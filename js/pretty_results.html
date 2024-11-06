@@ -7,6 +7,13 @@
     <title>Document</title>
 
 </head>
+<style>
+  .card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+}
+</style>
 
 <body class="container">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -16,11 +23,11 @@
   const listeTaxon = [
     { gbifid: 1, cd_ref:1, status: 'Espèce commune', name: "jeanpol", media: "https://taxref.mnhn.fr/api/media/download/inpn/167524" },
     { gbifid: 2, cd_ref:2, status: 'Espèce commune', name: "jeanjak", media: "https://taxref.mnhn.fr/api/media/download/inpn/157727" },
-    { gbifid: 3, cd_ref:3, status: 'Espèce commune', name: "jeanjean", media: "https://taxref.mnhn.fr/api/media/download/inpn/157724" },
+    { gbifid: 3, cd_ref:3, status: 'Espèce commune', name: "jeanjean", media: "https://taxref.mnhn.fr/api/media/download/inpn/157714" },
     { gbifid: 1, cd_ref:1, status: 'Espèce commune', name: "jeanpol", media: "https://taxref.mnhn.fr/api/media/download/inpn/157724" },
     { gbifid: 2, cd_ref:2, status: 'Espèce commune', name: "jeanjak", media: "https://taxref.mnhn.fr/api/media/download/inpn/157725" },
-    { gbifid: 3, cd_ref:3, status: 'Espèce commune', name: "jeanjean", media: "https://taxref.mnhn.fr/api/media/download/inpn/157714" },
-    { gbifid: 4, cd_ref:8, status: 'Espèce commune', name: "jeanolive", media: "https://taxref.mnhn.fr/api/media/download/inpn/157727" }
+    { gbifid: 3, cd_ref:3, status: 'Espèce commune', name: "jeanjean", media: "https://taxref.mnhn.fr/api/media/download/inpn/176524" },
+    { gbifid: 4, cd_ref:8, status: 'Espèce commune', name: "jeanolive", media: "https://taxref.mnhn.fr/api/media/download/inpn/157729" }
   ];
 
   function addTaxon(arrayTaxon, refContainer) {
@@ -45,7 +52,7 @@
     let myFigure = document.createElement("img");
     myFigure.id = arrayTaxon['name'];
     myFigure.src = arrayTaxon['media'];
-    myFigure.className = "img-fluid";
+    myFigure.className = "card-img-top";
 
     let myStatus = document.createElement("small")
     myStatus.innerText = arrayTaxon['status']
