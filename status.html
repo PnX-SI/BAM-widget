@@ -1,0 +1,58 @@
+<!-- https://taxref.mnhn.fr/api/taxa/61098/status/lines -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichez statuts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="container">
+        <h1 id="taxonName"></h1>
+        <div class="card" style="width: 18rem;">
+            <div class="card-header">
+                Liste de status
+            </div>
+            <ul id="listeStatuts" class="list-group list-group-flush">
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="js/status.js"></script>
+<script>
+    const taxonData ={
+        "Capra Ibex":{
+            name:"Capra Ibex",
+            cd_ref:61098,
+            gbifId:123,
+            count:125
+        }
+    }
+    const listeStatusUl = document.getElementById("listeStatuts");
+    document.getElementById("taxonName").innerHTML = taxonData["Capra Ibex"].name
+
+    getStatusForATaxon(taxonData["Capra Ibex"]).then(function(res){
+            res.status.forEach(element => {
+                const statusTypeAvailable = Object.keys(labels);
+                statusTypeAvailable.forEach(function (statusType) {
+                    // if no data available for this status Type
+                    if (!element[statusType]) {
+                        return
+                    }
+                    var li = document.createElement("li");
+                    li.classList.add("list-group-item");
+                    li.innerHTML = "<span class=\"badge bg-primary rounded-pill\">" + labels[statusType] + "</span>"+"<span> "+element[statusType]+"</span>";
+                    
+                    listeStatusUl.appendChild(li);
+                })
+            
+        });
+    });
+
+    
+    
+</script>
+</html>
