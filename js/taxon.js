@@ -1,10 +1,18 @@
-function getGbifTaxon(wkt, speciesList, page) {
-  console.log("getGbifTaxon", page);
+function test() {
+  return fetch("url").then(function (response) {
+    return response.json();
+  });
+}
+
+function getGbifTaxon(wkt, page) {
+  //   console.log("getGbifTaxon", page);
   const limit = 300;
   const offset = page * limit;
   geometry = wkt;
-  fetch(
-    "https://api.gbif.org/v1/occurrence/search?geometry=${geometry}&limit=${limit}&offset=${offset}"
+  let data = {};
+
+  let promise = fetch(
+    `https://api.gbif.org/v1/occurrence/search?geometry=${geometry}&limit=${limit}&offset=${offset}`
   )
     .then(function (response) {
       return response.json();
@@ -18,7 +26,6 @@ function getGbifTaxon(wkt, speciesList, page) {
         };
       });
 
-      console.log(speciesList);
       if (data.endOfRecords == false) {
         getGbifTaxon(wkt, speciesList, page + 1);
       }
