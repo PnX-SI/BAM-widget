@@ -14,6 +14,66 @@
   </head>
   <body>
     <div class="container">
+
+
+ <!--   DEBUT FORM  -->
+<form name="form-user-options" id="form-user-options">
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="switchGBIF">
+    <label class="form-check-label" for="flexSwitchCheckDefault">collect GBIF occurrences</label>
+  </div>
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="switchGN2" value=1>
+    <label class="form-check-label" for="flexSwitchCheckDefault">collect GN2 occurrences</label>
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" >GN2 url (if used)</span>
+    </div>
+    <input type="text" class="form-control" id="inputUrlGN2" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" >Buffer in meters (if input is point or line)</span>
+    </div>
+    <input type="text" class="form-control" id="inputBuffer" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text" > Max number of occurrences to aggregate</span>
+    </div>
+    <input type="text" class="form-control" id="inputNOCC" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+  </div>
+
+
+  <div class="form-item">
+    <label><input type="radio" name="locChoice" value="geoloc" id='buttonGeoloc' checked/>Current Location</label>
+    <label><input type="radio" name="locChoice" value="map" id='buttonMap'/>Pick on Map</label> 
+  </div>
+  <fieldset name="current" id="fieldsetGeoloc">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Longitude</label>
+      <input type="text" class="form-control" id="Longitude" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text"> 
+      </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Latitude</label>
+      <input type="text" class="form-control" id="Latitude">
+    </div>
+    <button type="button" class="btn btn-primary" id="getLocationButton" onclick="getLocationConstant()">get navigator location</button>
+  </fieldset>
+  <fieldset name="fieldsetMap" id="fieldsetMap">
+    <div id="mapdiv" style="width:500px; height:300px;"></div>
+  </fieldset>
+  
+  <button type="button" class="btn btn-primary btn-lg btn-block" onclick="processFormParams()">Submit</button>
+  
+</form>
+ <!--   FIN FORM  -->
+
       <h1 class="text-center">Occurrences</h1>
       <div class="text-center col-12">
         <div
@@ -22,7 +82,10 @@
           role="status"
         ></div>
       </div>
+
+ <!--   DEBUT DISPLAY LIST  -->
       <div class="row row-cols-1 row-cols-md-3 g-4" id="taxons-results"></div>
+      <!--   FIN DISPLAY LIST  -->
     </div>
   </body>
   <script
@@ -32,25 +95,34 @@
   ></script>
   <script src=" https://cdn.jsdelivr.net/npm/wellknown@0.5.0/wellknown.min.js "></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
   <script src="js/status.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/media.js"></script>
   <script src="js/taxon.js"></script>
   <script src="js/config.js"></script>
   <script src="js/display.js"></script>
-  <script>
-    params = getQueryParams();
-    console.log(params.useForm);
-    if (params.useForm == false) {
-      // Get Taxon list
-      const wkt = processLocalisation(params);
-      console.log(wkt);
-      getAllTopNTaxon(wkt, config.NB_MAX_TAXONS).then((listTaxons) => {
-        completeTaxonsData(listTaxons).then((listTaxonsModified) => {
-          document.getElementById("spinner-data").style.display = "none"; // Show
-          displayTaxonsCard(listTaxonsModified);
-        });
-      });
-    }
+  <script src="js/form.js"></script>
+    <script>
+
+params = getQueryParams(); 
+if (params.useForm == false) {
+    document.getElementById('form-user-options').style.display = 'none';
+    queryDisplayTaxonList(params); 
+}
+else {
+    //on loading
+    document.getElementById('mapdiv').style.display = "none"; 
+
+    // When clicking radio button
+    document.addEventListener('DOMContentLoaded', e => {
+        document.getElementById("form-user-options").addEventListener('change', handleEventMapChoices );
+    });
+
+    var marker = new OpenLayers.Marker(new OpenLayers.LonLat(0, 45));
+    initMap(marker)
+    
+}
+
   </script>
 </html>
