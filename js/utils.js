@@ -41,3 +41,42 @@ WHERE {
         })
     return idTaxRef
 }
+
+function getQueryParams() {
+
+    const params = (new URL(location)).searchParams;
+
+    return {
+        wkt: params.get("wkt"),
+        geolocation: params.get("geolocation"),
+        x: parseFloat(params.get("x")),
+        y: parseFloat(params.get("y")),
+        radius: parseInt(params.get("radius")),
+        use_gbif: JSON.parse(params.get("use_gbif")),
+        use_gn2: JSON.parse(params.get("use_gn2")),
+        gn_2_url: params.get("gn_2_url"),
+        nb_results: parseInt(params.get("nb_results")),
+    }
+}
+
+function convertGeoJsonToWkt(feature) {
+    const coo = feature.geometry.coordinates.map(function (ring) {
+        return '(' + ring.map(function (p) {
+            return p[0] + ' ' + p[1];
+        }).join(', ') + ')';
+    }).join(', ');
+    const wkt_str = 'POLYGON(' + coo + ')';
+    return wkt_str;
+}
+
+function processLocalisation(params) {
+    if (params.wkt) {
+        return params.wkt;
+    }
+    if (params.x && params.x) {
+        const point = turf.point([params.x, params.x]);
+        const buffered = turf.buffer(point, params.radius | 100, { units: "meters" });
+        //convert the json-input to WKT
+        return convertGeoJsonToWkt(buffered)
+    }
+}
