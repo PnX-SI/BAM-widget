@@ -71,13 +71,25 @@
     speciesList = {};
     // Get Taxon list
     getGbifTaxon(wkt, limit)
-      // .then((taxonsData) => {
-      //   let data = []
-      //   taxonsData.forEach((value,idx)=>)
-
-      //   return taxonsData;
-      // })
+      .then((taxonsData) => {
+        let data = [];
+        Object.keys(taxonsData).forEach((value) => {
+          data.push([value, taxonsData[value]["occCount"]]);
+        });
+        data.sort(function (a, b) {
+          return b[1] - a[1];
+        });
+        data = data.slice(0, 10).map((x) => {
+          return x[0];
+        });
+        let newTaxonsData = {};
+        data.forEach((key) => {
+          newTaxonsData[key] = taxonsData[key];
+        });
+        return newTaxonsData;
+      })
       .then(async function (taxonsData) {
+        console.log("taxonsData", taxonsData);
         // Loop on each taxon
         let promises = [];
         Object.keys(taxonsData).forEach((taxonKey) => {

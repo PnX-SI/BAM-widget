@@ -29,6 +29,6 @@ function getStatusForATaxon(taxonData) {
       return response.json();
     })
     .then((json) => {
-      return json._embedded;
+      return json._embedded?.status;
     });
 }
