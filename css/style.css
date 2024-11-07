@@ -3,3 +3,8 @@
     /* width:20rem; */
 
 }
+#form-container{
+    padding: 1em;
+    background-color: #efefef;
+    display: none;
+}

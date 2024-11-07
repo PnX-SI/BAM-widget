@@ -15,72 +15,76 @@
   </head>
   <body>
     <div class="container">
-
+      <h1 class="text-center">Taxons dans votre région</h1>
 
  <!--   DEBUT FORM  -->
-<form name="form-user-options" id="form-user-options">
-  <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" id="switchGBIF">
-    <label class="form-check-label" for="flexSwitchCheckDefault">collect GBIF occurrences</label>
-  </div>
-  <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" id="switchGN2" value=1>
-    <label class="form-check-label" for="flexSwitchCheckDefault">collect GN2 occurrences</label>
-  </div>
-
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" >GN2 url (if used)</span>
+    <div class="rounded-3" id="form-container">
+      <form name="form-user-options" id="form-user-options">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="switchGBIF">
+          <label class="form-check-label" for="flexSwitchCheckDefault">collect GBIF occurrences</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="switchGN2" value=1>
+          <label class="form-check-label" for="flexSwitchCheckDefault">collect GN2 occurrences</label>
+        </div>
+      
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" >GN2 url (if used)</span>
+          </div>
+          <input type="text" class="form-control" id="inputUrlGN2" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+      
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" >Buffer in meters (if input is point or line)</span>
+          </div>
+          <input type="text" class="form-control" id="inputBuffer" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+      
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" > Max number of occurrences to aggregate</span>
+          </div>
+          <input type="text" class="form-control" id="inputNOCC" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+      
+      
+        <div class="form-item">
+          <label><input type="radio" name="locChoice" value="geoloc" id='buttonGeoloc' checked/>Current Location</label>
+          <label><input type="radio" name="locChoice" value="map" id='buttonMap'/>Pick on Map</label> 
+        </div>
+        <fieldset name="current" id="fieldsetGeoloc">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Longitude</label>
+            <input type="text" class="form-control" id="Longitude" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text"> 
+            </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Latitude</label>
+            <input type="text" class="form-control" id="Latitude">
+          </div>
+          <button type="button" class="btn btn-primary" id="getLocationButton" onclick="getLocationConstant()">get navigator location</button>
+        </fieldset>
+        <fieldset name="fieldsetMap" id="fieldsetMap">
+          <div id="mapdiv" style="width:500px; height:300px;"></div>
+        </fieldset>
+        
+        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="processFormParams()">Submit</button>
+        
+      </form>
+       <!--   FIN FORM  -->
     </div>
-    <input type="text" class="form-control" id="inputUrlGN2" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-  </div>
-
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" >Buffer in meters (if input is point or line)</span>
-    </div>
-    <input type="text" class="form-control" id="inputBuffer" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-  </div>
-
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text" > Max number of occurrences to aggregate</span>
-    </div>
-    <input type="text" class="form-control" id="inputNOCC" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-  </div>
 
 
-  <div class="form-item">
-    <label><input type="radio" name="locChoice" value="geoloc" id='buttonGeoloc' checked/>Current Location</label>
-    <label><input type="radio" name="locChoice" value="map" id='buttonMap'/>Pick on Map</label> 
-  </div>
-  <fieldset name="current" id="fieldsetGeoloc">
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Longitude</label>
-      <input type="text" class="form-control" id="Longitude" aria-describedby="emailHelp">
-      <div id="emailHelp" class="form-text"> 
-      </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Latitude</label>
-      <input type="text" class="form-control" id="Latitude">
-    </div>
-    <button type="button" class="btn btn-primary" id="getLocationButton" onclick="getLocationConstant()">get navigator location</button>
-  </fieldset>
-  <fieldset name="fieldsetMap" id="fieldsetMap">
-    <div id="mapdiv" style="width:500px; height:300px;"></div>
-  </fieldset>
-  
-  <button type="button" class="btn btn-primary btn-lg btn-block" onclick="processFormParams()">Submit</button>
-  
-</form>
- <!--   FIN FORM  -->
-
-      <h1 class="text-center">Occurrences</h1>
+      
       <div class="text-center col-12">
         <div
           id="spinner-data"
           class="spinner-border text-primary"
           role="status"
+          style="display:none"
         ></div>
       </div>
 
@@ -118,6 +122,7 @@ if (params.useForm == false) {
 else {
     //on loading
     document.getElementById('mapdiv').style.display = "none"; 
+    document.getElementById("form-container").style.display = "block";
 
     // When clicking radio button
     document.addEventListener('DOMContentLoaded', e => {

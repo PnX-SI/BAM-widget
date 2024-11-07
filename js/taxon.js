@@ -40,7 +40,7 @@ function getGbifTaxon(
         // Compute the number of pages we need to query
         let nbOfPages = Math.ceil(countOccurrence / params.limit);
         if (nbOfPages > params.maxPage) {
-          nbOfPages = params.maxPage
+          nbOfPages = params.maxPage;
         }
 
         // Create a promise for each page
@@ -173,12 +173,10 @@ function queryDisplayTaxonList(params) {
   // Get Taxon list
   const wkt = processLocalisation(params);
   getAllTopNTaxon(wkt, config.NB_MAX_TAXONS).then((listTaxons) => {
-
+    document.getElementById("spinner-data").style.display = "block"; // Show
     completeTaxonsData(listTaxons).then((listTaxonsModified) => {
-
-      document.getElementById("spinner-data").style.display = 'none';// Show
+      document.getElementById("spinner-data").style.display = "none"; // Show
       displayTaxonsCard(listTaxonsModified);
-
     });
-  })
+  });
 }
