@@ -168,3 +168,17 @@ function getAllTopNTaxon(
     return Promise.resolve(allData.slice(0, nbMaxTaxons));
   });
 }
+
+function queryDisplayTaxonList(params) {
+  // Get Taxon list
+  const wkt = processLocalisation(params);
+  getAllTopNTaxon(wkt, config.NB_MAX_TAXONS).then((listTaxons) => {
+
+    completeTaxonsData(listTaxons).then((listTaxonsModified) => {
+
+      document.getElementById("spinner-data").style.display = 'none';// Show
+      displayTaxonsCard(listTaxonsModified);
+
+    });
+  })
+}
