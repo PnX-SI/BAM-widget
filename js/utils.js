@@ -70,13 +70,22 @@ function getQueryParams() {
     x: parseFloat(params.get("x")),
     y: parseFloat(params.get("y")),
     radius: parseInt(params.get("radius")),
-    use_gbif: JSON.parse(params.get("use_gbif")),
-    use_gn2: JSON.parse(params.get("use_gn2")),
-    gn_2_url: params.get("gn_2_url"),
-    nb_results: parseInt(params.get("nb_results")),
+    useGbif: JSON.parse(params.get("use_gbif")),
+    useGn2: JSON.parse(params.get("use_gn2")),
+    gn2Url: params.get("gn_2_url"),
+    nbResults: parseInt(params.get("nb_results")),
   };
 }
-
+// function() {
+//  //TODO generate wkt
+//   return {
+//     wkt: params.get("wkt"),
+//     useGbif: JSON.parse(params.get("use_gbif")),
+//     useGn2: JSON.parse(params.get("use_gn2")),
+//     gn2Url: params.get("gn_2_url"),
+//     nbResults: parseInt(params.get("nb_results")),
+//   };
+// }
 
 /**
  * Given a params object, returns a WKT string representing a localisation.
@@ -88,27 +97,28 @@ function getQueryParams() {
  * @returns {string|undefined} - A WKT string or undefined.
  */
 
-
 function processLocalisation(params) {
   if (params.wkt) {
-    const geojson = wellknown.parse(params.wkt)
-    //Test geom type : 
-    if (geojson.type.endsWith('Polygon')) {
-        return params.wkt;
-      }
-      else {
-        // Buffer 
-        const buffered = turf.buffer(geojson, params.radius | 100, { units: "meters" });
-        return wellknown.stringify(buffered)
-      }
+    const geojson = wellknown.parse(params.wkt);
+    //Test geom type :
+    if (geojson.type.endsWith("Polygon")) {
+      return params.wkt;
+    } else {
+      // Buffer
+      const buffered = turf.buffer(geojson, params.radius | 100, {
+        units: "meters",
+      });
+      return wellknown.stringify(buffered);
+    }
   }
   if (params.x && params.x) {
     const point = turf.point([params.x, params.x]);
-    const buffered = turf.buffer(point, params.radius | 100, { units: "meters" });
-    return wellknown.stringify(buffered)
+    const buffered = turf.buffer(point, params.radius | 100, {
+      units: "meters",
+    });
+    return wellknown.stringify(buffered);
   }
 }
-
 
 /**
  * Completes the data with the status and the picture of each taxon in the provided list.

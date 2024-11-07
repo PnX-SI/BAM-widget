@@ -5,7 +5,7 @@
  */
 function getStatusForATaxon(taxonData) {
   return fetch(
-    `https://taxref.mnhn.fr/api/taxa/${taxonData.cd_ref}/status/columns`
+    `https://taxref.mnhn.fr/api/taxa/${taxonData.cdRef}/status/columns`
   )
     .then((response) => {
       return response.json();

@@ -94,7 +94,7 @@ function getGbifTaxon(
  * @param {number} [nbMaxTaxons=DEFAULT_NB_MAX_TAXONS] - number of results to return
  * @returns {Promise<import('gbif-types').GBIFTaxon[]>}
  */
-function getPgRestTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
+function getPgRestTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS, params = {}) {
   const geometry = wkt;
   return (
     fetch(
@@ -122,19 +122,43 @@ function getPgRestTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
   );
 }
 
+function validateApiDefinition(api_def) {
+  if (!api_def.hasOwnProperty("function_")) {
+    throw Error("'function_' attribute is missing");
+  }
+  if (!api_def.hasOwnProperty("params")) {
+    throw Error("'params' attribute is missing");
+  }
+}
+
 /**
  * Get the top N taxons from both the GTSI API and the GBIF API given a WKT string
  * @param {string} wkt - Well-Known Text representation of a polygon
  * @param {number} [nbMaxTaxons=DEFAULT_NB_MAX_TAXONS] - number of results to return
  * @returns {Promise<import('gbif-types').GBIFTaxon[]>} - a list of taxons with their occurrence count and GBIF id
  */
-function getAllTopNTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
-  let promises = [
-    getPgRestTaxon(wkt, nbMaxTaxons),
-    getGbifTaxon(wkt, nbMaxTaxons),
-  ];
+function getAllTopNTaxon(
+  wkt,
+  nbMaxTaxons = DEFAULT_NB_MAX_TAXONS,
+  apiList = [
+    { function_: getGbifTaxon, params: { limit: 300 } },
+    { function_: getPgRestTaxon, params: {} },
+  ]
+) {
+  let promises = [];
+  apiList.forEach((api) => {
+    validateApiDefinition(api);
+    promises.push(api.function_(wkt, nbMaxTaxons, api.params));
+  });
+  if (promises.length == 0) return Promise.resolve([]);
+
   return Promise.all(promises).then((listOfData) => {
-    const allData = [...listOfData[0], ...listOfData[1]];
+    console.log("listOfData", listOfData);
+    let allData = [];
+    listOfData.forEach((element) => {
+      allData = [...allData, ...element];
+    });
+
     allData.sort(function (a, b) {
       return b["occCount"] - a["occCount"];
     });
