@@ -15,7 +15,7 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="text-center">Taxons dans votre région</h1>
+      <h1 class="text-center">Taxons around me</h1>
 
  <!--   DEBUT FORM  -->
     <div class="rounded-3" id="form-container">
@@ -65,7 +65,7 @@
             <label for="exampleInputPassword1" class="form-label">Latitude</label>
             <input type="text" class="form-control" id="Latitude">
           </div>
-          <button type="button" class="btn btn-primary" id="getLocationButton" onclick="getLocationConstant()">get navigator location</button>
+          <button type="button" class="btn btn-primary" id="getLocationButton" onclick="getLocationConstant()">Get your location !</button>
         </fieldset>
         <fieldset name="fieldsetMap" id="fieldsetMap">
           <div id="mapdiv" style="width:500px; height:300px;"></div>
@@ -90,7 +90,7 @@
 
  <!--   DEBUT DISPLAY LIST  -->
       <div
-        class="row row-cols-md-4 row-cols-sm-1 row-cols-xs-1"
+        class="row row-cols-md-4 row-cols-sm-1 row-cols-xs-1 mt-3"
         id="taxons-results"
       ></div>
       <!--   FIN DISPLAY LIST  -->

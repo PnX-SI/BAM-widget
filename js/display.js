@@ -1,5 +1,6 @@
 function displayTaxonsCard(taxonList) {
   var myContainer = document.getElementById("taxons-results");
+  myContainer.innerHTML = "";
   // proper call to the function
   taxonList.forEach((el) => {
     addTaxon(el, myContainer);
@@ -14,7 +15,7 @@ function addTaxon(arrayTaxon, refContainer) {
   // Create card element to be appened to card-group
   let cardCont = document.createElement("div");
   cardCont.className = "card col-3 cursor-pointer";
-  
+
   let myCard = document.createElement("div");
   myCard.classList = "card-body text-center";
 
@@ -33,7 +34,7 @@ function addTaxon(arrayTaxon, refContainer) {
   myFigure.className = "card-img-top";
 
   let myStatus = document.createElement("small");
-  let html_ = ""; 
+  let html_ = "";
   if (arrayTaxon.status) {
     Object.keys(arrayTaxon.status[0]).forEach((el) => {
       let color =

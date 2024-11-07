@@ -172,8 +172,8 @@ function getAllTopNTaxon(
 function queryDisplayTaxonList(params) {
   // Get Taxon list
   const wkt = processLocalisation(params);
+  document.getElementById("spinner-data").style.display = "block"; // Show
   getAllTopNTaxon(wkt, config.NB_MAX_TAXONS).then((listTaxons) => {
-    document.getElementById("spinner-data").style.display = "block"; // Show
     completeTaxonsData(listTaxons).then((listTaxonsModified) => {
       document.getElementById("spinner-data").style.display = "none"; // Show
       displayTaxonsCard(listTaxonsModified);
