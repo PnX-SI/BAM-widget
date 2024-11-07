@@ -106,17 +106,17 @@ function processLocalisation(params) {
       return params.wkt;
     } else {
       // Buffer
-      const buffered = turf.buffer(geojson, params.radius | 100, {
+      const buffered = turf.buffer(geojson, params.radius || 1000, {
         units: "meters",
       });
       return wellknown.stringify(buffered);
     }
   }
   if (params.x && params.x) {
-    const point = turf.point([params.x, params.x]);
-    const buffered = turf.buffer(point, params.radius | 100, {
+    const point = turf.point([params.x, params.y]);
+    const buffered = turf.buffer(point, params.radius || 1000, {
       units: "meters",
-    });
+    }); 
     return wellknown.stringify(buffered);
   }
 }
