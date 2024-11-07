@@ -11,13 +11,22 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div class="container">
-      <div id="spinner-data" class="spinner-border text-primary" role="status">
-        <!-- <span class="visually-hidden">Loading...</span> -->
+      <h1 class="text-center">Occurrences</h1>
+      <div class="text-center col-12">
+        <div
+          id="spinner-data"
+          class="spinner-border text-primary"
+          role="status"
+        ></div>
       </div>
-      <div class="row row-cols-1 row-cols-md-3 g-4" id="taxons-results"></div>
+      <div
+        class="row row-cols-md-4 row-cols-sm-1 row-cols-xs-1"
+        id="taxons-results"
+      ></div>
     </div>
   </body>
   <script
@@ -33,24 +42,19 @@
   <script src="js/taxon.js"></script>
   <script src="js/config.js"></script>
   <script src="js/display.js"></script>
-    <script>
-
-                          params = getQueryParams();
-                          console.log(params.useForm)
-                          if (params.useForm == false) {
-                          // Get Taxon list
-  const wkt = processLocalisation(params);
-  console.log(wkt)
-  getAllTopNTaxon(wkt, config.NB_MAX_TAXONS).then((listTaxons) => {
-
-    completeTaxonsData(listTaxons).then((listTaxonsModified) => {
-
-      document.getElementById("spinner-data").style.display = 'none';// Show 
-      displayTaxonsCard(listTaxonsModified);
-
-    });
-  });
-}
-
+  <script>
+    params = getQueryParams();
+    console.log(params.useForm);
+    if (params.useForm == false) {
+      // Get Taxon list
+      const wkt = processLocalisation(params);
+      console.log(wkt);
+      getAllTopNTaxon(wkt, config.NB_MAX_TAXONS).then((listTaxons) => {
+        completeTaxonsData(listTaxons).then((listTaxonsModified) => {
+          document.getElementById("spinner-data").style.display = "none"; // Show
+          displayTaxonsCard(listTaxonsModified);
+        });
+      });
+    }
   </script>
 </html>
