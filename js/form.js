@@ -81,8 +81,8 @@ function processFormParams() {
     let finSel = document.querySelector('input[name="locChoice"]:checked').value;
     if (finSel == 'map') {
         //get marker lon lat
-        queryParams["x"] = marker.lonlat['lon'];
-        queryParams["y"] = marker.lonlat['lat'];
+        queryParams["x"] = markers.markers[0]['lonlat'].transform("EPSG:3857", 'EPSG:4326')['lon'];
+        queryParams["y"] = markers.markers[0]['lonlat'].transform("EPSG:3857", 'EPSG:4326')['lon'];
 
     }
     else if (finSel == 'geoloc') {
