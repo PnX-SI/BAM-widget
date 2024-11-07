@@ -1,5 +1,12 @@
 const DEFAULT_NB_MAX_TAXONS = 10;
 
+/**
+ * Fetch a page of taxon data from GBIF given a WKT string
+ * @param {string} wkt - Well-Known Text representation of a polygon
+ * @param {number} limit - number of results to return
+ * @param {number} offset - offset of the first result
+ * @returns {Promise<import('gbif-types').GBIFSearchResponse>}
+ */
 function fetchApiTaxonGbif(wkt, limit, offset) {
   return fetch(
     `https://api.gbif.org/v1/occurrence/search?geometry=${wkt}&limit=${limit}&offset=${offset}`
@@ -8,6 +15,13 @@ function fetchApiTaxonGbif(wkt, limit, offset) {
   });
 }
 
+/**
+ * Fetch the list of taxons from GBIF given a WKT string
+ * @param {string} wkt - Well-Known Text representation of a polygon
+ * @param {number} [nbMaxTaxons=DEFAULT_NB_MAX_TAXONS] - maximum number of results to return
+ * @param {Object} [params={ limit: 300 }] - parameters to pass to the API
+ * @returns {Promise<Array<{gbifId: number, occCount: number, species: string}>>} - a list of taxons with their occurrence count and GBIF id
+ */
 function getGbifTaxon(
   wkt,
   nbMaxTaxons = DEFAULT_NB_MAX_TAXONS,
@@ -74,6 +88,12 @@ function getGbifTaxon(
   );
 }
 
+/**
+ * Fetch a list of taxon data from the GTSI API given a WKT string
+ * @param {string} wkt - Well-Known Text representation of a polygon
+ * @param {number} [nbMaxTaxons=DEFAULT_NB_MAX_TAXONS] - number of results to return
+ * @returns {Promise<import('gbif-types').GBIFTaxon[]>}
+ */
 function getPgRestTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
   const geometry = wkt;
   return (
@@ -102,8 +122,13 @@ function getPgRestTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
   );
 }
 
-function getTopTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
-  // let promiseTopTax = new Promise();
+/**
+ * Get the top N taxons from both the GTSI API and the GBIF API given a WKT string
+ * @param {string} wkt - Well-Known Text representation of a polygon
+ * @param {number} [nbMaxTaxons=DEFAULT_NB_MAX_TAXONS] - number of results to return
+ * @returns {Promise<import('gbif-types').GBIFTaxon[]>} - a list of taxons with their occurrence count and GBIF id
+ */
+function getAllTopNTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
   let promises = [
     getPgRestTaxon(wkt, nbMaxTaxons),
     getGbifTaxon(wkt, nbMaxTaxons),
