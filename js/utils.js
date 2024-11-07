@@ -145,13 +145,19 @@ function completeTaxonsData(taxonsData) {
  *   data object.
  */
 function completeData(taxonData) {
-  return getTaxRefCdNom(taxonData.gbifId)
+  let getCdRefPromise = null;
+  if ("cdRef" in taxonData) {
+    getCdRefPromise = Promise.resolve(taxonData["cdRef"]);
+  } else {
+    getCdRefPromise = getTaxRefCdNom(taxonData.gbifId);
+  }
+  return getCdRefPromise
     .then(async (taxrefId) => {
-      // get cd_ref
+      // get cdRef
       if (taxrefId) {
-        taxonData["cd_ref"] = taxrefId;
+        taxonData["cdRef"] = taxrefId;
         await getStatusForATaxon(taxonData).then((statusData) => {
-          // use cd_ref to get status of the taxon
+          // use cdRef to get status of the taxon
           taxonData["status"] = statusData;
         });
       }
