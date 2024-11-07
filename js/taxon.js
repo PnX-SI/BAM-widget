@@ -1,17 +1,20 @@
-function fetchApiTaxonGbif(geometry, limit, offset) {
+const DEFAULT_NB_MAX_TAXONS = 10;
+
+function fetchApiTaxonGbif(wkt, limit, offset) {
   return fetch(
-    `https://api.gbif.org/v1/occurrence/search?geometry=${geometry}&limit=${limit}&offset=${offset}`
+    `https://api.gbif.org/v1/occurrence/search?geometry=${wkt}&limit=${limit}&offset=${offset}`
   ).then((response) => {
     return response.json();
   });
 }
 
-function getGbifTaxon(wkt, limit) {
-  const geometry = wkt;
+function getGbifTaxon(
+  wkt,
+  nbMaxTaxons = DEFAULT_NB_MAX_TAXONS,
+  params = { limit: 300 }
+) {
   return (
-    fetch(
-      `https://api.gbif.org/v1/occurrence/search?geometry=${geometry}&limit=1`
-    )
+    fetch(`https://api.gbif.org/v1/occurrence/search?geometry=${wkt}&limit=1`)
       .then((response) => {
         return response.json();
       })
@@ -21,13 +24,13 @@ function getGbifTaxon(wkt, limit) {
       })
       .then(async function (countOccurrence) {
         // Compute the number of pages we need to query
-        const nbOfPages = Math.ceil(countOccurrence / limit);
+        const nbOfPages = Math.ceil(countOccurrence / params.limit);
 
         // Create a promise for each page
         let promises = [];
         for (let pageIndex = 0; pageIndex < nbOfPages; pageIndex++) {
-          const offset = pageIndex * limit;
-          promises.push(fetchApiTaxonGbif(geometry, limit, offset));
+          const offset = pageIndex * params.limit;
+          promises.push(fetchApiTaxonGbif(wkt, params.limit, offset));
         }
         let speciesList = {};
         // Run all promises and await for the responses
@@ -59,56 +62,57 @@ function getGbifTaxon(wkt, limit) {
         data.sort(function (a, b) {
           return b[1] - a[1];
         });
-        data = data.slice(0, 10).map((x) => {
+        data = data.slice(0, nbMaxTaxons).map((x) => {
           return x[0];
         });
-        let newTaxonsData = {};
+        let newTaxonsData = [];
         data.forEach((key) => {
-          newTaxonsData[key] = taxonsData[key];
+          newTaxonsData.push({ ...taxonsData[key], species: key });
         });
         return newTaxonsData;
       })
   );
 }
 
-function getPgRestTaxon(wkt, limit = 10, offset = 0) {
+function getPgRestTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
   const geometry = wkt;
   return (
     fetch(
-      `https://dev-gtsi.cevennes-parcnational.net/api/rpc/get_taxa_list?in_wkt=${geometry}&in_limit=${limit}`
+      `https://dev-gtsi.cevennes-parcnational.net/api/rpc/get_taxa_list?in_wkt=${geometry}&in_limit=${nbMaxTaxons}`
     )
       .then((response) => {
         return response.json();
       })
       // Get total number of occurrences
       .then((data) => {
-        return data.map(({
-          count_occ: occCount,
-          species_name: species,
-          species_key: gbifId,
-          ...rest
-        }) => ({
-          occCount,
-          species,
-          gbifId,
-          ...rest
-        }));
+        return data.map(
+          ({
+            count_occ: occCount,
+            species_name: species,
+            species_key: gbifId,
+            ...rest
+          }) => ({
+            occCount,
+            species,
+            gbifId,
+            ...rest,
+          })
+        );
       })
   );
 }
 
-function getTopTaxon(wkt) {
+function getTopTaxon(wkt, nbMaxTaxons = DEFAULT_NB_MAX_TAXONS) {
   // let promiseTopTax = new Promise();
-  let promises = [getPgRestTaxon(wkt, 10), getGbifTaxon(wkt, 20)];
+  let promises = [
+    getPgRestTaxon(wkt, nbMaxTaxons),
+    getGbifTaxon(wkt, nbMaxTaxons),
+  ];
   return Promise.all(promises).then((listOfData) => {
-    const allData = [...listOfData[0], ...listOfData[1]]
+    const allData = [...listOfData[0], ...listOfData[1]];
     allData.sort(function (a, b) {
       return b["occCount"] - a["occCount"];
     });
-    return Promise.resolve(allData.slice(0, 10))
+    return Promise.resolve(allData.slice(0, nbMaxTaxons));
   });
 }
-
-// getTopTaxon(wkt).then(data => {
-//   console.log(data)
-// })
