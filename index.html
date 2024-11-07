@@ -71,23 +71,6 @@
     speciesList = {};
     // Get Taxon list
     getGbifTaxon(wkt, limit)
-      .then((taxonsData) => {
-        let data = [];
-        Object.keys(taxonsData).forEach((value) => {
-          data.push([value, taxonsData[value]["occCount"]]);
-        });
-        data.sort(function (a, b) {
-          return b[1] - a[1];
-        });
-        data = data.slice(0, 10).map((x) => {
-          return x[0];
-        });
-        let newTaxonsData = {};
-        data.forEach((key) => {
-          newTaxonsData[key] = taxonsData[key];
-        });
-        return newTaxonsData;
-      })
       .then(async function (taxonsData) {
         console.log("taxonsData", taxonsData);
         // Loop on each taxon
@@ -109,8 +92,6 @@
     //   const listeStatusUl = document.getElementById("listeStatuts");
     //   document.getElementById("taxonName").innerHTML =
     //     taxonData["Capra Ibex"].name;
-
-    console.log(speciesList);
     // speciesList.forEach(species => {
     // getStatusForATaxon(taxonData["Capra Ibex"]).then(function (res) {
     //   res.status.forEach((element) => {

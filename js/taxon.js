@@ -51,5 +51,22 @@ function getGbifTaxon(wkt, limit) {
         });
         return speciesList;
       })
+      .then((taxonsData) => {
+        let data = [];
+        Object.keys(taxonsData).forEach((value) => {
+          data.push([value, taxonsData[value]["occCount"]]);
+        });
+        data.sort(function (a, b) {
+          return b[1] - a[1];
+        });
+        data = data.slice(0, 10).map((x) => {
+          return x[0];
+        });
+        let newTaxonsData = {};
+        data.forEach((key) => {
+          newTaxonsData[key] = taxonsData[key];
+        });
+        return newTaxonsData;
+      })
   );
 }
