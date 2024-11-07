@@ -25,7 +25,7 @@ function fetchApiTaxonGbif(wkt, limit, offset) {
 function getGbifTaxon(
   wkt,
   nbMaxTaxons = DEFAULT_NB_MAX_TAXONS,
-  params = { limit: 300 }
+  params = { limit: 300, maxPage: 10 }
 ) {
   return (
     fetch(`https://api.gbif.org/v1/occurrence/search?geometry=${wkt}&limit=1`)
@@ -38,7 +38,10 @@ function getGbifTaxon(
       })
       .then(async function (countOccurrence) {
         // Compute the number of pages we need to query
-        const nbOfPages = Math.ceil(countOccurrence / params.limit);
+        let nbOfPages = Math.ceil(countOccurrence / params.limit);
+        if (nbOfPages > params.maxPage) {
+          nbOfPages = params.maxPage
+        }
 
         // Create a promise for each page
         let promises = [];
@@ -141,7 +144,7 @@ function getAllTopNTaxon(
   wkt,
   nbMaxTaxons = DEFAULT_NB_MAX_TAXONS,
   apiList = [
-    { function_: getGbifTaxon, params: { limit: 300 } },
+    { function_: getGbifTaxon, params: { limit: 300, maxPage: 10 } },
     { function_: getPgRestTaxon, params: {} },
   ]
 ) {
