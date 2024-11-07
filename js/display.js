@@ -33,17 +33,18 @@ function addTaxon(arrayTaxon, refContainer) {
   myFigure.className = "card-img-top";
 
   let myStatus = document.createElement("small");
-  let html_ = "";
-  console.log(arrayTaxon.status);
-  Object.keys(arrayTaxon.status[0]).forEach((el) => {
-    let color =
-      arrayTaxon.status[0][el] in colorStatus
-        ? colorStatus[arrayTaxon.status[0][el]]
-        : "rgba(var(--bs-primary-rgb)";
-    if (arrayTaxon.status[0][el] && config.STATUS_LABELS[el]) {
-      html_ += `<span class="badge" style="background-color:${color}">${config.STATUS_LABELS[el]}: ${arrayTaxon.status[0][el]}</span> `;
-    }
-  });
+  let html_ = ""; 
+  if (arrayTaxon.status) {
+    Object.keys(arrayTaxon.status[0]).forEach((el) => {
+      let color =
+        arrayTaxon.status[0][el] in colorStatus
+          ? colorStatus[arrayTaxon.status[0][el]]
+          : "rgba(var(--bs-primary-rgb)";
+      if (arrayTaxon.status[0][el] && config.STATUS_LABELS[el]) {
+        html_ += `<span class="badge" style="background-color:${color}">${config.STATUS_LABELS[el]}: ${arrayTaxon.status[0][el]}</span> `;
+      }
+    });
+  }
   myStatus.innerHTML = html_;
   myStatus.className = "text-muted";
 
