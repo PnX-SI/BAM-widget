@@ -77,28 +77,6 @@ function getQueryParams() {
   };
 }
 
-/**
- * Converts a GeoJSON feature to a Well-Known Text (WKT) string.
- * @param {Object} feature - A GeoJSON feature object with geometry containing coordinates.
- * @returns {string} - A WKT string representing the polygon.
- */
-function convertGeoJsonToWkt(feature) {
-  const coo = feature.geometry.coordinates
-    .map(function (ring) {
-      return (
-        "(" +
-        ring
-          .map(function (p) {
-            return p[0] + " " + p[1];
-          })
-          .join(", ") +
-        ")"
-      );
-    })
-    .join(", ");
-  const wkt_str = "POLYGON(" + coo + ")";
-  return wkt_str;
-}
 
 /**
  * Given a params object, returns a WKT string representing a localisation.
@@ -109,19 +87,28 @@ function convertGeoJsonToWkt(feature) {
  * @param {Object} params - An object containing localisation parameters.
  * @returns {string|undefined} - A WKT string or undefined.
  */
+
+
 function processLocalisation(params) {
   if (params.wkt) {
-    return params.wkt;
+    const geojson = wellknown.parse(params.wkt)
+    //Test geom type : 
+    if (geojson.type.endsWith('Polygon')) {
+        return params.wkt;
+      }
+      else {
+        // Buffer 
+        const buffered = turf.buffer(geojson, params.radius | 100, { units: "meters" });
+        return wellknown.stringify(buffered)
+      }
   }
   if (params.x && params.x) {
     const point = turf.point([params.x, params.x]);
-    const buffered = turf.buffer(point, params.radius | 100, {
-      units: "meters",
-    });
-    //convert the json-input to WKT
-    return convertGeoJsonToWkt(buffered);
+    const buffered = turf.buffer(point, params.radius | 100, { units: "meters" });
+    return wellknown.stringify(buffered)
   }
 }
+
 
 /**
  * Completes the data with the status and the picture of each taxon in the provided list.
