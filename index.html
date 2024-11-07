@@ -129,8 +129,9 @@ else {
         document.getElementById("form-user-options").addEventListener('change', handleEventMapChoices );
     });
 
-    var marker = new OpenLayers.Marker(new OpenLayers.LonLat(0, 45));
-    initMap(marker)
+    var markers = new OpenLayers.Layer.Markers( "Markers" )
+    
+    initMap(markers)
     
 }
 

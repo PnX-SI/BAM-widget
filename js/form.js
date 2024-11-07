@@ -39,7 +39,7 @@ function handleEventMapChoices(event) {
     }
 }
 
-function initMap(marker) {
+function initMap(markers) {
     map = new OpenLayers.Map("mapdiv");
     map.addLayer(new OpenLayers.Layer.OSM());
 
@@ -51,7 +51,7 @@ function initMap(marker) {
 
     var zoom=4;
     map.setCenter (lonLat, zoom);
-    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    var marker = new OpenLayers.Marker(new OpenLayers.LonLat(0, 45));
     markers.addMarker(marker);
     map.addLayer(markers);
      
@@ -82,7 +82,7 @@ function processFormParams() {
     if (finSel == 'map') {
         //get marker lon lat
         queryParams["x"] = markers.markers[0]['lonlat'].transform("EPSG:3857", 'EPSG:4326')['lon'];
-        queryParams["y"] = markers.markers[0]['lonlat'].transform("EPSG:3857", 'EPSG:4326')['lon'];
+        queryParams["y"] =  markers.markers[0]['lonlat'].transform("EPSG:3857", 'EPSG:4326')['lon'];
 
     }
     else if (finSel == 'geoloc') {
