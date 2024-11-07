@@ -14,6 +14,7 @@ function addTaxon(arrayTaxon, refContainer) {
   // Create card element to be appened to card-group
   let cardCont = document.createElement("div");
   cardCont.className = "card col-3 cursor-pointer";
+  
   let myCard = document.createElement("div");
   myCard.classList = "card-body text-center";
 
@@ -29,8 +30,6 @@ function addTaxon(arrayTaxon, refContainer) {
   myFigure.src = arrayTaxon["mediaUrl"]
     ? arrayTaxon["mediaUrl"]
     : "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
-  //   myFigure.style.max_height = "200px";
-  //   myFigure.style.width = "80%";
   myFigure.className = "card-img-top";
 
   let myStatus = document.createElement("small");
@@ -55,6 +54,7 @@ function addTaxon(arrayTaxon, refContainer) {
   myCard.appendChild(cardTitle);
   cardCont.appendChild(myCard);
   myCard.appendChild(myCardFoot);
+
   refContainer.appendChild(cardCont);
   return;
 }
