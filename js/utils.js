@@ -72,6 +72,7 @@ function getQueryParams() {
     radius: parseInt(params.get("radius")),
     useGbif: JSON.parse(params.get("use_gbif")),
     useGn2: JSON.parse(params.get("use_gn2")),
+    useForm: JSON.parse(params.get("use_form")),
     gn2Url: params.get("gn_2_url"),
     nbResults: parseInt(params.get("nb_results")),
   };
@@ -168,3 +169,4 @@ function completeData(taxonData) {
       return taxonData;
     });
 }
+
