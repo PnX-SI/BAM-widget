@@ -6,6 +6,8 @@ import { getGbifTaxon } from "../lib/api/taxon";
 import Taxon from "./Taxon.vue";
 import Pagination from "./commons/Pagination.vue";
 
+import { GbifConnector } from "../lib/connectors/gbif.js";
+
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
@@ -49,6 +51,7 @@ const speciesListShowed = computed(() => {
     );
 });
 
+
 function refreshSpeciesList(wkt) {
   loadingObservations.value = true;
   speciesList.value = [];
@@ -58,11 +61,8 @@ function refreshSpeciesList(wkt) {
   }
   getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
     Object.values(response).forEach((observation) => {
-      getMedias(observation.taxonKey).then((url) => {
-        observation["media"] = url;
-        speciesList.value.push(observation);
-      });
-    });
+      speciesList.value.push(observation);
+    }); 
     loadingObservations.value = false;
   });
 }
@@ -90,8 +90,8 @@ watch(WKT, () => {
     <div class="row" id="species-listing">
       <Taxon
         v-for="observation in speciesListShowed"
-        :name="observation.acceptedScientificName"
-        :imageUrl="observation.media"
+        :taxonId="observation.taxonId" 
+        :name="observation.acceptedScientificName" 
         :description="observation.acceptedScientificName"
         :observationDate="observation.eventDate"
         :count="observation.occCount"

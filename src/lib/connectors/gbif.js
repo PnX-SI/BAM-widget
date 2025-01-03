@@ -6,17 +6,19 @@ const NO_IMAGE_URL =
 const GBIF_ENDPOINT = "https://api.gbif.org/v1";
 
 class GbifConnector extends Connector {
+
   fetchOccurrence(params) {
     let urlWithParams = new URL(`${GBIF_ENDPOINT}/occurrence/search`);
 
     for (const [key, value] of Object.entries(params)) {
       urlWithParams.searchParams.append(key, value);
-    }
+    } 
     const url = urlWithParams.toString();
     return fetch(url).then((response) => {
       return response.json();
     });
   }
+
   fetchMedia(idTaxon) {
     const url = `https://api.gbif.org/v1/species/${idTaxon}/media`;
     return fetch(url)
@@ -24,11 +26,17 @@ class GbifConnector extends Connector {
         return response.json();
       })
       .then(function (json) {
-        console.log(json);
-        if (json.results.length === 0) {
-          return json.results.map((media) => media.identifier);
-        }
-        return [NO_IMAGE_URL];
+        let mediaList = [];
+        Object.values(json.results).forEach((media) => {
+          if (media.audience !== "biologists") {
+            mediaList.push({
+              url: media.identifier,
+              licence: media.licence,
+              source: media.source
+            })
+          }
+        });
+        return mediaList
       });
   }
   fetchTaxonInfo(idTaxon) {
