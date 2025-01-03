@@ -1,9 +1,10 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
 import Map from "./Map.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import ListeTaxon from "./ListeTaxon.vue";
 import Filters from "./Filters.vue";
+import { GbifConnector } from "@/lib/connectors/gbif";
 
 const radius = ref(1);
 const wktSelected = ref("");
@@ -24,6 +25,23 @@ onMounted(() => {
   if (params.has("dateMax")) {
     dateMax.value = params.get("dateMax");
   }
+});
+
+watch(wktSelected, () => {
+  let connector = new GbifConnector();
+  connector
+    .fetchOccurrence({
+      limit: 20,
+      geometry: wktSelected.value,
+    })
+    .then((response) => {
+      console.log(response.results[0].acceptedTaxonKey);
+      connector
+        .fetchMedia(response.results[0].acceptedTaxonKey)
+        .then((urls) => {
+          console.log(urls[0]);
+        });
+    });
 });
 </script>
 
