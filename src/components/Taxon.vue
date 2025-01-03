@@ -47,7 +47,9 @@ const props = defineProps({
 <style>
 img {
   border-radius: none !important;
-  height: 20vh;
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
 }
 .description {
   height: 10vh;

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { getMedias } from "../lib/api/media";
 import Loading from "./commons/Loading.vue";
 import { getGbifTaxon } from "../lib/api/taxon";
@@ -15,6 +15,12 @@ const props = defineProps({
   itemPerPage: Number,
   dateMin: String,
   dateMax: String,
+});
+onMounted(() => {
+  if (props.wkt) {
+    WKT.value = props.wkt;
+    refreshSpeciesList(WKT.value);
+  }
 });
 
 const speciesList = ref([]);

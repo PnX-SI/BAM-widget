@@ -11,38 +11,19 @@ const wktSelected = ref("");
 const dateMin = ref(null);
 const dateMax = ref(null);
 
-onMounted(() => {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("radius")) {
-    radius.value = parseInt(params.get("radius"));
-  }
-  if (params.has("wkt")) {
-    wktSelected.value = params.get("wkt");
-  }
-  if (params.has("dateMin")) {
-    dateMin.value = params.get("dateMin");
-  }
-  if (params.has("dateMax")) {
-    dateMax.value = params.get("dateMax");
-  }
-});
-
-watch(wktSelected, () => {
-  let connector = new GbifConnector();
-  connector
-    .fetchOccurrence({
-      limit: 20,
-      geometry: wktSelected.value,
-    })
-    .then((response) => {
-      console.log(response.results[0].acceptedTaxonKey);
-      connector
-        .fetchMedia(response.results[0].acceptedTaxonKey)
-        .then((urls) => {
-          console.log(urls[0]);
-        });
-    });
-});
+const params = new URLSearchParams(window.location.search);
+if (params.has("radius")) {
+  radius.value = parseInt(params.get("radius"));
+}
+if (params.has("wkt")) {
+  wktSelected.value = params.get("wkt");
+}
+if (params.has("dateMin")) {
+  dateMin.value = params.get("dateMin");
+}
+if (params.has("dateMax")) {
+  dateMax.value = params.get("dateMax");
+}
 </script>
 
 <template>
@@ -64,6 +45,7 @@ watch(wktSelected, () => {
       <div class="col-12 col-lg-6 col-md-6">
         <Map
           :radius="radius"
+          :wkt="wktSelected"
           @wkt="(drawGeometryWKT) => (wktSelected = drawGeometryWKT)"
         />
       </div>

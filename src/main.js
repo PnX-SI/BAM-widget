@@ -5,7 +5,6 @@ import App from "./App.vue";
 
 import ListeCarteTaxonWidget from "./components/ListeCarteTaxonWidget.vue";
 import ListeTaxonWidget from "./components/ListeTaxonWidget.vue";
-import CarteWidget from "./components/CarteWidget.vue";
 import MainPage from "./components/MainPage.vue";
 
 import {
@@ -22,10 +21,6 @@ const routes = [
   {
     path: "/taxons",
     component: ListeTaxonWidget,
-  },
-  {
-    path: "/carte",
-    component: CarteWidget,
   },
   {
     path: "/configurateur",
