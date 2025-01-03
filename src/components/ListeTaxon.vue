@@ -6,6 +6,8 @@ import { getGbifTaxon } from "../lib/api/taxon";
 import Taxon from "./Taxon.vue";
 import Pagination from "./commons/Pagination.vue";
 
+import { GbifConnector } from "../lib/connectors/gbif.js";
+
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
@@ -49,6 +51,7 @@ const speciesListShowed = computed(() => {
     );
 });
 
+
 function refreshSpeciesList(wkt) {
   loadingObservations.value = true;
   speciesList.value = [];
@@ -56,16 +59,24 @@ function refreshSpeciesList(wkt) {
   if (dateMin.value && dateMax.value) {
     paramsGBIF = { eventDate: `${dateMin.value},${dateMax.value}` };
   }
-  getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
-    Object.values(response).forEach((observation) => {
-      getMedias(observation.taxonKey).then((url) => {
-        observation["media"] = url;
-        speciesList.value.push(observation);
+
+  const params = {
+    geometry: wkt,
+    maxPage: 2,
+    limit: 300,
+  }
+  new GbifConnector().fetchOccurrence(params).then((response) => {
+    Object.values(response.results).forEach((observation) => {
+      speciesList.value.push({
+        taxonId: observation.taxonKey,
+        acceptedScientificName: observation.acceptedScientificName,
+        eventDate: observation.eventDate,
+        gbifID: observation.gbifID,
       });
-    });
-    loadingObservations.value = false;
-  });
-}
+    })
+  })
+
+} 
 
 watch(WKT, () => {
   if (WKT.value) {
@@ -90,6 +101,7 @@ watch(WKT, () => {
     <div class="row" id="species-listing">
       <Taxon
         v-for="observation in speciesListShowed"
+        :taxonId="observation.taxonId" 
         :name="observation.acceptedScientificName"
         :imageUrl="observation.media"
         :description="observation.acceptedScientificName"
