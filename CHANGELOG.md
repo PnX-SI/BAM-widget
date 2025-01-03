@@ -2,9 +2,9 @@
 
 ## 0.2.0 (unreleased)
 
-Refonte du widget avec Vue.js et Leaflet
+Makeover of the widget with Vue.js and Leaflet.
 
-**🚀 Nouveautés**
+**✨ New features**
 
 -
 
