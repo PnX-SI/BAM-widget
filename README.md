@@ -1,9 +1,8 @@
 # TaxonAroundMe
 
-This repo proposed a Vue.js implementation of the work started in https://github.com/PnX-SI/widget-gtsi by @amandine-sahl, @jacquesfize, @EcMerc, @CynthiaBorotPNV
-and Simon Chevreau.
+This app allows you to retrieve and display species found in a given area. Different sources of data may be used : GBIF,a GeoNature instance (more incoming). The main goal is to propose different modes : map, list of species, both, etc.
 
-Will soon be displaced in an official repo !
+## Demo
 
 Demo : https://jacquesfize.github.io/taxons-around-me/
 
