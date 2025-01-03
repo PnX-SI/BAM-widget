@@ -22,15 +22,18 @@ const props = defineProps({
     type: Number,
     default: 10,
   },
+  wkt: String,
 });
 
 // Component Attributes
 const map = shallowRef(); // to store the Leaflet map
 const geometry = shallowRef(new L.FeatureGroup()); // to store the displayed geometry
 const radius = ref(props.radius); // in km
+const wkt = ref(props.wkt);
 
 watchEffect(() => {
   radius.value = props.radius;
+  wkt.value = props.wkt;
 });
 
 // Component Events
@@ -54,6 +57,12 @@ onMounted(() => {
 
   // Add draw control
   map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
+
+  if (wkt.value) {
+    let tmp = L.geoJSON().addTo(geometry.value);
+    tmp.addData(parse(wkt.value));
+    map.fitBounds(group.getBounds());
+  }
 
   function addLayer(event) {
     let layer = event.layer;
@@ -80,6 +89,13 @@ onMounted(() => {
       zoom: map.value.getZoom(),
     };
     localStorage.setItem("mapState", JSON.stringify(state));
+  });
+
+  watch(wkt, () => {
+    if (wkt.value) {
+      let tmp = L.geoJSON().addTo(geometry.value);
+      tmp.addData(parse(wkt.value));
+    }
   });
 });
 </script>
