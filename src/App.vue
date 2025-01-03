@@ -1,9 +1,7 @@
-<script setup>
-import MainPage from "./components/MainPage.vue";
-</script>
+<script setup></script>
 
 <template>
-  <MainPage />
+  <RouterView />
 </template>
 
 <style scoped></style>
