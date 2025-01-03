@@ -75,6 +75,7 @@ function getGbifTaxon(
               eventDate: observation.eventDate,
               gbifID: observation.gbifID,
               taxonKey: observation.taxonKey,
+              taxonId: observation.taxonKey,
               occCount: occCount + 1,
             };
           });
