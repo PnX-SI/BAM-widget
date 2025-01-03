@@ -5,8 +5,7 @@ import { lineChunk } from "@turf/turf";
 
 const props = defineProps({
   taxonId: Number,
-  name: String,
-  imageUrl: String,
+  name: String, 
   description: String,
   observationDate: String,
   count: Number,
@@ -43,7 +42,7 @@ watchEffect(() => {
   <div class="card mb-3">
     <div class="row">
       <div class="col-md-4 p-0">
-        <img :src="speciesMediaShowed?.url" class="card-img-top" :alt="props.imageUrl" />
+        <img :src="speciesMediaShowed?.url" class="card-img-top" :alt="speciesMediaShowed?.url" />
       </div>
       <div class="col-md-8">
         <div class="card-body">

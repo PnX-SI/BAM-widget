@@ -91,8 +91,7 @@ watch(WKT, () => {
       <Taxon
         v-for="observation in speciesListShowed"
         :taxonId="observation.taxonId" 
-        :name="observation.acceptedScientificName"
-        :imageUrl="observation.media"
+        :name="observation.acceptedScientificName" 
         :description="observation.acceptedScientificName"
         :observationDate="observation.eventDate"
         :count="observation.occCount"
