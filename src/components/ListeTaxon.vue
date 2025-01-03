@@ -59,24 +59,13 @@ function refreshSpeciesList(wkt) {
   if (dateMin.value && dateMax.value) {
     paramsGBIF = { eventDate: `${dateMin.value},${dateMax.value}` };
   }
-
-  const params = {
-    geometry: wkt,
-    maxPage: 2,
-    limit: 300,
-  }
-  new GbifConnector().fetchOccurrence(params).then((response) => {
-    Object.values(response.results).forEach((observation) => {
-      speciesList.value.push({
-        taxonId: observation.taxonKey,
-        acceptedScientificName: observation.acceptedScientificName,
-        eventDate: observation.eventDate,
-        gbifID: observation.gbifID,
-      });
-    })
-  })
-
-} 
+  getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
+    Object.values(response).forEach((observation) => {
+      speciesList.value.push(observation);
+    }); 
+    loadingObservations.value = false;
+  });
+}
 
 watch(WKT, () => {
   if (WKT.value) {
