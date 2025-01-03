@@ -19,5 +19,3 @@ git commit -m 'deploy'
 git push -f git@github.com:PnX-SI/widget-gtsi.git main:gh-pages
 
 cd -
-
-git@github.com:PnX-SI/widget-gtsi.git
