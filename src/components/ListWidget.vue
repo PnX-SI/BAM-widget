@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import TaxonList from "@/components/core/TaxonList.vue";
+import { useRoute } from "vue-router";
 
 const radius = ref(1);
 const wktSelected = ref();
@@ -9,21 +10,21 @@ const wktSelected = ref();
 const dateMin = ref(null);
 const dateMax = ref(null);
 
-onMounted(() => {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("radius")) {
-    radius.value = parseInt(params.get("radius"));
-  }
-  if (params.has("wkt")) {
-    wktSelected.value = params.get("wkt");
-  }
-  if (params.has("dateMin")) {
-    dateMin.value = params.get("dateMin");
-  }
-  if (params.has("dateMax")) {
-    dateMax.value = params.get("dateMax");
-  }
-});
+const route = useRoute();
+const params = route.query;
+
+if ("radius" in params) {
+  radius.value = parseInt(params.get("radius"));
+}
+if ("wkt" in params) {
+  wktSelected.value = params.wkt;
+}
+if ("dateMin" in params) {
+  dateMin.value = params.get("dateMin");
+}
+if ("dateMax" in params) {
+  dateMax.value = params.get("dateMax");
+}
 </script>
 
 <template>

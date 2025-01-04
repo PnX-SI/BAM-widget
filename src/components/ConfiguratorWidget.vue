@@ -1,6 +1,7 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
 import Map from "@/components/core/Map.vue";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Filters from "@/components/core/Filters.vue";
@@ -10,17 +11,19 @@ const wktSelected = ref("");
 const dateMin = ref(null);
 const dateMax = ref(null);
 
-const params = new URLSearchParams(window.location.search);
-if (params.has("radius")) {
+const route = useRoute();
+const params = route.query;
+
+if ("radius" in params) {
   radius.value = parseInt(params.get("radius"));
 }
-if (params.has("wkt")) {
-  wktSelected.value = params.get("wkt");
+if ("wkt" in params) {
+  wktSelected.value = params.wkt;
 }
-if (params.has("dateMin")) {
+if ("dateMin" in params) {
   dateMin.value = params.get("dateMin");
 }
-if (params.has("dateMax")) {
+if ("dateMax" in params) {
   dateMax.value = params.get("dateMax");
 }
 </script>

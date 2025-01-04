@@ -8,11 +8,7 @@ import ListWidget from "./components/ListWidget.vue";
 import ConfiguratorWidget from "./components/ConfiguratorWidget.vue";
 import Error404 from "./components/commons/Error404.vue";
 
-import {
-  createWebHistory,
-  createWebHashHistory,
-  createRouter,
-} from "vue-router";
+import { createWebHashHistory, createRouter } from "vue-router";
 import { createI18n } from "vue-i18n";
 import messagesFR from "./assets/languageAssets/fr";
 import messagesEN from "./assets/languageAssets/en";
