@@ -30,7 +30,7 @@ watch([radius, dateMin, dateMax], () => {
 <template>
   <div class="row g-3 mb-3" id="filters">
     <div class="col-12 col-md-12 col-lg-1" id="filtersTitle">
-      <h3><i class="bi bi-filter"></i> Filtres</h3>
+      <h3><i class="bi bi-filter"></i> {{ $t("filtersTitle") }}</h3>
     </div>
     <div class="col-12 col-md-4 col-lg-3">
       <label for="radius" class="form-label"

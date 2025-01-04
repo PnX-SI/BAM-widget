@@ -75,7 +75,7 @@ const pageToShow = computed(() => {
         id="previous"
         :class="isDisabled(pageIndex, true)"
       >
-        <a class="page-link">Previous</a>
+        <a class="page-link">{{ $t("previousPage") }}</a>
       </li>
       <li
         v-for="i in pageToShow"
@@ -90,7 +90,7 @@ const pageToShow = computed(() => {
         @click="pageIndex < maxNumberOfPages - 1 ? incrementPage() : ''"
         :class="isDisabled(pageIndex, false)"
       >
-        <a class="page-link" href="#">Next</a>
+        <a class="page-link" href="#">{{ $t("nextPage") }}</a>
       </li>
     </ul>
   </nav>

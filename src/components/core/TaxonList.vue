@@ -1,35 +1,53 @@
 <script setup>
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
-import { getMedias } from "../lib/api/media";
-import Loading from "./commons/Loading.vue";
-import { getGbifTaxon } from "../lib/api/taxon";
-import Taxon from "./Taxon.vue";
-import Pagination from "./commons/Pagination.vue";
-
-import { GbifConnector } from "../lib/connectors/gbif.js";
+import { computed, ref, watch, watchEffect } from "vue";
+import Loading from "@/components/commons/Loading.vue";
+import { getGbifTaxon } from "@/lib/api/taxon";
+import Taxon from "@/components/core/Taxon.vue";
+import Pagination from "@/components/commons/Pagination.vue";
 
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
 
-const props = defineProps({
-  wkt: String,
-  itemPerPage: Number,
-  dateMin: String,
-  dateMax: String,
-});
-onMounted(() => {
-  if (props.wkt) {
-    WKT.value = props.wkt;
-    refreshSpeciesList(WKT.value);
-  }
-});
-
 const speciesList = ref([]);
 const loadingObservations = ref(false);
 
 const pageIndex = ref(0);
-const itemsPerPage = ref(props.itemPerPage ? props.itemPerPage : 10);
+const itemsPerPage = ref(10);
+
+const props = defineProps({
+  wkt: String,
+  itemPerPage: Number,
+  dateMin: String,
+  dateMax: {
+    type: String,
+    default: "2025-01-01",
+  },
+  width: {
+    type: String,
+    default: "400px",
+  },
+  height: {
+    type: String,
+    default: "100vh",
+  },
+});
+
+const height = computed(() => {
+  return `height : ${props.height}`;
+});
+const heightSpeciesList = computed(() => {
+  const heightInPx = parseFloat(props.height.match(/\d+(?:\.\d+)?/)[0]);
+  const heightUnit = props.height.replace(/\d+(?:\.\d+)?/, "");
+  const heightInPercentOfParent = heightInPx * 0.8 + heightUnit;
+
+  return `height : ${heightInPercentOfParent}`;
+});
+
+if (props.wkt) {
+  WKT.value = props.wkt;
+  refreshSpeciesList(WKT.value);
+}
 
 watchEffect(() => {
   WKT.value = props.wkt;
@@ -40,6 +58,7 @@ watchEffect(() => {
   if (WKT.value && date_changed) {
     refreshSpeciesList(WKT.value);
   }
+  itemsPerPage.value = props.itemPerPage;
 });
 
 const speciesListShowed = computed(() => {
@@ -51,7 +70,6 @@ const speciesListShowed = computed(() => {
     );
 });
 
-
 function refreshSpeciesList(wkt) {
   loadingObservations.value = true;
   speciesList.value = [];
@@ -62,11 +80,10 @@ function refreshSpeciesList(wkt) {
   getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
     Object.values(response).forEach((observation) => {
       speciesList.value.push(observation);
-    }); 
+    });
     loadingObservations.value = false;
   });
 }
-
 watch(WKT, () => {
   if (WKT.value) {
     refreshSpeciesList(WKT.value);
@@ -74,9 +91,9 @@ watch(WKT, () => {
 });
 </script>
 <template>
-  <div id="liste-taxons" class="mb-3">
+  <div id="liste-taxons" class="mb-3" :style="height">
     <h2 class="col-12 text-center mb-3 mt-0 p-3">
-      <i class="bi bi-search"></i> Taxons observés
+      <i class="bi bi-search"></i> {{ $t("searchResults") }}
     </h2>
     <Loading :loadingStatus="loadingObservations" />
     <div
@@ -84,14 +101,14 @@ watch(WKT, () => {
       v-if="speciesListShowed.length == 0 && !loadingObservations"
     >
       <h4 class="col-12 text-center mb-3 mt-0 p-3">
-        <i class="bi bi-pin-map"></i> Dessiner une géométrie sur la carte
+        <i class="bi bi-pin-map"></i>{{ $t("drawGeometry") }}
       </h4>
     </div>
-    <div class="row" id="species-listing">
+    <div id="species-listing" :style="heightSpeciesList">
       <Taxon
         v-for="observation in speciesListShowed"
-        :taxonId="observation.taxonId" 
-        :name="observation.acceptedScientificName" 
+        :taxonId="observation.taxonId"
+        :name="observation.acceptedScientificName"
         :description="observation.acceptedScientificName"
         :observationDate="observation.eventDate"
         :count="observation.occCount"
@@ -114,11 +131,10 @@ watch(WKT, () => {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 70vh;
 }
 #species-listing {
   overflow: scroll;
-  height: 50vh;
+  max-height: 80vh;
 }
 #no-observation-message {
   background-color: #efefef;

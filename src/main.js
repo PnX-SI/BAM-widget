@@ -3,29 +3,38 @@ import "./assets/main.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import ListeCarteTaxonWidget from "./components/ListeCarteTaxonWidget.vue";
-import ListeTaxonWidget from "./components/ListeTaxonWidget.vue";
-import MainPage from "./components/MainPage.vue";
+import MapListWidget from "./components/MapListWidget.vue";
+import ListWidget from "./components/ListWidget.vue";
+import ConfiguratorWidget from "./components/ConfiguratorWidget.vue";
+import Error404 from "./components/commons/Error404.vue";
 
-import {
-  createMemoryHistory,
-  createWebHistory,
-  createRouter,
-} from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
+import { createI18n } from "vue-i18n";
+import messagesFR from "./assets/languageAssets/fr";
+import messagesEN from "./assets/languageAssets/en";
 
+const i18n = createI18n({
+  locale: "fr",
+  fallbackLocale: "en",
+  messages: {
+    ...messagesFR,
+    ...messagesEN,
+  },
+});
 const routes = [
   {
     path: "/",
-    component: ListeCarteTaxonWidget,
+    component: MapListWidget,
   },
   {
-    path: "/taxons",
-    component: ListeTaxonWidget,
+    path: "/list",
+    component: ListWidget,
   },
   {
-    path: "/configurateur",
-    component: MainPage,
+    path: "/config",
+    component: ConfiguratorWidget,
   },
+  { path: "/:pathMatch(.*)*", name: "NotFound", component: Error404 },
 ];
 
 const router = createRouter({
@@ -33,4 +42,4 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).mount("#app");
+createApp(App).use(router).use(i18n).mount("#app");
