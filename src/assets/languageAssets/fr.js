@@ -21,6 +21,11 @@ const messagesFR = {
       subtitle: "La page que vous recherchez n'existe pas",
     },
     drawGeometry: "Dessiner une geometrie",
+    size: {
+      width: "Largeur",
+      height: "Hauteur",
+    },
+    embed: "Code HTML",
   },
 };
 

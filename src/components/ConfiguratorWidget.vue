@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 import Map from "@/components/core/Map.vue";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Filters from "@/components/core/Filters.vue";
+import HTMLBuilder from "./core/HTMLBuilder.vue";
 
 const radius = ref(1);
 const wktSelected = ref("");
@@ -60,6 +61,16 @@ if ("dateMax" in params) {
           :itemPerPage="10"
           height="70vh"
         />
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-6 col-md-6 m-3">
+          <h4>Intégrer le widget dans votre site</h4>
+          <HTMLBuilder
+            :wkt="wktSelected"
+            :dateMin="dateMin"
+            :dateMax="dateMax"
+          />
+        </div>
       </div>
     </div>
   </div>

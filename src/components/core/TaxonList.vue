@@ -39,7 +39,7 @@ const height = computed(() => {
 const heightSpeciesList = computed(() => {
   const heightInPx = parseFloat(props.height.match(/\d+(?:\.\d+)?/)[0]);
   const heightUnit = props.height.replace(/\d+(?:\.\d+)?/, "");
-  const heightInPercentOfParent = heightInPx * 0.8 + heightUnit;
+  const heightInPercentOfParent = heightInPx * 0.7 + heightUnit;
 
   return `height : ${heightInPercentOfParent}`;
 });

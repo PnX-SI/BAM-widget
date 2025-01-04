@@ -21,6 +21,11 @@ const messagesEN = {
       subtitle: "The page you are looking for does not exist",
     },
     drawGeometry: "Draw geometry",
+    size: {
+      width: "Width",
+      height: "Height",
+    },
+    embed: "Embed",
   },
 };
 
