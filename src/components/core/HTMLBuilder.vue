@@ -17,6 +17,7 @@ console.log(window.location.origin);
 console.log(router.currentRoute.value.fullPath);
 
 const host = window.location.origin;
+const pathName = window.location.pathname;
 const route = router.currentRoute.value.fullPath;
 
 const embed = computed(() => {
@@ -33,7 +34,7 @@ const embed = computed(() => {
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
 
-  const link = `${host}/#${route}${params}`;
+  const link = `${host}${pathName}#${route}${params}`;
 
   return `<embed src="${link}" type="" style="width: ${width.value}; height: ${height.value}" />`;
 });
