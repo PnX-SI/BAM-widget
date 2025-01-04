@@ -15,7 +15,7 @@ function toWKT(layer, typeLayer, radius) {
   return WKT;
 }
 
-function saveMapState(map) {
+function restoreMapState(map) {
   const savedState = localStorage.getItem("mapState");
   if (savedState) {
     const state = JSON.parse(savedState);
@@ -26,4 +26,4 @@ function saveMapState(map) {
   }
 }
 
-export { toWKT, saveMapState };
+export { toWKT, restoreMapState };

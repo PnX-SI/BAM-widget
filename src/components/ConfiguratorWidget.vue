@@ -1,10 +1,9 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
-import Map from "./Map.vue";
-import { onMounted, ref, watch } from "vue";
-import ListeTaxon from "./ListeTaxon.vue";
-import Filters from "./Filters.vue";
-import { GbifConnector } from "@/lib/connectors/gbif";
+import { ref } from "vue";
+import Map from "@/components/core/Map.vue";
+import TaxonList from "@/components/core/TaxonList.vue";
+import Filters from "@/components/core/Filters.vue";
 
 const radius = ref(1);
 const wktSelected = ref("");
@@ -28,7 +27,7 @@ if (params.has("dateMax")) {
 
 <template>
   <div class="container-fluid">
-    <h1 id="title" class="col-12 text-center m-3">🐦Taxons around me🐛</h1>
+    <h1 id="title" class="col-12 text-center m-3">🐦{{ $t("title") }}🐛</h1>
 
     <div class="row">
       <div class="col m-2 mt-1 mb-3">
@@ -45,16 +44,18 @@ if (params.has("dateMax")) {
       <div class="col-12 col-lg-6 col-md-6">
         <Map
           :radius="radius"
+          height="70vh"
           :wkt="wktSelected"
           @wkt="(drawGeometryWKT) => (wktSelected = drawGeometryWKT)"
         />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
-        <ListeTaxon
+        <TaxonList
           :wkt="wktSelected"
           :dateMin="dateMin"
           :dateMax="dateMax"
           :itemPerPage="10"
+          height="70vh"
         />
       </div>
     </div>
@@ -64,9 +65,6 @@ if (params.has("dateMax")) {
 <script type="module"></script>
 
 <style scoped>
-#map {
-  height: 70vh;
-}
 #liste-taxons {
   padding: 1em;
 }
