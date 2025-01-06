@@ -1,5 +1,4 @@
 <script setup>
-import { UseClipboard } from "@vueuse/components";
 import HTMLBuilder from "./HTMLBuilder.vue";
 import { computed, ref, watch, watchEffect } from "vue";
 
@@ -48,6 +47,15 @@ const link = computed(() => {
 
   return `${host}${pathName}#${route.value}${params}`;
 });
+
+const copied = ref(false);
+function copy() {
+  navigator.clipboard.writeText(link.value);
+  copied.value = true;
+  setTimeout(() => {
+    copied.value = false;
+  }, 3000);
+}
 </script>
 
 <template>
@@ -56,14 +64,13 @@ const link = computed(() => {
       <h4>{{ $t("shareLink") }}</h4>
       <div class="input-group">
         <input class="form-control" type="text" :value="link"></input>
-      <UseClipboard v-slot="{ copy, copied }" :source="link">
           <button class="btn btn-outline-secondary" @click="copy()">
             <div v-if="copied">
               <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
             </div>
             <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
           </button>
-        </UseClipboard>
+
       </div>
       
 
