@@ -90,7 +90,7 @@ const pageToShow = computed(() => {
         @click="pageIndex < maxNumberOfPages - 1 ? incrementPage() : ''"
         :class="isDisabled(pageIndex, false)"
       >
-        <a class="page-link" href="#">{{ $t("nextPage") }}</a>
+        <a class="page-link">{{ $t("nextPage") }}</a>
       </li>
     </ul>
   </nav>
