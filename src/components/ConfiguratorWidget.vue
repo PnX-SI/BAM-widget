@@ -6,6 +6,7 @@ import Map from "@/components/core/Map.vue";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Filters from "@/components/core/Filters.vue";
 import HTMLBuilder from "./core/HTMLBuilder.vue";
+import Share from "./core/Share.vue";
 
 const radius = ref(1);
 const wktSelected = ref("");
@@ -62,16 +63,7 @@ if ("dateMax" in params) {
           height="70vh"
         />
       </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-6 col-md-6 m-3">
-          <h4>Intégrer le widget dans votre site</h4>
-          <HTMLBuilder
-            :wkt="wktSelected"
-            :dateMin="dateMin"
-            :dateMax="dateMax"
-          />
-        </div>
-      </div>
+      <Share :wkt="wktSelected" :dateMin="dateMin" :dateMax="dateMax" />
     </div>
   </div>
 </template>

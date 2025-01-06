@@ -1,45 +1,25 @@
 <script setup>
 import { computed, ref, watch, watchEffect } from "vue";
-import { useRouter } from "vue-router";
 
-const width = ref("300px");
-const height = ref("600px");
-const url = ref("");
+const width = ref("100wv");
+const height = ref("100vh");
+const typeWidget = ref("");
 
 const props = defineProps({
-  wkt: String,
-  dateMin: String,
-  dateMax: String,
+  link: String,
 });
 
-const router = useRouter();
-console.log(window.location.origin);
-console.log(router.currentRoute.value.fullPath);
+const emit = defineEmits(["width", "height", "typeWidget"]);
 
-const host = window.location.origin;
-const pathName = window.location.pathname;
-const route = router.currentRoute.value.fullPath;
+watch([typeWidget, width, height], () => {
+  emit("width", width.value);
+  emit("height", height.value);
+  emit("typeWidget", typeWidget.value);
+});
 
 const embed = computed(() => {
-  let paramsArray = [];
-  if (props.wkt) {
-    paramsArray.push(`wkt=${props.wkt}`);
-  }
-  if (props.dateMin) {
-    paramsArray.push(`dateMin=${props.dateMin}`);
-  }
-  if (props.dateMax) {
-    paramsArray.push(`dateMax=${props.dateMax}`);
-  }
-
-  const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
-
-  const link = `${host}${pathName}#${route}${params}`;
-
-  return `<embed src="${link}" type="" style="width: ${width.value}; height: ${height.value}" />`;
+  return `<embed src="${props.link}" type="" style="width: ${width.value}; height: ${height.value}" />`;
 });
-
-// console.log(url.value);
 </script>
 
 <template>
@@ -67,5 +47,11 @@ const embed = computed(() => {
       aria-label=".form-control-lg example"
       v-model="height"
     />
+    <span class="input-group-text">{{ $t("typeWidget.title") }}</span>
+    <select class="form-select" v-model="typeWidget">
+      <option value="">{{ $t("typeWidget.default") }}</option>
+      <option value="list">{{ $t("typeWidget.list") }}</option>
+      <option value="config">{{ $t("typeWidget.config") }}</option>
+    </select>
   </div>
 </template>

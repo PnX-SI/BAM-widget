@@ -26,6 +26,15 @@ const messagesEN = {
       height: "Height",
     },
     embed: "Embed",
+    typeWidget: {
+      title: "Type",
+      default: "Default",
+      list: "List of species",
+      config: "Configuration",
+    },
+    copy: "Copy",
+    copied: "Copied",
+    shareLink: "Share link",
   },
 };
 

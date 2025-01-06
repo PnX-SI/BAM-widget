@@ -26,6 +26,15 @@ const messagesFR = {
       height: "Hauteur",
     },
     embed: "Code HTML",
+    typeWidget: {
+      title: "Type",
+      default: "Par défaut",
+      list: "Liste de taxons",
+      config: "Configurateur",
+    },
+    copy: "Copier",
+    copied: "Copié",
+    shareLink: "Partager le lien",
   },
 };
 

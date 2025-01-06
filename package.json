@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@turf/turf": "^7.1.0",
+    "@vueuse/components": "^12.3.0",
+    "@vueuse/core": "^12.3.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "js-cookie": "^3.0.5",
