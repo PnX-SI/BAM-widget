@@ -5,42 +5,21 @@ import { useRoute } from "vue-router";
 import Map from "@/components/core/Map.vue";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Filters from "@/components/core/Filters.vue";
-import HTMLBuilder from "./core/HTMLBuilder.vue";
 import Share from "./core/Share.vue";
+import { fetchParams } from "@/lib/params";
 
-const radius = ref(1);
-const wktSelected = ref("");
-const dateMin = ref(null);
-const dateMax = ref(null);
-
-const route = useRoute();
-const params = route.query;
-
-if ("radius" in params) {
-  radius.value = parseInt(params.get("radius"));
-}
-if ("wkt" in params) {
-  wktSelected.value = params.wkt;
-}
-if ("dateMin" in params) {
-  dateMin.value = params.get("dateMin");
-}
-if ("dateMax" in params) {
-  dateMax.value = params.get("dateMax");
-}
+const params = fetchParams();
 </script>
 
 <template>
   <div class="container-fluid">
-    <h1 id="title" class="col-12 text-center m-3">🐦{{ $t("title") }}🐛</h1>
-
     <div class="row">
       <div class="col m-2 mt-1 mb-3">
         <Filters
-          :radius="radius"
-          @dateMin="(newDateMin) => (dateMin = newDateMin)"
-          @dateMax="(newDateMax) => (dateMax = newDateMax)"
-          @radius="(newradius) => (radius = parseInt(newradius))"
+          :radius="params.radius"
+          @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
+          @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
+          @radius="(newradius) => (params.radius = parseInt(newradius))"
         />
       </div>
     </div>
@@ -48,22 +27,26 @@ if ("dateMax" in params) {
     <div class="row">
       <div class="col-12 col-lg-6 col-md-6">
         <Map
-          :radius="radius"
+          :radius="params.radius"
           height="70vh"
-          :wkt="wktSelected"
-          @wkt="(drawGeometryWKT) => (wktSelected = drawGeometryWKT)"
+          :wkt="params.wktSelected"
+          @wkt="(drawGeometryWKT) => (params.wktSelected = drawGeometryWKT)"
         />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <TaxonList
-          :wkt="wktSelected"
-          :dateMin="dateMin"
-          :dateMax="dateMax"
+          :wkt="params.wktSelected"
+          :dateMin="params.dateMin"
+          :dateMax="params.dateMax"
           :itemPerPage="10"
           height="70vh"
         />
       </div>
-      <Share :wkt="wktSelected" :dateMin="dateMin" :dateMax="dateMax" />
+      <Share
+        :wkt="params.wktSelected"
+        :dateMin="params.dateMin"
+        :dateMax="params.dateMax"
+      />
     </div>
   </div>
 </template>
