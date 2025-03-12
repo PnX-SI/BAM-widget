@@ -1,6 +1,15 @@
+import { toast } from "vue3-toastify";
+
 class Connector {
   constructor(options) {
     this.options = options;
+  }
+  verifyOptions(params_names = []) {
+    params_names.forEach((name) => {
+      if (!this.options.hasOwnProperty(name)) {
+        toast.error(`Please indicate the ${name} parameter`);
+      }
+    });
   }
   fetchOccurrence(params) {
     throw new Error("Not implemented");
