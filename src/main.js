@@ -13,6 +13,8 @@ import { createI18n } from "vue-i18n";
 import messagesFR from "./assets/languageAssets/fr";
 import messagesEN from "./assets/languageAssets/en";
 
+import "vue3-toastify/dist/index.css";
+
 const i18n = createI18n({
   locale: "fr",
   fallbackLocale: "en",
