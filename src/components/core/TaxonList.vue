@@ -4,6 +4,7 @@ import Loading from "@/components/commons/Loading.vue";
 import { getGbifTaxon } from "@/lib/api/taxon";
 import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
+import { GeoNatureConnector } from "@/lib/connectors/geonature";
 
 const WKT = ref(null);
 const dateMin = ref(null);
@@ -63,7 +64,7 @@ watchEffect(() => {
 
 const speciesListShowed = computed(() => {
   return speciesList.value
-    .sort((a, b) => b.occCount - a.occCount)
+    .sort((a, b) => b.nbObservations - a.nbObservations)
     .slice(
       pageIndex.value * itemsPerPage.value,
       (pageIndex.value + 1) * itemsPerPage.value
@@ -77,12 +78,24 @@ function refreshSpeciesList(wkt) {
   if (dateMin.value && dateMax.value) {
     paramsGBIF = { eventDate: `${dateMin.value},${dateMax.value}` };
   }
-  getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
+  const GeoNature_Connector = new GeoNatureConnector({
+    GEONATURE_ENDPOINT: "http://127.0.0.1:8000",
+    ID_EXPORT: "20",
+  });
+  GeoNature_Connector.fetchOccurrence({
+    geometry: wkt,
+  }).then((response) => {
     Object.values(response).forEach((observation) => {
       speciesList.value.push(observation);
     });
     loadingObservations.value = false;
   });
+  // getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
+  //   Object.values(response).forEach((observation) => {
+  //     speciesList.value.push(observation);
+  //   });
+  //   loadingObservations.value = false;
+  // });
 }
 watch(WKT, () => {
   if (WKT.value) {
@@ -98,20 +111,21 @@ watch(WKT, () => {
     <Loading :loadingStatus="loadingObservations" />
     <div
       id="no-observation-message"
+      class="col-6 offset-3"
       v-if="speciesListShowed.length == 0 && !loadingObservations"
     >
-      <h4 class="col-12 text-center mb-3 mt-0 p-3">
+      <h5 class="col-12 text-center mb-3 mt-0 p-3">
         <i class="bi bi-pin-map"></i>{{ $t("drawGeometry") }}
-      </h4>
+      </h5>
     </div>
     <div id="species-listing" :style="heightSpeciesList">
       <Taxon
         v-for="observation in speciesListShowed"
         :taxonId="observation.taxonId"
-        :name="observation.acceptedScientificName"
+        :scientific-name="observation.acceptedScientificName"
         :description="observation.acceptedScientificName"
-        :observationDate="observation.eventDate"
-        :count="observation.occCount"
+        :observationDate="observation.lastSeenDate"
+        :count="observation.nbObservations"
       />
     </div>
 
@@ -133,15 +147,26 @@ watch(WKT, () => {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 #species-listing {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   max-height: 80vh;
 }
 #no-observation-message {
-  background-color: #efefef;
+  background-color: #f2f2f2;
   border-radius: 5px;
+  height: 100px;
 }
-#no-observation-message h4 {
-  border: 2px dashed #666;
-  border-radius: 10px;
+#no-observation-message {
+  position: relative;
+  top: 35%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+h5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 </style>
