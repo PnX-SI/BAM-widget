@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import TaxonList from "@/components/core/TaxonList.vue";
 import { useRoute } from "vue-router";
 
