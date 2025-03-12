@@ -11,7 +11,7 @@ const messagesFR = {
     reset: "Reinitialiser",
     searchResults: "Résultats de la recherche",
     noResults: "Aucun résultat",
-    previousPage: "Page precedente",
+    previousPage: "Page précédente",
     nextPage: "Page suivante",
     loading: "Chargement en cours ...",
     noObservations: "Aucune observation trouvable",
