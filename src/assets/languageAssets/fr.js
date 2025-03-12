@@ -20,7 +20,7 @@ const messagesFR = {
       title: "Page introuvable",
       subtitle: "La page que vous recherchez n'existe pas",
     },
-    drawGeometry: "Dessiner une geometrie",
+    drawGeometry: "Sélectionner une zone pour afficher les taxons",
     size: {
       width: "Largeur",
       height: "Hauteur",

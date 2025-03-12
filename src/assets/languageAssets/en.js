@@ -20,7 +20,7 @@ const messagesEN = {
       title: "Page not found",
       subtitle: "The page you are looking for does not exist",
     },
-    drawGeometry: "Draw geometry",
+    drawGeometry: "Select a zone to display taxons",
     size: {
       width: "Width",
       height: "Height",
