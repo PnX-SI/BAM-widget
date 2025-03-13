@@ -1,6 +1,6 @@
 <script setup>
 import HTMLBuilder from "./HTMLBuilder.vue";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 const props = defineProps({
   wkt: String,
@@ -70,7 +70,6 @@ function copy() {
             </div>
             <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
           </button>
-
       </div>
       
 
