@@ -10,9 +10,7 @@ import { fetchParams } from "@/lib/params";
 import { getConnector } from "@/lib/connectors/utils";
 
 const params = fetchParams();
-watch(params, () => {
-  console.log("eeeefffff", params.connector);
-});
+const connector = ref(getConnector(null, {})); // default GBiF
 </script>
 
 <template>
@@ -21,12 +19,13 @@ watch(params, () => {
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
         <Filters
+          :sourceName="connector.name"
           :radius="params.radius"
           @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
           @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
           @radius="(newradius) => (params.radius = parseInt(newradius))"
           @connector-data="
-            (dict) => (params.connector = getConnector(dict.name, dict.params))
+            (dict) => (connector = getConnector(dict.name, dict.params))
           "
         />
         <br />
@@ -46,7 +45,7 @@ watch(params, () => {
       </div>
       <div class="col-12 col-lg-4 col-md-4">
         <TaxonList
-          :connector="params.connector"
+          :connector="connector"
           :wkt="params.wktSelected"
           :dateMin="params.dateMin"
           :dateMax="params.dateMax"

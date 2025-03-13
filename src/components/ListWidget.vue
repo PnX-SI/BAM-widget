@@ -11,6 +11,7 @@ const params = fetchParams();
   <div>
     <div v-if="params.wktSelected">
       <TaxonList
+        :connector="params.connector"
         :wkt="params.wktSelected"
         :dateMin="params.dateMin"
         :dateMax="params.dateMax"

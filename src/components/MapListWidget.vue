@@ -21,6 +21,7 @@ const params = fetchParams();
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <TaxonList
+          :connector="params.connector"
           :wkt="params.wktSelected"
           height="80vh"
           :dateMin="params.dateMin"

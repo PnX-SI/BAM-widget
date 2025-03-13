@@ -9,7 +9,7 @@ import { getConnector } from "@/lib/connectors/utils";
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
-const connector = ref(getConnector("gbif", {}));
+const connector = ref(getConnector());
 
 const speciesList = ref([]);
 const loadingObservations = ref(false);
@@ -37,6 +37,11 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+});
+
+watchEffect(() => {
+  connector.value = props.connector;
+  refreshSpeciesList(WKT.value);
 });
 
 const height = computed(() => {
@@ -122,6 +127,7 @@ watch(WKT, () => {
         :description="observation.acceptedScientificName"
         :observationDate="observation.lastSeenDate"
         :count="observation.nbObservations"
+        :rank="observation.taxonRank"
         :connector="connector"
       />
     </div>

@@ -23,7 +23,7 @@ watchEffect(() => {
   radius.value = props.radius;
   dateMin.value = props.dateMin;
   dateMax.value = props.dateMax;
-  // sourceName.value = props.sourceName;
+  sourceName.value = props.sourceName;
 });
 
 const emit = defineEmits(["radius", "dateMin", "dateMax", "connectorData"]);
@@ -32,7 +32,7 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
   emit("radius", radius.value);
   emit("dateMin", dateMin.value);
   emit("dateMax", dateMax.value);
-  // emit("connectorData", { name: sourceName.value, params: sourceParams.value });
+  emit("connectorData", { name: sourceName.value, params: sourceParams.value });
 });
 </script>
 <template>
@@ -64,7 +64,7 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
     </div>
     <div class="col-12 col-md-4 col-lg-12">
       <SourceFilter
-        sourceName="geonature"
+        :sourceName="props.sourceName"
         @params="(params) => (sourceParams = params)"
         @source-name="(newSource) => (sourceName = newSource)"
       ></SourceFilter>
