@@ -11,6 +11,7 @@ const props = defineProps({
   description: String,
   observationDate: Date,
   count: Number,
+  connector: { type: Object, required: true },
 });
 
 const speciesMedia = ref([]);
@@ -27,14 +28,9 @@ const speciesMediaShowed = computed(() => {
 function refreshTaxonImage() {
   speciesMedia.value = [];
   if (props.taxonId) {
-    new GeoNatureConnector({
-      GEONATURE_ENDPOINT: "http://127.0.0.1:8000",
-      ID_EXPORT: "20",
-    })
-      .fetchMedia(props.taxonId)
-      .then((response) => {
-        speciesMedia.value = response;
-      });
+    props.connector.fetchMedia(props.taxonId).then((response) => {
+      speciesMedia.value = response;
+    });
   }
 }
 

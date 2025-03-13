@@ -2,7 +2,7 @@ import { reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getConnector } from "@/lib/connectors/utils";
 
-function fetchParams() {
+function fetchParams(params_ = {}) {
   const params = reactive({
     radius: 1,
     wktSelected: "",
@@ -25,7 +25,10 @@ function fetchParams() {
     params.dateMax = params_from_url.get("dateMax");
   }
   if ("connector" in params_from_url) {
-    params.connector = getConnector(params_from_url.connector, params_from_url);
+    params.connector = getConnector(params_from_url.connector, {
+      ...params_from_url,
+      params_,
+    });
   }
   return params;
 }

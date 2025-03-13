@@ -9,11 +9,7 @@ import { getConnector } from "@/lib/connectors/utils";
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
-const connector = ref(
-  getConnector("geonature", {
-    EXPORT_API_ENDPOINT: "http://127.0.0.1:8000/exports/api/20",
-  })
-);
+const connector = ref(getConnector("gbif", {}));
 
 const speciesList = ref([]);
 const loadingObservations = ref(false);
@@ -126,6 +122,7 @@ watch(WKT, () => {
         :description="observation.acceptedScientificName"
         :observationDate="observation.lastSeenDate"
         :count="observation.nbObservations"
+        :connector="connector"
       />
     </div>
 
