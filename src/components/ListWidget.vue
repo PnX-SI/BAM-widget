@@ -8,7 +8,7 @@ const params = fetchParams();
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <div v-if="params.wktSelected">
       <TaxonList
         :wkt="params.wktSelected"
@@ -23,8 +23,4 @@ const params = fetchParams();
   </div>
 </template>
 
-<style scoped>
-.container {
-  height: 100vh !important;
-}
-</style>
+<style scoped></style>
