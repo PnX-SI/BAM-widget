@@ -1,6 +1,6 @@
 const messagesEN = {
   en: {
-    title: "Taxons around me",
+    title: "Biodiversity around me",
     subtitle: "Search for taxons around me",
     filters: "Filters",
     filtersTitle: "Filters",
