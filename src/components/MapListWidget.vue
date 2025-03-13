@@ -1,11 +1,14 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Map from "./core/Map.vue";
 import { fetchParams } from "@/lib/params";
 
 const params = fetchParams();
+watch(params, () => {
+  console.log(params);
+});
 </script>
 
 <template>

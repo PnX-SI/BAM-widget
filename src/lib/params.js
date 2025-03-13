@@ -3,7 +3,13 @@ import { useRoute } from "vue-router";
 import { getConnector } from "@/lib/connectors/utils";
 import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
-
+function validateWKT(wkt, radius) {
+  if (wkt && (wkt.includes("POINT") || wkt.includes("LINESTRING"))) {
+    const buffered = buffer(parse(wkt), radius);
+    return stringify(buffered);
+  }
+  return wkt;
+}
 function fetchParams(params_ = {}) {
   const params = reactive({
     radius: 1,
@@ -18,15 +24,15 @@ function fetchParams(params_ = {}) {
     params.radius = parseInt(params_from_url.radius);
   }
   if ("wkt" in params_from_url) {
-    params.wktSelected = params_from_url.wkt;
-    if (
-      params.wktSelected &&
-      (params.wktSelected.includes("POINT") ||
-        params.wktSelected.includes("LINESTRING"))
-    ) {
-      const buffered = buffer(parse(params.wktSelected), params.radius);
-      params.wktSelected = stringify(buffered);
-    }
+    params.wktSelected = validateWKT(params_from_url.wkt, params.radius);
+  }
+  if ("sourceGeometry" in params_from_url) {
+    fetch(params_from_url.sourceGeometry)
+      .then((res) => res.json())
+      .then((geojson) => {
+        params.wktSelected = validateWKT(stringify(geojson), params.radius);
+      })
+      .catch((err) => console.error(err));
   }
   if ("dateMin" in params_from_url) {
     params.dateMin = params_from_url.dateMin;

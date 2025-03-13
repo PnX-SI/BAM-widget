@@ -54,6 +54,8 @@ radius.value = props.radius;
 watchEffect(() => {
   radius.value = props.radius;
   wkt.value = props.wkt;
+  let tmp = L.geoJSON().addTo(geometry.value);
+  tmp.addData(parse(wkt.value));
 });
 
 // Component Events

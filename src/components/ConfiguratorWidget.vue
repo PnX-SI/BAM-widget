@@ -34,8 +34,7 @@ const connector = ref(getConnector(null, {})); // default GBiF
           :dateMin="params.dateMin"
           :dateMax="params.dateMax"
           :radius="params.radius"
-          :connectorName="connector.name"
-          :connectorParams="connector.params"
+          :connector="connector"
         />
       </div>
       <div class="col-12 col-lg-5 col-md-6">

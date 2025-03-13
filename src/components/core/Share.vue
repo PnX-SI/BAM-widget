@@ -7,8 +7,7 @@ const props = defineProps({
   dateMin: String,
   dateMax: String,
   radius: Number,
-  connectorName: String,
-  connectorParams: Object,
+  connector: Object,
 });
 
 const width = ref("100wv");
@@ -35,15 +34,18 @@ watchEffect(() => {
 
 const link = computed(() => {
   const paramsArray = Object.entries(props)
-    .filter(([key, value]) => value !== undefined && value !== null)
+    .filter(
+      ([key, value]) =>
+        value !== undefined && value !== null && key !== "connector"
+    )
     .map(([key, value]) => `${key}=${value}`);
-  if (props.connectorParams) {
-    Object.entries(props.connectorParams).forEach(([key, value]) => {
+  if (props.connector.params) {
+    Object.entries(props.connector.params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         paramsArray.push(`${key}=${value}`);
       }
     });
-    paramsArray.push(`connector=${props.connectorName}`);
+    paramsArray.push(`connector=${props.connector.name}`);
   }
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";

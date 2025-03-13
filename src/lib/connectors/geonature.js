@@ -29,6 +29,7 @@ class GeoNatureConnector extends Connector {
         let taxonsData = {};
         json.items.features.forEach((item) => {
           item = item.properties;
+
           if (!taxonsData.hasOwnProperty(item.cd_ref)) {
             taxonsData[item.cd_ref] = new Taxon({
               acceptedScientificName: item.nom_scientifique,
@@ -50,6 +51,7 @@ class GeoNatureConnector extends Connector {
             )
           );
         });
+        console.log(taxonsData);
         return taxonsData;
       });
   }
