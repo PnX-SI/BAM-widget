@@ -9,7 +9,6 @@ function toWKT(layer, typeLayer, radius) {
     WKT = stringify(buffered);
   }
   if (typeLayer == "circle") {
-    console.log(layer.getRadius());
     var buffered = buffer(layer.toGeoJSON(), layer.getRadius() / 1000); // divided by 1000 to get in km
     WKT = stringify(buffered);
   }

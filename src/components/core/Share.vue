@@ -1,11 +1,13 @@
 <script setup>
 import HTMLBuilder from "./HTMLBuilder.vue";
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 
 const props = defineProps({
   wkt: String,
   dateMin: String,
   dateMax: String,
+  radius: Number,
+  connector: Object,
 });
 
 const width = ref("100wv");
@@ -27,20 +29,23 @@ const route = computed(() => {
 });
 
 watchEffect(() => {
-  console.log("WKT", props.wkt);
   wkt.value = props.wkt;
 });
 
 const link = computed(() => {
-  let paramsArray = [];
-  if (props.wkt) {
-    paramsArray.push(`wkt=${props.wkt}`);
-  }
-  if (props.dateMin) {
-    paramsArray.push(`dateMin=${props.dateMin}`);
-  }
-  if (props.dateMax) {
-    paramsArray.push(`dateMax=${props.dateMax}`);
+  const paramsArray = Object.entries(props)
+    .filter(
+      ([key, value]) =>
+        value !== undefined && value !== null && key !== "connector"
+    )
+    .map(([key, value]) => `${key}=${value}`);
+  if (props.connector.params) {
+    Object.entries(props.connector.params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        paramsArray.push(`${key}=${value}`);
+      }
+    });
+    paramsArray.push(`connector=${props.connector.name}`);
   }
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
@@ -60,21 +65,21 @@ function copy() {
 
 <template>
   <div class="row justify-content-center">
-    <div class="col-12 col-lg-6 col-md-6 m-3">
-      <h4>{{ $t("shareLink") }}</h4>
+    <div class="col-12 col-lg-12 col-md-6 text-center">
+      <h4><i class="bi bi-share"></i> {{ $t("shareLink") }}</h4>
       <div class="input-group">
-        <input class="form-control" type="text" :value="link"></input>
-          <button class="btn btn-outline-secondary" @click="copy()">
-            <div v-if="copied">
-              <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
-            </div>
-            <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
-          </button>
-
+        <input class="form-control" type="text" :value="link" />
+        <button class="btn btn-outline-secondary" @click="copy()">
+          <div v-if="copied">
+            <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
+          </div>
+          <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
+        </button>
       </div>
-      
 
-      <h4>Intégrer le widget dans votre site</h4>
+      <h4 class="mt-3 text-center">
+        <i class="bi bi-code-slash"></i> {{ $t("browserIntegration") }}
+      </h4>
       <HTMLBuilder
         :link="link"
         @typeWidget="(new_type) => (typeWidget = new_type)"

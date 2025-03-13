@@ -2,13 +2,17 @@
 import { onMounted, ref, computed, watchEffect, onUpdated } from "vue";
 import { GbifConnector } from "@/lib/connectors/gbif.js";
 import { lineChunk } from "@turf/turf";
+import { GeoNatureConnector } from "@/lib/connectors/geonature";
 
 const props = defineProps({
   taxonId: Number,
-  name: String,
+  scientificName: String,
+  vernacularName: String,
+  rank: String,
   description: String,
-  observationDate: String,
+  observationDate: Date,
   count: Number,
+  connector: { type: Object, required: true },
 });
 
 const speciesMedia = ref([]);
@@ -25,7 +29,7 @@ const speciesMediaShowed = computed(() => {
 function refreshTaxonImage() {
   speciesMedia.value = [];
   if (props.taxonId) {
-    new GbifConnector().fetchMedia(props.taxonId).then((response) => {
+    props.connector.fetchMedia(props.taxonId).then((response) => {
       speciesMedia.value = response;
     });
   }
@@ -39,49 +43,54 @@ watchEffect(() => {
 
 <template>
   <div class="card mb-3">
-    <div class="row">
+    <div class="row p-2" style="padding-left: 1.3em !important">
       <div class="col-md-4 p-0">
-        <img
+        <a :href="speciesMediaShowed?.url" target="_blank">
+          <img
           :src="speciesMediaShowed?.url"
           class="card-img-top"
           :alt="speciesMediaShowed?.url"
+          :title="'Source: '+speciesMediaShowed?.source"
+
         />
+        </a>
+        
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">{{ props.name }}</h5>
+          <h5 class="card-title" style="justify-content: left">
+            {{ props.vernacularName || props.scientificName }}
+          </h5>
           <!-- <p class="description card-text">{{ props.description }}</p> -->
           <p class="card-text">
             <small class="text-body-secondary"
-              >Observé le : {{ props.observationDate }}</small
-            >
+              ><strong>Nom scientifique :</strong>
+              {{ props.scientificName }}</small
+            ><br />
+            <small class="text-body-secondary"
+              ><strong>Date de la dernière observation :</strong>
+              {{ props?.observationDate.toLocaleDateString() }}</small
+            ><br />
+            <small class="text-body-secondary">
+              <strong>Nombre d'observations : </strong>{{ props.count }}
+            </small>
+            <br>
+            <small class="text-body-secondary">
+              <strong>Rang Taxonomique : </strong>{{ props.rank }}
+            </small>
+            <p></p>
           </p>
         </div>
       </div>
     </div>
   </div>
-  <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-    <div class="card">
-      <img :src="props.imageUrl" class="card-img-top" :alt="props.imageUrl" />
-      <div class="card-body">
-        <h5 class="card-title">{{ props.name }}</h5>
-        <p class="description card-text">{{ props.description }}</p>
-        <p class="card-text">Nombre d'observations : {{ props.count }}</p>
-      </div>
-      <div class="card-footer">
-        <small class="text-body-secondary"
-          >Observé le : {{ props.observationDate }}</small
-        >
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <style>
-img {
-  border-radius: none !important;
-  height: 200px;
-  width: 200px;
+.card-img-top {
+  border-radius: 5px;
+  height: 200px !important;
+  width: 200px !important;
   object-fit: cover;
 }
 .description {
