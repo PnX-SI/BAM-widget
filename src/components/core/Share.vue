@@ -27,7 +27,6 @@ const route = computed(() => {
 });
 
 watchEffect(() => {
-  console.log("WKT", props.wkt);
   wkt.value = props.wkt;
 });
 
@@ -60,8 +59,8 @@ function copy() {
 
 <template>
   <div class="row justify-content-center">
-    <div class="col-12 col-lg-6 col-md-6 m-3">
-      <h4>{{ $t("shareLink") }}</h4>
+    <div class="col-12 col-lg-12 col-md-6 text-center">
+      <h4><i class="bi bi-share"></i> {{ $t("shareLink") }}</h4>
       <div class="input-group">
         <input class="form-control" type="text" :value="link"></input>
           <button class="btn btn-outline-secondary" @click="copy()">
@@ -73,7 +72,7 @@ function copy() {
       </div>
       
 
-      <h4>Intégrer le widget dans votre site</h4>
+      <h4 class="mt-3 text-center"><i class="bi bi-code-slash"></i> {{ $t('browserIntegration') }}</h4>
       <HTMLBuilder
         :link="link"
         @typeWidget="(new_type) => (typeWidget = new_type)"
