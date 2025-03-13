@@ -22,6 +22,7 @@ class GbifConnector extends Connector {
   GBIF_ENDPOINT;
   constructor(options) {
     super(options);
+    this.name = "gbif";
     // this.verifyOptions(["API_ENDPOINT"])
     this.GBIF_ENDPOINT = this.options["GBIF_ENDPOINT"] || GBIF_ENDPOINT_DEFAULT;
   }

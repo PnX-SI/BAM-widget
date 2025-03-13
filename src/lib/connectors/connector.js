@@ -1,6 +1,7 @@
 import { toast } from "vue3-toastify";
 
 class Connector {
+  name;
   constructor(options) {
     this.options = options;
   }
