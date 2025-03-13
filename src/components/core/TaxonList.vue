@@ -1,14 +1,19 @@
 <script setup>
 import { computed, ref, watch, watchEffect } from "vue";
 import Loading from "@/components/commons/Loading.vue";
-import { getGbifTaxon } from "@/lib/api/taxon";
 import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
 import { GeoNatureConnector } from "@/lib/connectors/geonature";
+import { getConnector } from "@/lib/connectors/utils";
 
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
+const connector = ref(
+  getConnector("geonature", {
+    EXPORT_API_ENDPOINT: "http://127.0.0.1:8000/exports/api/20",
+  })
+);
 
 const speciesList = ref([]);
 const loadingObservations = ref(false);
@@ -32,6 +37,10 @@ const props = defineProps({
     type: String,
     default: "100vh",
   },
+  connector: {
+    type: Object,
+    required: true,
+  },
 });
 
 const height = computed(() => {
@@ -40,7 +49,7 @@ const height = computed(() => {
 const heightSpeciesList = computed(() => {
   const heightInPx = parseFloat(props.height.match(/\d+(?:\.\d+)?/)[0]);
   const heightUnit = props.height.replace(/\d+(?:\.\d+)?/, "");
-  const heightInPercentOfParent = heightInPx * 0.7 + heightUnit;
+  const heightInPercentOfParent = heightInPx * 0.9 + heightUnit;
 
   return `height : ${heightInPercentOfParent}`;
 });
@@ -78,24 +87,17 @@ function refreshSpeciesList(wkt) {
   if (dateMin.value && dateMax.value) {
     paramsGBIF = { eventDate: `${dateMin.value},${dateMax.value}` };
   }
-  const GeoNature_Connector = new GeoNatureConnector({
-    GEONATURE_ENDPOINT: "http://127.0.0.1:8000",
-    ID_EXPORT: "20",
-  });
-  GeoNature_Connector.fetchOccurrence({
-    geometry: wkt,
-  }).then((response) => {
-    Object.values(response).forEach((observation) => {
-      speciesList.value.push(observation);
+
+  connector.value
+    .fetchOccurrence({
+      geometry: wkt,
+    })
+    .then((response) => {
+      Object.values(response).forEach((observation) => {
+        speciesList.value.push(observation);
+      });
+      loadingObservations.value = false;
     });
-    loadingObservations.value = false;
-  });
-  // getGbifTaxon(wkt, paramsGBIF, { maxPage: 2, limit: 300 }).then((response) => {
-  //   Object.values(response).forEach((observation) => {
-  //     speciesList.value.push(observation);
-  //   });
-  //   loadingObservations.value = false;
-  // });
 }
 watch(WKT, () => {
   if (WKT.value) {
@@ -105,9 +107,6 @@ watch(WKT, () => {
 </script>
 <template>
   <div id="liste-taxons" class="mb-3" :style="height">
-    <h2 class="col-12 text-center mb-3 mt-0 p-3">
-      <i class="bi bi-search"></i> {{ $t("searchResults") }}
-    </h2>
     <Loading :loadingStatus="loadingObservations" />
     <div
       id="no-observation-message"
@@ -123,6 +122,7 @@ watch(WKT, () => {
         v-for="observation in speciesListShowed"
         :taxonId="observation.taxonId"
         :scientific-name="observation.acceptedScientificName"
+        :vernacular-name="observation.vernacularName"
         :description="observation.acceptedScientificName"
         :observationDate="observation.lastSeenDate"
         :count="observation.nbObservations"
@@ -144,13 +144,17 @@ watch(WKT, () => {
 #liste-taxons {
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 #species-listing {
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 80vh;
+  padding-right: 1em;
 }
+
 #no-observation-message {
   background-color: #f2f2f2;
   border-radius: 5px;
@@ -158,7 +162,7 @@ watch(WKT, () => {
 }
 #no-observation-message {
   position: relative;
-  top: 35%;
+  top: 50%;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);

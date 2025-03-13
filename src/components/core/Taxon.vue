@@ -9,7 +9,7 @@ const props = defineProps({
   scientificName: String,
   vernacularName: String,
   description: String,
-  observationDate: String,
+  observationDate: Date,
   count: Number,
 });
 
@@ -56,12 +56,18 @@ watchEffect(() => {
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">{{ props.scientificName }}</h5>
+          <h5 class="card-title" style="justify-content: left">
+            {{ props.vernacularName || props.scientificName }}
+          </h5>
           <!-- <p class="description card-text">{{ props.description }}</p> -->
           <p class="card-text">
             <small class="text-body-secondary"
+              ><strong>Nom scientifique :</strong>
+              {{ props.scientificName }}</small
+            ><br />
+            <small class="text-body-secondary"
               ><strong>Date de la dernière observation :</strong>
-              {{ props.observationDate }}</small
+              {{ props?.observationDate.toLocaleDateString() }}</small
             ><br />
             <small class="text-body-secondary">
               <strong>Nombre d'observations : </strong>{{ props.count }}
@@ -74,9 +80,10 @@ watchEffect(() => {
 </template>
 
 <style>
-img {
+.card-img-top {
   border-radius: 5px;
-
+  height: 200px !important;
+  width: 200px !important;
   object-fit: cover;
 }
 .description {
