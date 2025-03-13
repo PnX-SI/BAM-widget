@@ -5,21 +5,17 @@ const NO_IMAGE_URL =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/No_Image_Available.jpg/1024px-No_Image_Available.jpg";
 
 class GeoNatureConnector extends Connector {
-  GEONATURE_ENDPOINT;
-  ID_EXPORT;
+  EXPORT_API_ENDPOINT;
 
   constructor(options) {
     super(options);
-    this.verifyOptions(["GEONATURE_ENDPOINT", "ID_EXPORT"]);
-    this.GEONATURE_ENDPOINT = options?.GEONATURE_ENDPOINT;
-    this.ID_EXPORT = options?.ID_EXPORT;
+    // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
+    this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
   }
 
   fetchOccurrence(params = {}) {
-    let urlWithParams = new URL(
-      `${this.GEONATURE_ENDPOINT}/exports/api/${this.ID_EXPORT}`
-    );
-
+    let urlWithParams = new URL(this.EXPORT_API_ENDPOINT);
+    params = { ...params, limit: "ALL" };
     for (const [key, value] of Object.entries(params)) {
       urlWithParams.searchParams.append(key, value);
     }
@@ -53,7 +49,6 @@ class GeoNatureConnector extends Connector {
             )
           );
         });
-        console.log(taxonsData);
         return taxonsData;
       });
   }
@@ -66,14 +61,18 @@ class GeoNatureConnector extends Connector {
       })
       .then(function (json) {
         let mediaList = [];
-        Object.values(json?._embedded?.photos).forEach((media) => {
-          mediaList.push({
-            url: media._links.thumbnail.href,
-            licence: media.licence,
-            source: media.copyright,
+        try {
+          Object.values(json?._embedded?.photos).forEach((media) => {
+            mediaList.push({
+              url: media._links.thumbnail.href,
+              licence: media.licence,
+              source: media.copyright,
+            });
           });
-        });
-        return mediaList;
+          return mediaList;
+        } catch {
+          return [];
+        }
       });
   }
   fetchTaxonInfo(idTaxon) {
