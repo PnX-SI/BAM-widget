@@ -8,6 +8,7 @@ const props = defineProps({
   taxonId: Number,
   scientificName: String,
   vernacularName: String,
+  rank: String,
   description: String,
   observationDate: Date,
   count: Number,
@@ -44,11 +45,16 @@ watchEffect(() => {
   <div class="card mb-3">
     <div class="row p-2" style="padding-left: 1.3em !important">
       <div class="col-md-4 p-0">
-        <img
+        <a :href="speciesMediaShowed?.url" target="_blank">
+          <img
           :src="speciesMediaShowed?.url"
           class="card-img-top"
           :alt="speciesMediaShowed?.url"
+          :title="'Source: '+speciesMediaShowed?.source"
+
         />
+        </a>
+        
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -68,6 +74,11 @@ watchEffect(() => {
             <small class="text-body-secondary">
               <strong>Nombre d'observations : </strong>{{ props.count }}
             </small>
+            <br>
+            <small class="text-body-secondary">
+              <strong>Rang Taxonomique : </strong>{{ props.rank }}
+            </small>
+            <p></p>
           </p>
         </div>
       </div>
