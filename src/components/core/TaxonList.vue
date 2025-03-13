@@ -39,11 +39,6 @@ const props = defineProps({
   },
 });
 
-watchEffect(() => {
-  connector.value = props.connector;
-  refreshSpeciesList(WKT.value);
-});
-
 const height = computed(() => {
   return `height : ${props.height}`;
 });
@@ -61,12 +56,13 @@ if (props.wkt) {
 }
 
 watchEffect(() => {
+  connector.value = props.connector;
   WKT.value = props.wkt;
   const date_changed =
     dateMin.value != props.dateMin || dateMax.value != props.dateMax;
   dateMin.value = props.dateMin;
   dateMax.value = props.dateMax;
-  if (WKT.value && date_changed) {
+  if ((WKT.value || date_changed) && connector.value) {
     refreshSpeciesList(WKT.value);
   }
   itemsPerPage.value = props.itemPerPage;

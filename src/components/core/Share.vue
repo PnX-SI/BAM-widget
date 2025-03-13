@@ -6,6 +6,9 @@ const props = defineProps({
   wkt: String,
   dateMin: String,
   dateMax: String,
+  radius: Number,
+  connectorName: String,
+  connectorParams: Object,
 });
 
 const width = ref("100wv");
@@ -31,15 +34,16 @@ watchEffect(() => {
 });
 
 const link = computed(() => {
-  let paramsArray = [];
-  if (props.wkt) {
-    paramsArray.push(`wkt=${props.wkt}`);
-  }
-  if (props.dateMin) {
-    paramsArray.push(`dateMin=${props.dateMin}`);
-  }
-  if (props.dateMax) {
-    paramsArray.push(`dateMax=${props.dateMax}`);
+  const paramsArray = Object.entries(props)
+    .filter(([key, value]) => value !== undefined && value !== null)
+    .map(([key, value]) => `${key}=${value}`);
+  if (props.connectorParams) {
+    Object.entries(props.connectorParams).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        paramsArray.push(`${key}=${value}`);
+      }
+    });
+    paramsArray.push(`connector=${props.connectorName}`);
   }
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
@@ -62,17 +66,18 @@ function copy() {
     <div class="col-12 col-lg-12 col-md-6 text-center">
       <h4><i class="bi bi-share"></i> {{ $t("shareLink") }}</h4>
       <div class="input-group">
-        <input class="form-control" type="text" :value="link"></input>
-          <button class="btn btn-outline-secondary" @click="copy()">
-            <div v-if="copied">
-              <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
-            </div>
-            <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
-          </button>
+        <input class="form-control" type="text" :value="link" />
+        <button class="btn btn-outline-secondary" @click="copy()">
+          <div v-if="copied">
+            <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
+          </div>
+          <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
+        </button>
       </div>
-      
 
-      <h4 class="mt-3 text-center"><i class="bi bi-code-slash"></i> {{ $t('browserIntegration') }}</h4>
+      <h4 class="mt-3 text-center">
+        <i class="bi bi-code-slash"></i> {{ $t("browserIntegration") }}
+      </h4>
       <HTMLBuilder
         :link="link"
         @typeWidget="(new_type) => (typeWidget = new_type)"

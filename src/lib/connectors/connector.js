@@ -4,6 +4,7 @@ class Connector {
   name;
   constructor(options) {
     this.options = options;
+    this.params = this.options;
   }
   verifyOptions(params_names = []) {
     params_names.forEach((name) => {

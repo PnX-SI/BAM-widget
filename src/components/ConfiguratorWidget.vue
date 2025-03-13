@@ -15,7 +15,7 @@ const connector = ref(getConnector(null, {})); // default GBiF
 
 <template>
   <div class="container-fluid">
-    <h1 id="title" class="col-12 text-center m-3">🐦{{ $t("title") }}🐛</h1>
+    <h1 id="title" class="col-12 text-center m-3">🐦 {{ $t("title") }} 🐛</h1>
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
         <Filters
@@ -33,6 +33,9 @@ const connector = ref(getConnector(null, {})); // default GBiF
           :wkt="params.wktSelected"
           :dateMin="params.dateMin"
           :dateMax="params.dateMax"
+          :radius="params.radius"
+          :connectorName="connector.name"
+          :connectorParams="connector.params"
         />
       </div>
       <div class="col-12 col-lg-5 col-md-6">

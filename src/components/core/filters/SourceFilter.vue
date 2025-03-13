@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 
 const sources = {
   gbif: [
@@ -48,6 +48,10 @@ function updateSource() {
   emit("sourceName", sourceName.value);
   emit("params", params);
 }
+onMounted(() => {
+  emit("sourceName", sourceName.value);
+  emit("params", params);
+});
 </script>
 
 <template>
