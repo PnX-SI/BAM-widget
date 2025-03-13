@@ -5,6 +5,7 @@ const messagesFR = {
     filters: "Filtres",
     filtersTitle: "Filtres",
     radius: "Rayon",
+    bufferSize: "Taille du buffer :",
     dateMin: "Date Min",
     dateMax: "Date Max",
     search: "Rechercher",
@@ -20,7 +21,8 @@ const messagesFR = {
       title: "Page introuvable",
       subtitle: "La page que vous recherchez n'existe pas",
     },
-    drawGeometry: "Sélectionner une zone pour afficher les taxons",
+    browserIntegration: "Intégrer le widget dans votre site",
+    drawGeometry: "Dessiner une zone pour afficher les espèces",
     size: {
       width: "Largeur",
       height: "Hauteur",
@@ -35,6 +37,10 @@ const messagesFR = {
     copy: "Copier",
     copied: "Copié",
     shareLink: "Partager le lien",
+    source: {
+      title: "Source de données",
+      select: "Sélectionner une source :",
+    },
   },
 };
 
