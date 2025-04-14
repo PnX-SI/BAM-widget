@@ -68,7 +68,7 @@ const pageToShow = computed(() => {
 </script>
 
 <template>
-  <nav aria-label="...">
+  <nav class="d-flex justify-content-center mt-3">
     <ul class="pagination">
       <li
         @click="pageIndex != 0 ? decrementPage() : ''"

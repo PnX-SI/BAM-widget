@@ -42,13 +42,6 @@ const props = defineProps({
 const height = computed(() => {
   return `height : ${props.height}`;
 });
-const heightSpeciesList = computed(() => {
-  const heightInPx = parseFloat(props.height.match(/\d+(?:\.\d+)?/)[0]);
-  const heightUnit = props.height.replace(/\d+(?:\.\d+)?/, "");
-  const heightInPercentOfParent = heightInPx * 0.9 + heightUnit;
-
-  return `height : ${heightInPercentOfParent}`;
-});
 
 if (props.wkt) {
   WKT.value = props.wkt;
@@ -102,32 +95,33 @@ watch(WKT, () => {
 });
 </script>
 <template>
-  <div id="liste-taxons" class="mb-3" :style="height">
-    <Loading :loadingStatus="loadingObservations" />
-    <div
-      id="no-observation-message"
-      class="col-6 offset-3"
-      v-if="speciesListShowed.length == 0 && !loadingObservations"
-    >
-      <h5 class="col-12 text-center mb-3 mt-0 p-3">
-        <i class="bi bi-pin-map"></i>{{ $t("drawGeometry") }}
-      </h5>
+  <div :class="height">
+    <div id="liste-taxons" class="mb-3 h-80">
+      <Loading :loadingStatus="loadingObservations" />
+      <div
+        id="no-observation-message"
+        class="col-6 offset-3"
+        v-if="speciesListShowed.length == 0 && !loadingObservations"
+      >
+        <h5 class="col-12 text-center mb-3 mt-0 p-3">
+          <i class="bi bi-pin-map"></i>{{ $t("drawGeometry") }}
+        </h5>
+      </div>
+      <div id="species-listing" class="row row-cols-2 row-cols-md-1 g-4">
+        <Taxon
+          v-for="observation in speciesListShowed"
+          :taxonId="observation.taxonId"
+          :scientific-name="observation.acceptedScientificName"
+          :vernacular-name="observation.vernacularName"
+          :description="observation.acceptedScientificName"
+          :observationDate="observation.lastSeenDate"
+          :count="observation.nbObservations"
+          :rank="observation.taxonRank"
+          :connector="connector"
+        />
+      </div>
     </div>
-    <div id="species-listing" :style="heightSpeciesList">
-      <Taxon
-        v-for="observation in speciesListShowed"
-        :taxonId="observation.taxonId"
-        :scientific-name="observation.acceptedScientificName"
-        :vernacular-name="observation.vernacularName"
-        :description="observation.acceptedScientificName"
-        :observationDate="observation.lastSeenDate"
-        :count="observation.nbObservations"
-        :rank="observation.taxonRank"
-        :connector="connector"
-      />
-    </div>
-
-    <div class="d-flex justify-content-center m-3">
+    <div class="mt-3 h-20">
       <Pagination
         v-if="speciesListShowed.length > 0"
         :pageIndex="pageIndex"

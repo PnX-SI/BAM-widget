@@ -42,45 +42,35 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="card mb-3">
-    <div class="row p-2" style="padding-left: 1.3em !important">
-      <div class="col-md-4 p-0">
-        <a :href="speciesMediaShowed?.url" target="_blank">
-          <img
-          :src="speciesMediaShowed?.url"
-          class="card-img-top"
-          :alt="speciesMediaShowed?.url"
-          :title="'Source: '+speciesMediaShowed?.source"
-
-        />
-        </a>
-        
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title" style="justify-content: left">
+  <div class="col">
+    <div class="card h-100">
+      <img
+        class="card-img-top"
+        :src="speciesMediaShowed?.url"
+        :alt="speciesMediaShowed?.url"
+        :title="'Source: ' + speciesMediaShowed?.source"
+      />
+      <div class="card-body">
+        <div class="card-text">
+          <h5 class="card-title text-wrap">
             {{ props.vernacularName || props.scientificName }}
           </h5>
-          <!-- <p class="description card-text">{{ props.description }}</p> -->
-          <p class="card-text">
-            <small class="text-body-secondary"
-              ><strong>Nom scientifique :</strong>
-              {{ props.scientificName }}</small
-            ><br />
-            <small class="text-body-secondary"
-              ><strong>Date de la dernière observation :</strong>
-              {{ props?.observationDate.toLocaleDateString() }}</small
-            ><br />
-            <small class="text-body-secondary">
-              <strong>Nombre d'observations : </strong>{{ props.count }}
-            </small>
-            <br>
-            <small class="text-body-secondary">
-              <strong>Rang Taxonomique : </strong>{{ props.rank }}
-            </small>
-            <p></p>
-          </p>
+          <small class="text-body-secondary"
+            ><strong>Nom scientifique :</strong>
+            {{ props.scientificName }}</small
+          ><br />
+
+          <small class="text-body-secondary">
+            <strong>Nombre d'observations : </strong>{{ props.count }}
+          </small>
+          <br />
         </div>
+      </div>
+      <div class="card-footer">
+        <small class="text-body-secondary"
+          >Date de la dernière observation :
+          {{ props?.observationDate.toLocaleDateString() }}</small
+        >
       </div>
     </div>
   </div>
@@ -89,8 +79,8 @@ watchEffect(() => {
 <style>
 .card-img-top {
   border-radius: 5px;
-  height: 200px !important;
-  width: 200px !important;
+  height: 150px !important;
+  /* width: 150px !important; */
   object-fit: cover;
 }
 .description {

@@ -8,7 +8,7 @@ import { restoreMapState, toWKT } from "@/lib/utils";
 import { parse, stringify } from "wellknown";
 
 // Vue
-import { computed, onMounted, ref, shallowRef, watch, watchEffect } from "vue";
+import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
 
 // Draw config
 import drawConfig from "./MapConfig";
@@ -51,12 +51,12 @@ if (props.wkt) {
 
 radius.value = props.radius;
 
-watchEffect(() => {
-  radius.value = props.radius;
-  wkt.value = props.wkt;
-  let tmp = L.geoJSON().addTo(geometry.value);
-  tmp.addData(parse(wkt.value));
-});
+// watchEffect(() => {
+//   radius.value = props.radius;
+//   wkt.value = props.wkt;
+//   let tmp = L.geoJSON().addTo(geometry.value);
+//   tmp.addData(parse(wkt.value));
+// });
 
 // Component Events
 const emit = defineEmits(["wkt", "geojson"]);
