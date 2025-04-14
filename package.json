@@ -15,6 +15,7 @@
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
+    "leaflet.locatecontrol": "^0.83.1",
     "vue": "^3.5.13",
     "vue-i18n": "^10.0.5",
     "vue-router": "^4.5.0",

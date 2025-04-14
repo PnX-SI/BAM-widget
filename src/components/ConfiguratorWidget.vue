@@ -37,15 +37,15 @@ const connector = ref(getConnector(null, {})); // default GBiF
           :connector="connector"
         />
       </div>
-      <div class="col-12 col-lg-5 col-md-6">
+      <div class="col-12 col-lg-6 col-md-6">
         <Map
           :radius="params.radius"
-          height="80vh"
+          height="100vh"
           :wkt="params.wktSelected"
           @wkt="(drawGeometryWKT) => (params.wktSelected = drawGeometryWKT)"
         />
       </div>
-      <div class="col-12 col-lg-4 col-md-4">
+      <div class="col-12 col-lg-3 col-md-4">
         <TaxonList
           :connector="connector"
           :wkt="params.wktSelected"
