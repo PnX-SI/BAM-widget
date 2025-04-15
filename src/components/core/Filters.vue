@@ -38,9 +38,6 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
 </script>
 <template>
   <div id="filters">
-    <div class="col-12 col-md-12 col-lg-12 text-center" id="filtersTitle">
-      <h3><i class="bi bi-filter"></i> {{ $t("filtersTitle") }}</h3>
-    </div>
     <div class="col-12 col-md-4 col-lg-12">
       <BufferSizeFilter
         :radius="radius"

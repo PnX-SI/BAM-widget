@@ -8,6 +8,7 @@ import Filters from "@/components/core/Filters.vue";
 import Share from "./core/Share.vue";
 import { fetchParams } from "@/lib/params";
 import { getConnector } from "@/lib/connectors/utils";
+import LanguageSwitch from "./commons/LanguageSwitch.vue";
 
 const params = fetchParams();
 const connector = ref(getConnector(null, {})); // default GBiF
@@ -15,27 +16,37 @@ const connector = ref(getConnector(null, {})); // default GBiF
 
 <template>
   <div class="container-fluid">
-    <h1 id="title" class="col-12 text-center m-3">🐦 {{ $t("title") }} 🐛</h1>
+    <nav class="navbar bg-body-tertiary mb-3">
+      <div class="container-fluid">
+        <a class="navbar-brand">🐛 🐦 🌱{{ $t("title") }} </a>
+        <div class="d-flex" role="search">
+          <Share
+            :wkt="params.wktSelected"
+            :dateMin="params.dateMin"
+            :dateMax="params.dateMax"
+            :radius="params.radius"
+            :connector="connector"
+          />
+          <LanguageSwitch></LanguageSwitch>
+        </div>
+      </div>
+    </nav>
+
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
+        <div class="col-12 col-md-12 col-lg-12 text-center" id="filtersTitle">
+          <h3><i class="bi bi-sliders"></i> {{ $t("filtersTitle") }}</h3>
+        </div>
         <Filters
           :sourceName="connector.name"
           :radius="params.radius"
           @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
           @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
           @radius="(newradius) => (params.radius = parseInt(newradius))"
-          @connector-data="
+        />
+        <!-- @connector-data="
             (dict) => (connector = getConnector(dict.name, dict.params))
-          "
-        />
-        <br />
-        <Share
-          :wkt="params.wktSelected"
-          :dateMin="params.dateMin"
-          :dateMax="params.dateMax"
-          :radius="params.radius"
-          :connector="connector"
-        />
+          " -->
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <Map
