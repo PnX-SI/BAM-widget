@@ -140,5 +140,25 @@ class GbifConnector extends Connector {
         };
       });
   }
+
+  searchTaxon(searchString = "", params = {}) {
+    const url = `https://api.gbif.org/v1/species/search?q=${searchString}&limit=20`;
+    console.log(url);
+    return fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then(function (json) {
+        let results = [];
+        json.results.forEach((element) => {
+          results.push({
+            scientificName: element.scientificName,
+            // vernacularName: element?.vernacularName[0].vernacularName,
+            taxonKey: element.key,
+          });
+        });
+        return results;
+      });
+  }
 }
 export { GbifConnector };
