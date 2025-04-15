@@ -64,28 +64,41 @@ function copy() {
 </script>
 
 <template>
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-12 col-md-6 text-center">
-      <h4><i class="bi bi-share"></i> {{ $t("shareLink") }}</h4>
-      <div class="input-group">
-        <input class="form-control" type="text" :value="link" />
-        <button class="btn btn-outline-secondary" @click="copy()">
+  <BDropdown
+    :text="$t('share')"
+    variant="primary"
+    class="me-2"
+    auto-close="outside"
+  >
+    <template #button-content>
+      <i class="bi bi-share"></i> {{ $t("share") }}</template
+    >
+    <div class="row justify-content-center" style="padding: 1em">
+      <div class="col-12 col-lg-12 col-md-6 text-center">
+        <label for="shareButton"> Partager un lien </label>
+        <button
+          class="btn btn-outline-secondary"
+          id="shareButton"
+          @click="copy()"
+        >
           <div v-if="copied">
             <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
           </div>
-          <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
+          <div v-else><i class="bi bi-link-45deg"></i> {{ $t("copy") }}</div>
         </button>
+        <br />
+        <HTMLBuilder
+          :link="link"
+          @typeWidget="(new_type) => (typeWidget = new_type)"
+          @width="(new_width) => (width = new_width)"
+          @height="(new_height) => (height = new_height)"
+        />
       </div>
-
-      <h4 class="mt-3 text-center">
-        <i class="bi bi-code-slash"></i> {{ $t("browserIntegration") }}
-      </h4>
-      <HTMLBuilder
-        :link="link"
-        @typeWidget="(new_type) => (typeWidget = new_type)"
-        @width="(new_width) => (width = new_width)"
-        @height="(new_height) => (height = new_height)"
-      />
     </div>
-  </div>
+  </BDropdown>
 </template>
+<style scoped>
+#shareButton {
+  margin-left: 0.5em;
+}
+</style>

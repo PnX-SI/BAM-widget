@@ -23,7 +23,9 @@ const embed = computed(() => {
 </script>
 
 <template>
-  <span class="input-group-text">{{ $t("embed") }}</span>
+  <span class="input-group-text"
+    ><i class="bi bi-code-slash"></i> {{ $t("browserIntegration") }}</span
+  >
   <textarea
     class="form-control"
     placeholder="Embed URL"
