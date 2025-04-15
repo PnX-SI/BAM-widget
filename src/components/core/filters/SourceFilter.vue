@@ -44,7 +44,7 @@ watch([sourceName], () => {
 
 const emit = defineEmits(["sourceName", "params"]);
 
-function updateSource() {
+function updateSource(a) {
   emit("sourceName", sourceName.value);
   emit("params", params);
 }
@@ -55,53 +55,56 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="sourceParam">
-    <h5>{{ $t("source.title") }}</h5>
-    <label for="sourceName"> {{ $t("source.select") }}</label>
-    <select v-model="sourceName" class="form-select">
-      <option v-for="(source, sourceName) in sources" :value="sourceName">
-        {{ sourceName }}
-      </option>
-    </select>
-    <div class="parameters" v-for="form in sources[sourceName]">
-      <label :for="form.name">{{ form.label }}</label>
-      <input
-        v-if="form.type === String"
-        class="form-control"
-        :placeholder="form.default"
-        v-model="params[form.name]"
-      />
-      <input
-        v-else-if="form.type === Number"
-        :type="form.type"
-        class="form-control"
-        :placeholder="form.default"
-        v-model="params[form.name]"
-      />
-      <select
-        v-else-if="Array.isArray(form.type)"
-        class="form-select"
-        v-model="params[form.name]"
-      >
-        <option v-for="option in form.type" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
-      <div v-else class="text-danger">Unsupported input type</div>
-    </div>
-    <div class="d-flex justify-content-center mt-3">
-      <button class="btn btn-primary" @click="updateSource">
-        Mettre à jour les paramètres
-      </button>
+  <div class="text-center col-12">
+    <div>
+      <span><strong>Source </strong> : {{ sourceName }}</span
+      ><BButton v-b-modal.modal-center variant="primary"
+        ><i class="bi bi-pencil-square"></i
+      ></BButton>
     </div>
   </div>
+
+  <BModal
+    id="modal-center"
+    centered
+    :title="$t('source.title')"
+    @ok="updateSource"
+  >
+    <div class="sourceParam">
+      <label for="sourceName"> {{ $t("source.select") }}</label>
+      <select v-model="sourceName" class="form-select">
+        <option v-for="(source, sourceName) in sources" :value="sourceName">
+          {{ sourceName }}
+        </option>
+      </select>
+      <div class="parameters" v-for="form in sources[sourceName]">
+        <label :for="form.name">{{ form.label }}</label>
+        <input
+          v-if="form.type === String"
+          class="form-control"
+          :placeholder="form.default"
+          v-model="params[form.name]"
+        />
+        <input
+          v-else-if="form.type === Number"
+          :type="form.type"
+          class="form-control"
+          :placeholder="form.default"
+          v-model="params[form.name]"
+        />
+        <select
+          v-else-if="Array.isArray(form.type)"
+          class="form-select"
+          v-model="params[form.name]"
+        >
+          <option v-for="option in form.type" :key="option" :value="option">
+            {{ option }}
+          </option>
+        </select>
+        <div v-else class="text-danger">Unsupported input type</div>
+      </div>
+    </div>
+  </BModal>
 </template>
 
-<style>
-.sourceParam {
-  border: 1px #aaa solid;
-  padding: 1em;
-  margin-top: 1em;
-  border-radius: 5px;
-}
-</style>
+<style></style>

@@ -3,6 +3,7 @@ import { ref, watch, watchEffect } from "vue";
 import DateFilter from "./filters/DateFilter.vue";
 import BufferSizeFilter from "./filters/BufferSizeFilter.vue";
 import SourceFilter from "./filters/SourceFilter.vue";
+import TaxonResearch from "./filters/TaxonResearch.vue";
 
 const radius = ref(10);
 const dateMin = ref(null);
@@ -46,21 +47,23 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
         @update:radius="(newRadius) => (radius = newRadius)"
       ></BufferSizeFilter>
     </div>
-    <div class="col-12 col-md-4 col-lg-12">
-      <DateFilter
-        id="startDate"
-        label="Date minimum"
-        :currentDate="dateMin"
-        @update:date="(newDate) => (dateMin = newDate)"
-      ></DateFilter>
-    </div>
-    <div class="col-12 col-md-4 col-lg-12">
-      <DateFilter
-        id="endDate"
-        label="Date maximum"
-        :currentDate="dateMax"
-        @update:date="(newDate) => (dateMax = newDate)"
-      ></DateFilter>
+    <div class="row">
+      <div class="col-6">
+        <DateFilter
+          id="startDate"
+          label="Date min."
+          :currentDate="dateMin"
+          @update:date="(newDate) => (dateMin = newDate)"
+        ></DateFilter>
+      </div>
+      <div class="col-6">
+        <DateFilter
+          id="endDate"
+          label="Date max."
+          :currentDate="dateMax"
+          @update:date="(newDate) => (dateMax = newDate)"
+        ></DateFilter>
+      </div>
     </div>
     <div class="col-12 col-md-4 col-lg-12">
       <SourceFilter
@@ -69,6 +72,7 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
         @source-name="(newSource) => (sourceName = newSource)"
       ></SourceFilter>
     </div>
+    <TaxonResearch></TaxonResearch>
   </div>
 </template>
 <style>
