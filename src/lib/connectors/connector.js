@@ -25,6 +25,7 @@ class Connector {
   fetchTaxonStatus(idTaxon) {
     throw new Error("Not implemented");
   }
+  searchTaxon(searchString = "", params = {}) {}
 }
 
 export { Connector };
