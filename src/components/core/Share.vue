@@ -69,15 +69,16 @@ function copy() {
     variant="primary"
     class="me-2"
     auto-close="outside"
+    menu-class="share_modal"
   >
     <template #button-content>
       <i class="bi bi-share"></i> {{ $t("share") }}</template
     >
     <div class="row justify-content-center" style="padding: 1em">
       <div class="col-12 col-lg-12 col-md-6 text-center">
-        <label for="shareButton"> Partager un lien </label>
+        <label for="shareButton"> {{ $t("shareLink") }} </label>
         <button
-          class="btn btn-outline-secondary"
+          class="btn btn-outline-secondary mb-3"
           id="shareButton"
           @click="copy()"
         >
@@ -86,7 +87,7 @@ function copy() {
           </div>
           <div v-else><i class="bi bi-link-45deg"></i> {{ $t("copy") }}</div>
         </button>
-        <br />
+
         <HTMLBuilder
           :link="link"
           @typeWidget="(new_type) => (typeWidget = new_type)"
@@ -97,8 +98,11 @@ function copy() {
     </div>
   </BDropdown>
 </template>
-<style scoped>
+<style>
 #shareButton {
   margin-left: 0.5em;
+}
+.share_modal {
+  min-width: 400px !important;
 }
 </style>

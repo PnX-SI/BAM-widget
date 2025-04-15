@@ -49,6 +49,8 @@ const embed = computed(() => {
       aria-label=".form-control-lg example"
       v-model="height"
     />
+  </div>
+  <div class="input-group">
     <span class="input-group-text">{{ $t("typeWidget.title") }}</span>
     <select class="form-select" v-model="typeWidget">
       <option value="">{{ $t("typeWidget.default") }}</option>
