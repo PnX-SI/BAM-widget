@@ -29,7 +29,7 @@ const messagesFR = {
     },
     embed: "Code HTML",
     typeWidget: {
-      title: "Type",
+      title: "Type de widget",
       default: "Par défaut",
       list: "Liste de taxons",
       config: "Configurateur",
@@ -37,6 +37,7 @@ const messagesFR = {
     copy: "Copier",
     copied: "Copié",
     share: "Partager",
+    shareLink: "Partager un lien",
     source: {
       title: "Source de données",
       select: "Sélectionner une source :",
