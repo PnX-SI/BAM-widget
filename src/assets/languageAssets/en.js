@@ -12,8 +12,8 @@ const messagesEN = {
     reset: "Reset",
     searchResults: "Search results",
     noResults: "No results",
-    previousPage: "Previous page",
-    nextPage: "Next page",
+    previousPage: "Previous",
+    nextPage: "Next",
     loading: "Loading...",
     noObservations: "No observations found",
     noGeometry: "No geometry found",
@@ -29,7 +29,7 @@ const messagesEN = {
     },
     embed: "Embed",
     typeWidget: {
-      title: "Type",
+      title: "Type of widget",
       default: "Default",
       list: "List of species",
       config: "Configuration",
@@ -37,6 +37,7 @@ const messagesEN = {
     copy: "Copy",
     copied: "Copied",
     share: "Share",
+    shareLink: "Share a link",
     source: {
       title: "Data Source",
       select: "Select a data source:",
