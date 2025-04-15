@@ -1,6 +1,8 @@
 import "./assets/main.css";
 
 import { createApp } from "vue";
+import { createBootstrap } from "bootstrap-vue-next";
+
 import App from "./App.vue";
 
 import MapListWidget from "./components/MapListWidget.vue";
@@ -14,6 +16,8 @@ import messagesFR from "./assets/languageAssets/fr";
 import messagesEN from "./assets/languageAssets/en";
 
 import "vue3-toastify/dist/index.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 
 const i18n = createI18n({
   locale: "fr",
@@ -44,4 +48,4 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).use(i18n).mount("#app");
+createApp(App).use(router).use(i18n).use(createBootstrap()).mount("#app");

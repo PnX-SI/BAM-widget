@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@turf/turf": "^7.1.0",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
+    "bootstrap-vue-next": "^0.28.6",
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
+    "unplugin-vue-components": "^28.5.0",
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8"
   }
