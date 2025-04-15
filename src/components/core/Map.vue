@@ -51,12 +51,14 @@ if (props.wkt) {
 
 radius.value = props.radius;
 
-// watchEffect(() => {
-//   radius.value = props.radius;
-//   wkt.value = props.wkt;
-//   let tmp = L.geoJSON().addTo(geometry.value);
-//   tmp.addData(parse(wkt.value));
-// });
+watchEffect(() => {
+  radius.value = props.radius;
+  wkt.value = props.wkt;
+  if (wktFromOutside.value) {
+    let tmp = L.geoJSON().addTo(geometry.value);
+    tmp.addData(parse(wkt.value));
+  }
+});
 
 // Component Events
 const emit = defineEmits(["wkt", "geojson"]);

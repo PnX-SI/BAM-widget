@@ -34,7 +34,10 @@ const connector = ref(getConnector(null, {})); // default GBiF
 
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
-        <div class="col-12 col-md-12 col-lg-12 text-center" id="filtersTitle">
+        <div
+          class="col-12 col-md-12 col-lg-12 text-center mb-3"
+          id="filtersTitle"
+        >
           <h3><i class="bi bi-sliders"></i> {{ $t("filtersTitle") }}</h3>
         </div>
         <Filters

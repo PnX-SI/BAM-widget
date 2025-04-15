@@ -38,13 +38,13 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
 </script>
 <template>
   <div id="filters">
-    <div class="col-12 col-md-4 col-lg-12">
+    <div class="col-lg-12">
       <BufferSizeFilter
         :radius="radius"
         @update:radius="(newRadius) => (radius = newRadius)"
       ></BufferSizeFilter>
     </div>
-    <div class="row">
+    <div class="row mt-3">
       <div class="col-6">
         <DateFilter
           id="startDate"
@@ -62,14 +62,16 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
         ></DateFilter>
       </div>
     </div>
-    <div class="col-12 col-md-4 col-lg-12">
+    <div class="col-12 mt-3">
       <SourceFilter
         :sourceName="props.sourceName"
         @params="(params) => (sourceParams = params)"
         @source-name="(newSource) => (sourceName = newSource)"
       ></SourceFilter>
     </div>
-    <TaxonResearch></TaxonResearch>
+    <div class="col-12 mt-3">
+      <TaxonResearch></TaxonResearch>
+    </div>
   </div>
 </template>
 <style>
