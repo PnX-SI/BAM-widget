@@ -30,6 +30,7 @@ watch(params, () => {
           :dateMin="params.dateMin"
           :dateMax="params.dateMax"
           :itemPerPage="10"
+          :nbTaxonPerLine="2"
         />
       </div>
     </div>

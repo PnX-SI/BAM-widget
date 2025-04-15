@@ -16,6 +16,7 @@ const params = fetchParams();
         :dateMin="params.dateMin"
         :dateMax="params.dateMax"
         :itemPerPage="10"
+        :nbTaxonPerLine="4"
       />
     </div>
     <div v-else>
