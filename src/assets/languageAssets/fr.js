@@ -21,7 +21,7 @@ const messagesFR = {
       title: "Page introuvable",
       subtitle: "La page que vous recherchez n'existe pas",
     },
-    browserIntegration: "Intégrer le widget dans votre site",
+    browserIntegration: "Code HTML",
     drawGeometry: "Dessiner une zone pour afficher les espèces",
     size: {
       width: "Largeur",
@@ -36,7 +36,7 @@ const messagesFR = {
     },
     copy: "Copier",
     copied: "Copié",
-    shareLink: "Partager le lien",
+    share: "Partager",
     source: {
       title: "Source de données",
       select: "Sélectionner une source :",
