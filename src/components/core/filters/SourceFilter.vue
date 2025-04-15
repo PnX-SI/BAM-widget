@@ -56,10 +56,18 @@ onMounted(() => {
 
 <template>
   <div class="text-center col-12">
-    <div>
-      <span><strong>Source </strong> : {{ sourceName }}</span
-      ><BButton v-b-modal.modal-center variant="primary"
-        ><i class="bi bi-pencil-square"></i
+    <div class="input-group">
+      <label for="languageSelect" class="input-group-text"
+        >Source de données</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        :placeholder="sourceName"
+        disabled
+      />
+      <BButton v-b-modal.modal-center variant="outline-secondary"
+        ><i class="bi bi-database-fill-gear"></i
       ></BButton>
     </div>
   </div>
