@@ -47,9 +47,6 @@ const classNames = computed(() => {
   const row_cols_md = props.nbTaxonPerLine === 1 ? 1 : props.nbTaxonPerLine / 2;
   return `row row-cols-1 row-cols-lg-${props.nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
 });
-const height = computed(() => {
-  return `height : ${props.height}`;
-});
 
 if (props.wkt) {
   WKT.value = props.wkt;
@@ -85,6 +82,7 @@ const speciesListShowed = computed(() => {
 });
 
 function refreshSpeciesList(wkt) {
+  if (wkt.length === 0) return;
   loadingObservations.value = true;
   speciesList.value = [];
   let paramsGBIF = {};
@@ -112,34 +110,34 @@ watch(WKT, () => {
 });
 </script>
 <template>
-  <div :class="height">
-    <div id="liste-taxons" class="mb-3 h-80">
-      <Loading :loadingStatus="loadingObservations" />
-      <div
-        id="no-observation-message"
-        class="col-6 offset-3"
-        v-if="speciesListShowed.length == 0 && !loadingObservations"
-      >
-        <h5 class="col-12 text-center mb-3 mt-0 p-3">
-          <i class="bi bi-pin-map"></i>{{ $t("drawGeometry") }}
-        </h5>
-      </div>
-      <div id="species-listing" :class="classNames">
-        <Taxon
-          v-for="observation in speciesListShowed"
-          :taxonId="observation.taxonId"
-          :scientific-name="observation.acceptedScientificName"
-          :vernacular-name="observation.vernacularName"
-          :description="observation.acceptedScientificName"
-          :observationDate="observation.lastSeenDate"
-          :count="observation.nbObservations"
-          :rank="observation.taxonRank"
-          :connector="connector"
-          :key="observation.taxonId"
-        />
-      </div>
+  <div id="liste-taxons" class="mb-3 h-100">
+    <Loading id="loadingObs" :loadingStatus="loadingObservations" />
+    <div
+      id="no-observation-message"
+      class="col-6"
+      v-if="speciesListShowed.length == 0 && !loadingObservations"
+    >
+      <h5>{{ $t("drawGeometry") }}</h5>
+      <h5>
+        <i class="bi bi-square-fill"></i> <i class="bi bi-hexagon-fill"></i>
+        <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
+      </h5>
     </div>
-    <div class="mt-3 h-20">
+    <div id="species-listing" :class="classNames">
+      <Taxon
+        v-for="observation in speciesListShowed"
+        :taxonId="observation.taxonId"
+        :scientific-name="observation.acceptedScientificName"
+        :vernacular-name="observation.vernacularName"
+        :description="observation.acceptedScientificName"
+        :observationDate="observation.lastSeenDate"
+        :count="observation.nbObservations"
+        :rank="observation.taxonRank"
+        :connector="connector"
+        :key="observation.taxonId"
+      />
+    </div>
+    <div class="mt-3">
       <Pagination
         v-if="speciesListShowed.length > 0"
         :pageIndex="pageIndex"
@@ -165,18 +163,21 @@ watch(WKT, () => {
   padding-right: 1em;
 }
 
-#no-observation-message {
-  background-color: #f2f2f2;
-  border-radius: 5px;
-  height: 100px;
-}
-#no-observation-message {
+#no-observation-message,
+#loadingObs {
+  background-color: var(--bs-secondary-bg);
+  color: var(--bs-secondary-color);
+  border-radius: 10px;
+  text-align: center;
+  padding: 1em;
+  width: 100%;
   position: relative;
   top: 50%;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+
 h5 {
   display: flex;
   justify-content: center;
