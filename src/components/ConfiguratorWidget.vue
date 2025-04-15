@@ -46,10 +46,10 @@ const connector = ref(getConnector(null, {})); // default GBiF
           @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
           @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
           @radius="(newradius) => (params.radius = parseInt(newradius))"
-        />
-        <!-- @connector-data="
+          @connector-data="
             (dict) => (connector = getConnector(dict.name, dict.params))
-          " -->
+          "
+        />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <Map
