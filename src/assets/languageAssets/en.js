@@ -36,7 +36,7 @@ const messagesEN = {
     },
     copy: "Copy",
     copied: "Copied",
-    shareLink: "Share link",
+    share: "Share",
     source: {
       title: "Data Source",
       select: "Select a data source:",
