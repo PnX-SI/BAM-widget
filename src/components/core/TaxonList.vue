@@ -38,7 +38,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 const height = computed(() => {
   return `height : ${props.height}`;
 });
@@ -46,6 +45,13 @@ const height = computed(() => {
 if (props.wkt) {
   WKT.value = props.wkt;
 }
+
+watch(pageIndex, () => {
+  document.getElementById("species-listing").scrollTo({
+    top: 0,
+    left: 0,
+  });
+});
 
 watchEffect(() => {
   connector.value = props.connector;
@@ -82,10 +88,12 @@ function refreshSpeciesList(wkt) {
       geometry: wkt,
     })
     .then((response) => {
+      speciesList.value = [];
       Object.values(response).forEach((observation) => {
         speciesList.value.push(observation);
       });
       loadingObservations.value = false;
+      pageIndex.value = 0;
     });
 }
 watch(WKT, () => {
@@ -118,6 +126,7 @@ watch(WKT, () => {
           :count="observation.nbObservations"
           :rank="observation.taxonRank"
           :connector="connector"
+          :key="observation.taxonId"
         />
       </div>
     </div>

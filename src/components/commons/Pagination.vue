@@ -1,5 +1,5 @@
 <script setup>
-import { watch, ref, computed } from "vue";
+import { watch, ref, computed, watchEffect } from "vue";
 
 const props = defineProps({
   itemPerPage: Number,
@@ -11,7 +11,7 @@ const pageIndex = ref(props.pageIndex);
 const itemsPerPage = ref(props.itemPerPage);
 const totalItems = ref(props.totalItems);
 
-watch(props, () => {
+watchEffect(() => {
   itemsPerPage.value = props.itemPerPage;
   pageIndex.value = props.pageIndex;
   totalItems.value = props.totalItems;
