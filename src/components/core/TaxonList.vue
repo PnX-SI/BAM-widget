@@ -37,6 +37,15 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  nbTaxonPerLine: {
+    type: Number,
+    default: 1,
+  },
+});
+
+const classNames = computed(() => {
+  const row_cols_md = props.nbTaxonPerLine === 1 ? 1 : props.nbTaxonPerLine / 2;
+  return `row row-cols-1 row-cols-lg-${props.nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
 });
 const height = computed(() => {
   return `height : ${props.height}`;
@@ -115,7 +124,7 @@ watch(WKT, () => {
           <i class="bi bi-pin-map"></i>{{ $t("drawGeometry") }}
         </h5>
       </div>
-      <div id="species-listing" class="row row-cols-2 row-cols-md-1 g-4">
+      <div id="species-listing" :class="classNames">
         <Taxon
           v-for="observation in speciesListShowed"
           :taxonId="observation.taxonId"
