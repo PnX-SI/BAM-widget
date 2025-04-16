@@ -42,6 +42,13 @@ const messagesFR = {
       title: "Source de données",
       select: "Sélectionner une source :",
     },
+    desc: "Décroissant",
+    asc: "Croissant",
+    taxon: {
+      scientificName: "Nom scientifique",
+      vernacularName: "Nom vernaculaire",
+      nbObservations: "Nombre d'observations",
+    },
   },
 };
 

@@ -3,9 +3,17 @@ import { computed, ref, watch, watchEffect } from "vue";
 import Loading from "@/components/commons/Loading.vue";
 import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
-import { GeoNatureConnector } from "@/lib/connectors/geonature";
+import SortBy from "../commons/SortBy.vue";
 import { getConnector } from "@/lib/connectors/utils";
+import sortArray from "sort-array";
 
+const partsOfTheDay = ["twilight", "afternoon", "morning", "evening"];
+
+const sortByAvailable = [
+  "vernacularName",
+  "acceptedScientificName",
+  "nbObservations",
+];
 const WKT = ref(null);
 const dateMin = ref(null);
 const dateMax = ref(null);
@@ -16,6 +24,9 @@ const loadingObservations = ref(false);
 
 const pageIndex = ref(0);
 const itemsPerPage = ref(10);
+
+const sortBy = ref("nbObservations");
+const order = ref("desc");
 
 const props = defineProps({
   wkt: String,
@@ -41,6 +52,33 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  sortBy: {
+    type: String,
+    default: "vernacularName",
+    validator(value) {
+      return [
+        "vernacularName",
+        "acceptedScientificName",
+        "nbObservations",
+      ].includes(value);
+    },
+  },
+  order: {
+    type: String,
+    default: "asc",
+    validator(value) {
+      return ["asc", "desc"].includes(value);
+    },
+  },
+});
+
+watchEffect(() => {
+  if (props.sortBy) {
+    sortBy.value = props.sortBy;
+  }
+  if (props.order) {
+    order.value = props.order;
+  }
 });
 
 const classNames = computed(() => {
@@ -73,12 +111,15 @@ watchEffect(() => {
 });
 
 const speciesListShowed = computed(() => {
-  return speciesList.value
-    .sort((a, b) => b.nbObservations - a.nbObservations)
-    .slice(
-      pageIndex.value * itemsPerPage.value,
-      (pageIndex.value + 1) * itemsPerPage.value
-    );
+  let sorted = sortArray(speciesList.value, {
+    by: sortBy.value,
+    order: order.value,
+  }).slice(
+    pageIndex.value * itemsPerPage.value,
+    (pageIndex.value + 1) * itemsPerPage.value
+  );
+  console.log("species list", sorted);
+  return sorted;
 });
 
 function refreshSpeciesList(wkt) {
@@ -103,43 +144,52 @@ function refreshSpeciesList(wkt) {
       pageIndex.value = 0;
     });
 }
-watch(WKT, () => {
+watch([WKT, dateMin, dateMax], () => {
   if (WKT.value) {
     refreshSpeciesList(WKT.value);
   }
 });
 </script>
 <template>
-  <div id="liste-taxons" class="mb-3 h-100">
-    <Loading id="loadingObs" :loadingStatus="loadingObservations" />
-    <div
-      id="no-observation-message"
-      class="col-6"
-      v-if="speciesListShowed.length == 0 && !loadingObservations"
-    >
-      <h5>{{ $t("drawGeometry") }}</h5>
-      <h5>
-        <i class="bi bi-square-fill"></i> <i class="bi bi-hexagon-fill"></i>
-        <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
-      </h5>
+  <div id="liste-taxons" class="card mb-3 h-100 p-0">
+    <div class="card-header">
+      <SortBy
+        :sort-by-available="sortByAvailable"
+        @sortBy="(newsort) => (sortBy = newsort)"
+        @orderBy="(neworder) => (order = neworder)"
+        sortBy="acceptedScientificName"
+      ></SortBy>
     </div>
-    <div id="species-listing" :class="classNames">
-      <Taxon
-        v-for="observation in speciesListShowed"
-        :taxonId="observation.taxonId"
-        :scientific-name="observation.acceptedScientificName"
-        :vernacular-name="observation.vernacularName"
-        :description="observation.acceptedScientificName"
-        :observationDate="observation.lastSeenDate"
-        :count="observation.nbObservations"
-        :rank="observation.taxonRank"
-        :connector="connector"
-        :key="observation.taxonId"
-      />
+    <div class="card-body">
+      <Loading id="loadingObs" :loadingStatus="loadingObservations" />
+      <div
+        id="no-observation-message"
+        class="col-6"
+        v-if="speciesListShowed.length == 0 && !loadingObservations"
+      >
+        <h5>{{ $t("drawGeometry") }}</h5>
+        <h5>
+          <i class="bi bi-square-fill"></i> <i class="bi bi-hexagon-fill"></i>
+          <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
+        </h5>
+      </div>
+      <div id="species-listing" :class="classNames">
+        <Taxon
+          v-for="observation in speciesListShowed"
+          :taxonId="observation.taxonId"
+          :scientific-name="observation.acceptedScientificName"
+          :vernacular-name="observation.vernacularName"
+          :description="observation.acceptedScientificName"
+          :observationDate="observation.lastSeenDate"
+          :count="observation.nbObservations"
+          :rank="observation.taxonRank"
+          :connector="connector"
+          :key="observation.taxonId"
+        />
+      </div>
     </div>
-    <div class="mt-3">
+    <div v-if="speciesListShowed.length > 0" class="card-footer">
       <Pagination
-        v-if="speciesListShowed.length > 0"
         :pageIndex="pageIndex"
         :total-items="speciesList.length"
         :itemPerPage="itemsPerPage"
@@ -148,19 +198,14 @@ watch(WKT, () => {
     </div>
   </div>
 </template>
-<style>
-#liste-taxons {
-  background-color: white;
-  border-radius: 5px;
-  overflow: hidden;
-
-  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-}
+<style scoped>
 #species-listing {
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 80vh;
-  padding-right: 1em;
+}
+.card-body {
+  overflow: hidden;
 }
 
 #no-observation-message,
@@ -178,10 +223,10 @@ watch(WKT, () => {
   transform: translateY(-50%);
 }
 
-h5 {
+/* h5 {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-}
+} */
 </style>

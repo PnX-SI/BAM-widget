@@ -58,7 +58,7 @@ const pageToShow = computed(() => {
   if (maxNumberOfPages.value > 5) {
     const start = pageIndex.value > 0 ? 0 : 1;
     let arange = [];
-    for (let i = start; i < 5; i++) {
+    for (let i = start; i < 4; i++) {
       arange.push(pageIndex.value + i);
     }
     return arange;
@@ -68,7 +68,7 @@ const pageToShow = computed(() => {
 </script>
 
 <template>
-  <nav class="d-flex justify-content-center mt-3">
+  <nav class="d-flex justify-content-center">
     <ul class="pagination">
       <li
         @click="pageIndex != 0 ? decrementPage() : ''"
@@ -95,3 +95,9 @@ const pageToShow = computed(() => {
     </ul>
   </nav>
 </template>
+<style scoped>
+.pagination {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+</style>

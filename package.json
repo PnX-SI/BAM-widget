@@ -17,6 +17,7 @@
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
     "leaflet.locatecontrol": "^0.83.1",
+    "sort-array": "^5.0.0",
     "vue": "^3.5.13",
     "vue-i18n": "^10.0.5",
     "vue-router": "^4.5.0",
