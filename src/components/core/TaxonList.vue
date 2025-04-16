@@ -110,13 +110,13 @@ function refreshSpeciesList(wkt) {
       pageIndex.value = 0;
     });
 }
-watch([config.wktSelected, config.dateMin, config.dateMax], () => {
-  if (config.wktSelected.value) {
-    refreshSpeciesList(config.wktSelected.value);
+watch([config.wkt, config.dateMin, config.dateMax], () => {
+  if (config.wkt.value) {
+    refreshSpeciesList(config.wkt.value);
   }
 });
-if (config.wktSelected.value) {
-  refreshSpeciesList(config.wktSelected.value);
+if (config.wkt.value) {
+  refreshSpeciesList(config.wkt.value);
 }
 </script>
 <template>

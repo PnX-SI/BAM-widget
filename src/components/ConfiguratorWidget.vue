@@ -11,25 +11,24 @@ const config = ParameterStore.getInstance();
 </script>
 
 <template>
+  <BNavbar
+    v-b-color-mode="'light'"
+    toggleable="lg"
+    variant="light"
+    class="mb-3"
+  >
+    <BNavbarBrand href="#">🐛 🐦 🌱{{ $t("title") }}</BNavbarBrand>
+    <BNavbarToggle target="nav-collapse" />
+    <BCollapse id="nav-collapse" is-nav>
+      <BNavbarNav class="ms-auto mb-2 mb-lg-0">
+        <BNavForm class="d-flex" right>
+          <Share />
+          <LanguageSwitch></LanguageSwitch>
+        </BNavForm>
+      </BNavbarNav>
+    </BCollapse>
+  </BNavbar>
   <div class="container-fluid">
-    <BNavbar
-      v-b-color-mode="'light'"
-      toggleable="lg"
-      variant="light"
-      class="mb-3"
-    >
-      <BNavbarBrand href="#">🐛 🐦 🌱{{ $t("title") }}</BNavbarBrand>
-      <BNavbarToggle target="nav-collapse" />
-      <BCollapse id="nav-collapse" is-nav>
-        <BNavbarNav class="ms-auto mb-2 mb-lg-0">
-          <BNavForm class="d-flex" right>
-            <Share />
-            <LanguageSwitch></LanguageSwitch>
-          </BNavForm>
-        </BNavbarNav>
-      </BCollapse>
-    </BNavbar>
-
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
         <div class="card">
@@ -48,10 +47,8 @@ const config = ParameterStore.getInstance();
         <Map
           :radius="config.radius.value"
           height="100vh"
-          :wkt="config.wktSelected.value"
-          @wkt="
-            (drawGeometryWKT) => (config.wktSelected.value = drawGeometryWKT)
-          "
+          :wkt="config.wkt.value"
+          @wkt="(drawGeometryWKT) => (config.wkt.value = drawGeometryWKT)"
         />
       </div>
       <div class="col-12 col-lg-3 col-md-4">
