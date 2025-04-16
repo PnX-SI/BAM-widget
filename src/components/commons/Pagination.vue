@@ -11,16 +11,9 @@ const pageIndex = ref(props.pageIndex);
 const itemsPerPage = ref(props.itemPerPage);
 const totalItems = ref(props.totalItems);
 
-watchEffect(() => {
-  itemsPerPage.value = props.itemPerPage;
-  pageIndex.value = props.pageIndex;
-  totalItems.value = props.totalItems;
-});
-
-const emit = defineEmits(["page"]);
-
+const emit = defineEmits(["update:page"]);
 watch(pageIndex, () => {
-  emit("page", pageIndex.value);
+  emit("update:page", pageIndex.value);
 });
 
 function isActive(selectedPageIndex) {
@@ -95,6 +88,7 @@ const pageToShow = computed(() => {
     </ul>
   </nav>
 </template>
+
 <style scoped>
 .pagination {
   margin-top: 0.5em;

@@ -77,7 +77,6 @@ watchEffect(() => {
 .card-img-top {
   border-radius: 5px;
   height: 150px !important;
-  /* width: 150px !important; */
   object-fit: cover;
 }
 .description {

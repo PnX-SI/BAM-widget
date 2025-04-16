@@ -124,8 +124,8 @@ if (config.wkt.value) {
     <div class="card-header">
       <SortBy
         :sort-by-available="sortByAvailable"
-        @sortBy="(newsort) => (sortBy = newsort)"
-        @orderBy="(neworder) => (order = neworder)"
+        @update:sortBy="(newsort) => (sortBy = newsort)"
+        @update:orderBy="(neworder) => (order = neworder)"
         sortBy="acceptedScientificName"
       ></SortBy>
     </div>
@@ -162,7 +162,7 @@ if (config.wkt.value) {
         :pageIndex="pageIndex"
         :total-items="speciesList.length"
         :itemPerPage="config.itemsPerPage.value"
-        @page="(index) => (pageIndex = index)"
+        @update:page="(index) => (pageIndex = index)"
       />
     </div>
   </div>
@@ -191,11 +191,4 @@ if (config.wkt.value) {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-
-/* h5 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-} */
 </style>

@@ -9,12 +9,16 @@ const props = defineProps({
   link: String,
 });
 
-const emit = defineEmits(["width", "height", "typeWidget"]);
+const emit = defineEmits([
+  "update:width",
+  "update:height",
+  "update:typeWidget",
+]);
 
 watch([typeWidget, width, height], () => {
-  emit("width", width.value);
-  emit("height", height.value);
-  emit("typeWidget", typeWidget.value);
+  emit("update:width", width.value);
+  emit("update:height", height.value);
+  emit("update:typeWidget", typeWidget.value);
 });
 
 const embed = computed(() => {

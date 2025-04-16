@@ -1,3 +1,30 @@
+<script setup>
+import { ref, defineEmits, watch } from "vue";
+
+const props = defineProps({
+  sortByAvailable: { type: Array, required: true },
+  sortBy: { type: String, required: true },
+});
+
+const sortByAvailable = props.sortByAvailable;
+const sortBy = ref(props.sortBy);
+const orderBy = ref("desc");
+const emit = defineEmits(["update:sortBy", "update:orderBy"]);
+
+function changeOrder() {
+  if (orderBy.value === "asc") {
+    orderBy.value = "desc";
+  } else {
+    orderBy.value = "asc";
+  }
+  emit("update:orderBy", orderBy.value);
+}
+
+watch(sortBy, (newVal) => {
+  emit("update:sortBy", newVal);
+});
+</script>
+
 <template>
   <div class="input-group">
     <label for="sortby" class="input-group-text">
@@ -20,31 +47,3 @@
   </div>
   <div></div>
 </template>
-
-<script setup>
-import { ref, defineEmits, watch } from "vue";
-
-const props = defineProps({
-  sortByAvailable: { type: Array, required: true },
-  sortBy: { type: String, required: true },
-});
-
-const sortByAvailable = props.sortByAvailable;
-const sortBy = ref(props.sortBy);
-const orderBy = ref("desc");
-const emit = defineEmits(["sortBy", "orderBy"]);
-
-function changeOrder() {
-  if (orderBy.value === "asc") {
-    orderBy.value = "desc";
-  } else {
-    orderBy.value = "asc";
-  }
-  emit("orderBy", orderBy.value);
-  emit("sortBy", sortBy.value);
-}
-
-watch(sortBy, (newVal) => {
-  emit("sortBy", newVal);
-});
-</script>
