@@ -48,6 +48,8 @@ const messagesFR = {
       scientificName: "Nom scientifique",
       vernacularName: "Nom vernaculaire",
       nbObservations: "Nombre d'observations",
+      lastSeenDate: "Date de la dernière observation",
+      taxonFilter: "Filtre par taxon",
     },
   },
 };

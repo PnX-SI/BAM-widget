@@ -52,19 +52,20 @@ watchEffect(() => {
             {{ props.vernacularName || props.scientificName }}
           </h5>
           <small class="text-body-secondary"
-            ><strong>Nom scientifique :</strong>
+            ><strong>{{ $t("taxon.scientificName") }} :</strong>
             {{ props.scientificName }}</small
           ><br />
 
           <small class="text-body-secondary">
-            <strong>Nombre d'observations : </strong>{{ props.count }}
+            <strong>{{ $t("taxon.nbObservations") }} : </strong
+            >{{ props.count }}
           </small>
           <br />
         </div>
       </div>
       <div class="card-footer">
         <small class="text-body-secondary"
-          >Date de la dernière observation :
+          >{{ $t("taxon.lastSeenDate") }} :
           {{ props?.observationDate.toLocaleDateString() }}</small
         >
       </div>

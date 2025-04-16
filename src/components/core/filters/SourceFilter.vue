@@ -57,9 +57,9 @@ onMounted(() => {
 <template>
   <div class="text-center col-12">
     <div class="input-group">
-      <label for="languageSelect" class="input-group-text"
-        >Source de données</label
-      >
+      <label for="languageSelect" class="input-group-text">{{
+        $t("source.title")
+      }}</label>
       <input
         type="text"
         class="form-control"

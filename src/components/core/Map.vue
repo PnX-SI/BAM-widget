@@ -5,7 +5,7 @@ import "leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { restoreMapState, toWKT } from "@/lib/utils";
-import { parse, stringify } from "wellknown";
+import { parse } from "wellknown";
 
 // Vue
 import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
@@ -123,7 +123,6 @@ onMounted(() => {
 
 <style scoped>
 #map {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 </style>
