@@ -1,17 +1,13 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
 import Map from "@/components/core/Map.vue";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Filters from "@/components/core/Filters.vue";
 import Share from "./core/Share.vue";
-import { fetchParams } from "@/lib/params";
-import { getConnector } from "@/lib/connectors/utils";
 import LanguageSwitch from "./commons/LanguageSwitch.vue";
+import ParameterStore from "@/lib/parameterStore";
 
-const params = fetchParams();
-const connector = ref(getConnector(null, {})); // default GBiF
+const config = ParameterStore.getInstance();
 </script>
 
 <template>
@@ -27,13 +23,7 @@ const connector = ref(getConnector(null, {})); // default GBiF
       <BCollapse id="nav-collapse" is-nav>
         <BNavbarNav class="ms-auto mb-2 mb-lg-0">
           <BNavForm class="d-flex" right>
-            <Share
-              :wkt="params.wktSelected"
-              :dateMin="params.dateMin"
-              :dateMax="params.dateMax"
-              :radius="params.radius"
-              :connector="connector"
-            />
+            <Share />
             <LanguageSwitch></LanguageSwitch>
           </BNavForm>
         </BNavbarNav>
@@ -48,35 +38,24 @@ const connector = ref(getConnector(null, {})); // default GBiF
           </h4>
           <div class="card-body">
             <Filters
-              :sourceName="connector.name"
-              :radius="params.radius"
-              @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
-              @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
-              @radius="(newradius) => (params.radius = parseInt(newradius))"
-              @connector-data="
-                (dict) => (connector = getConnector(dict.name, dict.params))
-              "
+              :sourceName="config.connector.value.name"
+              :radius="config.radius.value"
             />
           </div>
         </div>
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <Map
-          :radius="params.radius"
+          :radius="config.radius.value"
           height="100vh"
-          :wkt="params.wktSelected"
-          @wkt="(drawGeometryWKT) => (params.wktSelected = drawGeometryWKT)"
+          :wkt="config.wktSelected.value"
+          @wkt="
+            (drawGeometryWKT) => (config.wktSelected.value = drawGeometryWKT)
+          "
         />
       </div>
       <div class="col-12 col-lg-3 col-md-4">
-        <TaxonList
-          :connector="connector"
-          :wkt="params.wktSelected"
-          :dateMin="params.dateMin"
-          :dateMax="params.dateMax"
-          :itemPerPage="10"
-          height="80vh"
-        />
+        <TaxonList :itemPerPage="10" height="80vh" />
       </div>
     </div>
   </div>

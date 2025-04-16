@@ -1,19 +1,12 @@
 <script setup>
 import HTMLBuilder from "./HTMLBuilder.vue";
 import { computed, ref, watchEffect } from "vue";
-
-const props = defineProps({
-  wkt: String,
-  dateMin: String,
-  dateMax: String,
-  radius: Number,
-  connector: Object,
-});
+import ParameterStore from "@/lib/parameterStore";
+const config = ParameterStore.getInstance();
 
 const width = ref("100wv");
 const height = ref("100vh");
 const typeWidget = ref("");
-const wkt = ref("");
 
 const host = window.location.origin;
 const pathName = window.location.pathname;
@@ -28,24 +21,20 @@ const route = computed(() => {
   }
 });
 
-watchEffect(() => {
-  wkt.value = props.wkt;
-});
-
 const link = computed(() => {
-  const paramsArray = Object.entries(props)
+  const paramsArray = Object.entries(config.getParams())
     .filter(
       ([key, value]) =>
         value !== undefined && value !== null && key !== "connector"
     )
     .map(([key, value]) => `${key}=${value}`);
-  if (props.connector.params) {
-    Object.entries(props.connector.params).forEach(([key, value]) => {
+  if (config.connector.value.params) {
+    Object.entries(config.connector.value.params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         paramsArray.push(`${key}=${value}`);
       }
     });
-    paramsArray.push(`connector=${props.connector.name}`);
+    paramsArray.push(`connector=${config.connector.value.name}`);
   }
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";

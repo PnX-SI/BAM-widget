@@ -4,20 +4,16 @@ import Loading from "@/components/commons/Loading.vue";
 import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
 import SortBy from "../commons/SortBy.vue";
-import { getConnector } from "@/lib/connectors/utils";
 import sortArray from "sort-array";
 
-const partsOfTheDay = ["twilight", "afternoon", "morning", "evening"];
+import ParameterStore from "@/lib/parameterStore";
+const config = ParameterStore.getInstance();
 
 const sortByAvailable = [
   "vernacularName",
   "acceptedScientificName",
   "nbObservations",
 ];
-const WKT = ref(null);
-const dateMin = ref(null);
-const dateMax = ref(null);
-const connector = ref(getConnector());
 
 const speciesList = ref([]);
 const loadingObservations = ref(false);
@@ -29,13 +25,6 @@ const sortBy = ref("nbObservations");
 const order = ref("desc");
 
 const props = defineProps({
-  wkt: String,
-  itemPerPage: Number,
-  dateMin: String,
-  dateMax: {
-    type: String,
-    default: "2025-01-01",
-  },
   width: {
     type: String,
     default: "400px",
@@ -43,10 +32,6 @@ const props = defineProps({
   height: {
     type: String,
     default: "100vh",
-  },
-  connector: {
-    type: Object,
-    required: true,
   },
   nbTaxonPerLine: {
     type: Number,
@@ -86,28 +71,11 @@ const classNames = computed(() => {
   return `row row-cols-1 row-cols-lg-${props.nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
 });
 
-if (props.wkt) {
-  WKT.value = props.wkt;
-}
-
 watch(pageIndex, () => {
   document.getElementById("species-listing").scrollTo({
     top: 0,
     left: 0,
   });
-});
-
-watchEffect(() => {
-  connector.value = props.connector;
-  WKT.value = props.wkt;
-  const date_changed =
-    dateMin.value != props.dateMin || dateMax.value != props.dateMax;
-  dateMin.value = props.dateMin;
-  dateMax.value = props.dateMax;
-  if (WKT.value || (date_changed && connector.value)) {
-    refreshSpeciesList(WKT.value);
-  }
-  itemsPerPage.value = props.itemPerPage;
 });
 
 const speciesListShowed = computed(() => {
@@ -118,7 +86,7 @@ const speciesListShowed = computed(() => {
     pageIndex.value * itemsPerPage.value,
     (pageIndex.value + 1) * itemsPerPage.value
   );
-  console.log("species list", sorted);
+
   return sorted;
 });
 
@@ -126,14 +94,12 @@ function refreshSpeciesList(wkt) {
   if (wkt.length === 0) return;
   loadingObservations.value = true;
   speciesList.value = [];
-  let paramsGBIF = {};
-  if (dateMin.value && dateMax.value) {
-    paramsGBIF = { eventDate: `${dateMin.value},${dateMax.value}` };
-  }
 
-  connector.value
+  config.connector.value
     .fetchOccurrence({
       geometry: wkt,
+      dateMin: config.dateMin.value,
+      dateMax: config.dateMax.value,
     })
     .then((response) => {
       speciesList.value = [];
@@ -144,11 +110,14 @@ function refreshSpeciesList(wkt) {
       pageIndex.value = 0;
     });
 }
-watch([WKT, dateMin, dateMax], () => {
-  if (WKT.value) {
-    refreshSpeciesList(WKT.value);
+watch([config.wktSelected, config.dateMin, config.dateMax], () => {
+  if (config.wktSelected.value) {
+    refreshSpeciesList(config.wktSelected.value);
   }
 });
+if (config.wktSelected.value) {
+  refreshSpeciesList(config.wktSelected.value);
+}
 </script>
 <template>
   <div id="liste-taxons" class="card mb-3 h-100 p-0">
@@ -183,7 +152,7 @@ watch([WKT, dateMin, dateMax], () => {
           :observationDate="observation.lastSeenDate"
           :count="observation.nbObservations"
           :rank="observation.taxonRank"
-          :connector="connector"
+          :connector="config.connector.value"
           :key="observation.taxonId"
         />
       </div>
@@ -192,7 +161,7 @@ watch([WKT, dateMin, dateMax], () => {
       <Pagination
         :pageIndex="pageIndex"
         :total-items="speciesList.length"
-        :itemPerPage="itemsPerPage"
+        :itemPerPage="config.itemsPerPage.value"
         @page="(index) => (pageIndex = index)"
       />
     </div>

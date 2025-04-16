@@ -1,9 +1,5 @@
 <script setup>
-import { onMounted, ref, computed, watchEffect, onUpdated } from "vue";
-import { GbifConnector } from "@/lib/connectors/gbif.js";
-import { lineChunk } from "@turf/turf";
-import { GeoNatureConnector } from "@/lib/connectors/geonature";
-
+import { ref, computed, watchEffect } from "vue";
 const props = defineProps({
   taxonId: Number,
   scientificName: String,

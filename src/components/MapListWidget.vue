@@ -1,14 +1,9 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
 import TaxonList from "@/components/core/TaxonList.vue";
 import Map from "./core/Map.vue";
-import { fetchParams } from "@/lib/params";
 
-const params = fetchParams();
-watch(params, () => {
-  console.log(params);
-});
+import ParameterStore from "@/lib/parameterStore";
+const config = ParameterStore.getInstance();
 </script>
 
 <template>
@@ -16,22 +11,14 @@ watch(params, () => {
     <div class="row">
       <div class="col-12 col-lg-6 col-md-6">
         <Map
-          :radius="params.radius"
+          :radius="config.radius.value"
           height="100vh"
-          :wkt="params.wktSelected"
+          :wkt="config.wktSelected.value"
           :editable="false"
         />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
-        <TaxonList
-          :connector="params.connector"
-          :wkt="params.wktSelected"
-          height="80vh"
-          :dateMin="params.dateMin"
-          :dateMax="params.dateMax"
-          :itemPerPage="10"
-          :nbTaxonPerLine="2"
-        />
+        <TaxonList height="80vh" :itemPerPage="10" :nbTaxonPerLine="2" />
       </div>
     </div>
   </div>
