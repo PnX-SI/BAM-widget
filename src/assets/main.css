@@ -7,13 +7,6 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-body {
-  /* background-image: linear-gradient(
-    to right,
-    rgba(34, 193, 195, 1) 0%,
-    rgba(253, 187, 45, 1) 100%
-  ); */
-}
 .container {
   width: 100%;
   height: 200vh;

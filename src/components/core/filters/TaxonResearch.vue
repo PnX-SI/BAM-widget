@@ -20,7 +20,7 @@ watch(typedSearch, (newVal) => {
 
 <template>
   <div class="input-group mb-3">
-    <span class="input-group-text">Filtrer par taxon</span>
+    <span class="input-group-text">{{ $t("taxon.taxonFilter") }}</span>
     <input
       type="text"
       class="form-control"

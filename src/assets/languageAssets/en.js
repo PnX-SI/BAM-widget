@@ -45,9 +45,11 @@ const messagesEN = {
     desc: "Décroissant",
     asc: "Croissant",
     taxon: {
-      scientificName: "Nom scientifique",
-      vernacularName: "Nom vernaculaire",
-      nbObservations: "Nombre d'observations",
+      scientificName: "Scientific Name",
+      vernacularName: "Vernacular name",
+      nbObservations: "Observation count",
+      lastSeenDate: "Last seen date",
+      taxonFilter: "Filter by taxon",
     },
   },
 };
