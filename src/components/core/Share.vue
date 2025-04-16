@@ -79,9 +79,9 @@ function copy() {
 
         <HTMLBuilder
           :link="link"
-          @typeWidget="(new_type) => (typeWidget = new_type)"
-          @width="(new_width) => (width = new_width)"
-          @height="(new_height) => (height = new_height)"
+          @update:typeWidget="(new_type) => (typeWidget = new_type)"
+          @update:width="(new_width) => (width = new_width)"
+          @update:height="(new_height) => (height = new_height)"
         />
       </div>
     </div>

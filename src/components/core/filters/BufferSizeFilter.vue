@@ -5,7 +5,7 @@ const props = defineProps({
   radius: { type: Number, required: true },
 });
 
-const radius = ref(props?.radius);
+const radius = ref(props.radius);
 
 const emit = defineEmits(["update:radius"]);
 

@@ -7,6 +7,7 @@ const props = defineProps({
 watch(props, () => {
   loadingStatus.value = props.loadingStatus;
 });
+
 const loadingStatus = ref(
   props.loadingStatus != null ? props.loadingStatus : false
 );
