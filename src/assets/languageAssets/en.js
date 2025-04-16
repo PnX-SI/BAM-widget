@@ -42,6 +42,13 @@ const messagesEN = {
       title: "Data Source",
       select: "Select a data source:",
     },
+    desc: "Décroissant",
+    asc: "Croissant",
+    taxon: {
+      scientificName: "Nom scientifique",
+      vernacularName: "Nom vernaculaire",
+      nbObservations: "Nombre d'observations",
+    },
   },
 };
 
