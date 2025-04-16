@@ -1,39 +1,24 @@
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import DateFilter from "./filters/DateFilter.vue";
 import BufferSizeFilter from "./filters/BufferSizeFilter.vue";
 import SourceFilter from "./filters/SourceFilter.vue";
 import TaxonResearch from "./filters/TaxonResearch.vue";
+import { getConnector } from "@/lib/connectors/utils";
+import ParameterStore from "@/lib/parameterStore";
+const config = ParameterStore.getInstance();
 
-const radius = ref(10);
-const dateMin = ref(null);
-const dateMax = ref(null);
-const sourceName = ref("geonature");
-const sourceParams = ref({});
-const occMaxRetrieved = ref(300);
-const maxPage = ref(10);
-
-const props = defineProps({
-  radius: Number,
-  dateMin: Date,
-  dateMax: Date,
-  sourceName: String,
-});
-
-watchEffect(() => {
-  radius.value = props.radius;
-  dateMin.value = props.dateMin;
-  dateMax.value = props.dateMax;
-  sourceName.value = props.sourceName;
-});
-
-const emit = defineEmits(["radius", "dateMin", "dateMax", "connectorData"]);
+const radius = ref(config.radius.value);
+const dateMin = ref(config.dateMin.value);
+const dateMax = ref(config.dateMax.value);
+const sourceName = ref(config.connector.value.name);
+const sourceParams = ref(config.connector.value.params);
 
 watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
-  emit("radius", radius.value);
-  emit("dateMin", dateMin.value);
-  emit("dateMax", dateMax.value);
-  emit("connectorData", { name: sourceName.value, params: sourceParams.value });
+  config.radius.value = radius.value;
+  config.dateMin.value = dateMin.value;
+  config.dateMax.value = dateMax.value;
+  config.connector.value = getConnector(sourceName.value, sourceParams.value);
 });
 </script>
 <template>
@@ -64,7 +49,7 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
     </div>
     <div class="col-12 mt-3">
       <SourceFilter
-        :sourceName="props.sourceName"
+        :sourceName="sourceName"
         @params="(params) => (sourceParams = params)"
         @source-name="(newSource) => (sourceName = newSource)"
       ></SourceFilter>

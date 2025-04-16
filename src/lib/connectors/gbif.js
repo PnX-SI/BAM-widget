@@ -39,6 +39,9 @@ class GbifConnector extends Connector {
     if (!params.maxPage) {
       params.maxPage = 10;
     }
+    if (params.dateMin && params.dateMax) {
+      params = { ...params, eventDate: `${params.dateMin},${params.dateMax}` };
+    }
 
     return this.countOccurrence(params).then(async function (countOccurrence) {
       // Compute the number of pages we need to query
