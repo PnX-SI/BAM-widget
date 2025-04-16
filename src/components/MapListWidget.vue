@@ -17,7 +17,7 @@ watch(params, () => {
       <div class="col-12 col-lg-6 col-md-6">
         <Map
           :radius="params.radius"
-          height="80vh"
+          height="100vh"
           :wkt="params.wktSelected"
           :editable="false"
         />
