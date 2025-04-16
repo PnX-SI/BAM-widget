@@ -13,7 +13,7 @@ const config = ParameterStore.getInstance();
         <Map
           :radius="config.radius.value"
           height="100vh"
-          :wkt="config.wktSelected.value"
+          :wkt="config.wkt.value"
           :editable="false"
         />
       </div>

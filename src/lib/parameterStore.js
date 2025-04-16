@@ -11,7 +11,7 @@ class ParameterStore {
     ParameterStore.instance = this;
 
     this.radius = ref(1);
-    this.wktSelected = ref("");
+    this.wkt = ref("");
     this.dateMin = ref(null);
     this.dateMax = ref(null);
     this.connector = ref(getConnector(null, {}));
@@ -24,19 +24,13 @@ class ParameterStore {
       this.radius.value = parseInt(params_from_url.radius);
     }
     if ("wkt" in params_from_url) {
-      this.wktSelected.value = validateWKT(
-        params_from_url.wkt,
-        this.radius.value
-      );
+      this.wkt.value = validateWKT(params_from_url.wkt, this.radius.value);
     }
     if ("sourceGeometry" in params_from_url) {
       fetch(params_from_url.sourceGeometry)
         .then((res) => res.json())
         .then((geojson) => {
-          this.wktSelected.value = validateWKT(
-            stringify(geojson),
-            this.radius.value
-          );
+          this.wkt.value = validateWKT(stringify(geojson), this.radius.value);
         })
         .catch((err) => console.error(err));
     }
