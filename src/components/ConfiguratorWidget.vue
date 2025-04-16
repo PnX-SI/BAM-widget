@@ -16,40 +16,49 @@ const connector = ref(getConnector(null, {})); // default GBiF
 
 <template>
   <div class="container-fluid">
-    <nav class="navbar bg-body-tertiary mb-3">
-      <div class="container-fluid">
-        <a class="navbar-brand">🐛 🐦 🌱{{ $t("title") }} </a>
-        <div class="d-flex" role="search">
-          <Share
-            :wkt="params.wktSelected"
-            :dateMin="params.dateMin"
-            :dateMax="params.dateMax"
-            :radius="params.radius"
-            :connector="connector"
-          />
-          <LanguageSwitch></LanguageSwitch>
-        </div>
-      </div>
-    </nav>
+    <BNavbar
+      v-b-color-mode="'light'"
+      toggleable="lg"
+      variant="light"
+      class="mb-3"
+    >
+      <BNavbarBrand href="#">🐛 🐦 🌱{{ $t("title") }}</BNavbarBrand>
+      <BNavbarToggle target="nav-collapse" />
+      <BCollapse id="nav-collapse" is-nav>
+        <BNavbarNav class="ms-auto mb-2 mb-lg-0">
+          <BNavForm class="d-flex" right>
+            <Share
+              :wkt="params.wktSelected"
+              :dateMin="params.dateMin"
+              :dateMax="params.dateMax"
+              :radius="params.radius"
+              :connector="connector"
+            />
+            <LanguageSwitch></LanguageSwitch>
+          </BNavForm>
+        </BNavbarNav>
+      </BCollapse>
+    </BNavbar>
 
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
-        <div
-          class="col-12 col-md-12 col-lg-12 text-center mb-3"
-          id="filtersTitle"
-        >
-          <h3><i class="bi bi-sliders"></i> {{ $t("filtersTitle") }}</h3>
+        <div class="card">
+          <h4 class="card-header">
+            {{ $t("filtersTitle") }}
+          </h4>
+          <div class="card-body">
+            <Filters
+              :sourceName="connector.name"
+              :radius="params.radius"
+              @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
+              @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
+              @radius="(newradius) => (params.radius = parseInt(newradius))"
+              @connector-data="
+                (dict) => (connector = getConnector(dict.name, dict.params))
+              "
+            />
+          </div>
         </div>
-        <Filters
-          :sourceName="connector.name"
-          :radius="params.radius"
-          @dateMin="(newDateMin) => (params.dateMin = newDateMin)"
-          @dateMax="(newDateMax) => (params.dateMax = newDateMax)"
-          @radius="(newradius) => (params.radius = parseInt(newradius))"
-          @connector-data="
-            (dict) => (connector = getConnector(dict.name, dict.params))
-          "
-        />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <Map
