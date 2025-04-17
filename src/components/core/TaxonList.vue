@@ -24,6 +24,8 @@ const itemsPerPage = ref(10);
 const sortBy = ref("nbObservations");
 const order = ref("desc");
 
+const searchString = ref("");
+
 const props = defineProps({
   width: {
     type: String,
@@ -79,7 +81,17 @@ watch(pageIndex, () => {
 });
 
 const speciesListShowed = computed(() => {
-  let sorted = sortArray(speciesList.value, {
+  let filteredSpecies = speciesList.value;
+  if (searchString.value !== "") {
+    filteredSpecies = speciesList.value.filter(function (taxon) {
+      const data =
+        taxon?.vernacularName != undefined
+          ? taxon.vernacularName + " " + taxon.acceptedScientificName
+          : taxon.acceptedScientificName;
+      return data.toLowerCase().includes(searchString.value.toLowerCase());
+    });
+  }
+  let sorted = sortArray(filteredSpecies, {
     by: sortBy.value,
     order: order.value,
   }).slice(
@@ -122,6 +134,18 @@ if (config.wkt.value) {
 <template>
   <div id="liste-taxons" class="card mb-3 h-100 p-0">
     <div class="card-header">
+      <div class="input-group">
+        <label for="search" class="input-group-text"
+          ><i class="bi bi-search"></i
+        ></label>
+        <input
+          type="text"
+          name=""
+          class="form-control"
+          id="search"
+          v-model="searchString"
+        />
+      </div>
       <SortBy
         :sort-by-available="sortByAvailable"
         @update:sortBy="(newsort) => (sortBy = newsort)"
