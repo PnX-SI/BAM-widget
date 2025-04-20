@@ -15,7 +15,7 @@ class ParameterStore {
     this.dateMin = ref(null);
     this.dateMax = ref(null);
     this.connector = ref(getConnector(null, {}));
-    this.itemsPerPage = ref(30);
+    this.itemsPerPage = ref(10);
     this.nbTaxonPerLigne = ref(4);
 
     const params_from_url = useRoute()?.query;
@@ -44,6 +44,9 @@ class ParameterStore {
       this.connector.value = getConnector(params_from_url.connector, {
         ...params_from_url,
       });
+    }
+    if ("itemsPerPage" in params_from_url) {
+      this.itemsPerPage.value = parseInt(params_from_url.itemsPerPage);
     }
     ParameterStore.instance = this;
   }

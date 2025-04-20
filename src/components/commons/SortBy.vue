@@ -34,10 +34,10 @@ watch(sortBy, (newVal) => {
     <select v-model="sortBy" class="form-select" id="sortby">
       <option
         v-for="field in sortByAvailable"
-        :key="`sort-${field}`"
-        :value="field"
+        :key="`sort-${field.field_name}`"
+        :value="field.field_name"
       >
-        {{ field }}
+        {{ field.label }}
       </option>
     </select>
     <button class="btn btn-outline-secondary" @click="changeOrder">

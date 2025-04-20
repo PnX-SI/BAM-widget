@@ -52,7 +52,7 @@ const config = ParameterStore.getInstance();
         />
       </div>
       <div class="col-12 col-lg-3 col-md-4">
-        <TaxonList :itemPerPage="10" height="80vh" />
+        <TaxonList height="80vh" />
       </div>
     </div>
   </div>
