@@ -5,21 +5,27 @@ import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
 import SortBy from "../commons/SortBy.vue";
 import sortArray from "sort-array";
-
+import { useI18n } from "vue-i18n";
 import ParameterStore from "@/lib/parameterStore";
+
+const { t } = useI18n();
 const config = ParameterStore.getInstance();
 
 const sortByAvailable = [
-  "vernacularName",
-  "acceptedScientificName",
-  "nbObservations",
+  { field_name: "vernacularName", label: t("taxon.vernacularName") },
+  {
+    field_name: "acceptedScientificName",
+    label: t("taxon.scientificName"),
+  },
+  { field_name: "nbObservations", label: t("taxon.nbObservations") },
+  { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
 ];
 
 const speciesList = ref([]);
 const loadingObservations = ref(false);
 
 const pageIndex = ref(0);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(config.itemsPerPage);
 
 const sortBy = ref("nbObservations");
 const order = ref("desc");
@@ -35,6 +41,9 @@ const props = defineProps({
     type: String,
     default: "100vh",
   },
+  itemsPerPage: {
+    type: Number,
+  },
   nbTaxonPerLine: {
     type: Number,
     default: 1,
@@ -47,6 +56,7 @@ const props = defineProps({
         "vernacularName",
         "acceptedScientificName",
         "nbObservations",
+        "lastSeenDate",
       ].includes(value);
     },
   },
@@ -59,14 +69,13 @@ const props = defineProps({
   },
 });
 
-watchEffect(() => {
-  if (props.sortBy) {
-    sortBy.value = props.sortBy;
-  }
-  if (props.order) {
-    order.value = props.order;
-  }
-});
+if (props.sortBy) {
+  sortBy.value = props.sortBy;
+}
+if (props.order) {
+  order.value = props.order;
+}
+// if (props.itemsPerPage) itemsPerPage.value = props.itemsPerPage;
 
 const classNames = computed(() => {
   const row_cols_md = props.nbTaxonPerLine === 1 ? 1 : props.nbTaxonPerLine / 2;
@@ -91,21 +100,18 @@ const speciesListShowed = computed(() => {
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
-  let sorted = sortArray(filteredSpecies, {
+  return sortArray(filteredSpecies, {
     by: sortBy.value,
     order: order.value,
   }).slice(
     pageIndex.value * itemsPerPage.value,
     (pageIndex.value + 1) * itemsPerPage.value
   );
-
-  return sorted;
 });
 
 function refreshSpeciesList(wkt) {
   if (wkt.length === 0) return;
   loadingObservations.value = true;
-  speciesList.value = [];
 
   config.connector.value
     .fetchOccurrence({
