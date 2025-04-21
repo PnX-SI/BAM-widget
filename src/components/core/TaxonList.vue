@@ -28,7 +28,7 @@ const pageIndex = ref(0);
 const itemsPerPage = ref(config.itemsPerPage);
 
 const sortBy = ref("nbObservations");
-const order = ref("desc");
+const orderBy = ref("desc");
 
 const searchString = ref("");
 
@@ -50,7 +50,7 @@ const props = defineProps({
   },
   sortBy: {
     type: String,
-    default: "vernacularName",
+    default: "acceptedScientificName",
     validator(value) {
       return [
         "vernacularName",
@@ -62,7 +62,6 @@ const props = defineProps({
   },
   order: {
     type: String,
-    default: "asc",
     validator(value) {
       return ["asc", "desc"].includes(value);
     },
@@ -73,7 +72,7 @@ if (props.sortBy) {
   sortBy.value = props.sortBy;
 }
 if (props.order) {
-  order.value = props.order;
+  orderBy.value = props.order;
 }
 // if (props.itemsPerPage) itemsPerPage.value = props.itemsPerPage;
 
@@ -102,14 +101,14 @@ const speciesListShowed = computed(() => {
   }
   return sortArray(filteredSpecies, {
     by: sortBy.value,
-    order: order.value,
+    order: orderBy.value,
   }).slice(
     pageIndex.value * itemsPerPage.value,
     (pageIndex.value + 1) * itemsPerPage.value
   );
 });
 
-function refreshSpeciesList(wkt) {
+function fetchSpeciesList(wkt) {
   if (wkt.length === 0) return;
   loadingObservations.value = true;
 
@@ -130,11 +129,11 @@ function refreshSpeciesList(wkt) {
 }
 watch([config.wkt, config.dateMin, config.dateMax], () => {
   if (config.wkt.value) {
-    refreshSpeciesList(config.wkt.value);
+    fetchSpeciesList(config.wkt.value);
   }
 });
 if (config.wkt.value) {
-  refreshSpeciesList(config.wkt.value);
+  fetchSpeciesList(config.wkt.value);
 }
 </script>
 <template>
@@ -155,8 +154,9 @@ if (config.wkt.value) {
       <SortBy
         :sort-by-available="sortByAvailable"
         @update:sortBy="(newsort) => (sortBy = newsort)"
-        @update:orderBy="(neworder) => (order = neworder)"
+        @update:orderBy="(neworder) => (orderBy = neworder)"
         sortBy="acceptedScientificName"
+        orderBy="desc"
       ></SortBy>
     </div>
     <div class="card-body">
