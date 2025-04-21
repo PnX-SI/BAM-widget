@@ -4,11 +4,12 @@ import { ref, defineEmits, watch } from "vue";
 const props = defineProps({
   sortByAvailable: { type: Array, required: true },
   sortBy: { type: String, required: true },
+  orderBy: { type: String, default: "asc" },
 });
 
 const sortByAvailable = props.sortByAvailable;
 const sortBy = ref(props.sortBy);
-const orderBy = ref("desc");
+const orderBy = ref(props.orderBy);
 const emit = defineEmits(["update:sortBy", "update:orderBy"]);
 
 function changeOrder() {
@@ -41,8 +42,8 @@ watch(sortBy, (newVal) => {
       </option>
     </select>
     <button class="btn btn-outline-secondary" @click="changeOrder">
-      <i v-if="orderBy === 'asc'" class="bi bi-sort-alpha-down"></i>
-      <i v-else class="bi bi-sort-alpha-up"></i>
+      <i v-if="orderBy === 'asc'" class="bi bi-sort-down"></i>
+      <i v-else class="bi bi-sort-up"></i>
     </button>
   </div>
   <div></div>
