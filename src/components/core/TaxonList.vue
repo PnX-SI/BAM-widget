@@ -68,6 +68,9 @@ const props = defineProps({
   },
 });
 
+const nbTaxonPerLine = config.nbTaxonPerLine.value
+  ? config.nbTaxonPerLine.value
+  : props.nbTaxonPerLine;
 if (props.sortBy) {
   sortBy.value = props.sortBy;
 }
@@ -77,8 +80,8 @@ if (props.order) {
 // if (props.itemsPerPage) itemsPerPage.value = props.itemsPerPage;
 
 const classNames = computed(() => {
-  const row_cols_md = props.nbTaxonPerLine === 1 ? 1 : props.nbTaxonPerLine / 2;
-  return `row row-cols-1 row-cols-lg-${props.nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
+  const row_cols_md = nbTaxonPerLine === 1 ? 1 : nbTaxonPerLine / 2;
+  return `row row-cols-1 row-cols-lg-${nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
 });
 
 watch(pageIndex, () => {
@@ -198,6 +201,12 @@ if (config.wkt.value) {
   </div>
 </template>
 <style scoped>
+@media (max-width: 768px) {
+  #liste-taxons {
+    margin-top: 2em;
+  }
+}
+
 #species-listing {
   overflow-y: scroll;
   overflow-x: hidden;
