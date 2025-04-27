@@ -1,7 +1,7 @@
 <template>
   <div class="card small">
     <div class="card-header">
-      <h5>{{ $t("howto") }}</h5>
+      <h4>{{ $t("howto") }}</h4>
     </div>
     <div
       class="card-body"
