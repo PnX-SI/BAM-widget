@@ -4,11 +4,11 @@ const messagesFR = {
     subtitle: "Rechercher des taxons autour de moi",
     howto: "Comment ça marche ?",
     intro: `<p>
-        Bienvenue sur notre plateforme dédiée à
+        <em>Biodiversité autour de moi</em> est une interface dédiée à
         <strong>l'exploration des taxons <i class="bi bi-search"></i></strong>
         ! Cette interface vous permet de
         <strong
-          >rechercher et d'explorer des espéces présentes dans une zone
+          >rechercher les espéces observées dans une zone
           géographique spécifique <i class="bi bi-geo-alt"></i></strong
         >.
       </p>

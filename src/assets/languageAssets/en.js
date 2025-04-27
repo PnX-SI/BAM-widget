@@ -3,11 +3,11 @@ const messagesEN = {
     title: "Biodiversity around me",
     subtitle: "Search for taxons around me",
     howto: "How does it work ?",
-    intro: `<p>Welcome to our platform dedicated to
+    intro: `<p><em>Biodiversity around me</em> is a platform dedicated to
       <strong>exploring taxons <i class="bi bi-search"></i></strong>
       ! This interface allows you to
       <strong
-        >search and explore species present in a specific geographic area <i class="bi bi-geo-alt"></i></strong
+        >search species seen in a specific geographic area <i class="bi bi-geo-alt"></i></strong
       >.
     </p>
     <p>
