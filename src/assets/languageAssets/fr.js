@@ -2,6 +2,33 @@ const messagesFR = {
   fr: {
     title: "Biodiversité autour de moi",
     subtitle: "Rechercher des taxons autour de moi",
+    howto: "Comment ça marche ?",
+    intro: `<p>
+        Bienvenue sur notre plateforme dédiée à
+        <strong>l'exploration des taxons <i class="bi bi-search"></i></strong>
+        ! Cette interface vous permet de
+        <strong
+          >rechercher et d'explorer des espéces présentes dans une zone
+          géographique spécifique <i class="bi bi-geo-alt"></i></strong
+        >.
+      </p>
+      <p>
+        <strong>Utilisez la carte interactive <i class="bi bi-map"></i></strong>
+        pour sélectionner la zone où vous souhaitez effectuer votre recherche.
+        La
+        <strong
+          ><i class="fa fa-kiwi-bird"></i> liste des taxons
+          <i class="fa fa-leaf"></i
+        ></strong>
+        trouvés dans la zone sélectionnée s'affichera à côté de la carte
+        <i class="bi bi-list-ul"></i>.
+      </p>
+      <p>
+        Vous pouvez également
+        <strong>partager vos résultats <i class="bi bi-share"></i></strong>
+        pour collaborer avec d'autres utilisateurs.
+      </p>`,
+    parameters: "Paramètres",
     filters: "Filtres",
     filtersTitle: "Filtres",
     radius: "Rayon",
@@ -41,6 +68,7 @@ const messagesFR = {
     source: {
       title: "Source de données",
       select: "Sélectionner une source :",
+      modify: "Modifier la source de données",
     },
     desc: "Décroissant",
     asc: "Croissant",
