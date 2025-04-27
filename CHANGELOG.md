@@ -1,12 +1,19 @@
 # CHANGELOG
 
-## 0.2.0 (unreleased)
+## 1.0 (unreleased)
 
-Makeover of the widget with Vue.js and Leaflet.
+### ✨ New Features
 
-**✨ New features**
+- Added multilingual support.
+- Introduced a modernized design.
+- Added sorting capability to the taxon list.
+- Added a search form to filter taxons.
+- Differents sources can now be used in addition of GBIF. For now, only GeoNature.
+- A research can be shared using a link or integrated in a HTML page using an `<embed>` dedicated tag
 
--
+### 🔧 Technical Improvements
+
+- Now using Vue.js (V3)
 
 ## 0.1.0 (2025-01-03)
 
