@@ -42,8 +42,8 @@ watch(sortBy, (newVal) => {
       </option>
     </select>
     <button class="btn btn-outline-secondary" @click="changeOrder">
-      <i v-if="orderBy === 'asc'" class="bi bi-sort-down"></i>
-      <i v-else class="bi bi-sort-up"></i>
+      <i v-if="orderBy === 'asc'" class="bi bi-sort-up"></i>
+      <i v-else class="bi bi-sort-down"></i>
     </button>
   </div>
   <div></div>

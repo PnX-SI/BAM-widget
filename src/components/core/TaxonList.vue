@@ -139,7 +139,7 @@ if (config.wkt.value) {
 <template>
   <div id="liste-taxons" class="card mb-3 h-100 p-0">
     <div class="card-header">
-      <div class="input-group">
+      <div class="input-group mb-2">
         <label for="search" class="input-group-text"
           ><i class="bi bi-search"></i
         ></label>

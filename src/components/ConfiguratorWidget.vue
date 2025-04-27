@@ -6,6 +6,7 @@ import Filters from "@/components/core/Filters.vue";
 import Share from "./core/Share.vue";
 import LanguageSwitch from "./commons/LanguageSwitch.vue";
 import ParameterStore from "@/lib/parameterStore";
+import Intro from "./core/Intro.vue";
 
 const config = ParameterStore.getInstance();
 </script>
@@ -31,17 +32,11 @@ const config = ParameterStore.getInstance();
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-lg-3 col-md-2">
-        <div class="card">
-          <h4 class="card-header">
-            {{ $t("filtersTitle") }}
-          </h4>
-          <div class="card-body">
-            <Filters
-              :sourceName="config.connector.value.name"
-              :radius="config.radius.value"
-            />
-          </div>
-        </div>
+        <Intro class="mb-2"></Intro>
+        <Filters
+          :sourceName="config.connector.value.name"
+          :radius="config.radius.value"
+        />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <Map

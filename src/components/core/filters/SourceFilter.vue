@@ -56,20 +56,14 @@ onMounted(() => {
 
 <template>
   <div class="text-center col-12">
-    <div class="input-group">
-      <label for="languageSelect" class="input-group-text">{{
-        $t("source.title")
-      }}</label>
-      <input
-        type="text"
-        class="form-control"
-        :placeholder="sourceName"
-        disabled
-      />
-      <BButton v-b-modal.modal-center variant="outline-secondary"
-        ><i class="bi bi-database-fill-gear"></i
-      ></BButton>
-    </div>
+    <BButton
+      v-b-modal.modal-center
+      variant="success"
+      size="lg"
+      class="col-12 mb-3"
+      ><i class="fa fa-leaf"></i> <br />
+      {{ $t("source.modify") }}</BButton
+    >
   </div>
 
   <BModal
