@@ -58,7 +58,7 @@ onMounted(() => {
   <div class="text-center col-12">
     <BButton
       v-b-modal.modal-center
-      variant="success"
+      variant="primary"
       size="lg"
       class="col-12 mb-3"
       ><i class="fa fa-leaf"></i> <br />
