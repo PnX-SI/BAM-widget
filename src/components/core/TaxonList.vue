@@ -111,7 +111,7 @@ const speciesListShowed = computed(() => {
 function fetchSpeciesList(wkt) {
   if (wkt.length === 0) return;
   loadingObservations.value = true;
-
+  speciesList.value = [];
   config.connector.value
     .fetchOccurrence({
       geometry: wkt,
@@ -137,7 +137,7 @@ if (config.wkt.value) {
 }
 </script>
 <template>
-  <div id="liste-taxons" class="card mb-3 h-100 p-0">
+  <div id="liste-taxons" class="card mb-3 p-0" style="height: 100vh">
     <div class="card-header">
       <div class="input-group mb-2">
         <label for="search" class="input-group-text"

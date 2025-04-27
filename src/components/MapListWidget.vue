@@ -18,7 +18,7 @@ const config = ParameterStore.getInstance();
         />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
-        <TaxonList height="80vh" :nbTaxonPerLine="2" />
+        <TaxonList :nbTaxonPerLine="2" />
       </div>
     </div>
   </div>
