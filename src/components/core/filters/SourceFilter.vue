@@ -2,18 +2,18 @@
 import { reactive, ref, watch, onMounted } from "vue";
 
 const sources = {
-  gbif: [
+  GBIF: [
     {
       name: "API_ENPOINT",
-      label: "Adresse de l'API du GBIF utilisée",
+      label: "Adresse de l'API du GBIF",
       type: String,
       default: "https://api.gbif.org/v1",
     },
   ],
-  geonature: [
+  GeoNature: [
     {
       name: "EXPORT_API_ENDPOINT",
-      label: "Adresse de l'API d'un export GN",
+      label: "Adresse de l'API d'un export GeoNature",
       type: String,
       default: "http://localhost:8000/exports/api/20",
     },
