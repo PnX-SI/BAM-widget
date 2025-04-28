@@ -1,11 +1,11 @@
 import { GbifConnector } from "./gbif";
 import { GeoNatureConnector } from "./geonature";
 
-function getConnector(connectorName = "gbif", params = {}) {
+function getConnector(connectorName = "GBIF", params = {}) {
   switch (connectorName) {
-    case "gbif":
+    case "GBIF":
       return new GbifConnector(params);
-    case "geonature":
+    case "GeoNature":
       return new GeoNatureConnector(params);
     default:
       return new GbifConnector(params);
