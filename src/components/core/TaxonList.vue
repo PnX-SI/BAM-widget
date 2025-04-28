@@ -41,6 +41,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  showFilters: {
+    type: Boolean,
+    default: true,
+  },
   sortBy: {
     type: String,
     default: "nbObservations",
@@ -62,9 +66,10 @@ const props = defineProps({
   },
 });
 
-const nbTaxonPerLine = config.nbTaxonPerLine.value
-  ? config.nbTaxonPerLine.value
-  : props.nbTaxonPerLine;
+const nbTaxonPerLine =
+  config.nbTaxonPerLine.value != undefined
+    ? config.nbTaxonPerLine.value
+    : props.nbTaxonPerLine;
 
 if (props.sortBy) {
   sortBy.value = props.sortBy;
@@ -72,6 +77,11 @@ if (props.sortBy) {
 if (props.order) {
   orderBy.value = props.order;
 }
+
+const showFilters =
+  config.showFilters.value != undefined
+    ? config.showFilters.value
+    : props.showFilters;
 
 const classNames = computed(() => {
   const row_cols_md = nbTaxonPerLine === 1 ? 1 : nbTaxonPerLine / 2;
@@ -134,7 +144,6 @@ function fetchSpeciesList(wkt) {
       pageIndex.value = 0;
     })
     .catch((error) => {
-      console.log("aaaa");
       loadingObservations.value = false;
       loadingError.value = true;
     });
@@ -153,18 +162,12 @@ if (config.wkt.value) {
 </script>
 <template>
   <div id="taxon-list" class="card">
-    <div class="card-header">
-      <div class="input-group mb-2">
-        <label for="search" class="input-group-text"
-          ><i class="bi bi-search"></i
-        ></label>
-        <input
-          type="text"
-          class="form-control"
-          id="search"
-          v-model="searchString"
-        />
-      </div>
+    <div class="card-header" v-if="showFilters == true">
+      <SearchForm
+        @update:searchString="
+          (newSearchString) => (searchString = newSearchString)
+        "
+      ></SearchForm>
       <SortBy
         :sort-by-available="sortByAvailable"
         @update:sortBy="(newsort) => (sortBy = newsort)"

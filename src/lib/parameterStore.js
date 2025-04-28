@@ -17,6 +17,7 @@ class ParameterStore {
     this.connector = ref(getConnector(null, {}));
     this.itemsPerPage = ref(10);
     this.nbTaxonPerLine = ref(null);
+    this.showFilters = ref(true);
 
     const params_from_url = useRoute()?.query;
     if (!params_from_url) return;
@@ -48,8 +49,12 @@ class ParameterStore {
     if ("itemsPerPage" in params_from_url) {
       this.itemsPerPage.value = parseInt(params_from_url.itemsPerPage);
     }
-    if ("itemsPerPage" in params_from_url) {
+    if ("nbTaxonPerLine" in params_from_url) {
       this.nbTaxonPerLine.value = parseInt(params_from_url.nbTaxonPerLine);
+    }
+    if ("showFilters" in params_from_url) {
+      this.showFilters.value =
+        params_from_url["showFilters"] == "true" ? true : false;
     }
     ParameterStore.instance = this;
   }
