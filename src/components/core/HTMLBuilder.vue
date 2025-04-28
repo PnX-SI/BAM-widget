@@ -7,6 +7,7 @@ const typeWidget = ref("");
 
 const props = defineProps({
   link: String,
+  required: true,
 });
 
 const emit = defineEmits([

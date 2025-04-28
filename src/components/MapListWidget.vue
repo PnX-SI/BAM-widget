@@ -23,9 +23,3 @@ const config = ParameterStore.getInstance();
     </div>
   </div>
 </template>
-
-<style scoped>
-.container {
-  height: 100vh !important;
-}
-</style>
