@@ -23,6 +23,7 @@ const sortByAvailable = [
 
 const speciesList = ref([]);
 const loadingObservations = ref(false);
+const loadingError = ref(false);
 
 const pageIndex = ref(0);
 const itemsPerPage = ref(config.itemsPerPage);
@@ -33,14 +34,6 @@ const orderBy = ref("desc");
 const searchString = ref("");
 
 const props = defineProps({
-  width: {
-    type: String,
-    default: "400px",
-  },
-  height: {
-    type: String,
-    default: "100vh",
-  },
   itemsPerPage: {
     type: Number,
   },
@@ -71,13 +64,13 @@ const props = defineProps({
 const nbTaxonPerLine = config.nbTaxonPerLine.value
   ? config.nbTaxonPerLine.value
   : props.nbTaxonPerLine;
+
 if (props.sortBy) {
   sortBy.value = props.sortBy;
 }
 if (props.order) {
   orderBy.value = props.order;
 }
-// if (props.itemsPerPage) itemsPerPage.value = props.itemsPerPage;
 
 const classNames = computed(() => {
   const row_cols_md = nbTaxonPerLine === 1 ? 1 : nbTaxonPerLine / 2;
@@ -111,9 +104,15 @@ const speciesListShowed = computed(() => {
   );
 });
 
+/**
+ * Fetches the species list based on the given WKT geometry and populate the `speciesList` variable.
+ * @param {string} wkt - The WKT geometry to filter by
+ */
+
 function fetchSpeciesList(wkt) {
   if (wkt.length === 0) return;
   loadingObservations.value = true;
+  loadingError.value = false;
   speciesList.value = [];
   config.connector.value
     .fetchOccurrence({
@@ -128,19 +127,27 @@ function fetchSpeciesList(wkt) {
       });
       loadingObservations.value = false;
       pageIndex.value = 0;
+    })
+    .catch((error) => {
+      console.log("aaaa");
+      loadingObservations.value = false;
+      loadingError.value = true;
     });
 }
+// Watch for geometry and parameters changes
 watch([config.wkt, config.dateMin, config.dateMax], () => {
   if (config.wkt.value) {
     fetchSpeciesList(config.wkt.value);
   }
 });
+
+// If wkt given in the URL
 if (config.wkt.value) {
   fetchSpeciesList(config.wkt.value);
 }
 </script>
 <template>
-  <div id="liste-taxons" class="card mb-3 p-0" style="height: 100vh">
+  <div id="taxon-list" class="card">
     <div class="card-header">
       <div class="input-group mb-2">
         <label for="search" class="input-group-text"
@@ -148,7 +155,6 @@ if (config.wkt.value) {
         ></label>
         <input
           type="text"
-          name=""
           class="form-control"
           id="search"
           v-model="searchString"
@@ -167,7 +173,9 @@ if (config.wkt.value) {
       <div
         id="no-observation-message"
         class="col-6"
-        v-if="speciesListShowed.length == 0 && !loadingObservations"
+        v-if="
+          speciesListShowed.length == 0 && !loadingObservations && !loadingError
+        "
       >
         <h5>{{ $t("drawGeometry") }}</h5>
         <h5>
@@ -175,7 +183,14 @@ if (config.wkt.value) {
           <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
         </h5>
       </div>
-      <div id="species-listing" :class="classNames">
+      <div
+        id="loading-error"
+        class="col-6 bg-danger"
+        v-if="loadingError == true"
+      >
+        <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
+      </div>
+      <div id="taxon-list-content" :class="classNames">
         <Taxon
           v-for="observation in speciesListShowed"
           :taxonId="observation.taxonId"
@@ -201,13 +216,18 @@ if (config.wkt.value) {
   </div>
 </template>
 <style scoped>
+#taxon-list {
+  margin-bottom: 3em;
+  padding: 0;
+  height: 100vh;
+}
 @media (max-width: 768px) {
-  #liste-taxons {
+  #taxon-list {
     margin-top: 2em;
   }
 }
 
-#species-listing {
+#taxon-list-content {
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 80vh;
@@ -216,10 +236,9 @@ if (config.wkt.value) {
   overflow: hidden;
 }
 
+#loading-error,
 #no-observation-message,
 #loadingObs {
-  background-color: var(--bs-secondary-bg);
-  color: var(--bs-secondary-color);
   border-radius: 10px;
   text-align: center;
   padding: 1em;
@@ -229,5 +248,14 @@ if (config.wkt.value) {
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+#no-observation-message,
+#loadingObs {
+  background-color: var(--bs-secondary-bg);
+  color: var(--bs-secondary-color);
+}
+#loading-error {
+  color: white;
 }
 </style>

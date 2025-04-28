@@ -69,9 +69,4 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
 label {
   font-weight: bold;
 }
-#filtersTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 </style>

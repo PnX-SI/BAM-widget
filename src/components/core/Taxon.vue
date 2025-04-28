@@ -32,7 +32,7 @@ function refreshTaxonImage() {
 }
 
 watchEffect(() => {
-  // Quand props change
+  // if any of props changes
   refreshTaxonImage();
 });
 </script>
@@ -78,8 +78,5 @@ watchEffect(() => {
   border-radius: 0px !important;
   height: 150px !important;
   object-fit: cover;
-}
-.description {
-  height: 10vh;
 }
 </style>
