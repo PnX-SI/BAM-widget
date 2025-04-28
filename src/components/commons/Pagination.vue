@@ -15,6 +15,9 @@ const emit = defineEmits(["update:page"]);
 watch(pageIndex, () => {
   emit("update:page", pageIndex.value);
 });
+watchEffect(() => {
+  pageIndex.value = props.pageIndex;
+});
 
 function isActive(selectedPageIndex) {
   if (selectedPageIndex == pageIndex.value) {
