@@ -2,7 +2,7 @@ const messagesEN = {
   en: {
     title: "Biodiversity around me",
     subtitle: "Search for species around me",
-    howto: "How does it works?",
+    howto: "How does it work?",
     intro: `<p><em>Biodiversity around me</em> is a widget dedicated to
       <strong>exploring species <i class="bi bi-search"></i></strong>
       ! This interface allows you to
