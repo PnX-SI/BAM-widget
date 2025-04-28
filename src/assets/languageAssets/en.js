@@ -1,20 +1,20 @@
 const messagesEN = {
   en: {
     title: "Biodiversity around me",
-    subtitle: "Search for taxons around me",
-    howto: "How does it work ?",
-    intro: `<p><em>Biodiversity around me</em> is a platform dedicated to
-      <strong>exploring taxons <i class="bi bi-search"></i></strong>
+    subtitle: "Search for species around me",
+    howto: "How does it works?",
+    intro: `<p><em>Biodiversity around me</em> is a widget dedicated to
+      <strong>exploring species <i class="bi bi-search"></i></strong>
       ! This interface allows you to
       <strong
-        >search species seen in a specific geographic area <i class="bi bi-geo-alt"></i></strong
+        >search species observed in a specific geographic area <i class="bi bi-geo-alt"></i></strong
       >.
     </p>
     <p>
       <strong>Use the interactive map <i class="bi bi-map"></i></strong>
       to select the area where you want to perform your search. The
       <strong
-        ><i class="fa fa-kiwi-bird"></i> list of taxons
+        ><i class="fa fa-kiwi-bird"></i> list of species
         <i class="fa fa-leaf"></i
       ></strong>
       found in the selected area will be displayed next to the map
@@ -40,14 +40,14 @@ const messagesEN = {
     previousPage: "Previous",
     nextPage: "Next",
     loading: "Loading...",
-    noObservations: "No observations found",
+    noObservations: "No observation found",
     noGeometry: "No geometry found",
     error404: {
       title: "Page not found",
       subtitle: "The page you are looking for does not exist",
     },
     browserIntegration: "Integrate the widget into your site",
-    drawGeometry: "Select a zone to display species",
+    drawGeometry: "Draw an area to display species",
     size: {
       width: "Width",
       height: "Height",
@@ -73,8 +73,8 @@ const messagesEN = {
     taxon: {
       scientificName: "Scientific Name",
       vernacularName: "Vernacular name",
-      nbObservations: "Observation count",
-      lastSeenDate: "Last seen date",
+      nbObservations: "Number of observations",
+      lastSeenDate: "Last observation date",
       taxonFilter: "Filter by taxon",
     },
   },
