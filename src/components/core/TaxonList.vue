@@ -78,7 +78,7 @@ const classNames = computed(() => {
 });
 
 watch(pageIndex, () => {
-  document.getElementById("species-listing").scrollTo({
+  document.getElementById("taxon-list-content").scrollTo({
     top: 0,
     left: 0,
   });
