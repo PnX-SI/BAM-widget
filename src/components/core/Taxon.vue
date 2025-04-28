@@ -76,7 +76,7 @@ watchEffect(() => {
 <style>
 .card-img-top {
   border-radius: 0px !important;
-  height: 150px !important;
+  max-height: 300px !important;
   object-fit: cover;
 }
 </style>
