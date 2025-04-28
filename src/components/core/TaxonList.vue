@@ -43,7 +43,7 @@ const props = defineProps({
   },
   sortBy: {
     type: String,
-    default: "acceptedScientificName",
+    default: "nbObservations",
     validator(value) {
       return [
         "vernacularName",
@@ -55,6 +55,7 @@ const props = defineProps({
   },
   order: {
     type: String,
+    default: "desc",
     validator(value) {
       return ["asc", "desc"].includes(value);
     },
@@ -82,6 +83,10 @@ watch(pageIndex, () => {
     top: 0,
     left: 0,
   });
+});
+
+watch(searchString, () => {
+  pageIndex.value = 0;
 });
 
 const speciesListShowed = computed(() => {
@@ -164,8 +169,8 @@ if (config.wkt.value) {
         :sort-by-available="sortByAvailable"
         @update:sortBy="(newsort) => (sortBy = newsort)"
         @update:orderBy="(neworder) => (orderBy = neworder)"
-        sortBy="acceptedScientificName"
-        orderBy="desc"
+        :sortBy="sortBy"
+        :orderBy="orderBy"
       ></SortBy>
     </div>
     <div class="card-body">
