@@ -18,7 +18,7 @@ const config = ParameterStore.getInstance();
     variant="light"
     class="mb-3"
   >
-    <BNavbarBrand href="#/config">🐛 🐦 🌱{{ $t("title") }}</BNavbarBrand>
+    <BNavbarBrand href="#/config">🐛 🐦 🌱 {{ $t("title") }}</BNavbarBrand>
     <BNavbarToggle target="nav-collapse" />
     <BCollapse id="nav-collapse" is-nav>
       <BNavbarNav class="ms-auto mb-2 mb-lg-0">
