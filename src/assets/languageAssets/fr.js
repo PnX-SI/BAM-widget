@@ -1,14 +1,14 @@
 const messagesFR = {
   fr: {
     title: "Biodiversité autour de moi",
-    subtitle: "Rechercher des taxons autour de moi",
+    subtitle: "Rechercher des espèces autour de moi",
     howto: "Comment ça marche ?",
     intro: `<p>
-        <em>Biodiversité autour de moi</em> est une interface dédiée à
-        <strong>l'exploration des taxons <i class="bi bi-search"></i></strong>
+        <em>Biodiversité autour de moi</em> est un widget dédié à
+        <strong>l'exploration des espèces <i class="bi bi-search"></i></strong>
         ! Cette interface vous permet de
         <strong
-          >rechercher les espéces observées dans une zone
+          >rechercher les espèces observées dans une zone
           géographique spécifique <i class="bi bi-geo-alt"></i></strong
         >.
       </p>
@@ -17,10 +17,10 @@ const messagesFR = {
         pour sélectionner la zone où vous souhaitez effectuer votre recherche.
         La
         <strong
-          ><i class="fa fa-kiwi-bird"></i> liste des taxons
+          ><i class="fa fa-kiwi-bird"></i> liste des espèces
           <i class="fa fa-leaf"></i
         ></strong>
-        trouvés dans la zone sélectionnée s'affichera à côté de la carte
+        trouvées dans la zone sélectionnée s'affichera à côté de la carte
         <i class="bi bi-list-ul"></i>.
       </p>
       <p>
@@ -36,19 +36,19 @@ const messagesFR = {
     dateMin: "Date Min",
     dateMax: "Date Max",
     search: "Rechercher",
-    reset: "Reinitialiser",
+    reset: "Réinitialiser",
     searchResults: "Résultats de la recherche",
     noResults: "Aucun résultat",
     previousPage: "Précedent",
     nextPage: "Suivant",
     loading: "Chargement en cours ...",
-    noObservations: "Aucune observation trouvable",
-    noGeometry: "Aucune geometrie trouvable",
+    noObservations: "Aucune observation trouvée",
+    noGeometry: "Aucune géometrie trouvée",
     error404: {
       title: "Page introuvable",
       subtitle: "La page que vous recherchez n'existe pas",
     },
-    browserIntegration: "Code HTML",
+    browserIntegration: "Intégrer le widget dans votre site",
     drawGeometry: "Dessiner une zone pour afficher les espèces",
     size: {
       width: "Largeur",
@@ -58,7 +58,7 @@ const messagesFR = {
     typeWidget: {
       title: "Type de widget",
       default: "Par défaut",
-      list: "Liste de taxons",
+      list: "Liste d'espèces",
       config: "Configurateur",
     },
     copy: "Copier",

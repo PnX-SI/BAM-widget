@@ -9,7 +9,7 @@ class GeoNatureConnector extends Connector {
 
   constructor(options) {
     super(options);
-    this.name = "geonature";
+    this.name = "GeoNature";
     // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
     this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
   }
