@@ -28,10 +28,6 @@ watch(sortBy, (newVal) => {
 
 <template>
   <div class="input-group">
-    <label for="sortby" class="input-group-text">
-      <i class="bi bi-funnel"></i
-    ></label>
-
     <select v-model="sortBy" class="form-select" id="sortby">
       <option
         v-for="field in sortByAvailable"
