@@ -12,6 +12,7 @@ import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
 
 // Draw config
 import drawConfig from "./MapConfig";
+import { booleanClockwise, rewind } from "@turf/turf";
 
 const props = defineProps({
   radius: {
@@ -96,8 +97,17 @@ onMounted(() => {
     geometry.value.clearLayers();
     geometry.value.addLayer(layer);
 
+    let geojson = layer.toGeoJSON();
+    if (!booleanClockwise(geojson)) {
+      geojson = rewind(geojson);
+    }
     // Convert to WKT
-    const WKT = toWKT(layer, event.layerType, radius.value);
+    const WKT = toWKT(
+      geojson,
+      event.layerType == "circle" ? layer.getRadius() : null,
+      event.layerType,
+      radius.value
+    );
     // If point or line, we buffer the geometry
     if (event.layerType == "marker" || event.layerType == "polyline") {
       let tmp = L.geoJSON().addTo(geometry.value);
