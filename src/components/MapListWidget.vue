@@ -14,7 +14,8 @@ const config = ParameterStore.getInstance();
           :radius="config.radius.value"
           height="100vh"
           :wkt="config.wkt.value"
-          :editable="false"
+          :editable="true"
+          @wkt="(drawGeometryWKT) => (config.wkt.value = drawGeometryWKT)"
         />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
