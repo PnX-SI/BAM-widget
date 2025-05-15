@@ -3,12 +3,15 @@ import { getConnector } from "./connectors/utils";
 import { useRoute } from "vue-router";
 import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
+import { useI18n } from "vue-i18n";
 
 class ParameterStore {
   static instance = null;
   constructor() {
     if (ParameterStore.instance) return;
     ParameterStore.instance = this;
+    //must be called here
+    const { locale, availableLocales } = useI18n();
 
     this.radius = ref(1);
     this.wkt = ref("");
@@ -18,6 +21,7 @@ class ParameterStore {
     this.itemsPerPage = ref(10);
     this.nbTaxonPerLine = ref(null);
     this.showFilters = ref(true);
+    this.lang = ref(locale);
 
     const params_from_url = useRoute()?.query;
     if (!params_from_url) return;
@@ -55,6 +59,12 @@ class ParameterStore {
     if ("showFilters" in params_from_url) {
       this.showFilters.value =
         params_from_url["showFilters"] == "true" ? true : false;
+    }
+    if ("lang" in params_from_url) {
+      if (availableLocales.includes(params_from_url["lang"])) {
+        this.lang = params_from_url["lang"];
+        locale.value = this.lang;
+      }
     }
     ParameterStore.instance = this;
   }
