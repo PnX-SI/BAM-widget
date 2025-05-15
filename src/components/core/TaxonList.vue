@@ -206,6 +206,9 @@ if (config.wkt.value) {
         @update:page="(index) => (pageIndex = index)"
       />
     </div>
+    <div id="data-source-credits">
+      {{ $t("source.title") }} : {{ config.connector.value.name }}
+    </div>
   </div>
 </template>
 
@@ -249,6 +252,12 @@ if (config.wkt.value) {
 }
 
 #loading-error {
+  color: white;
+}
+
+#data-source-credits {
+  text-align: center;
+  background: var(--bs-primary);
   color: white;
 }
 </style>
