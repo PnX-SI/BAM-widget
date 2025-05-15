@@ -1,37 +1,16 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import Loading from "@/components/commons/Loading.vue";
 import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
 import SortBy from "../commons/SortBy.vue";
+import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";
-import { useI18n } from "vue-i18n";
 import ParameterStore from "@/lib/parameterStore";
 
 const { t } = useI18n();
 const config = ParameterStore.getInstance();
-
-const sortByAvailable = [
-  { field_name: "vernacularName", label: t("taxon.vernacularName") },
-  {
-    field_name: "acceptedScientificName",
-    label: t("taxon.scientificName"),
-  },
-  { field_name: "nbObservations", label: t("taxon.nbObservations") },
-  { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
-];
-
-const speciesList = ref([]);
-const loadingObservations = ref(false);
-const loadingError = ref(false);
-
-const pageIndex = ref(0);
-const itemsPerPage = ref(config.itemsPerPage);
-
-const sortBy = ref("nbObservations");
-const orderBy = ref("desc");
-
-const searchString = ref("");
 
 const props = defineProps({
   itemsPerPage: {
@@ -66,37 +45,41 @@ const props = defineProps({
   },
 });
 
+const speciesList = ref([]);
+const loadingObservations = ref(false);
+const loadingError = ref(false);
+
+const pageIndex = ref(0);
+const itemsPerPage = ref(config.itemsPerPage);
+
+const sortBy = ref(props.sortBy || "nbObservations");
+const orderBy = ref(props.order || "desc");
+
+const searchString = ref("");
+
 const nbTaxonPerLine =
   config.nbTaxonPerLine.value != undefined
     ? config.nbTaxonPerLine.value
     : props.nbTaxonPerLine;
-
-if (props.sortBy) {
-  sortBy.value = props.sortBy;
-}
-if (props.order) {
-  orderBy.value = props.order;
-}
 
 const showFilters =
   config.showFilters.value != undefined
     ? config.showFilters.value
     : props.showFilters;
 
+const sortByAvailable = [
+  { field_name: "vernacularName", label: t("taxon.vernacularName") },
+  {
+    field_name: "acceptedScientificName",
+    label: t("taxon.scientificName"),
+  },
+  { field_name: "nbObservations", label: t("taxon.nbObservations") },
+  { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
+];
+
 const classNames = computed(() => {
   const row_cols_md = nbTaxonPerLine === 1 ? 1 : nbTaxonPerLine / 2;
   return `row row-cols-1 row-cols-lg-${nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
-});
-
-watch(pageIndex, () => {
-  document.getElementById("taxon-list-content").scrollTo({
-    top: 0,
-    left: 0,
-  });
-});
-
-watch(searchString, () => {
-  pageIndex.value = 0;
 });
 
 const speciesListShowed = computed(() => {
@@ -118,11 +101,6 @@ const speciesListShowed = computed(() => {
     (pageIndex.value + 1) * itemsPerPage.value
   );
 });
-
-/**
- * Fetches the species list based on the given WKT geometry and populate the `speciesList` variable.
- * @param {string} wkt - The WKT geometry to filter by
- */
 
 function fetchSpeciesList(wkt) {
   if (wkt.length === 0) return;
@@ -148,6 +126,18 @@ function fetchSpeciesList(wkt) {
       loadingError.value = true;
     });
 }
+
+watch(pageIndex, () => {
+  document.getElementById("taxon-list-content").scrollTo({
+    top: 0,
+    left: 0,
+  });
+});
+
+watch(searchString, () => {
+  pageIndex.value = 0;
+});
+
 // Watch for geometry and parameters changes
 watch([config.wkt, config.dateMin, config.dateMax], () => {
   if (config.wkt.value) {
@@ -160,9 +150,10 @@ if (config.wkt.value) {
   fetchSpeciesList(config.wkt.value);
 }
 </script>
+
 <template>
   <div id="taxon-list" class="card">
-    <div class="card-header" v-if="showFilters == true">
+    <div class="card-header" v-if="showFilters">
       <SearchForm
         @update:searchString="
           (newSearchString) => (searchString = newSearchString)
@@ -217,25 +208,27 @@ if (config.wkt.value) {
     </div>
   </div>
 </template>
+
 <style scoped>
 #taxon-list {
   margin-bottom: 3em;
   padding: 0;
   height: 100vh;
-}
-@media (max-width: 768px) {
-  #taxon-list {
-    margin-top: 2em;
-  }
+  display: flex;
+  flex-direction: column;
 }
 
 #taxon-list-content {
-  overflow-y: scroll;
+  overflow-y: auto; /* Utilisez 'auto' au lieu de 'scroll' pour éviter les barres de défilement inutiles */
   overflow-x: hidden;
-  max-height: 80vh;
+  flex-grow: 1; /* Permet à la zone de défilement de prendre tout l'espace disponible */
 }
+
 .card-body {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Permet au corps de la carte de prendre tout l'espace disponible */
 }
 
 #loading-error,
@@ -247,8 +240,6 @@ if (config.wkt.value) {
   width: 100%;
   position: relative;
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
 
@@ -257,6 +248,7 @@ if (config.wkt.value) {
   background-color: var(--bs-secondary-bg);
   color: var(--bs-secondary-color);
 }
+
 #loading-error {
   color: white;
 }

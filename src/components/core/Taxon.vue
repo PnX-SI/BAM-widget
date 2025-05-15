@@ -43,7 +43,11 @@ const kingdomIcon = computed(() => {
 });
 
 const classIcon = computed(() => {
-  return taxonClassIcons[taxon.kingdom][taxon.class]["Icon"];
+  try {
+    return taxonClassIcons[taxon.kingdom][taxon.class]["Icon"];
+  } catch (error) {
+    return "";
+  }
 });
 
 const pageLink = computed(() => {

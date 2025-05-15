@@ -4,7 +4,6 @@ import { computed } from "vue";
 const props = defineProps({
   typeIcon: {
     type: String,
-    required: true,
     default: "font-icon",
   },
   imageIcon: {
