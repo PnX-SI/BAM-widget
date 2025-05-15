@@ -57,7 +57,7 @@ const messagesFR = {
     embed: "Code HTML",
     typeWidget: {
       title: "Type de widget",
-      default: "Par défaut",
+      default: "Carte et liste",
       list: "Liste d'espèces",
       config: "Configurateur",
     },

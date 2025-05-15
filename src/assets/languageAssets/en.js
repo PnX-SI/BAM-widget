@@ -55,7 +55,7 @@ const messagesEN = {
     embed: "Embed",
     typeWidget: {
       title: "Type of widget",
-      default: "Default",
+      default: "Map and List",
       list: "List of species",
       config: "Configuration",
     },
