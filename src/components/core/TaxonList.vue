@@ -211,7 +211,6 @@ if (config.wkt.value) {
 
 <style scoped>
 #taxon-list {
-  margin-bottom: 3em;
   padding: 0;
   height: 100vh;
   display: flex;
