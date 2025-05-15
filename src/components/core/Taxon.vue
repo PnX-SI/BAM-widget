@@ -1,16 +1,16 @@
 <script setup>
 import { ref, computed, watchEffect } from "vue";
+
+import { taxonClassIcons } from "@/assets/taxonclass2icon";
+import { Taxon } from "@/lib/models";
+import BadgeTaxon from "./BadgeTaxon.vue";
+
 const props = defineProps({
-  taxonId: Number,
-  scientificName: String,
-  vernacularName: String,
-  rank: String,
-  kingdom: String,
-  description: String,
-  observationDate: Date,
-  count: Number,
+  taxon: Taxon,
   connector: { type: Object, required: true },
 });
+
+const taxon = props.taxon;
 
 const speciesMedia = ref([]);
 
@@ -25,24 +25,29 @@ const speciesMediaShowed = computed(() => {
 
 function refreshTaxonImage() {
   speciesMedia.value = [];
-  if (props.taxonId) {
-    props.connector.fetchMedia(props.taxonId).then((response) => {
+  if (taxon.taxonId) {
+    props.connector.fetchMedia(taxon.taxonId).then((response) => {
       speciesMedia.value = response;
     });
   }
 }
 
+const kingdomColor = computed(() => {
+  return taxon.kingdom == "Plantae" ? "#27ae60" : "#e67e22";
+});
+
 const kingdomIcon = computed(() => {
-  switch (props.kingdom.toLowerCase()) {
-    case "plantae":
-      return "fa-solid fa-seedling badge-plantae";
-    case "animalia":
-      return "fa-solid fa-paw badge-animalia";
-  }
+  return taxon.kingdom == "Plantae"
+    ? "fa-solid fa-seedling"
+    : "fa-solid fa-paw";
+});
+
+const classIcon = computed(() => {
+  return taxonClassIcons[taxon.kingdom][taxon.class]["Icon"];
 });
 
 const pageLink = computed(() => {
-  return props.connector.getTaxonDetailPage(props.taxonId);
+  return props.connector.getTaxonDetailPage(taxon.taxonId);
 });
 
 watchEffect(() => {
@@ -55,7 +60,18 @@ watchEffect(() => {
   <div class="col">
     <div class="card h-100">
       <div class="taxon-photo">
-        <i :class="kingdomIcon + ' badge-kingdom '"></i>
+        <BadgeTaxon
+          :class-icon="kingdomIcon"
+          id="badge-kingdom"
+          :background-color="kingdomColor"
+          :tooltip="taxon.kingdom"
+        ></BadgeTaxon>
+        <BadgeTaxon
+          :class-icon="classIcon"
+          id="badge-class"
+          background-color="#8e44ad"
+          :tooltip="taxon.class"
+        ></BadgeTaxon>
         <img
           :src="speciesMediaShowed?.url"
           :alt="speciesMediaShowed?.url"
@@ -66,16 +82,16 @@ watchEffect(() => {
       <div class="card-body">
         <div class="card-text">
           <h5 class="card-title text-wrap">
-            {{ props.vernacularName || props.scientificName }}
+            {{ taxon.vernacularName || taxon.acceptedScientificName }}
           </h5>
           <small class="text-body-secondary"
             ><strong>{{ $t("taxon.scientificName") }} :</strong>
-            {{ props.scientificName }}</small
+            {{ taxon.acceptedScientificName }}</small
           ><br />
 
           <small class="text-body-secondary">
             <strong>{{ $t("taxon.nbObservations") }} : </strong
-            >{{ props.count }}
+            >{{ taxon.nbObservations }}
           </small>
           <br />
 
@@ -94,7 +110,7 @@ watchEffect(() => {
       <div class="card-footer">
         <small class="text-body-secondary"
           >{{ $t("taxon.lastSeenDate") }} :
-          {{ props?.observationDate.toLocaleDateString() }}</small
+          {{ taxon?.lastSeenDate.toLocaleDateString() }}</small
         >
       </div>
     </div>
@@ -109,21 +125,15 @@ watchEffect(() => {
   width: 100%;
 }
 
-.badge-kingdom {
+#badge-kingdom.badgeTaxon {
   position: absolute;
   top: 10px;
   right: 10px;
-  color: white;
-  border-radius: 50%;
-  padding: 0.5em;
-  font-size: 1.5em;
 }
 
-.badge-plantae {
-  background-color: #27ae60;
-}
-
-.badge-animalia {
-  background-color: #e67e22;
+#badge-class.badgeTaxon {
+  position: absolute;
+  top: 10px;
+  right: 60px;
 }
 </style>

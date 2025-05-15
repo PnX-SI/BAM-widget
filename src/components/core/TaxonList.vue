@@ -201,16 +201,9 @@ if (config.wkt.value) {
       <div id="taxon-list-content" :class="classNames">
         <Taxon
           v-for="observation in speciesListShowed"
-          :taxonId="observation.taxonId"
-          :scientific-name="observation.acceptedScientificName"
-          :vernacular-name="observation.vernacularName"
-          :description="observation.acceptedScientificName"
-          :observationDate="observation.lastSeenDate"
-          :count="observation.nbObservations"
-          :rank="observation.taxonRank"
+          :taxon="observation"
           :connector="config.connector.value"
           :key="observation.taxonId"
-          :kingdom="observation.kingdom"
         />
       </div>
     </div>
