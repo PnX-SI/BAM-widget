@@ -66,9 +66,13 @@ watchEffect(() => {
           </small>
           <br />
           <small class="text-body-secondary">
-            <a :href="pageLink"
-              ><strong>{{ $t("taxon.seeMore") }}</strong></a
-            >
+            <!-- prettier-ignore -->
+            <a
+              :href="pageLink"
+              target="_blank"
+              class="link-primary d-inline-flex align-items-center"
+              ><strong>{{ $t("taxon.seeMore") }} <i class="bi bi-arrow-right"></i> </strong>  
+            </a>
           </small>
           <br />
         </div>
