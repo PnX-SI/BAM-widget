@@ -106,11 +106,14 @@ class GbifConnector extends Connector {
       .then(function (json) {
         let mediaList = [];
         Object.values(json.results).forEach((media) => {
-          if (media.audience !== "biologists") {
+          if (
+            media.hasOwnProperty("license") &&
+            media.hasOwnProperty("rightsHolder")
+          ) {
             mediaList.push({
               url: media.identifier,
               licence: media.licence,
-              source: media.source,
+              source: `${media.rightsHolder} (${media.license})`,
             });
           }
         });

@@ -59,7 +59,6 @@ watchEffect(() => {
   refreshTaxonImage();
 });
 </script>
-
 <template>
   <div class="col">
     <div class="card h-100">
@@ -81,6 +80,9 @@ watchEffect(() => {
           :alt="speciesMediaShowed?.url"
           :title="'Source: ' + speciesMediaShowed?.source"
         />
+        <span class="caption" v-if="speciesMediaShowed.source">{{
+          speciesMediaShowed.source
+        }}</span>
       </div>
 
       <div class="card-body">
@@ -105,7 +107,7 @@ watchEffect(() => {
               :href="pageLink"
               target="_blank"
               class="badge bg-light text-primary border border-primary text-decoration-none"
-              ><strong>{{ $t("taxon.seeMore") }} <i class="bi bi-arrow-right"></i> </strong>  
+              ><strong>{{ $t("taxon.seeMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
           </small>
           <br />
@@ -122,6 +124,11 @@ watchEffect(() => {
 </template>
 
 <style>
+.taxon-photo {
+  position: relative;
+  display: inline-block;
+}
+
 .taxon-photo > img {
   object-fit: cover;
   height: 250px !important;
@@ -139,5 +146,16 @@ watchEffect(() => {
   position: absolute;
   top: 10px;
   right: 60px;
+}
+
+.caption {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border-radius: 3px;
 }
 </style>

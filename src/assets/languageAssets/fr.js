@@ -67,7 +67,7 @@ const messagesFR = {
     shareLink: "Partager un lien",
     source: {
       title: "Source de données",
-      select: "Sélectionner une source :",
+      select: "Sélectionner une source",
       modify: "Modifier la source de données",
     },
     desc: "Décroissant",
