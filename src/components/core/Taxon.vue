@@ -31,6 +31,10 @@ function refreshTaxonImage() {
   }
 }
 
+const pageLink = computed(() => {
+  return props.connector.getTaxonDetailPage(props.taxonId);
+});
+
 watchEffect(() => {
   // if any of props changes
   refreshTaxonImage();
@@ -59,6 +63,12 @@ watchEffect(() => {
           <small class="text-body-secondary">
             <strong>{{ $t("taxon.nbObservations") }} : </strong
             >{{ props.count }}
+          </small>
+          <br />
+          <small class="text-body-secondary">
+            <a :href="pageLink"
+              ><strong>{{ $t("taxon.seeMore") }}</strong></a
+            >
           </small>
           <br />
         </div>

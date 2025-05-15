@@ -26,6 +26,9 @@ class Connector {
     throw new Error("Not implemented");
   }
   searchTaxon(searchString = "", params = {}) {}
+  getTaxonDetailPage(taxonId) {
+    throw new Error("Not implemented");
+  }
 }
 
 export { Connector };

@@ -163,5 +163,8 @@ class GbifConnector extends Connector {
         return results;
       });
   }
+  getTaxonDetailPage(taxonId) {
+    return `https://www.gbif.org/species/${taxonId}`;
+  }
 }
 export { GbifConnector };

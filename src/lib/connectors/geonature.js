@@ -103,5 +103,9 @@ class GeoNatureConnector extends Connector {
         return json._embedded?.status;
       });
   }
+
+  getTaxonDetailPage(taxonId) {
+    return `https://inpn.mnhn.fr/espece/cd_nom/${taxonId}`;
+  }
 }
 export { GeoNatureConnector };

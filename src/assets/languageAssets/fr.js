@@ -78,6 +78,7 @@ const messagesFR = {
       nbObservations: "Nombre d'observations",
       lastSeenDate: "Date de la dernière observation",
       taxonFilter: "Filtre par taxon",
+      seeMore: "En savoir plus",
     },
   },
 };
