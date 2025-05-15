@@ -6,6 +6,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { restoreMapState, toWKT } from "@/lib/utils";
 import { parse } from "wellknown";
+import { LocateControl } from "leaflet.locatecontrol";
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
 // Vue
 import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
@@ -35,6 +37,7 @@ const map = shallowRef(); // to store the Leaflet map
 const geometry = shallowRef(new L.FeatureGroup()); // to store the displayed geometry
 const radius = ref(1); // in km
 const wkt = ref(null);
+const editable = ref(props.editable);
 
 const wktFromOutside = computed(() => {
   return props.wkt ? true : false;
@@ -86,8 +89,9 @@ onMounted(() => {
   }
 
   // Add draw control
-  if (props.editable) {
+  if (editable.value) {
     map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
+    new LocateControl().addTo(map.value);
   }
 
   // Add event listener on geometry creation
