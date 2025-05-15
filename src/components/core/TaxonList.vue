@@ -210,6 +210,7 @@ if (config.wkt.value) {
           :rank="observation.taxonRank"
           :connector="config.connector.value"
           :key="observation.taxonId"
+          :kingdom="observation.kingdom"
         />
       </div>
     </div>

@@ -9,6 +9,8 @@ class Taxon {
     this.description = taxonInfo?.description;
     this.taxonSheetUrl = taxonInfo?.taxonSheetUrl;
     this.lastSeenDate = taxonInfo?.lastSeenDate;
+    this.kingdom = taxonInfo?.kingdom;
+    this.class = taxonInfo?.class;
   }
 }
 

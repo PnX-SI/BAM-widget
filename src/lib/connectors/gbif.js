@@ -74,6 +74,8 @@ class GbifConnector extends Connector {
                   taxonId: observation.taxonKey,
                   mediaUrl: NO_IMAGE_URL,
                   taxonRank: observation.taxonRank,
+                  kingdom: observation.kingdom,
+                  class: observation.class,
                   nbObservations: 0,
                   description: "",
                   lastSeenDate: new Date(observation.eventDate).getTime(),
