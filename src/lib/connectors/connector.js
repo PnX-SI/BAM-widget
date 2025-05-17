@@ -1,10 +1,15 @@
 import { toast } from "vue3-toastify";
+import { useI18n } from "vue-i18n";
 
 class Connector {
   name;
+  language;
   constructor(options) {
     this.options = options;
     this.params = this.options;
+
+    const { locale } = useI18n();
+    this.language = locale;
   }
   verifyOptions(params_names = []) {
     params_names.forEach((name) => {
@@ -27,6 +32,9 @@ class Connector {
   }
   searchTaxon(searchString = "", params = {}) {}
   getTaxonDetailPage(taxonId) {
+    throw new Error("Not implemented");
+  }
+  fetchVernacularName(taxonID) {
     throw new Error("Not implemented");
   }
 }

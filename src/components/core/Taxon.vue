@@ -4,6 +4,10 @@ import { ref, computed, watchEffect } from "vue";
 import { taxonClassIcons } from "@/assets/taxonclass2icon";
 import { Taxon } from "@/lib/models";
 import BadgeTaxon from "./BadgeTaxon.vue";
+import ParameterStore from "@/lib/parameterStore";
+import { watch } from "vue";
+
+const config = ParameterStore.getInstance();
 
 const props = defineProps({
   taxon: Taxon,
@@ -11,8 +15,16 @@ const props = defineProps({
 });
 
 const taxon = props.taxon;
-
 const speciesMedia = ref([]);
+
+const vernacularName = ref(taxon.vernacularName);
+function refreshVernacularName() {
+  props.connector.fetchVernacularName(taxon.taxonId).then((name) => {
+    if (name) {
+      vernacularName.value = name;
+    }
+  });
+}
 
 const speciesMediaShowed = computed(() => {
   if (speciesMedia.value.length == 0) {
@@ -58,6 +70,12 @@ watchEffect(() => {
   // if any of props changes
   refreshTaxonImage();
 });
+
+refreshVernacularName();
+
+watch(config.lang, () => {
+  refreshVernacularName();
+});
 </script>
 <template>
   <div class="col">
@@ -88,7 +106,7 @@ watchEffect(() => {
       <div class="card-body">
         <div class="card-text">
           <h5 class="card-title text-wrap">
-            {{ taxon.vernacularName || taxon.acceptedScientificName }}
+            {{ vernacularName || taxon.acceptedScientificName }}
           </h5>
           <small class="text-body-secondary"
             ><strong>{{ $t("taxon.scientificName") }} :</strong>

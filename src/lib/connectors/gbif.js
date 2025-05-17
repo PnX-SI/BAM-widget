@@ -32,6 +32,26 @@ class GbifConnector extends Connector {
     });
   }
 
+  fetchVernacularName(taxonID) {
+    const mapping_language = { en: "eng", fr: "fra" };
+    return fetch(
+      `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        let name = undefined;
+        data.results.forEach((nameData) => {
+          if (nameData.language == mapping_language[this.language]) {
+            name = nameData.vernacularName.capitalize();
+            return;
+          }
+        });
+        return name;
+      });
+  }
+
   fetchOccurrence(params) {
     if (!params.limit) {
       params.limit = 300;
@@ -121,7 +141,7 @@ class GbifConnector extends Connector {
       });
   }
   fetchTaxonInfo(idTaxon) {
-    const url = `https://api.gbif.org/v1/species/${idTaxon}`;
+    const url = `https://api.gbif.org/v1/species/${idTaxon}?language=${this.language}`;
     return fetch(url)
       .then((response) => {
         return response.json();
