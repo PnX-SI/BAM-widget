@@ -139,4 +139,11 @@ onMounted(() => {
 #map {
   border-radius: 10px;
 }
+@media screen and (max-width: 770px) {
+  #map {
+    height: 50vh !important;
+    margin-bottom: 1em;
+    margin-top: 1em;
+  }
+}
 </style>
