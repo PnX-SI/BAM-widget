@@ -1,5 +1,6 @@
 import { toast } from "vue3-toastify";
 import { useI18n } from "vue-i18n";
+import { warn } from "vue";
 
 class Connector {
   name;
@@ -7,9 +8,12 @@ class Connector {
   constructor(options) {
     this.options = options;
     this.params = this.options;
-
-    const { locale } = useI18n();
-    this.language = locale;
+    try {
+      const { locale } = useI18n();
+      this.language = locale;
+    } catch (error) {
+      warn("useI18n can't be called outside of <script setup> context");
+    }
   }
   verifyOptions(params_names = []) {
     params_names.forEach((name) => {
