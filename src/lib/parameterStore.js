@@ -21,7 +21,7 @@ class ParameterStore {
     this.itemsPerPage = ref(10);
     this.nbTaxonPerLine = ref(null);
     this.showFilters = ref(true);
-    this.lang = ref(locale);
+    this.lang = locale;
 
     const params_from_url = useRoute()?.query;
     if (!params_from_url) return;
@@ -62,8 +62,7 @@ class ParameterStore {
     }
     if ("lang" in params_from_url) {
       if (availableLocales.includes(params_from_url["lang"])) {
-        this.lang = params_from_url["lang"];
-        locale.value = this.lang;
+        locale.value = params_from_url["lang"];
       }
     }
     ParameterStore.instance = this;
