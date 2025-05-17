@@ -1,5 +1,6 @@
 import { Connector } from "./connector";
 import { Taxon } from "../models";
+import ParameterStore from "../parameterStore";
 
 const NO_IMAGE_URL =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/No_Image_Available.jpg/1024px-No_Image_Available.jpg";
@@ -34,6 +35,7 @@ class GbifConnector extends Connector {
 
   fetchVernacularName(taxonID) {
     const mapping_language = { en: "eng", fr: "fra" };
+    const currentLanguage = ParameterStore.getInstance().lang.value;
     return fetch(
       `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
     )
@@ -43,7 +45,7 @@ class GbifConnector extends Connector {
       .then((data) => {
         let name = undefined;
         data.results.forEach((nameData) => {
-          if (nameData.language == mapping_language[this.language]) {
+          if (nameData.language == mapping_language[currentLanguage]) {
             name = nameData.vernacularName.capitalize();
             return;
           }

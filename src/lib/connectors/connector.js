@@ -8,12 +8,6 @@ class Connector {
   constructor(options) {
     this.options = options;
     this.params = this.options;
-    try {
-      const { locale } = useI18n();
-      this.language = locale;
-    } catch (error) {
-      warn("useI18n can't be called outside of <script setup> context");
-    }
   }
   verifyOptions(params_names = []) {
     params_names.forEach((name) => {
