@@ -113,7 +113,7 @@ watch(config.lang, () => {
             {{ taxon.acceptedScientificName }}</small
           ><br />
 
-          <small class="text-body-secondary">
+          <small v-if="taxon.nbObservations" class="text-body-secondary">
             <strong>{{ $t("taxon.nbObservations") }} : </strong
             >{{ taxon.nbObservations }}
           </small>
