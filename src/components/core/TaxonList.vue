@@ -48,6 +48,7 @@ const props = defineProps({
 const speciesList = ref([]);
 const loadingObservations = ref(false);
 const loadingError = ref(false);
+const noDataFound = ref(false);
 
 const pageIndex = ref(0);
 const itemsPerPage = ref(config.itemsPerPage);
@@ -89,7 +90,9 @@ const speciesListShowed = computed(() => {
       const data =
         taxon?.vernacularName != undefined
           ? taxon.vernacularName + " " + taxon.acceptedScientificName
-          : taxon.acceptedScientificName ? taxon.acceptedScientificName : "incertae sedis";
+          : taxon.acceptedScientificName
+          ? taxon.acceptedScientificName
+          : "incertae sedis";
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
@@ -104,6 +107,7 @@ const speciesListShowed = computed(() => {
 
 function fetchSpeciesList(wkt) {
   if (wkt.length === 0) return;
+  noDataFound.value = false;
   loadingObservations.value = true;
   loadingError.value = false;
   speciesList.value = [];
@@ -118,6 +122,7 @@ function fetchSpeciesList(wkt) {
       Object.values(response).forEach((observation) => {
         speciesList.value.push(observation);
       });
+      noDataFound.value = speciesList.value.length === 0 ? true : false;
       loadingObservations.value = false;
       pageIndex.value = 0;
     })
@@ -170,10 +175,10 @@ if (config.wkt.value) {
     <div class="card-body">
       <Loading id="loadingObs" :loadingStatus="loadingObservations" />
       <div
-        id="no-observation-message"
+        id="no-geometry-message"
         class="col-6"
         v-if="
-          speciesListShowed.length == 0 && !loadingObservations && !loadingError
+          config.wkt.value.length === 0 && !loadingObservations && !loadingError
         "
       >
         <h5>{{ $t("drawGeometry") }}</h5>
@@ -181,6 +186,17 @@ if (config.wkt.value) {
           <i class="bi bi-square-fill"></i> <i class="bi bi-hexagon-fill"></i>
           <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
         </h5>
+      </div>
+      <div
+        id="no-observations-message"
+        v-if="
+          config.wkt.value.length &&
+          !loadingObservations &&
+          !loadingError &&
+          speciesList.length === 0
+        "
+      >
+        {{ $t("noSpeciesObserved") }}
       </div>
       <div
         id="loading-error"
@@ -234,7 +250,8 @@ if (config.wkt.value) {
 }
 
 #loading-error,
-#no-observation-message,
+#no-geometry-message,
+#no-observations-message,
 #loadingObs {
   border-radius: 10px;
   text-align: center;
@@ -245,10 +262,15 @@ if (config.wkt.value) {
   transform: translateY(-50%);
 }
 
-#no-observation-message,
+#no-geometry-message,
 #loadingObs {
   background-color: var(--bs-secondary-bg);
   color: var(--bs-secondary-color);
+}
+
+#no-observations-message {
+  background-color: var(--bs-warning);
+  color: white;
 }
 
 #loading-error {

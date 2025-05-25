@@ -43,6 +43,7 @@ const messagesFR = {
     nextPage: "Suivant",
     loading: "Chargement en cours ...",
     noObservations: "Aucune observation trouvée",
+    noSpeciesObserved: "Aucune espèces observées dans cette zone !",
     noGeometry: "Aucune géometrie trouvée",
     error404: {
       title: "Page introuvable",
