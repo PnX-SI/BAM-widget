@@ -1,5 +1,5 @@
 import { Connector } from "./connector";
-import { Taxon } from "../models";
+import { Media, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
 
 const NO_IMAGE_URL =
@@ -7,89 +7,93 @@ const NO_IMAGE_URL =
 
 const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
 
+/**
+ * Calls the GBIF occurrence API with the given parameters.
+ * @param {Object} params - The parameters to pass to the API.
+ * @returns {Promise<Object>} A promise that resolves to the JSON response from the API.
+ */
 function callOccurrenceApi(params = {}) {
-  let urlWithParams = new URL(`${GBIF_ENDPOINT_DEFAULT}/occurrence/search`);
-
-  for (const [key, value] of Object.entries(params)) {
+  const urlWithParams = new URL(`${GBIF_ENDPOINT_DEFAULT}/occurrence/search`);
+  Object.entries(params).forEach(([key, value]) => {
     urlWithParams.searchParams.append(key, value);
-  }
-  const url = urlWithParams.toString();
-  return fetch(url).then((response) => {
-    return response.json();
   });
+  return fetch(urlWithParams.toString()).then((response) => response.json());
 }
 
+/**
+ * A connector class for interacting with the GBIF API.
+ */
 class GbifConnector extends Connector {
-  GBIF_ENDPOINT;
+  /**
+   * Creates an instance of GbifConnector.
+   * @param {Object} options - The options for the connector.
+   */
   constructor(options) {
     super(options);
     this.name = "GBIF";
-    // this.verifyOptions(["API_ENDPOINT"])
-    this.GBIF_ENDPOINT = this.options["GBIF_ENDPOINT"] || GBIF_ENDPOINT_DEFAULT;
-  }
-  countOccurrence(params = {}) {
-    return callOccurrenceApi({ params }).then((data) => {
-      return data.count;
-    });
+    this.GBIF_ENDPOINT = this.options.GBIF_ENDPOINT || GBIF_ENDPOINT_DEFAULT;
   }
 
+  /**
+   * Counts the occurrences based on the given parameters.
+   * @param {Object} params - The parameters for the occurrence query.
+   * @returns {Promise<number>} A promise that resolves to the count of occurrences.
+   */
+  countOccurrence(params = {}) {
+    return callOccurrenceApi(params).then((data) => data.count);
+  }
+
+  /**
+   * Fetches the vernacular name for a given taxon ID.
+   * @param {string} taxonID - The ID of the taxon.
+   * @returns {Promise<string|undefined>} A promise that resolves to the vernacular name if found.
+   */
   fetchVernacularName(taxonID) {
     const mapping_language = { en: "eng", fr: "fra" };
     const currentLanguage = ParameterStore.getInstance().lang.value;
     return fetch(
       `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
     )
-      .then((response) => {
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
-        let name = undefined;
-        data.results.forEach((nameData) => {
-          if (nameData.language == mapping_language[currentLanguage]) {
-            name = nameData.vernacularName.capitalize();
-            return;
-          }
-        });
-        return name;
+        const nameData = data.results.find(
+          (nameData) => nameData.language === mapping_language[currentLanguage]
+        );
+        return nameData ? nameData.vernacularName.capitalize() : undefined;
       });
   }
-
+  /**
+   * Fetches occurrences based on the given parameters.
+   * @param {Object} params - The parameters for the occurrence query.
+   * @returns {Promise<Object>} A promise that resolves to the taxons data.
+   */
   fetchOccurrence(params) {
-    if (!params.limit) {
-      params.limit = 300;
-    }
-    if (!params.maxPage) {
-      params.maxPage = 10;
-    }
-    if (params.dateMin && params.dateMax) {
-      params = { ...params, eventDate: `${params.dateMin},${params.dateMax}` };
+    const defaultParams = { limit: 300, maxPage: 10, ...params };
+    if (defaultParams.dateMin && defaultParams.dateMax) {
+      defaultParams.eventDate = `${defaultParams.dateMin},${defaultParams.dateMax}`;
     }
 
-    return this.countOccurrence(params).then(async function (countOccurrence) {
-      // Compute the number of pages we need to query
-      let nbOfPages = Math.ceil(countOccurrence / params.limit);
-      if (nbOfPages > params.maxPage) {
-        nbOfPages = params.maxPage;
-      }
+    return this.countOccurrence(defaultParams).then((countOccurrence) => {
+      const nbOfPages = Math.min(
+        Math.ceil(countOccurrence / defaultParams.limit),
+        defaultParams.maxPage
+      );
 
-      // Create a promise for each page
-      let promises = [];
-      for (let pageIndex = 0; pageIndex < nbOfPages; pageIndex++) {
-        const offset = pageIndex * params.limit;
-        promises.push(callOccurrenceApi({ ...params, offset }));
-      }
-      let taxonsData = {};
-      // Run all promises and await for the responses
-      await Promise.all(promises).then((listOfData) => {
-        listOfData
-          .map((apiResult) => {
-            return apiResult.results;
-          })
-          // For each page
-          .forEach((resultsPage) => {
-            // For each occurrence retrieve the gbifID and increase occurrence count
-            resultsPage.forEach((observation) => {
-              if (!taxonsData.hasOwnProperty(observation.taxonKey)) {
+      const taxonsData = {};
+
+      // Function to fetch page data
+      // Use recursion to chain data fetching
+      const fetchPage = (pageIndex) => {
+        // Stop recursion when all pages are fetched
+        if (pageIndex >= nbOfPages) {
+          return Promise.resolve();
+        }
+
+        const offset = pageIndex * defaultParams.limit;
+        return callOccurrenceApi({ ...defaultParams, offset }).then(
+          (apiResult) => {
+            apiResult.results.forEach((observation) => {
+              if (!taxonsData[observation.taxonKey]) {
                 taxonsData[observation.taxonKey] = new Taxon({
                   acceptedScientificName: observation.acceptedScientificName,
                   vernacularName: observation.vernacularName,
@@ -98,12 +102,12 @@ class GbifConnector extends Connector {
                   taxonRank: observation.taxonRank,
                   kingdom: observation.kingdom,
                   class: observation.class,
-                  nbObservations: 0,
+                  // nbObservations: 0,
                   description: "",
                   lastSeenDate: new Date(observation.eventDate).getTime(),
                 });
               }
-              taxonsData[observation.taxonKey].nbObservations += 1;
+              // taxonsData[observation.taxonKey].nbObservations += 1;
               taxonsData[observation.taxonKey].lastSeenDate = new Date(
                 Math.max(
                   new Date(observation.eventDate).getTime(),
@@ -113,111 +117,130 @@ class GbifConnector extends Connector {
                 )
               );
             });
-          });
-      });
-      return taxonsData;
+
+            // Fetch the next page
+            return fetchPage(pageIndex + 1);
+          }
+        );
+      };
+
+      // Start fetching from the first page
+      return fetchPage(0).then(() => taxonsData);
     });
   }
 
+  /**
+   * Fetches media for a given taxon ID.
+   * @param {string} idTaxon - The ID of the taxon.
+   * @returns {Promise<Array>} A promise that resolves to the list of media.
+   */
   fetchMedia(idTaxon) {
-    const url = `https://api.gbif.org/v1/species/${idTaxon}/media`;
+    const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/media`;
     return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((json) => {
         let mediaList = this.processMedia(json.results);
-        if (mediaList.length == 0) {
+        if (mediaList.length === 0) {
           return this.fetchMediaOccurence(idTaxon);
         }
-        else {
-          return mediaList;
-        }
+        return mediaList;
       });
   }
-
-  processMedia(medias) {
-    let mediaList = [];
-    Object.values(medias).forEach((media) => {
-      if (
-        media.hasOwnProperty("license") &&
-        media.hasOwnProperty("rightsHolder")
-      ) {
-        mediaList.push({
-          url: media.identifier,
-          licence: media.licence,
-          source: `${media.rightsHolder} (${media.license})`,
-        })
-      }
-    });
-    return mediaList;
-  }
-
+  /**
+   * Fetches media from occurrences of a taxon ID
+   * @param {string} idTaxon - The ID of the taxon.
+   * @returns {Promise<Array>} A promise that resolves to the list of media.
+   */
   fetchMediaOccurence(idTaxon) {
-    const url = `https://api.gbif.org/v1/occurrence/search?limit=10&mediaType=StillImage&speciesKey=${idTaxon}`;
+    const url = `${this.GBIF_ENDPOINT}/occurrence/search?limit=10&mediaType=StillImage&speciesKey=${idTaxon}`;
     return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((json) => {
-        let medias = [];
-        json.results.forEach((element) => {
-          medias = medias.concat(element.media);
-        });
+        const medias = json.results.flatMap((element) => element.media);
         return this.processMedia(medias);
       });
   }
 
-  fetchTaxonInfo(idTaxon) {
-    const url = `https://api.gbif.org/v1/species/${idTaxon}?language=${this.language}`;
-    return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then(function (json) {
-        return {
-          scientificName: json.scientificName,
-          vernacularName: json.vernacularName,
-          rank: json.rank,
-          taxonKey: json.key,
-        };
-      });
-  }
-  fetchTaxonStatus(idTaxon) {
-    const url = `https://api.gbif.org/v1/species/${idTaxon}/iucnRedListCategory`;
-    return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then(function (json) {
-        return {
-          iucnRedListCategory: json.category,
-          code: json.code,
-        };
-      });
+  /**
+   * Fetch medias with licence and rights holder informations
+   * @param {Array} medias - The media data to process.
+   * @returns {Array} The list of Media objects.
+   */
+  processMedia(medias) {
+    return Object.values(medias)
+      .filter(
+        (media) =>
+          media.hasOwnProperty("license") &&
+          media.hasOwnProperty("rightsHolder")
+      )
+      .map(
+        (media) =>
+          new Media({
+            url: media.identifier,
+            licence: media.licence,
+            source: `${media.rightsHolder} (${media.license})`,
+          })
+      );
   }
 
-  searchTaxon(searchString = "", params = {}) {
-    const url = `https://api.gbif.org/v1/species/search?q=${searchString}&limit=20`;
-    console.log(url);
+  /**
+   * Fetches taxon information for a given taxon ID.
+   * @param {string} idTaxon - The ID of the taxon.
+   * @returns {Promise<Object>} A promise that resolves to the taxon information.
+   */
+  fetchTaxonInfo(idTaxon) {
+    const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}?language=${this.language}`;
     return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then(function (json) {
-        let results = [];
-        json.results.forEach((element) => {
-          results.push({
-            scientificName: element.scientificName,
-            // vernacularName: element?.vernacularName[0].vernacularName,
-            taxonKey: element.key,
-          });
-        });
-        return results;
-      });
+      .then((response) => response.json())
+      .then((json) => ({
+        scientificName: json.scientificName,
+        vernacularName: json.vernacularName,
+        rank: json.rank,
+        taxonKey: json.key,
+      }));
   }
+
+  /**
+   * Fetches the taxon status for a given taxon ID.
+   * @param {string} idTaxon - The ID of the taxon.
+   * @returns {Promise<Object>} A promise that resolves to the taxon status.
+   */
+  fetchTaxonStatus(idTaxon) {
+    const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/iucnRedListCategory`;
+    return fetch(url)
+      .then((response) => response.json())
+      .then((json) => ({
+        iucnRedListCategory: json.category,
+        code: json.code,
+      }));
+  }
+
+  /**
+   * Searches for taxa based on a search string.
+   * @param {string} searchString - The search string.
+   * @param {Object} params - Additional parameters for the search.
+   * @returns {Promise<Array>} A promise that resolves to the list of search results.
+   */
+  searchTaxon(searchString = "", params = {}) {
+    const url = `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&limit=20`;
+    return fetch(url)
+      .then((response) => response.json())
+      .then((json) =>
+        json.results.map((element) => ({
+          scientificName: element.scientificName,
+          taxonKey: element.key,
+        }))
+      );
+  }
+
+  /**
+   * Gets the detail page URL for a given taxon ID.
+   * @param {string} taxonId - The ID of the taxon.
+   * @returns {string} The URL of the taxon detail page.
+   */
   getTaxonDetailPage(taxonId) {
     return `https://www.gbif.org/species/${taxonId}`;
   }
 }
+
 export { GbifConnector };
