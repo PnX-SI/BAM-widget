@@ -13,9 +13,7 @@ const { t } = useI18n();
 const config = ParameterStore.getInstance();
 
 const props = defineProps({
-  itemsPerPage: {
-    type: Number,
-  },
+  itemsPerPage: Number,
   nbTaxonPerLine: {
     type: Number,
     default: 1,
@@ -26,22 +24,19 @@ const props = defineProps({
   },
   sortBy: {
     type: String,
-    default: "nbObservations",
-    validator(value) {
-      return [
+    default: "lastSeenDate",
+    validator: (value) =>
+      [
         "vernacularName",
         "acceptedScientificName",
         "nbObservations",
         "lastSeenDate",
-      ].includes(value);
-    },
+      ].includes(value),
   },
   order: {
     type: String,
     default: "desc",
-    validator(value) {
-      return ["asc", "desc"].includes(value);
-    },
+    validator: (value) => ["asc", "desc"].includes(value),
   },
 });
 
@@ -53,27 +48,17 @@ const noDataFound = ref(false);
 const pageIndex = ref(0);
 const itemsPerPage = ref(config.itemsPerPage);
 
-const sortBy = ref(props.sortBy || "nbObservations");
+const sortBy = ref(props.sortBy || "lastSeenDate");
 const orderBy = ref(props.order || "desc");
 
 const searchString = ref("");
 
-const nbTaxonPerLine =
-  config.nbTaxonPerLine.value != undefined
-    ? config.nbTaxonPerLine.value
-    : props.nbTaxonPerLine;
-
-const showFilters =
-  config.showFilters.value != undefined
-    ? config.showFilters.value
-    : props.showFilters;
+const nbTaxonPerLine = config.nbTaxonPerLine.value ?? props.nbTaxonPerLine;
+const showFilters = config.showFilters.value ?? props.showFilters;
 
 const sortByAvailable = [
   { field_name: "vernacularName", label: t("taxon.vernacularName") },
-  {
-    field_name: "acceptedScientificName",
-    label: t("taxon.scientificName"),
-  },
+  { field_name: "acceptedScientificName", label: t("taxon.scientificName") },
   { field_name: "nbObservations", label: t("taxon.nbObservations") },
   { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
 ];
@@ -85,14 +70,11 @@ const classNames = computed(() => {
 
 const speciesListShowed = computed(() => {
   let filteredSpecies = speciesList.value;
-  if (searchString.value !== "") {
-    filteredSpecies = speciesList.value.filter(function (taxon) {
-      const data =
-        taxon?.vernacularName != undefined
-          ? taxon.vernacularName + " " + taxon.acceptedScientificName
-          : taxon.acceptedScientificName
-          ? taxon.acceptedScientificName
-          : "incertae sedis";
+  if (searchString.value) {
+    filteredSpecies = speciesList.value.filter((taxon) => {
+      const data = taxon?.vernacularName
+        ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
+        : taxon.acceptedScientificName || "incertae sedis";
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
@@ -105,8 +87,8 @@ const speciesListShowed = computed(() => {
   );
 });
 
-function fetchSpeciesList(wkt) {
-  if (wkt.length === 0) return;
+const fetchSpeciesList = (wkt) => {
+  if (!wkt.length) return;
   noDataFound.value = false;
   loadingObservations.value = true;
   loadingError.value = false;
@@ -118,39 +100,31 @@ function fetchSpeciesList(wkt) {
       dateMax: config.dateMax.value,
     })
     .then((response) => {
-      speciesList.value = [];
-      Object.values(response).forEach((observation) => {
-        speciesList.value.push(observation);
-      });
-      noDataFound.value = speciesList.value.length === 0 ? true : false;
+      speciesList.value = Object.values(response);
+      noDataFound.value = !speciesList.value.length;
       loadingObservations.value = false;
       pageIndex.value = 0;
     })
-    .catch((error) => {
+    .catch(() => {
       loadingObservations.value = false;
       loadingError.value = true;
     });
-}
+};
 
 watch(pageIndex, () => {
-  document.getElementById("taxon-list-content").scrollTo({
-    top: 0,
-    left: 0,
-  });
+  document.getElementById("taxon-list-content").scrollTo({ top: 0, left: 0 });
 });
 
 watch(searchString, () => {
   pageIndex.value = 0;
 });
 
-// Watch for geometry and parameters changes
 watch([config.wkt, config.dateMin, config.dateMax], () => {
   if (config.wkt.value) {
     fetchSpeciesList(config.wkt.value);
   }
 });
 
-// If wkt given in the URL
 if (config.wkt.value) {
   fetchSpeciesList(config.wkt.value);
 }
@@ -163,23 +137,21 @@ if (config.wkt.value) {
         @update:searchString="
           (newSearchString) => (searchString = newSearchString)
         "
-      ></SearchForm>
+      />
       <SortBy
         :sort-by-available="sortByAvailable"
         @update:sortBy="(newsort) => (sortBy = newsort)"
         @update:orderBy="(neworder) => (orderBy = neworder)"
         :sortBy="sortBy"
         :orderBy="orderBy"
-      ></SortBy>
+      />
     </div>
     <div class="card-body">
       <Loading id="loadingObs" :loadingStatus="loadingObservations" />
       <div
         id="no-geometry-message"
         class="col-6"
-        v-if="
-          config.wkt.value.length === 0 && !loadingObservations && !loadingError
-        "
+        v-if="!config.wkt.value.length && !loadingObservations && !loadingError"
       >
         <h5>{{ $t("drawGeometry") }}</h5>
         <h5>
@@ -193,28 +165,24 @@ if (config.wkt.value) {
           config.wkt.value.length &&
           !loadingObservations &&
           !loadingError &&
-          speciesList.length === 0
+          !speciesList.length
         "
       >
         {{ $t("noSpeciesObserved") }}
       </div>
-      <div
-        id="loading-error"
-        class="col-6 bg-danger"
-        v-if="loadingError == true"
-      >
+      <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
       <div id="taxon-list-content" :class="classNames">
         <Taxon
           v-for="observation in speciesListShowed"
+          :key="observation.taxonId"
           :taxon="observation"
           :connector="config.connector.value"
-          :key="observation.taxonId"
         />
       </div>
     </div>
-    <div v-if="speciesListShowed.length > 0" class="card-footer">
+    <div v-if="speciesListShowed.length" class="card-footer">
       <Pagination
         :pageIndex="pageIndex"
         :total-items="speciesList.length"
@@ -237,16 +205,16 @@ if (config.wkt.value) {
 }
 
 #taxon-list-content {
-  overflow-y: auto; /* Utilisez 'auto' au lieu de 'scroll' pour éviter les barres de défilement inutiles */
+  overflow-y: auto;
   overflow-x: hidden;
-  flex-grow: 1; /* Permet à la zone de défilement de prendre tout l'espace disponible */
+  flex-grow: 1;
 }
 
 .card-body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Permet au corps de la carte de prendre tout l'espace disponible */
+  flex-grow: 1;
 }
 
 #loading-error,
