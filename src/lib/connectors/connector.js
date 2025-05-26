@@ -35,6 +35,10 @@ class Connector {
   fetchVernacularName(taxonID) {
     throw new Error("Not implemented");
   }
+
+  sourceDetailMessage() {
+    return "";
+  }
 }
 
 export { Connector };

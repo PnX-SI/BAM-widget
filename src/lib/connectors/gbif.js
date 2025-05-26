@@ -102,12 +102,12 @@ class GbifConnector extends Connector {
                   taxonRank: observation.taxonRank,
                   kingdom: observation.kingdom,
                   class: observation.class,
-                  // nbObservations: 0,
+                  nbObservations: 0,
                   description: "",
                   lastSeenDate: new Date(observation.eventDate).getTime(),
                 });
               }
-              // taxonsData[observation.taxonKey].nbObservations += 1;
+              taxonsData[observation.taxonKey].nbObservations += 1;
               taxonsData[observation.taxonKey].lastSeenDate = new Date(
                 Math.max(
                   new Date(observation.eventDate).getTime(),
@@ -240,6 +240,10 @@ class GbifConnector extends Connector {
    */
   getTaxonDetailPage(taxonId) {
     return `https://www.gbif.org/species/${taxonId}`;
+  }
+
+  sourceDetailMessage() {
+    return "The number of observations and the last seen dates are aggragated based on the latest 30000 observations made in the selected area.";
   }
 }
 

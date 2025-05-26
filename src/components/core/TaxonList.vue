@@ -24,7 +24,7 @@ const props = defineProps({
   },
   sortBy: {
     type: String,
-    default: "lastSeenDate",
+    default: "nbObservations",
     validator: (value) =>
       [
         "vernacularName",
@@ -191,7 +191,15 @@ if (config.wkt.value) {
       />
     </div>
     <div id="data-source-credits">
-      {{ $t("source.title") }} : {{ config.connector.value.name }}
+      {{ $t("source.title") }} {{ config.connector.value.name }}
+      <BTooltip>
+        <template #target>
+          <a style="color: white; text-decoration: underline"
+            ><i class="bi bi-info-circle"></i
+          ></a>
+        </template>
+        {{ config.connector.value.sourceDetailMessage() }}
+      </BTooltip>
     </div>
   </div>
 </template>
