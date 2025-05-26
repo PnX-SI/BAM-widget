@@ -243,7 +243,7 @@ class GbifConnector extends Connector {
   }
 
   sourceDetailMessage() {
-    return "The number of observations and the last seen dates are aggragated based on the latest 30000 observations made in the selected area.";
+    return "The number of observations and the dates of the last sightings are based on an aggregation of the last 30,000 observations made within the selected area.";
   }
 }
 
