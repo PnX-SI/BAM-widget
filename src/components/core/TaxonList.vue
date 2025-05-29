@@ -49,7 +49,7 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    default: "gallery",
+    default: "detailedList",
     validator: (value) => ["detailedList", "gallery"].includes(value),
   },
 });
