@@ -10,18 +10,16 @@ import { LocateControl } from "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
 // Vue
-import { computed, onMounted, ref, shallowRef, watchEffect } from "vue";
+import { computed, onMounted, ref, shallowRef, watch } from "vue";
 
 // Draw config
 import drawConfig from "./MapConfig";
 import { booleanClockwise, rewind } from "@turf/turf";
 
+import ParameterStore from "@/lib/parameterStore";
+const { radius, wkt } = ParameterStore.getInstance();
+
 const props = defineProps({
-  radius: {
-    type: Number,
-    default: 1,
-  },
-  wkt: String,
   height: {
     type: String,
     default: "100vh",
@@ -35,37 +33,22 @@ const props = defineProps({
 // Component Attributes
 const map = shallowRef(); // to store the Leaflet map
 const geometry = shallowRef(new L.FeatureGroup()); // to store the displayed geometry
-const radius = ref(1); // in km
-const wkt = ref(null);
 const editable = ref(props.editable);
 
 const wktFromOutside = computed(() => {
-  return props.wkt ? true : false;
+  return wkt.value ? true : false;
 });
 
 const style = computed(() => {
   return "height: " + props.height + ";";
 });
 
-if (props.wkt) {
-  wkt.value = props.wkt;
-  let tmp = L.geoJSON().addTo(geometry.value);
-  tmp.addData(parse(wkt.value));
-}
-
-radius.value = props.radius;
-
-watchEffect(() => {
-  radius.value = props.radius;
-  wkt.value = props.wkt;
-  if (wktFromOutside.value) {
+watch(wkt, () => {
+  if (wkt.value) {
     let tmp = L.geoJSON().addTo(geometry.value);
     tmp.addData(parse(wkt.value));
   }
 });
-
-// Component Events
-const emit = defineEmits(["wkt", "geojson"]);
 
 // Component Lifecycle
 onMounted(() => {
@@ -118,7 +101,7 @@ onMounted(() => {
       tmp.addData(parse(WKT));
     }
 
-    emit("wkt", WKT);
+    wkt.value = WKT;
   });
 
   window.addEventListener("beforeunload", function (e) {
