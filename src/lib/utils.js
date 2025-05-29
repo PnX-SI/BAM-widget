@@ -1,5 +1,11 @@
 import { stringify } from "wellknown";
 import { buffer } from "@turf/turf";
+import L from "leaflet";
+
+function randomChoice(choices) {
+  var index = Math.floor(Math.random() * choices.length);
+  return choices[index];
+}
 
 function toWKT(geojson, layerRadius, typeLayer, radius) {
   let WKT = stringify(geojson);
@@ -89,4 +95,4 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
   },
 });
 
-export { toWKT, restoreMapState };
+export { toWKT, restoreMapState, randomChoice };
