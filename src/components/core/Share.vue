@@ -10,15 +10,13 @@ const typeWidget = ref("");
 
 const host = window.location.origin;
 const pathName = window.location.pathname;
+
 const route = computed(() => {
-  switch (typeWidget.value) {
-    case "list":
-      return "/list";
-    case "config":
-      return "/config";
-    default:
-      return "/";
-  }
+  const routes = {
+    list: "/list",
+    config: "/config",
+  };
+  return routes[typeWidget.value] || "/";
 });
 
 const link = computed(() => {
@@ -61,22 +59,21 @@ function copy() {
     menu-class="share_modal"
   >
     <template #button-content>
-      <i class="bi bi-share"></i> {{ $t("share") }}</template
-    >
-    <div class="row justify-content-center" style="padding: 1em">
+      <i class="bi bi-share"></i> {{ $t("share") }}
+    </template>
+    <div class="row justify-content-center p-3">
       <div class="col-12 col-lg-12 col-md-6 text-center">
-        <label for="shareButton"> {{ $t("shareLink") }} </label>
+        <label for="shareButton">{{ $t("shareLink") }}</label>
         <button
           class="btn btn-outline-secondary mb-3"
           id="shareButton"
-          @click="copy()"
+          @click="copy"
         >
           <div v-if="copied">
-            <i class="bi bi-check2-circle"></i> {{ $t("copied") }} !
+            <i class="bi bi-check2-circle"></i> {{ $t("copied") }}!
           </div>
           <div v-else><i class="bi bi-link-45deg"></i> {{ $t("copy") }}</div>
         </button>
-
         <HTMLBuilder
           :link="link"
           @update:typeWidget="(new_type) => (typeWidget = new_type)"
@@ -87,6 +84,7 @@ function copy() {
     </div>
   </BDropdown>
 </template>
+
 <style>
 #shareButton {
   margin-left: 0.5em;

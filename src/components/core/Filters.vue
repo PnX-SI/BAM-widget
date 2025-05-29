@@ -7,19 +7,17 @@ import { getConnector } from "@/lib/connectors/utils";
 import ParameterStore from "@/lib/parameterStore";
 const config = ParameterStore.getInstance();
 
-const radius = ref(config.radius.value);
-const dateMin = ref(config.dateMin.value);
-const dateMax = ref(config.dateMax.value);
+const { radius, dateMin, dateMax, connector } = config;
+
 const sourceName = ref(config.connector.value.name);
 const sourceParams = ref(config.connector.value.params);
 
-watch([radius, dateMin, dateMax, sourceName, sourceParams], () => {
-  config.radius.value = radius.value;
-  config.dateMin.value = dateMin.value;
-  config.dateMax.value = dateMax.value;
-  config.connector.value = getConnector(sourceName.value, sourceParams.value);
-});
+const updateConfig = () => {
+  connector.value = getConnector(sourceName.value, sourceParams.value);
+};
+watch([radius, dateMin, dateMax, sourceName, sourceParams], updateConfig);
 </script>
+
 <template>
   <div class="card">
     <h4 class="card-header">

@@ -37,6 +37,7 @@ const messagesEN = {
     reset: "Reset",
     searchResults: "Search results",
     noResults: "No results",
+    noSpeciesObserved: "No species observed in this area !",
     previousPage: "Previous",
     nextPage: "Next",
     loading: "Loading...",

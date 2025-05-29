@@ -2,47 +2,44 @@
 import { ref, computed, watchEffect } from "vue";
 
 import { taxonClassIcons } from "@/assets/taxonclass2icon";
-import { Taxon } from "@/lib/models";
+import { NO_IMAGE_URL } from "@/assets/constant";
+import { Media, Taxon } from "@/lib/models";
 import BadgeTaxon from "./BadgeTaxon.vue";
 import ParameterStore from "@/lib/parameterStore";
+import { randomChoice } from "@/lib/utils";
 import { watch } from "vue";
 
-const config = ParameterStore.getInstance();
+const { lang, connector } = ParameterStore.getInstance();
 
 const props = defineProps({
   taxon: Taxon,
-  connector: { type: Object, required: true },
 });
 
 const taxon = props.taxon;
-const speciesMedia = ref([]);
-
+const speciesPhoto = ref([]);
 const vernacularName = ref(taxon.vernacularName);
+
 function refreshVernacularName() {
-  props.connector.fetchVernacularName(taxon.taxonId).then((name) => {
+  connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
     if (name) {
       vernacularName.value = name;
     }
   });
 }
 
-const speciesMediaShowed = computed(() => {
-  if (speciesMedia.value.length == 0) {
-    return {
-      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/No_Image_Available.jpg/1024px-No_Image_Available.jpg",
-    };
-  }
-  return speciesMedia.value[0];
-});
-
 function refreshTaxonImage() {
-  speciesMedia.value = [];
+  speciesPhoto.value = [];
   if (taxon.taxonId) {
-    props.connector.fetchMedia(taxon.taxonId).then((response) => {
-      speciesMedia.value = response;
+    connector.value.fetchMedia(taxon.taxonId).then((response) => {
+      speciesPhoto.value = response;
     });
   }
 }
+const mediaDisplayed = computed(() => {
+  return speciesPhoto.value.length == 0
+    ? new Media({ url: NO_IMAGE_URL })
+    : randomChoice(speciesPhoto.value);
+});
 
 const kingdomColor = computed(() => {
   return taxon.kingdom == "Plantae" ? "#27ae60" : "#e67e22";
@@ -63,17 +60,16 @@ const classIcon = computed(() => {
 });
 
 const pageLink = computed(() => {
-  return props.connector.getTaxonDetailPage(taxon.taxonId);
+  return connector.value.getTaxonDetailPage(taxon.taxonId);
 });
 
 watchEffect(() => {
   // if any of props changes
   refreshTaxonImage();
+  refreshVernacularName();
 });
 
-refreshVernacularName();
-
-watch(config.lang, () => {
+watch(lang, () => {
   refreshVernacularName();
 });
 </script>
@@ -94,12 +90,12 @@ watch(config.lang, () => {
           :tooltip="taxon.class"
         ></BadgeTaxon>
         <img
-          :src="speciesMediaShowed?.url"
-          :alt="speciesMediaShowed?.url"
-          :title="'Source: ' + speciesMediaShowed?.source"
+          :src="mediaDisplayed?.url"
+          :alt="mediaDisplayed?.url"
+          :title="'Source: ' + mediaDisplayed?.source"
         />
-        <span class="caption" v-if="speciesMediaShowed.source">{{
-          speciesMediaShowed.source
+        <span class="caption" v-if="mediaDisplayed.source">{{
+          mediaDisplayed.source
         }}</span>
       </div>
 
@@ -113,7 +109,7 @@ watch(config.lang, () => {
             {{ taxon.acceptedScientificName }}</small
           ><br />
 
-          <small class="text-body-secondary">
+          <small v-if="taxon.nbObservations" class="text-body-secondary">
             <strong>{{ $t("taxon.nbObservations") }} : </strong
             >{{ taxon.nbObservations }}
           </small>

@@ -10,13 +10,7 @@ const config = ParameterStore.getInstance();
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-lg-6 col-md-6">
-        <Map
-          :radius="config.radius.value"
-          height="100vh"
-          :wkt="config.wkt.value"
-          :editable="true"
-          @wkt="(drawGeometryWKT) => (config.wkt.value = drawGeometryWKT)"
-        />
+        <Map height="100vh" :editable="true" />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
         <TaxonList :nbTaxonPerLine="2" />

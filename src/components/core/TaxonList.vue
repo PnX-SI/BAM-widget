@@ -10,12 +10,18 @@ import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
 
 const { t } = useI18n();
-const config = ParameterStore.getInstance();
+const {
+  wkt,
+  dateMin,
+  dateMax,
+  nbTaxonPerLine,
+  showFilters,
+  itemsPerPage,
+  connector,
+} = ParameterStore.getInstance();
 
 const props = defineProps({
-  itemsPerPage: {
-    type: Number,
-  },
+  itemsPerPage: Number,
   nbTaxonPerLine: {
     type: Number,
     default: 1,
@@ -27,52 +33,36 @@ const props = defineProps({
   sortBy: {
     type: String,
     default: "nbObservations",
-    validator(value) {
-      return [
+    validator: (value) =>
+      [
         "vernacularName",
         "acceptedScientificName",
         "nbObservations",
         "lastSeenDate",
-      ].includes(value);
-    },
+      ].includes(value),
   },
   order: {
     type: String,
     default: "desc",
-    validator(value) {
-      return ["asc", "desc"].includes(value);
-    },
+    validator: (value) => ["asc", "desc"].includes(value),
   },
 });
 
 const speciesList = ref([]);
-const loadingObservations = ref(false);
-const loadingError = ref(false);
+let loadingObservations = false;
+let loadingError = false;
+let noDataFound = false;
 
 const pageIndex = ref(0);
-const itemsPerPage = ref(config.itemsPerPage);
 
-const sortBy = ref(props.sortBy || "nbObservations");
+const sortBy = ref(props.sortBy || "lastSeenDate");
 const orderBy = ref(props.order || "desc");
 
 const searchString = ref("");
 
-const nbTaxonPerLine =
-  config.nbTaxonPerLine.value != undefined
-    ? config.nbTaxonPerLine.value
-    : props.nbTaxonPerLine;
-
-const showFilters =
-  config.showFilters.value != undefined
-    ? config.showFilters.value
-    : props.showFilters;
-
 const sortByAvailable = [
   { field_name: "vernacularName", label: t("taxon.vernacularName") },
-  {
-    field_name: "acceptedScientificName",
-    label: t("taxon.scientificName"),
-  },
+  { field_name: "acceptedScientificName", label: t("taxon.scientificName") },
   { field_name: "nbObservations", label: t("taxon.nbObservations") },
   { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
 ];
@@ -84,12 +74,11 @@ const classNames = computed(() => {
 
 const speciesListShowed = computed(() => {
   let filteredSpecies = speciesList.value;
-  if (searchString.value !== "") {
-    filteredSpecies = speciesList.value.filter(function (taxon) {
-      const data =
-        taxon?.vernacularName != undefined
-          ? taxon.vernacularName + " " + taxon.acceptedScientificName
-          : taxon.acceptedScientificName;
+  if (searchString.value) {
+    filteredSpecies = speciesList.value.filter((taxon) => {
+      const data = taxon?.vernacularName
+        ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
+        : taxon.acceptedScientificName || "incertae sedis";
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
@@ -102,52 +91,46 @@ const speciesListShowed = computed(() => {
   );
 });
 
-function fetchSpeciesList(wkt) {
-  if (wkt.length === 0) return;
-  loadingObservations.value = true;
-  loadingError.value = false;
+const fetchSpeciesList = (wkt) => {
+  if (!wkt.length) return;
+  noDataFound = false;
+  loadingObservations = true;
+  loadingError = false;
   speciesList.value = [];
-  config.connector.value
+  connector.value
     .fetchOccurrence({
       geometry: wkt,
-      dateMin: config.dateMin.value,
-      dateMax: config.dateMax.value,
+      dateMin: dateMin.value,
+      dateMax: dateMax.value,
     })
     .then((response) => {
-      speciesList.value = [];
-      Object.values(response).forEach((observation) => {
-        speciesList.value.push(observation);
-      });
-      loadingObservations.value = false;
+      speciesList.value = Object.values(response);
+      noDataFound = !speciesList.value.length;
+      loadingObservations = false;
       pageIndex.value = 0;
     })
-    .catch((error) => {
-      loadingObservations.value = false;
-      loadingError.value = true;
+    .catch(() => {
+      loadingObservations = false;
+      loadingError = true;
     });
-}
+};
 
 watch(pageIndex, () => {
-  document.getElementById("taxon-list-content").scrollTo({
-    top: 0,
-    left: 0,
-  });
+  document.getElementById("taxon-list-content").scrollTo({ top: 0, left: 0 });
 });
 
 watch(searchString, () => {
   pageIndex.value = 0;
 });
 
-// Watch for geometry and parameters changes
-watch([config.wkt, config.dateMin, config.dateMax], () => {
-  if (config.wkt.value) {
-    fetchSpeciesList(config.wkt.value);
+watch([wkt, dateMin, dateMax], () => {
+  if (wkt.value) {
+    fetchSpeciesList(wkt.value);
   }
 });
 
-// If wkt given in the URL
-if (config.wkt.value) {
-  fetchSpeciesList(config.wkt.value);
+if (wkt.value) {
+  fetchSpeciesList(wkt.value);
 }
 </script>
 
@@ -158,23 +141,21 @@ if (config.wkt.value) {
         @update:searchString="
           (newSearchString) => (searchString = newSearchString)
         "
-      ></SearchForm>
+      />
       <SortBy
         :sort-by-available="sortByAvailable"
         @update:sortBy="(newsort) => (sortBy = newsort)"
         @update:orderBy="(neworder) => (orderBy = neworder)"
         :sortBy="sortBy"
         :orderBy="orderBy"
-      ></SortBy>
+      />
     </div>
     <div class="card-body">
       <Loading id="loadingObs" :loadingStatus="loadingObservations" />
       <div
-        id="no-observation-message"
+        id="no-geometry-message"
         class="col-6"
-        v-if="
-          speciesListShowed.length == 0 && !loadingObservations && !loadingError
-        "
+        v-if="!wkt.length && !loadingObservations && !loadingError"
       >
         <h5>{{ $t("drawGeometry") }}</h5>
         <h5>
@@ -183,31 +164,45 @@ if (config.wkt.value) {
         </h5>
       </div>
       <div
-        id="loading-error"
-        class="col-6 bg-danger"
-        v-if="loadingError == true"
+        id="no-observations-message"
+        v-if="
+          wkt.length &&
+          !loadingObservations &&
+          !loadingError &&
+          !speciesList.length
+        "
       >
+        {{ $t("noSpeciesObserved") }}
+      </div>
+      <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
       <div id="taxon-list-content" :class="classNames">
         <Taxon
           v-for="observation in speciesListShowed"
-          :taxon="observation"
-          :connector="config.connector.value"
           :key="observation.taxonId"
+          :taxon="observation"
         />
       </div>
     </div>
-    <div v-if="speciesListShowed.length > 0" class="card-footer">
+    <div v-if="speciesListShowed.length" class="card-footer">
       <Pagination
         :pageIndex="pageIndex"
         :total-items="speciesList.length"
-        :itemPerPage="config.itemsPerPage.value"
+        :itemPerPage="itemsPerPage"
         @update:page="(index) => (pageIndex = index)"
       />
     </div>
     <div id="data-source-credits">
-      {{ $t("source.title") }} : {{ config.connector.value.name }}
+      {{ $t("source.title") }} {{ connector.name }}
+      <BTooltip>
+        <template #target>
+          <a style="color: white; text-decoration: underline"
+            ><i class="bi bi-info-circle"></i
+          ></a>
+        </template>
+        {{ connector.sourceDetailMessage() }}
+      </BTooltip>
     </div>
   </div>
 </template>
@@ -221,20 +216,21 @@ if (config.wkt.value) {
 }
 
 #taxon-list-content {
-  overflow-y: auto; /* Utilisez 'auto' au lieu de 'scroll' pour éviter les barres de défilement inutiles */
+  overflow-y: auto;
   overflow-x: hidden;
-  flex-grow: 1; /* Permet à la zone de défilement de prendre tout l'espace disponible */
+  flex-grow: 1;
 }
 
 .card-body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Permet au corps de la carte de prendre tout l'espace disponible */
+  flex-grow: 1;
 }
 
 #loading-error,
-#no-observation-message,
+#no-geometry-message,
+#no-observations-message,
 #loadingObs {
   border-radius: 10px;
   text-align: center;
@@ -245,10 +241,15 @@ if (config.wkt.value) {
   transform: translateY(-50%);
 }
 
-#no-observation-message,
+#no-geometry-message,
 #loadingObs {
   background-color: var(--bs-secondary-bg);
   color: var(--bs-secondary-color);
+}
+
+#no-observations-message {
+  background-color: var(--bs-warning);
+  color: white;
 }
 
 #loading-error {
