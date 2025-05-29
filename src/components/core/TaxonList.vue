@@ -10,7 +10,15 @@ import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
 
 const { t } = useI18n();
-const config = ParameterStore.getInstance();
+const {
+  wkt,
+  dateMin,
+  dateMax,
+  nbTaxonPerLine,
+  showFilters,
+  itemsPerPage,
+  connector,
+} = ParameterStore.getInstance();
 
 const props = defineProps({
   itemsPerPage: Number,
@@ -41,20 +49,16 @@ const props = defineProps({
 });
 
 const speciesList = ref([]);
-const loadingObservations = ref(false);
-const loadingError = ref(false);
-const noDataFound = ref(false);
+let loadingObservations = false;
+let loadingError = false;
+let noDataFound = false;
 
 const pageIndex = ref(0);
-const itemsPerPage = ref(config.itemsPerPage);
 
 const sortBy = ref(props.sortBy || "lastSeenDate");
 const orderBy = ref(props.order || "desc");
 
 const searchString = ref("");
-
-const nbTaxonPerLine = config.nbTaxonPerLine.value ?? props.nbTaxonPerLine;
-const showFilters = config.showFilters.value ?? props.showFilters;
 
 const sortByAvailable = [
   { field_name: "vernacularName", label: t("taxon.vernacularName") },
@@ -89,25 +93,25 @@ const speciesListShowed = computed(() => {
 
 const fetchSpeciesList = (wkt) => {
   if (!wkt.length) return;
-  noDataFound.value = false;
-  loadingObservations.value = true;
-  loadingError.value = false;
+  noDataFound = false;
+  loadingObservations = true;
+  loadingError = false;
   speciesList.value = [];
-  config.connector.value
+  connector.value
     .fetchOccurrence({
       geometry: wkt,
-      dateMin: config.dateMin.value,
-      dateMax: config.dateMax.value,
+      dateMin: dateMin.value,
+      dateMax: dateMax.value,
     })
     .then((response) => {
       speciesList.value = Object.values(response);
-      noDataFound.value = !speciesList.value.length;
-      loadingObservations.value = false;
+      noDataFound = !speciesList.value.length;
+      loadingObservations = false;
       pageIndex.value = 0;
     })
     .catch(() => {
-      loadingObservations.value = false;
-      loadingError.value = true;
+      loadingObservations = false;
+      loadingError = true;
     });
 };
 
@@ -119,14 +123,14 @@ watch(searchString, () => {
   pageIndex.value = 0;
 });
 
-watch([config.wkt, config.dateMin, config.dateMax], () => {
-  if (config.wkt.value) {
-    fetchSpeciesList(config.wkt.value);
+watch([wkt, dateMin, dateMax], () => {
+  if (wkt.value) {
+    fetchSpeciesList(wkt.value);
   }
 });
 
-if (config.wkt.value) {
-  fetchSpeciesList(config.wkt.value);
+if (wkt.value) {
+  fetchSpeciesList(wkt.value);
 }
 </script>
 
@@ -151,7 +155,7 @@ if (config.wkt.value) {
       <div
         id="no-geometry-message"
         class="col-6"
-        v-if="!config.wkt.value.length && !loadingObservations && !loadingError"
+        v-if="!wkt.length && !loadingObservations && !loadingError"
       >
         <h5>{{ $t("drawGeometry") }}</h5>
         <h5>
@@ -162,7 +166,7 @@ if (config.wkt.value) {
       <div
         id="no-observations-message"
         v-if="
-          config.wkt.value.length &&
+          wkt.length &&
           !loadingObservations &&
           !loadingError &&
           !speciesList.length
@@ -178,7 +182,6 @@ if (config.wkt.value) {
           v-for="observation in speciesListShowed"
           :key="observation.taxonId"
           :taxon="observation"
-          :connector="config.connector.value"
         />
       </div>
     </div>
@@ -186,19 +189,19 @@ if (config.wkt.value) {
       <Pagination
         :pageIndex="pageIndex"
         :total-items="speciesList.length"
-        :itemPerPage="config.itemsPerPage.value"
+        :itemPerPage="itemsPerPage"
         @update:page="(index) => (pageIndex = index)"
       />
     </div>
     <div id="data-source-credits">
-      {{ $t("source.title") }} {{ config.connector.value.name }}
+      {{ $t("source.title") }} {{ connector.name }}
       <BTooltip>
         <template #target>
           <a style="color: white; text-decoration: underline"
             ><i class="bi bi-info-circle"></i
           ></a>
         </template>
-        {{ config.connector.value.sourceDetailMessage() }}
+        {{ connector.sourceDetailMessage() }}
       </BTooltip>
     </div>
   </div>
