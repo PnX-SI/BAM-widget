@@ -51,7 +51,7 @@ class ParameterStore {
     this.setParameterFromUrl("showFilters", (value) => value === "true");
     this.setParameterFromUrl("lang", (value) => {
       if (availableLocales.includes(value)) {
-        locale.value = value;
+        return value;
       }
     });
   }
