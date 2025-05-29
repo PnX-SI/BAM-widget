@@ -55,7 +55,7 @@ function updateGeometryFromWKT() {
     tmp.addData(parse(wkt.value));
   }
 }
-
+updateGeometryFromWKT();
 function updateGeometry() {
   if (!drawEventData) return;
 
