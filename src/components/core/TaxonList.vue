@@ -8,6 +8,7 @@ import SortBy from "../commons/SortBy.vue";
 import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
+import TaxonThumbnail from "./TaxonThumbnail.vue";
 
 const { t } = useI18n();
 const {
@@ -46,9 +47,15 @@ const props = defineProps({
     default: "desc",
     validator: (value) => ["asc", "desc"].includes(value),
   },
+  mode: {
+    type: String,
+    default: "gallery",
+    validator: (value) => ["detailedList", "gallery"].includes(value),
+  },
 });
 
 const speciesList = ref([]);
+nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine;
 let loadingObservations = false;
 let loadingError = false;
 let noDataFound = false;
@@ -67,9 +74,16 @@ const sortByAvailable = [
   { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
 ];
 
+const mode = ref(props.mode);
+function toggleMode() {
+  mode.value = mode.value == "gallery" ? "detailedList" : "gallery";
+}
+
 const classNames = computed(() => {
-  const row_cols_md = nbTaxonPerLine === 1 ? 1 : nbTaxonPerLine / 2;
-  return `row row-cols-1 row-cols-lg-${nbTaxonPerLine} row-cols-md-${row_cols_md} g-4`;
+  const gallery_mode = mode.value === "gallery" ? 2 : 1;
+  const row_cols_lg = nbTaxonPerLine.value * gallery_mode;
+  const row_cols_md = nbTaxonPerLine.value === 1 ? 1 : row_cols_lg / 2;
+  return `row row-cols-${row_cols_lg} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
 });
 
 const speciesListShowed = computed(() => {
@@ -177,12 +191,27 @@ if (wkt.value) {
       <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
-      <div id="taxon-list-content" :class="classNames">
-        <Taxon
-          v-for="observation in speciesListShowed"
-          :key="observation.taxonId"
-          :taxon="observation"
-        />
+      <div id="taxon-list-content">
+        <div class="justify-content-center toggleMode">
+          <button class="btn btn-secondary" @click="toggleMode()">
+            <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
+            <i v-else class="fa-solid fa-grip-vertical"></i>
+          </button>
+        </div>
+        <div v-if="mode === 'detailedList'" :class="classNames">
+          <Taxon
+            v-for="observation in speciesListShowed"
+            :key="observation.taxonId"
+            :taxon="observation"
+          />
+        </div>
+        <div v-else :class="classNames">
+          <TaxonThumbnail
+            v-for="observation in speciesListShowed"
+            :key="observation.taxonId"
+            :taxon="observation"
+          />
+        </div>
       </div>
     </div>
     <div v-if="speciesListShowed.length" class="card-footer">
@@ -216,9 +245,9 @@ if (wkt.value) {
 }
 
 #taxon-list-content {
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
-  flex-grow: 1;
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
 }
 
 .card-body {
@@ -226,6 +255,7 @@ if (wkt.value) {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding: 0 !important;
 }
 
 #loading-error,
@@ -260,5 +290,29 @@ if (wkt.value) {
   text-align: center;
   background: var(--bs-primary);
   color: white;
+}
+.toggleMode {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.card-body {
+  position: relative; /* Assurez-vous que le conteneur parent est positionné de manière relative */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.toggleMode {
+  position: absolute;
+  top: 10px; /* Ajustez selon vos besoins */
+  left: 10px; /* Ajustez selon vos besoins */
+  z-index: 10; /* Assurez-vous que le bouton est au-dessus des autres éléments */
+}
+
+.toggleMode button {
+  padding: 5px 10px; /* Ajustez le padding selon vos besoins */
+  width: 40px !important;
 }
 </style>
