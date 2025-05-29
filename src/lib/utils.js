@@ -2,11 +2,24 @@ import { stringify } from "wellknown";
 import { buffer } from "@turf/turf";
 import L from "leaflet";
 
+/**
+ * Return a random element from a given array
+ * @param {Array} choices
+ * @returns {any} item selected
+ */
 function randomChoice(choices) {
   var index = Math.floor(Math.random() * choices.length);
   return choices[index];
 }
 
+/**
+ * Return the WKT(Well-Know Text) version of a given geojson
+ * @param {Object} geojson
+ * @param {number} layerRadius
+ * @param {String} typeLayer
+ * @param {Number} radius
+ * @returns {String} WKT
+ */
 function toWKT(geojson, layerRadius, typeLayer, radius) {
   let WKT = stringify(geojson);
   // If point or line, we buffer the geometry since API does not support them
@@ -21,6 +34,10 @@ function toWKT(geojson, layerRadius, typeLayer, radius) {
   return WKT;
 }
 
+/**
+ * Restore a Leaflet map state stored in he localStorage
+ * @param {*} map
+ */
 function restoreMapState(map) {
   const savedState = localStorage.getItem("mapState");
   if (savedState) {

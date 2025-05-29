@@ -1,9 +1,6 @@
 import { Connector } from "./connector";
 import { Taxon } from "../models";
-
-const NO_IMAGE_URL =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/No_Image_Available.jpg/1024px-No_Image_Available.jpg";
-
+import { NO_IMAGE_URL } from "@/assets/constant";
 class GeoNatureConnector extends Connector {
   EXPORT_API_ENDPOINT;
 

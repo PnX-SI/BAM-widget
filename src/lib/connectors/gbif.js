@@ -1,9 +1,7 @@
 import { Connector } from "./connector";
 import { Media, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
-
-const NO_IMAGE_URL =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/No_Image_Available.jpg/1024px-No_Image_Available.jpg";
+import { NO_IMAGE_URL } from "@/assets/constant";
 
 const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
 
@@ -43,11 +41,6 @@ class GbifConnector extends Connector {
     return callOccurrenceApi(params).then((data) => data.count);
   }
 
-  /**
-   * Fetches the vernacular name for a given taxon ID.
-   * @param {string} taxonID - The ID of the taxon.
-   * @returns {Promise<string|undefined>} A promise that resolves to the vernacular name if found.
-   */
   fetchVernacularName(taxonID) {
     const mapping_language = { en: "eng", fr: "fra" };
     const currentLanguage = ParameterStore.getInstance().lang.value;
@@ -62,11 +55,7 @@ class GbifConnector extends Connector {
         return nameData ? nameData.vernacularName.capitalize() : undefined;
       });
   }
-  /**
-   * Fetches occurrences based on the given parameters.
-   * @param {Object} params - The parameters for the occurrence query.
-   * @returns {Promise<Object>} A promise that resolves to the taxons data.
-   */
+
   fetchOccurrence(params) {
     const defaultParams = { limit: 300, maxPage: 10, ...params };
     if (defaultParams.dateMin && defaultParams.dateMax) {
@@ -129,11 +118,6 @@ class GbifConnector extends Connector {
     });
   }
 
-  /**
-   * Fetches media for a given taxon ID.
-   * @param {string} idTaxon - The ID of the taxon.
-   * @returns {Promise<Array>} A promise that resolves to the list of media.
-   */
   fetchMedia(idTaxon) {
     const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/media`;
     return fetch(url)
@@ -183,11 +167,6 @@ class GbifConnector extends Connector {
       );
   }
 
-  /**
-   * Fetches taxon information for a given taxon ID.
-   * @param {string} idTaxon - The ID of the taxon.
-   * @returns {Promise<Object>} A promise that resolves to the taxon information.
-   */
   fetchTaxonInfo(idTaxon) {
     const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}?language=${this.language}`;
     return fetch(url)
@@ -200,11 +179,6 @@ class GbifConnector extends Connector {
       }));
   }
 
-  /**
-   * Fetches the taxon status for a given taxon ID.
-   * @param {string} idTaxon - The ID of the taxon.
-   * @returns {Promise<Object>} A promise that resolves to the taxon status.
-   */
   fetchTaxonStatus(idTaxon) {
     const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/iucnRedListCategory`;
     return fetch(url)
@@ -215,12 +189,6 @@ class GbifConnector extends Connector {
       }));
   }
 
-  /**
-   * Searches for taxa based on a search string.
-   * @param {string} searchString - The search string.
-   * @param {Object} params - Additional parameters for the search.
-   * @returns {Promise<Array>} A promise that resolves to the list of search results.
-   */
   searchTaxon(searchString = "", params = {}) {
     const url = `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&limit=20`;
     return fetch(url)
@@ -233,11 +201,6 @@ class GbifConnector extends Connector {
       );
   }
 
-  /**
-   * Gets the detail page URL for a given taxon ID.
-   * @param {string} taxonId - The ID of the taxon.
-   * @returns {string} The URL of the taxon detail page.
-   */
   getTaxonDetailPage(taxonId) {
     return `https://www.gbif.org/species/${taxonId}`;
   }
