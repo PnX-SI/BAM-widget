@@ -17,6 +17,26 @@ function callOccurrenceApi(params = {}) {
   });
   return fetch(urlWithParams.toString()).then((response) => response.json());
 }
+function callfetchVernacularName(taxonID) {
+  const mapping_language = { en: "eng", fr: "fra" };
+  const currentLanguage = ParameterStore.getInstance().lang.value;
+  return fetch(
+    `${GBIF_ENDPOINT_DEFAULT}/species/${taxonID}/vernacularNames?limit=100`
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      let name = undefined;
+      data.results.forEach((nameData) => {
+        if (nameData.language == mapping_language[currentLanguage]) {
+          name = nameData.vernacularName.capitalize();
+          return;
+        }
+      });
+      return name;
+    });
+}
 
 /**
  * A connector class for interacting with the GBIF API.
@@ -56,7 +76,7 @@ class GbifConnector extends Connector {
       });
   }
 
-  fetchOccurrence(params) {
+  fetchOccurrenceRowData(params) {
     const defaultParams = { limit: 300, maxPage: 10, ...params };
     if (defaultParams.dateMin && defaultParams.dateMax) {
       defaultParams.eventDate = `${defaultParams.dateMin},${defaultParams.dateMax}`;
@@ -115,6 +135,29 @@ class GbifConnector extends Connector {
 
       // Start fetching from the first page
       return fetchPage(0).then(() => taxonsData);
+    });
+  }
+
+  fetchOccurrence(params) {
+    return this.fetchOccurrenceRowData(params).then(async function (data) {
+      let promises = [];
+      let taxonList = {};
+      Object.keys(data).forEach((id_taxon) => {
+        promises.push(
+          callfetchVernacularName(id_taxon).then((name) => {
+            data[id_taxon].vernacularName = name;
+            return data[id_taxon];
+          })
+        );
+      });
+      await Promise.all(promises).then((data) => {
+        taxonList = data.reduce((taxonList, taxon) => {
+          taxonList[taxon.taxonId] = taxon;
+          return taxonList;
+        }, {});
+        console.log(taxonList);
+      });
+      return taxonList;
     });
   }
 
