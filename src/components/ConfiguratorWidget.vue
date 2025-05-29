@@ -39,19 +39,11 @@ const config = ParameterStore.getInstance();
       <!-- Intro & Parameters -->
       <div class="col-12 col-lg-3 col-md-2">
         <Intro class="mb-2"></Intro>
-        <Filters
-          :sourceName="config.connector.value.name"
-          :radius="config.radius.value"
-        />
+        <Filters :sourceName="config.connector.value.name" />
       </div>
       <!-- Map -->
       <div class="col-12 col-lg-6 col-md-6">
-        <Map
-          :radius="config.radius.value"
-          height="100vh"
-          :wkt="config.wkt.value"
-          @wkt="(drawGeometryWKT) => (config.wkt.value = drawGeometryWKT)"
-        />
+        <Map height="100vh" />
       </div>
       <!-- Taxon list -->
       <div class="col-12 col-lg-3 col-md-4">
