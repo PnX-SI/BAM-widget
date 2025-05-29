@@ -7,11 +7,14 @@ import { useI18n } from "vue-i18n";
 
 class ParameterStore {
   static instance = null;
+
   constructor() {
-    if (ParameterStore.instance) return;
-    ParameterStore.instance = this;
-    //must be called here
+    if (ParameterStore.instance) {
+      return ParameterStore.instance;
+    }
+
     const { locale, availableLocales } = useI18n();
+    const paramsFromUrl = useRoute()?.query;
 
     this.radius = ref(1);
     this.wkt = ref("");
@@ -23,61 +26,66 @@ class ParameterStore {
     this.showFilters = ref(true);
     this.lang = locale;
 
-    const params_from_url = useRoute()?.query;
-    if (!params_from_url) return;
-    if ("radius" in params_from_url) {
-      this.radius.value = parseInt(params_from_url.radius);
-    }
-    if ("wkt" in params_from_url) {
-      this.wkt.value = validateWKT(params_from_url.wkt, this.radius.value);
-    }
-    if ("sourceGeometry" in params_from_url) {
-      fetch(params_from_url.sourceGeometry)
-        .then((res) => res.json())
-        .then((geojson) => {
-          this.wkt.value = validateWKT(stringify(geojson), this.radius.value);
-        })
-        .catch((err) => console.error(err));
-    }
-    if ("dateMin" in params_from_url) {
-      this.dateMin.value = params_from_url.dateMin;
-    }
-    if ("dateMax" in params_from_url) {
-      this.dateMax.value = params_from_url.dateMax;
-    }
-    if ("connector" in params_from_url) {
-      this.connector.value = getConnector(params_from_url.connector, {
-        ...params_from_url,
-      });
-    }
-    if ("itemsPerPage" in params_from_url) {
-      this.itemsPerPage.value = parseInt(params_from_url.itemsPerPage);
-    }
-    if ("nbTaxonPerLine" in params_from_url) {
-      this.nbTaxonPerLine.value = parseInt(params_from_url.nbTaxonPerLine);
-    }
-    if ("showFilters" in params_from_url) {
-      this.showFilters.value =
-        params_from_url["showFilters"] == "true" ? true : false;
-    }
-    if ("lang" in params_from_url) {
-      if (availableLocales.includes(params_from_url["lang"])) {
-        locale.value = params_from_url["lang"];
-      }
-    }
+    this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
+
     ParameterStore.instance = this;
   }
+
+  initializeFromUrl(paramsFromUrl, locale, availableLocales) {
+    if (!paramsFromUrl) return;
+
+    this.setParameterFromUrl("radius", (value) => parseInt(value));
+    this.setParameterFromUrl("wkt", (value) =>
+      validateWKT(value, this.radius.value)
+    );
+    this.setParameterFromUrl("sourceGeometry", (value) =>
+      this.fetchAndSetGeometry(value)
+    );
+    this.setParameterFromUrl("dateMin", (value) => value);
+    this.setParameterFromUrl("dateMax", (value) => value);
+    this.setParameterFromUrl("connector", (value) =>
+      getConnector(value, { ...paramsFromUrl })
+    );
+    this.setParameterFromUrl("itemsPerPage", (value) => parseInt(value));
+    this.setParameterFromUrl("nbTaxonPerLine", (value) => parseInt(value));
+    this.setParameterFromUrl("showFilters", (value) => value === "true");
+    this.setParameterFromUrl("lang", (value) => {
+      if (availableLocales.includes(value)) {
+        locale.value = value;
+      }
+    });
+  }
+
+  setParameterFromUrl(paramName, transformFn) {
+    if (paramName in useRoute().query) {
+      const value = useRoute().query[paramName];
+      this[paramName].value = transformFn(value);
+    }
+  }
+
+  async fetchAndSetGeometry(url) {
+    try {
+      const response = await fetch(url);
+      const geojson = await response.json();
+      this.wkt.value = validateWKT(stringify(geojson), this.radius.value);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   getParams() {
     const params = {};
     Object.entries(this)
-      .filter(([key, value]) => value !== undefined && value !== null)
-      .forEach(([key, value]) => (params[key] = value.value));
+      .filter(([_, value]) => value !== undefined && value !== null)
+      .forEach(([key, value]) => {
+        params[key] = value.value;
+      });
     return params;
   }
-  static instance;
+
   static getInstance() {
     if (!ParameterStore.instance) {
-      new ParameterStore();
+      ParameterStore.instance = new ParameterStore();
     }
     return ParameterStore.instance;
   }
