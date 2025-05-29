@@ -75,9 +75,9 @@ watch(lang, () => {
 </script>
 <template>
   <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 mb-2">
       <div class="taxon-photo">
-        <BadgeTaxon
+        <!-- <BadgeTaxon
           :class-icon="kingdomIcon"
           id="badge-kingdom"
           :background-color="kingdomColor"
@@ -88,7 +88,7 @@ watch(lang, () => {
           id="badge-class"
           background-color="#8e44ad"
           :tooltip="taxon.class"
-        ></BadgeTaxon>
+        ></BadgeTaxon> -->
         <img
           :src="mediaDisplayed?.url"
           :alt="mediaDisplayed?.url"
@@ -137,7 +137,7 @@ watch(lang, () => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .taxon-photo {
   position: relative;
   display: inline-block;
