@@ -12,6 +12,10 @@ function randomChoice(choices) {
   return choices[index];
 }
 
+function getBaseUrl() {
+  // Utilisation de window.location pour obtenir l'URL de base
+  return `${window.location.protocol}//${window.location.host}`;
+}
 /**
  * Return the WKT(Well-Know Text) version of a given geojson
  * @param {Object} geojson
@@ -112,4 +116,4 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
   },
 });
 
-export { toWKT, restoreMapState, randomChoice };
+export { toWKT, restoreMapState, randomChoice, getBaseUrl };

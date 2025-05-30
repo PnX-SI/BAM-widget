@@ -1,9 +1,10 @@
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { getConnector } from "./connectors/utils";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
 import { useI18n } from "vue-i18n";
+import { getBaseUrl } from "./utils";
 
 class ParameterStore {
   static instance = null;
@@ -14,7 +15,9 @@ class ParameterStore {
     }
 
     const { locale, availableLocales } = useI18n();
-    const paramsFromUrl = useRoute()?.query;
+    const route = useRoute();
+    const router = useRouter();
+    const paramsFromUrl = route?.query;
 
     this.radius = ref(1);
     this.wkt = ref("");
@@ -25,10 +28,20 @@ class ParameterStore {
     this.nbTaxonPerLine = ref(null);
     this.showFilters = ref(true);
     this.lang = locale;
+    this.mode = ref("detailedList");
+    this.sourceGeometry = ref(null);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
     ParameterStore.instance = this;
+
+    // "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode"
+    //   .split(" ")
+    //   .forEach((param) => {
+    //     watch(this[param], () => {
+    //       router.push({ path: route.path, query: this.getParams() });
+    //     });
+    //   });
   }
 
   initializeFromUrl(paramsFromUrl, locale, availableLocales) {
@@ -41,6 +54,7 @@ class ParameterStore {
     this.setParameterFromUrl(
       "sourceGeometry",
       async (value) => {
+        this.sourceGeometry = value;
         try {
           const response = await fetch(value);
           const geojson = await response.json();
@@ -67,6 +81,9 @@ class ParameterStore {
         return value;
       }
     });
+    this.setParameterFromUrl("mode", (value) =>
+      ["detailedList", "gallery"].includes(value) ? value : "detailedList"
+    );
   }
 
   setParameterFromUrl(paramName, transformFn, setValueInFunction = false) {
@@ -81,12 +98,18 @@ class ParameterStore {
   }
 
   getParams() {
-    const params = {};
+    let params = {};
     Object.entries(this)
       .filter(([_, value]) => value !== undefined && value !== null)
       .forEach(([key, value]) => {
         params[key] = value.value;
       });
+    params["connector"] = this.connector.value.name;
+    params = { ...params, ...this.connector.value.options };
+
+    if (params?.sourceGeometry && params?.wkt) {
+      delete params["sourceGeometry"];
+    }
     return params;
   }
 

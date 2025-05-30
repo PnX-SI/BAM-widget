@@ -19,6 +19,7 @@ const {
   showFilters,
   itemsPerPage,
   connector,
+  mode,
 } = ParameterStore.getInstance();
 
 const props = defineProps({
@@ -49,7 +50,6 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    default: "detailedList",
     validator: (value) => ["detailedList", "gallery"].includes(value),
   },
 });
@@ -74,7 +74,7 @@ const sortByAvailable = [
   { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
 ];
 
-const mode = ref(props.mode);
+mode.value = props.mode ?? mode.value;
 function toggleMode() {
   mode.value = mode.value == "gallery" ? "detailedList" : "gallery";
 }
@@ -83,8 +83,8 @@ const classNames = computed(() => {
   const gallery_mode = mode.value === "gallery" ? 2 : 1;
   const row_cols_lg = nbTaxonPerLine.value * gallery_mode;
   const row_cols_md = nbTaxonPerLine.value === 1 ? 1 : row_cols_lg / 2;
-  const row_cols_small = gallery_mode;
-  return `row row-cols-${row_cols_small} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
+  const row_cols_sm = gallery_mode;
+  return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
 });
 
 const speciesListShowed = computed(() => {
