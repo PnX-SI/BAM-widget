@@ -83,7 +83,8 @@ const classNames = computed(() => {
   const gallery_mode = mode.value === "gallery" ? 2 : 1;
   const row_cols_lg = nbTaxonPerLine.value * gallery_mode;
   const row_cols_md = nbTaxonPerLine.value === 1 ? 1 : row_cols_lg / 2;
-  return `row row-cols-${row_cols_lg} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
+  const row_cols_small = gallery_mode;
+  return `row row-cols-${row_cols_small} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
 });
 
 const speciesListShowed = computed(() => {
