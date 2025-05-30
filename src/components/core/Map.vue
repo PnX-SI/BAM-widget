@@ -53,8 +53,14 @@ function updateGeometryFromWKT() {
   if (wkt.value) {
     let tmp = L.geoJSON().addTo(geometry.value);
     tmp.addData(parse(wkt.value));
+    focusOnGeometry();
   }
 }
+
+function focusOnGeometry() {
+  map.value.fitBounds(geometry.value.getBounds());
+}
+
 updateGeometryFromWKT();
 function updateGeometry() {
   if (!drawEventData) return;
@@ -97,7 +103,7 @@ function setupMap() {
   map.value.addLayer(geometry.value);
 
   if (wktFromOutside.value) {
-    map.value.fitBounds(geometry.value.getBounds());
+    focusOnGeometry();
   }
 
   if (editable.value) {

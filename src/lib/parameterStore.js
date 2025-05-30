@@ -38,8 +38,21 @@ class ParameterStore {
     this.setParameterFromUrl("wkt", (value) =>
       validateWKT(value, this.radius.value)
     );
-    this.setParameterFromUrl("sourceGeometry", (value) =>
-      this.fetchAndSetGeometry(value)
+    this.setParameterFromUrl(
+      "sourceGeometry",
+      async (value) => {
+        try {
+          const response = await fetch(value);
+          const geojson = await response.json();
+          this.wkt.value = validateWKT(
+            stringify(geojson.geometry),
+            this.radius.value
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      true
     );
     this.setParameterFromUrl("dateMin", (value) => value);
     this.setParameterFromUrl("dateMax", (value) => value);
@@ -56,20 +69,14 @@ class ParameterStore {
     });
   }
 
-  setParameterFromUrl(paramName, transformFn) {
+  setParameterFromUrl(paramName, transformFn, setValueInFunction = false) {
     if (paramName in useRoute().query) {
       const value = useRoute().query[paramName];
-      this[paramName].value = transformFn(value);
-    }
-  }
-
-  async fetchAndSetGeometry(url) {
-    try {
-      const response = await fetch(url);
-      const geojson = await response.json();
-      this.wkt.value = validateWKT(stringify(geojson), this.radius.value);
-    } catch (err) {
-      console.error(err);
+      if (!setValueInFunction) {
+        this[paramName].value = transformFn(value);
+      } else {
+        transformFn(value);
+      }
     }
   }
 
