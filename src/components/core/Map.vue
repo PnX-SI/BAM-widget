@@ -58,7 +58,7 @@ function updateGeometryFromWKT() {
 }
 
 function focusOnGeometry() {
-  map.value.fitBounds(geometry.value.getBounds());
+  if (map.value) map.value.fitBounds(geometry.value.getBounds());
 }
 
 updateGeometryFromWKT();
