@@ -2,7 +2,8 @@ import { toast } from "vue3-toastify";
 
 class Connector {
   name;
-  language;
+  taxonClass2SourceID = {};
+
   constructor(options) {
     this.options = options;
     this.params = this.options;

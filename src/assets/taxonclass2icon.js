@@ -12,12 +12,6 @@ const taxonClassIcons = {
     Amphibia: {
       Icon: "fas fa-frog",
     },
-    Actinopterygii: {
-      Icon: "fas fa-fish",
-    },
-    Chondrichthyes: {
-      Icon: "fas fa-water",
-    },
     Insecta: {
       Icon: "fas fa-bug",
     },

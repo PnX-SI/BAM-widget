@@ -30,6 +30,19 @@ class GbifConnector extends Connector {
     super(options);
     this.name = "GBIF";
     this.GBIF_ENDPOINT = this.options.GBIF_ENDPOINT || GBIF_ENDPOINT_DEFAULT;
+    this.taxonClass2SourceID = {
+      Aves: 212,
+      Mammalia: 359,
+      Reptilia: 358,
+      Amphibia: 131,
+      Insecta: 216,
+      Arachnida: 367,
+      Gastropoda: 225,
+      Bivalvia: 137,
+      Magnoliopsida: 220,
+      Liliopsida: 196,
+      Pinopsida: 194,
+    };
   }
 
   /**
@@ -57,9 +70,16 @@ class GbifConnector extends Connector {
   }
 
   fetchOccurrence(params) {
-    const defaultParams = { limit: 300, maxPage: 10, ...params };
+    let defaultParams = { limit: 300, maxPage: 10, ...params };
     if (defaultParams.dateMin && defaultParams.dateMax) {
       defaultParams.eventDate = `${defaultParams.dateMin},${defaultParams.dateMax}`;
+    }
+
+    if (params?.class) {
+      defaultParams = {
+        ...defaultParams,
+        classKey: this.taxonClass2SourceID[params?.class],
+      };
     }
 
     return this.countOccurrence(defaultParams).then((countOccurrence) => {
