@@ -21,19 +21,7 @@ const route = computed(() => {
 
 const link = computed(() => {
   const paramsArray = Object.entries(config.getParams())
-    .filter(
-      ([key, value]) =>
-        value !== undefined && value !== null && key !== "connector"
-    )
-    .map(([key, value]) => `${key}=${value}`);
-  if (config.connector.value.params) {
-    Object.entries(config.connector.value.params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        paramsArray.push(`${key}=${value}`);
-      }
-    });
-    paramsArray.push(`connector=${config.connector.value.name}`);
-  }
+  .map(([key, value]) => `${key}=${value}`);
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
 

@@ -35,13 +35,13 @@ class ParameterStore {
 
     ParameterStore.instance = this;
 
-    // "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode"
-    //   .split(" ")
-    //   .forEach((param) => {
-    //     watch(this[param], () => {
-    //       router.push({ path: route.path, query: this.getParams() });
-    //     });
-    //   });
+    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode"
+      .split(" ")
+      .forEach((param) => {
+        watch(this[param], () => {
+          router.replace({ path: route.path, query: this.getParams() });
+        });
+      });
   }
 
   initializeFromUrl(paramsFromUrl, locale, availableLocales) {
@@ -54,7 +54,7 @@ class ParameterStore {
     this.setParameterFromUrl(
       "sourceGeometry",
       async (value) => {
-        this.sourceGeometry = value;
+        this.sourceGeometry.value = value;
         try {
           const response = await fetch(value);
           const geojson = await response.json();
@@ -68,6 +68,7 @@ class ParameterStore {
       },
       true
     );
+
     this.setParameterFromUrl("dateMin", (value) => value);
     this.setParameterFromUrl("dateMax", (value) => value);
     this.setParameterFromUrl("connector", (value) =>
@@ -100,15 +101,18 @@ class ParameterStore {
   getParams() {
     let params = {};
     Object.entries(this)
-      .filter(([_, value]) => value !== undefined && value !== null)
+      .filter(
+        ([_, value]) =>
+          value.value !== undefined && value.value !== null && value.value != ""
+      )
       .forEach(([key, value]) => {
         params[key] = value.value;
       });
     params["connector"] = this.connector.value.name;
     params = { ...params, ...this.connector.value.options };
 
-    if (params?.sourceGeometry && params?.wkt) {
-      delete params["sourceGeometry"];
+    if (params?.sourceGeometry != null && params?.wkt) {
+      delete params["wkt"];
     }
     return params;
   }

@@ -32,7 +32,7 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt } = ParameterStore.getInstance();
+const { radius, wkt, sourceGeometry } = ParameterStore.getInstance();
 
 // Component Attributes
 const map = shallowRef();
@@ -89,6 +89,7 @@ function updateGeometry() {
   }
 
   wkt.value = WKT;
+  sourceGeometry.value = null;
 }
 
 function setupMap() {
