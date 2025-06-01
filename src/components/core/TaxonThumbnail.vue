@@ -54,7 +54,7 @@ fetchVernacularName();
       />
 
       <div class="card-img-overlay">
-        <h5 class="card-title">{{ taxon.vernacularName || vernacularName }}</h5>
+        <h5 class="card-title">{{ vernacularName ?? taxon.vernacularName }}</h5>
       </div>
     </div>
   </a>
