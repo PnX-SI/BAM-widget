@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 
 const width = ref("100wv");
 const height = ref("100vh");

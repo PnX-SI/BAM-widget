@@ -1,5 +1,10 @@
 <script setup>
-import { reactive, ref, watch, onMounted } from "vue";
+import { reactive, ref, watch } from "vue";
+
+import ParameterStore from "@/lib/parameterStore";
+import { getConnector } from "@/lib/connectors/utils";
+
+const { connector } = ParameterStore.getInstance();
 
 const sources = {
   GBIF: [
@@ -20,14 +25,7 @@ const sources = {
   ],
 };
 
-const props = defineProps({
-  sourceName: {
-    type: String,
-    required: true,
-  },
-});
-
-const sourceName = ref(props.sourceName);
+const sourceName = ref(connector.value.name);
 let params = reactive(
   Object.fromEntries(
     sources[sourceName.value].map((form) => [form.name, form.default])
@@ -42,16 +40,9 @@ watch([sourceName], () => {
   );
 });
 
-const emit = defineEmits(["sourceName", "params"]);
-
 function updateSource(a) {
-  emit("sourceName", sourceName.value);
-  emit("params", params);
+  connector.value = getConnector(sourceName.value, params);
 }
-onMounted(() => {
-  emit("sourceName", sourceName.value);
-  emit("params", params);
-});
 </script>
 
 <template>

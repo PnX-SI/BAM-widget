@@ -5,10 +5,7 @@ import TaxonList from "@/components/core/TaxonList.vue";
 import Filters from "@/components/core/Filters.vue";
 import Share from "./core/Share.vue";
 import LanguageSwitch from "./commons/LanguageSwitch.vue";
-import ParameterStore from "@/lib/parameterStore";
 import Intro from "./core/Intro.vue";
-
-const config = ParameterStore.getInstance();
 </script>
 
 <template>
@@ -39,7 +36,7 @@ const config = ParameterStore.getInstance();
       <!-- Intro & Parameters -->
       <div class="col-12 col-lg-3 col-md-2">
         <Intro class="mb-2"></Intro>
-        <Filters :sourceName="config.connector.value.name" />
+        <Filters />
       </div>
       <!-- Map -->
       <div class="col-12 col-lg-6 col-md-6">

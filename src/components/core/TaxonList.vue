@@ -113,7 +113,6 @@ const fetchSpeciesList = (wkt) => {
   loadingObservations = true;
   loadingError = false;
   speciesList.value = [];
-  console.log(class_.value);
   connector.value
     .fetchOccurrence({
       geometry: wkt,
@@ -141,7 +140,7 @@ watch(searchString, () => {
   pageIndex.value = 0;
 });
 
-watch([wkt, class_, dateMin, dateMax], () => {
+watch([wkt, class_, dateMin, dateMax, connector], () => {
   if (wkt.value) {
     fetchSpeciesList(wkt.value);
   }

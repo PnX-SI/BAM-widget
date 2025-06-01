@@ -1,17 +1,7 @@
 <script setup>
-import { ref, watch } from "vue";
+import ParameterStore from "@/lib/parameterStore";
 
-const props = defineProps({
-  radius: { type: Number, required: true },
-});
-
-const radius = ref(props.radius);
-
-const emit = defineEmits(["update:radius"]);
-
-watch(radius, () => {
-  emit("update:radius", radius.value);
-});
+const { radius } = ParameterStore.getInstance();
 </script>
 
 <template>

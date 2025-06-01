@@ -13,11 +13,7 @@ const orderBy = ref(props.orderBy);
 const emit = defineEmits(["update:sortBy", "update:orderBy"]);
 
 function changeOrder() {
-  if (orderBy.value === "asc") {
-    orderBy.value = "desc";
-  } else {
-    orderBy.value = "asc";
-  }
+  orderBy.value = orderBy.value === "asc" ? "desc" : "asc";
   emit("update:orderBy", orderBy.value);
 }
 

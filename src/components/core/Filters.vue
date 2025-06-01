@@ -1,22 +1,13 @@
 <script setup>
-import { ref, watch } from "vue";
+import ParameterStore from "@/lib/parameterStore";
+
+// Components
+import TaxonClassFilter from "../commons/TaxonClassFilter.vue";
 import DateFilter from "./filters/DateFilter.vue";
 import BufferSizeFilter from "./filters/BufferSizeFilter.vue";
 import SourceFilter from "./filters/SourceFilter.vue";
-import { getConnector } from "@/lib/connectors/utils";
-import ParameterStore from "@/lib/parameterStore";
-import TaxonClassFilter from "../commons/TaxonClassFilter.vue";
-const config = ParameterStore.getInstance();
 
-const { radius, dateMin, dateMax, connector, showFilters } = config;
-
-const sourceName = ref(config.connector.value.name);
-const sourceParams = ref(config.connector.value.params);
-
-const updateConfig = () => {
-  connector.value = getConnector(sourceName.value, sourceParams.value);
-};
-watch([radius, dateMin, dateMax, sourceName, sourceParams], updateConfig);
+const { dateMin, dateMax, showFilters } = ParameterStore.getInstance();
 </script>
 
 <template>
@@ -27,10 +18,7 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], updateConfig);
     <div class="card-body">
       <div id="filters">
         <div class="col-lg-12">
-          <BufferSizeFilter
-            :radius="radius"
-            @update:radius="(newRadius) => (radius = newRadius)"
-          ></BufferSizeFilter>
+          <BufferSizeFilter></BufferSizeFilter>
         </div>
         <div class="row mt-3">
           <div class="col-6">
@@ -62,11 +50,7 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], updateConfig);
     </div>
   </div>
   <div class="col mt-3">
-    <SourceFilter
-      :sourceName="sourceName"
-      @params="(params) => (sourceParams = params)"
-      @source-name="(newSource) => (sourceName = newSource)"
-    ></SourceFilter>
+    <SourceFilter></SourceFilter>
   </div>
 </template>
 <style>

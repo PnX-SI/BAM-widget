@@ -1,9 +1,7 @@
 <script setup>
+// Components
 import TaxonList from "@/components/core/TaxonList.vue";
 import Map from "./core/Map.vue";
-
-import ParameterStore from "@/lib/parameterStore";
-const config = ParameterStore.getInstance();
 </script>
 
 <template>

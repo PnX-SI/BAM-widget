@@ -1,6 +1,5 @@
 <script setup>
 import { taxonClassIcons } from "@/assets/taxonclass2icon";
-
 import ParameterStore from "@/lib/parameterStore";
 
 const class_ = ParameterStore.getInstance().class;

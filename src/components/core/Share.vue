@@ -1,6 +1,6 @@
 <script setup>
 import HTMLBuilder from "./HTMLBuilder.vue";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import ParameterStore from "@/lib/parameterStore";
 const config = ParameterStore.getInstance();
 
@@ -20,8 +20,9 @@ const route = computed(() => {
 });
 
 const link = computed(() => {
-  const paramsArray = Object.entries(config.getParams())
-  .map(([key, value]) => `${key}=${value}`);
+  const paramsArray = Object.entries(config.getParams()).map(
+    ([key, value]) => `${key}=${value}`
+  );
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
 
