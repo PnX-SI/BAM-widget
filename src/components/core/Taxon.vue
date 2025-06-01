@@ -41,6 +41,7 @@ const mediaDisplayed = computed(() => {
     : randomChoice(speciesPhoto.value);
 });
 
+// Until icon are found, not used
 const kingdomColor = computed(() => {
   return taxon.kingdom == "Plantae" ? "#27ae60" : "#e67e22";
 });
@@ -76,7 +77,7 @@ watch(lang, () => {
 <template>
   <div class="col">
     <div class="card h-100 mb-2">
-      <div class="taxon-photo">
+      <div class="taxon-photo" :class="mediaDisplayed.url ? '' : 'placeholder'">
         <!-- <BadgeTaxon
           :class-icon="kingdomIcon"
           id="badge-kingdom"
