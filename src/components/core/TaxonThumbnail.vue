@@ -1,77 +1,33 @@
 <script setup>
-import { ref, computed, watchEffect } from "vue";
-
-import { taxonClassIcons } from "@/assets/taxonclass2icon";
-import { NO_IMAGE_URL } from "@/assets/constant";
-import { Media, Taxon } from "@/lib/models";
-import BadgeTaxon from "./BadgeTaxon.vue";
-import ParameterStore from "@/lib/parameterStore";
-import { randomChoice } from "@/lib/utils";
-import { watch } from "vue";
-
-const { lang, connector } = ParameterStore.getInstance();
+import { Media } from "@/lib/models";
 
 const props = defineProps({
-  taxon: Taxon,
-});
-
-const taxon = props.taxon;
-const speciesPhoto = ref([]);
-const isLoading = ref(false);
-
-function fetchTaxonImage() {
-  speciesPhoto.value = [];
-  if (taxon.taxonId) {
-    isLoading.value = true;
-    connector.value.fetchMedia(taxon.taxonId).then((response) => {
-      speciesPhoto.value = response;
-      isLoading.value = false;
-    });
-  }
-}
-const mediaDisplayed = computed(() => {
-  return speciesPhoto.value.length == 0
-    ? new Media({ url: NO_IMAGE_URL })
-    : randomChoice(speciesPhoto.value);
-});
-const vernacularName = ref(taxon.vernacularName);
-
-function fetchVernacularName() {
-  connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
-    if (name) {
-      vernacularName.value = name.split(",")[0];
-    }
-  });
-}
-fetchTaxonImage();
-fetchVernacularName();
-
-watch(lang, () => {
-  fetchVernacularName();
+  media: { type: Media },
+  vernacularName: { type: String },
+  urlDetailPage: { type: String },
 });
 </script>
 <template>
   <div class="col card thumbnail">
     <img
       class="card-img"
-      :class="isLoading ? 'placeholder' : ''"
-      :src="mediaDisplayed?.url"
-      :alt="mediaDisplayed?.url"
-      :title="'Source: ' + mediaDisplayed?.source"
+      :src="props.media?.url"
+      :alt="props.media?.url"
+      :title="'Source: ' + props.media?.source"
     />
 
     <div class="card-img-overlay">
       <div class="card-title h6">
         <a
           style="color: inherit; text-decoration: inherit"
-          :href="connector.getTaxonDetailPage(taxon.taxonId)"
+          :href="props.urlDetailPage"
           target="_blank"
         >
-          <span>{{ vernacularName || taxon.acceptedScientificName }} </span></a
+          <span>{{ props.vernacularName }} </span></a
         >
 
         <BPopover
-          v-if="mediaDisplayed.source"
+          v-if="props.media.source"
           :click="true"
           :close-on-hide="true"
           :delay="{ show: 0, hide: 0 }"
@@ -79,7 +35,7 @@ watch(lang, () => {
           <template #target>
             <i class="bi bi-c-square-fill copyright-icon"></i>
           </template>
-          {{ mediaDisplayed.source }}
+          {{ props.media.source }}
         </BPopover>
       </div>
     </div>

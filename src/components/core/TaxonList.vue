@@ -2,13 +2,12 @@
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Loading from "@/components/commons/Loading.vue";
-import Taxon from "@/components/core/Taxon.vue";
 import Pagination from "@/components/commons/Pagination.vue";
 import SortBy from "../commons/SortBy.vue";
 import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
-import TaxonThumbnail from "./TaxonThumbnail.vue";
+import TaxonView from "./TaxonView.vue";
 
 const { t } = useI18n();
 const {
@@ -196,27 +195,18 @@ if (wkt.value) {
       <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
-      <div id="taxon-list-content">
+      <div id="taxon-list-content" :class="classNames">
         <div class="justify-content-center toggleMode">
           <button class="btn btn-secondary" @click="toggleMode()">
             <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
             <i v-else class="fa-solid fa-grip-vertical"></i>
           </button>
         </div>
-        <div v-if="mode === 'detailedList'" :class="classNames">
-          <Taxon
-            v-for="observation in speciesListShowed"
-            :key="observation.taxonId"
-            :taxon="observation"
-          />
-        </div>
-        <div v-else :class="classNames">
-          <TaxonThumbnail
-            v-for="observation in speciesListShowed"
-            :key="observation.taxonId"
-            :taxon="observation"
-          />
-        </div>
+        <TaxonView
+          v-for="observation in speciesListShowed"
+          :key="observation.taxonId"
+          :taxon="observation"
+        />
       </div>
     </div>
     <div v-if="speciesListShowed.length" class="card-footer">
