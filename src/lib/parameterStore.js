@@ -5,6 +5,7 @@ import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
 import { useI18n } from "vue-i18n";
 import { getBaseUrl } from "./utils";
+import { taxonClassIcons } from "@/assets/taxonclass2icon";
 
 class ParameterStore {
   static instance = null;
@@ -30,12 +31,13 @@ class ParameterStore {
     this.lang = locale;
     this.mode = ref("detailedList");
     this.sourceGeometry = ref(null);
+    this.class = ref(null);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode"
+    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode class"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -74,6 +76,11 @@ class ParameterStore {
     this.setParameterFromUrl("connector", (value) =>
       getConnector(value, { ...paramsFromUrl })
     );
+    this.setParameterFromUrl("class", (value) =>
+      Object.keys(this.connector.value.taxonClass2SourceID)?.includes(value)
+        ? value
+        : null
+    );
     this.setParameterFromUrl("itemsPerPage", (value) => parseInt(value));
     this.setParameterFromUrl("nbTaxonPerLine", (value) => parseInt(value));
     this.setParameterFromUrl("showFilters", (value) => value === "true");
@@ -103,7 +110,9 @@ class ParameterStore {
     Object.entries(this)
       .filter(
         ([_, value]) =>
-          value.value !== undefined && value.value !== null && value.value != ""
+          value.value !== undefined &&
+          value.value !== null &&
+          value.value !== ""
       )
       .forEach(([key, value]) => {
         params[key] = value.value;

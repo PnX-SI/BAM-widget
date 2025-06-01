@@ -22,6 +22,8 @@ const {
   mode,
 } = ParameterStore.getInstance();
 
+const class_ = ParameterStore.getInstance().class;
+
 const props = defineProps({
   itemsPerPage: Number,
   nbTaxonPerLine: {
@@ -112,11 +114,13 @@ const fetchSpeciesList = (wkt) => {
   loadingObservations = true;
   loadingError = false;
   speciesList.value = [];
+  console.log(class_.value);
   connector.value
     .fetchOccurrence({
       geometry: wkt,
       dateMin: dateMin.value,
       dateMax: dateMax.value,
+      class: class_.value,
     })
     .then((response) => {
       speciesList.value = Object.values(response);
@@ -138,7 +142,7 @@ watch(searchString, () => {
   pageIndex.value = 0;
 });
 
-watch([wkt, dateMin, dateMax], () => {
+watch([wkt, class_, dateMin, dateMax], () => {
   if (wkt.value) {
     fetchSpeciesList(wkt.value);
   }

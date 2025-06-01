@@ -80,6 +80,7 @@ const messagesFR = {
       lastSeenDate: "Date de la dernière observation",
       taxonFilter: "Filtre par taxon",
       seeMore: "En savoir plus",
+      class: "Classe du Taxon",
     },
   },
 };

@@ -5,9 +5,10 @@ import BufferSizeFilter from "./filters/BufferSizeFilter.vue";
 import SourceFilter from "./filters/SourceFilter.vue";
 import { getConnector } from "@/lib/connectors/utils";
 import ParameterStore from "@/lib/parameterStore";
+import TaxonClassFilter from "../commons/TaxonClassFilter.vue";
 const config = ParameterStore.getInstance();
 
-const { radius, dateMin, dateMax, connector } = config;
+const { radius, dateMin, dateMax, connector, showFilters } = config;
 
 const sourceName = ref(config.connector.value.name);
 const sourceParams = ref(config.connector.value.params);
@@ -48,6 +49,9 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], updateConfig);
               @update:date="(newDate) => (dateMax = newDate)"
             ></DateFilter>
           </div>
+        </div>
+        <div class="col mt-3">
+          <TaxonClassFilter></TaxonClassFilter>
         </div>
       </div>
     </div>

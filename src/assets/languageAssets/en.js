@@ -78,6 +78,7 @@ const messagesEN = {
       lastSeenDate: "Last observation date",
       taxonFilter: "Filter by taxon",
       seeMore: "See more",
+      class: "Taxon's class",
     },
   },
 };
