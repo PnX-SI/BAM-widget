@@ -45,6 +45,10 @@ function fetchVernacularName() {
 }
 fetchTaxonImage();
 fetchVernacularName();
+
+watch(lang, () => {
+  fetchVernacularName();
+});
 </script>
 <template>
   <div class="col card thumbnail">
