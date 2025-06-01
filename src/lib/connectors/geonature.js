@@ -48,7 +48,6 @@ class GeoNatureConnector extends Connector {
             )
           );
         });
-        console.log(taxonsData);
         return taxonsData;
       });
   }
@@ -103,6 +102,10 @@ class GeoNatureConnector extends Connector {
 
   getTaxonDetailPage(taxonId) {
     return `https://inpn.mnhn.fr/espece/cd_nom/${taxonId}`;
+  }
+
+  fetchVernacularName(taxonId) {
+    return Promise.resolve(null);
   }
 }
 export { GeoNatureConnector };
