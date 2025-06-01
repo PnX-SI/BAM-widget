@@ -14,6 +14,7 @@ function drawConfig(featureGroup) {
         },
         shapeOptions: {},
       },
+      marker: false,
       circlemarker: false,
       circle: true, // Turns off this drawing tool
       rectangle: true,
