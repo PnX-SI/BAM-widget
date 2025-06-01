@@ -30,6 +30,7 @@ const messagesFR = {
       </p>`,
     parameters: "Paramètres",
     filters: "Filtres",
+    showFilters: "Afficher les filtres",
     filtersTitle: "Filtres",
     radius: "Rayon",
     bufferSize: "Taille du buffer :",

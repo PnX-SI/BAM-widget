@@ -28,6 +28,7 @@ const messagesEN = {
     `,
     parameters: "Parameters",
     filters: "Filters",
+    showFilters: "Show Filters",
     filtersTitle: "Filters",
     radius: "Radius",
     bufferSize: "Buffer Size:",

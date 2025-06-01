@@ -53,6 +53,11 @@ watch([radius, dateMin, dateMax, sourceName, sourceParams], updateConfig);
         <div class="col mt-3">
           <TaxonClassFilter></TaxonClassFilter>
         </div>
+        <div class="col mt-3">
+          <BFormCheckbox switch v-model="showFilters">{{
+            $t("showFilters")
+          }}</BFormCheckbox>
+        </div>
       </div>
     </div>
   </div>
