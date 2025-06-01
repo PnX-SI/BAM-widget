@@ -27,6 +27,19 @@ function updateClass(className) {
           >{{ value }}</BButton
         >
       </div>
+      <div
+        v-for="value of Object.keys(taxonClassIcons.Plantae)"
+        :key="value"
+        class="col"
+      >
+        <BButton
+          pill
+          variant="outline-success"
+          :pressed="class_ == value"
+          @click="updateClass(value)"
+          >{{ value }}</BButton
+        >
+      </div>
     </div>
   </div>
 </template>
