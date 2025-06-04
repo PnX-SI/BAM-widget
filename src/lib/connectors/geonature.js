@@ -1,6 +1,8 @@
 import { Connector } from "./connector";
 import { Taxon } from "../models";
 import { NO_IMAGE_URL } from "@/assets/constant";
+import parse from "wellknown";
+
 class GeoNatureConnector extends Connector {
   EXPORT_API_ENDPOINT;
 
@@ -9,44 +11,42 @@ class GeoNatureConnector extends Connector {
     this.name = "GeoNature";
     // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
     this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
+    this.OBSERVATIONS_ENDPOINT =
+      "http://127.0.0.1:8000/synthese/observations/taxa";
   }
 
   fetchOccurrence(params = {}) {
-    let urlWithParams = new URL(this.EXPORT_API_ENDPOINT);
-    params = { ...params, limit: "ALL" };
-    for (const [key, value] of Object.entries(params)) {
-      urlWithParams.searchParams.append(key, value);
-    }
-    const url = urlWithParams.toString();
-    return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then((json) => {
+    return fetch(this.OBSERVATIONS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": "testkey",
+      },
+      body: JSON.stringify({
+        format: "json",
+        sort: "id_dataset",
+        geoIntersection: {
+          type: "Feature",
+          properties: {},
+          geometry: parse(params.geometry),
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((items) => {
         let taxonsData = {};
-        json.items.features.forEach((item) => {
-          item = item.properties;
-
-          if (!taxonsData.hasOwnProperty(item.cd_ref)) {
-            taxonsData[item.cd_ref] = new Taxon({
-              acceptedScientificName: item.nom_scientifique,
-              vernacularName: item.nom_vernaculaire,
-              taxonId: item.cd_ref,
-              taxonKey: item.cd_ref,
-              mediaUrl: NO_IMAGE_URL,
-              taxonRank: "", //this.fetchTaxonInfo(item.cd_ref),
-              nbObservations: 0,
-              description: "",
-              lastSeenDate: new Date(item.date_max).getTime(),
-            });
-          }
-          taxonsData[item.cd_ref].nbObservations += 1;
-          taxonsData[item.cd_ref].lastSeenDate = new Date(
-            Math.max(
-              new Date(item.date_max).getTime(),
-              new Date(taxonsData[item.cd_ref].lastSeenDate).getTime()
-            )
-          );
+        items.forEach((observation) => {
+          taxonsData[observation.cd_ref] = new Taxon({
+            acceptedScientificName: observation.nom_valide,
+            vernacularName: observation.nom_vern,
+            taxonId: observation.cd_ref,
+            mediaUrl: NO_IMAGE_URL,
+            taxonRank: observation.id_rang,
+            kingdom: observation.regne,
+            class: observation.class,
+            nbObservations: observation.nb_obs,
+            lastSeenDate: new Date(observation.date_min),
+          });
         });
         return taxonsData;
       });
