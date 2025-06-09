@@ -1,5 +1,5 @@
 import { toast } from "vue3-toastify";
-import { getMediaSource } from "../media/media";
+import { getMediaSource, SOURCE_ } from "../media/media";
 
 class Connector {
   name;
@@ -112,6 +112,20 @@ class Connector {
    */
   sourceDetailMessage() {
     return "";
+  }
+  getCompatibleMediaSource() {
+    const availableSource = [];
+    Object.values(SOURCE_)
+      .filter((idMediaSource) =>
+        getMediaSource(idMediaSource).isCompatible(this)
+      )
+      .forEach((idMediaSource) => {
+        availableSource.push({
+          value: idMediaSource,
+          text: getMediaSource(idMediaSource).name,
+        });
+      });
+    return availableSource;
   }
 }
 

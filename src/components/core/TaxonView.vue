@@ -23,19 +23,22 @@ const vernacularName = ref(taxon.vernacularName);
 function fetchTaxonImage() {
   speciesPhoto.value = [];
   if (taxon.taxonId) {
-    connector.value.fetchMedia(taxon.taxonId).then((response) => {
+    connector.fetchMedia(taxon.taxonId).then((response) => {
       speciesPhoto.value = response;
     });
   }
 }
 const mediaDisplayed = computed(() => {
+  if (!speciesPhoto.value) {
+    return new Media({ url: NO_IMAGE_URL });
+  }
   return speciesPhoto.value.length == 0
     ? new Media({ url: NO_IMAGE_URL })
     : randomChoice(speciesPhoto.value);
 });
 
 function refreshVernacularName() {
-  connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
+  connector.fetchVernacularName(taxon.taxonId).then((name) => {
     if (name) {
       vernacularName.value = name.split(",")[0];
     }

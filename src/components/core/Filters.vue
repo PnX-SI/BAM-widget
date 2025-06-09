@@ -1,11 +1,12 @@
 <script setup>
 import ParameterStore from "@/lib/parameterStore";
-
 // Components
 import TaxonClassFilter from "../commons/TaxonClassFilter.vue";
 import DateFilter from "./filters/DateFilter.vue";
 import BufferSizeFilter from "./filters/BufferSizeFilter.vue";
 import SourceFilter from "./filters/SourceFilter.vue";
+
+import MediaSourceSelector from "./filters/MediaSourceSelector.vue";
 
 const { dateMin, dateMax, showFilters } = ParameterStore.getInstance();
 </script>
@@ -45,6 +46,9 @@ const { dateMin, dateMax, showFilters } = ParameterStore.getInstance();
           <BFormCheckbox switch v-model="showFilters">{{
             $t("showFilters")
           }}</BFormCheckbox>
+        </div>
+        <div class="col mt-3">
+          <MediaSourceSelector> </MediaSourceSelector>
         </div>
       </div>
     </div>

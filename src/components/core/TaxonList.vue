@@ -109,7 +109,7 @@ const fetchSpeciesList = (wkt) => {
   loadingObservations = true;
   loadingError = false;
   speciesList.value = [];
-  connector.value
+  connector
     .fetchOccurrence({
       geometry: wkt,
       dateMin: dateMin.value,

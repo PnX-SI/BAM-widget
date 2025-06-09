@@ -25,7 +25,7 @@ const sources = {
   ],
 };
 
-const sourceName = ref(connector.value.name);
+const sourceName = ref(connector.name);
 let params = reactive(
   Object.fromEntries(
     sources[sourceName.value].map((form) => [form.name, form.default])
@@ -41,7 +41,7 @@ watch([sourceName], () => {
 });
 
 function updateSource(a) {
-  connector.value = getConnector(sourceName.value, params);
+  connector = getConnector(sourceName.value, params);
 }
 </script>
 

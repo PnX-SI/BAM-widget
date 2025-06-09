@@ -1,6 +1,6 @@
 export class UrlMediaSource extends MediaSource {
   constructor(params) {
-    this.name = "UrlMediaSource";
+    super("UrlMediaSource");
     this.url = params.urlTemplate;
   }
 

@@ -5,6 +5,7 @@ import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { WikiDataImageSource } from "../media/Wikidata";
 import { GBIFMediaSource } from "../media/Gbif";
+import { getMediaSource, SOURCE_ } from "../media/media";
 
 const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
 
@@ -34,6 +35,8 @@ class GbifConnector extends Connector {
     this.name = "GBIF";
     this.GBIF_ENDPOINT = this.options.GBIF_ENDPOINT || GBIF_ENDPOINT_DEFAULT;
     this.referential = TAXON_REFERENTIAL.GBIF;
+    this.mediaSource = this.mediaSource || getMediaSource(SOURCE_.GBIF);
+
     this.taxonClass2SourceID = {
       Aves: 212,
       Mammalia: 359,

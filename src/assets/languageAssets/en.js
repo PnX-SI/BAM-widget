@@ -72,6 +72,10 @@ const messagesEN = {
     },
     desc: "Décroissant",
     asc: "Croissant",
+    media: {
+      source: "Media source",
+      select: "Select a media source",
+    },
     taxon: {
       scientificName: "Scientific Name",
       vernacularName: "Vernacular name",
