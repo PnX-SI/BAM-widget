@@ -115,7 +115,6 @@ class ParameterStore {
       .forEach(([key, value]) => {
         params[key] = value.value;
       });
-
     params["connector"] = this.connector.name;
     params = { ...params, ...this.connector.getParams() };
 

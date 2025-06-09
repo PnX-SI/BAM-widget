@@ -33,6 +33,7 @@ class Connector {
             "mediaSource",
           ].includes(key)
       )
+      .filter(([key, value]) => typeof value != typeof {})
       .forEach(([key, value]) => {
         params[key] = value;
       });
