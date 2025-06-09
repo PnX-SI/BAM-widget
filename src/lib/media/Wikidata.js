@@ -55,11 +55,10 @@ function fetchImageFromWikidata(entityId) {
       if (!imageClaims.length) {
         return "No image found for this entity.";
       }
-
       // Get the filename from the first image claim
       const imageFilename = imageClaims[0].mainsnak.datavalue.value;
       // Step 3: Construct the URL to fetch the image from Wikimedia Commons
-      const imageUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${imageFilename}`;
+      const imageUrl = `https://commons.wikimedia.org/w/thumb.php?width=500&f=${imageFilename}`;
       return [
         new Media({
           url: imageUrl,
