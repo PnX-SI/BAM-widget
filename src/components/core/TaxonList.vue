@@ -2,7 +2,6 @@
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Loading from "@/components/commons/Loading.vue";
-import Pagination from "@/components/commons/Pagination.vue";
 import SortBy from "../commons/SortBy.vue";
 import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";

@@ -16,6 +16,25 @@ class Connector {
       }
     });
   }
+
+  getParams() {
+    const params = {};
+    Object.entries(this)
+      .filter(
+        ([key, _]) =>
+          ![
+            "options",
+            "params",
+            "name",
+            "taxonClass2SourceID",
+            "referential",
+          ].includes(key)
+      )
+      .forEach(([key, value]) => {
+        params[key] = value;
+      });
+    return params;
+  }
   /**
    * Fetches occurrences based on the given parameters.
    * @param {Object} params - The parameters for the occurrence query.
