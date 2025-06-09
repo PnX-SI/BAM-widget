@@ -3,6 +3,7 @@ import { toast } from "vue3-toastify";
 class Connector {
   name;
   taxonClass2SourceID = {};
+  referential;
 
   constructor(options) {
     this.options = options;

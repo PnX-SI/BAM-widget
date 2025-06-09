@@ -4,6 +4,8 @@ import { useRoute, useRouter } from "vue-router";
 import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
 import { useI18n } from "vue-i18n";
+import { getBaseUrl } from "./utils";
+import { taxonClassIcons } from "@/assets/taxonclass2icon";
 
 class ParameterStore {
   static instance = null;

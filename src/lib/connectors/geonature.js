@@ -1,6 +1,7 @@
 import { Connector } from "./connector";
 import { Taxon } from "../models";
 import { NO_IMAGE_URL } from "@/assets/constant";
+import { TAXON_REFERENTIAL } from "../taxonReferential";
 class GeoNatureConnector extends Connector {
   EXPORT_API_ENDPOINT;
 
@@ -9,6 +10,7 @@ class GeoNatureConnector extends Connector {
     this.name = "GeoNature";
     // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
     this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
+    this.referential = TAXON_REFERENTIAL.TAXREF;
   }
 
   fetchOccurrence(params = {}) {
