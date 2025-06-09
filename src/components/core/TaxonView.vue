@@ -54,15 +54,16 @@ watch(lang, () => {
   <TaxonThumbnail
     v-if="mode == 'gallery'"
     :media="mediaDisplayed"
-    :vernacular-name="vernacularName ?? taxon.acceptedScientificName"
+    :vernacular-name="vernacularName || taxon.acceptedScientificName"
     :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
+    :accepted-scientific-name="taxon.acceptedScientificName"
   >
   </TaxonThumbnail>
   <TaxonDetailed
     v-else
     :media="mediaDisplayed"
     :accepted-scientific-name="taxon.acceptedScientificName"
-    :vernacular-name="vernacularName ?? taxon.acceptedScientificName"
+    :vernacular-name="vernacularName || taxon.acceptedScientificName"
     :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
     :nb-observations="taxon?.nbObservations"
     :last-seen-date="taxon?.lastSeenDate"

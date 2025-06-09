@@ -45,7 +45,6 @@ const props = defineProps({
 <style scoped>
 .card {
   border: 0;
-  margin-bottom: 1em;
   align-content: space-around;
 }
 .card-img {
