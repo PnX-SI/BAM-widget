@@ -1,12 +1,13 @@
 import { Media } from "../models";
 import { MediaSource } from "./MediaSource";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
+import { SOURCE_ } from "./media";
 
 export class TaxrefODATA extends MediaSource {
   constructor(parameters) {
-    super("Taxref");
+    super("Taxref", SOURCE_.TAXREF_ODATA);
   }
-  fetchMedia(taxonID, connector) {
+  fetchPicture(taxonID, connector) {
     const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${taxonID}&visibility=PUBLIC`;
     return fetch(url)
       .then((response) => {

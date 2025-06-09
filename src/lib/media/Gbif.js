@@ -1,12 +1,21 @@
 import { Media } from "../models";
 import { MediaSource } from "./MediaSource";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
+import { SOURCE_ } from "./media";
 
 export class GBIFMediaSource extends MediaSource {
   constructor(parameters) {
-    super("GBIFMediaSource");
+    super("GBIFMediaSource", SOURCE_.GBIF);
   }
-  fetchMedia(taxonID, connector) {
+  isCompatible(connector) {
+    return connector.referential == TAXON_REFERENTIAL.GBIF ? true : false;
+  }
+  fetchPicture(taxonID, connector) {
+    if (!this.isCompatible(connector)) {
+      throw new Error(
+        `The connector ${connector.name} is not available for the GBIF Media Source`
+      );
+    }
     const url = `${connector.GBIF_ENDPOINT}/species/${taxonID}/media`;
     return fetch(url)
       .then((response) => response.json())
@@ -54,8 +63,5 @@ export class GBIFMediaSource extends MediaSource {
         const medias = json.results.flatMap((element) => element.media);
         return this.processMedia(medias);
       });
-  }
-  isCompatible(connector) {
-    return connector.referential == TAXON_REFERENTIAL.GBIF ? true : false;
   }
 }

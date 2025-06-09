@@ -142,11 +142,6 @@ class GbifConnector extends Connector {
     });
   }
 
-  fetchMedia(idTaxon) {
-    const mediaSource = new GBIFMediaSource();
-    return mediaSource.fetchMedia(idTaxon, this);
-  }
-
   fetchTaxonInfo(idTaxon) {
     const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}?language=${this.language}`;
     return fetch(url)

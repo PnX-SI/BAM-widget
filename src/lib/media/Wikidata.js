@@ -1,5 +1,6 @@
 import { Media } from "../models";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
+import { SOURCE_ } from "./media";
 import { MediaSource } from "./MediaSource";
 
 const { GBIF, TAXREF } = TAXON_REFERENTIAL;
@@ -95,9 +96,9 @@ function fetchWikidataImage(idTaxon, connector, wikidataEntryID = null) {
 
 class WikiDataImageSource extends MediaSource {
   constructor() {
-    super("WikidataMediaSource");
+    super("WikidataMediaSource", SOURCE_.WIKIDATA);
   }
-  fetchMedia(taxonID, connector) {
+  fetchPicture(taxonID, connector) {
     if (!this.isCompatible(connector)) {
       throw new Error(
         `Wikidata Image source is only compatible with the GBIF and a TAXREF referential based connector `

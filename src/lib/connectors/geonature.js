@@ -54,28 +54,6 @@ class GeoNatureConnector extends Connector {
       });
   }
 
-  fetchMedia(idTaxon) {
-    const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${idTaxon}&visibility=PUBLIC`;
-    return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then(function (json) {
-        let mediaList = [];
-        try {
-          Object.values(json?._embedded?.photos).forEach((media) => {
-            mediaList.push({
-              url: media._links.thumbnail.href,
-              licence: media.licence,
-              source: media.copyright,
-            });
-          });
-          return mediaList;
-        } catch {
-          return [];
-        }
-      });
-  }
   fetchTaxonInfo(idTaxon) {
     const url = `https://odata-inpn.mnhn.fr/taxa/${idTaxon}`; //
     return fetch(url)

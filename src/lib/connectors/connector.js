@@ -1,4 +1,5 @@
 import { toast } from "vue3-toastify";
+import { getMediaSource } from "../media/media";
 
 class Connector {
   name;
@@ -7,7 +8,8 @@ class Connector {
 
   constructor(options) {
     this.options = options;
-    this.params = this.options;
+
+    this.mediaSource = options?.mediaSource;
   }
   verifyOptions(params_names = []) {
     params_names.forEach((name) => {
@@ -28,11 +30,15 @@ class Connector {
             "name",
             "taxonClass2SourceID",
             "referential",
+            "mediaSource",
           ].includes(key)
       )
       .forEach(([key, value]) => {
         params[key] = value;
       });
+    if (this.mediaSource) {
+      params["mediaSource"] = this.mediaSource.id;
+    }
     return params;
   }
   /**
@@ -50,7 +56,10 @@ class Connector {
    * @returns {Promise<Array>} A promise that resolves to the list of media.
    */
   fetchMedia(idTaxon) {
-    throw new Error("Not implemented");
+    if (!this.mediaSource.isCompatible(this))
+      throw new Error("Media Source incompatible");
+
+    return this.mediaSource.fetchPicture(idTaxon, this);
   }
 
   /**
