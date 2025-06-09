@@ -1,11 +1,9 @@
-import { ref, watch } from "vue";
+import { reactive, ref, watch } from "vue";
 import { getConnector } from "./connectors/utils";
 import { useRoute, useRouter } from "vue-router";
 import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
 import { useI18n } from "vue-i18n";
-import { getBaseUrl } from "./utils";
-import { taxonClassIcons } from "@/assets/taxonclass2icon";
 
 class ParameterStore {
   static instance = null;
@@ -24,7 +22,7 @@ class ParameterStore {
     this.wkt = ref("");
     this.dateMin = ref(null);
     this.dateMax = ref(null);
-    this.connector = ref(getConnector(null, {}));
+    this.connector = reactive(getConnector(null, paramsFromUrl));
     this.itemsPerPage = ref(10);
     this.nbTaxonPerLine = ref(null);
     this.showFilters = ref(true);
@@ -37,7 +35,7 @@ class ParameterStore {
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode class"
+    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode class connector"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -77,7 +75,7 @@ class ParameterStore {
       getConnector(value, { ...paramsFromUrl })
     );
     this.setParameterFromUrl("class", (value) =>
-      Object.keys(this.connector.value.taxonClass2SourceID)?.includes(value)
+      Object.keys(this.connector.taxonClass2SourceID)?.includes(value)
         ? value
         : null
     );
@@ -117,8 +115,8 @@ class ParameterStore {
       .forEach(([key, value]) => {
         params[key] = value.value;
       });
-    params["connector"] = this.connector.value.name;
-    params = { ...params, ...this.connector.value.options };
+    params["connector"] = this.connector.name;
+    params = { ...params, ...this.connector.getParams() };
 
     if (params?.sourceGeometry != null && params?.wkt) {
       delete params["wkt"];

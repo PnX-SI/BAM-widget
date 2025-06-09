@@ -2,6 +2,10 @@ import { Connector } from "./connector";
 import { Media, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
 import { NO_IMAGE_URL } from "@/assets/constant";
+import { TAXON_REFERENTIAL } from "../taxonReferential";
+import { WikiDataImageSource } from "../media/Wikidata";
+import { GBIFMediaSource } from "../media/Gbif";
+import { getMediaSource, SOURCE_ } from "../media/media";
 
 const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
 
@@ -30,6 +34,9 @@ class GbifConnector extends Connector {
     super(options);
     this.name = "GBIF";
     this.GBIF_ENDPOINT = this.options.GBIF_ENDPOINT || GBIF_ENDPOINT_DEFAULT;
+    this.referential = TAXON_REFERENTIAL.GBIF;
+    this.mediaSource = this.mediaSource || getMediaSource(SOURCE_.GBIF);
+
     this.taxonClass2SourceID = {
       Aves: 212,
       Mammalia: 359,
@@ -136,55 +143,6 @@ class GbifConnector extends Connector {
       // Start fetching from the first page
       return fetchPage(0).then(() => taxonsData);
     });
-  }
-
-  fetchMedia(idTaxon) {
-    const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/media`;
-    return fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        let mediaList = this.processMedia(json.results);
-        if (mediaList.length === 0) {
-          return this.fetchMediaOccurence(idTaxon);
-        }
-        return mediaList;
-      });
-  }
-  /**
-   * Fetches media from occurrences of a taxon ID
-   * @param {string} idTaxon - The ID of the taxon.
-   * @returns {Promise<Array>} A promise that resolves to the list of media.
-   */
-  fetchMediaOccurence(idTaxon) {
-    const url = `${this.GBIF_ENDPOINT}/occurrence/search?limit=10&mediaType=StillImage&speciesKey=${idTaxon}`;
-    return fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        const medias = json.results.flatMap((element) => element.media);
-        return this.processMedia(medias);
-      });
-  }
-
-  /**
-   * Fetch medias with licence and rights holder informations
-   * @param {Array} medias - The media data to process.
-   * @returns {Array} The list of Media objects.
-   */
-  processMedia(medias) {
-    return Object.values(medias)
-      .filter(
-        (media) =>
-          media.hasOwnProperty("license") &&
-          media.hasOwnProperty("rightsHolder")
-      )
-      .map(
-        (media) =>
-          new Media({
-            url: media.identifier,
-            licence: media.licence,
-            source: `${media.rightsHolder} (${media.license})`,
-          })
-      );
   }
 
   fetchTaxonInfo(idTaxon) {

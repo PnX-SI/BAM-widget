@@ -1,6 +1,8 @@
 import { Connector } from "./connector";
 import { Taxon } from "../models";
 import { NO_IMAGE_URL } from "@/assets/constant";
+import { TAXON_REFERENTIAL } from "../taxonReferential";
+import { getMediaSource, SOURCE_ } from "../media/media";
 class GeoNatureConnector extends Connector {
   EXPORT_API_ENDPOINT;
 
@@ -9,6 +11,8 @@ class GeoNatureConnector extends Connector {
     this.name = "GeoNature";
     // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
     this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
+    this.referential = TAXON_REFERENTIAL.TAXREF;
+    this.mediaSource = this.mediaSource ?? getMediaSource(SOURCE_.TAXREF_ODATA);
   }
 
   fetchOccurrence(params = {}) {
@@ -52,28 +56,6 @@ class GeoNatureConnector extends Connector {
       });
   }
 
-  fetchMedia(idTaxon) {
-    const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${idTaxon}&visibility=PUBLIC`;
-    return fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then(function (json) {
-        let mediaList = [];
-        try {
-          Object.values(json?._embedded?.photos).forEach((media) => {
-            mediaList.push({
-              url: media._links.thumbnail.href,
-              licence: media.licence,
-              source: media.copyright,
-            });
-          });
-          return mediaList;
-        } catch {
-          return [];
-        }
-      });
-  }
   fetchTaxonInfo(idTaxon) {
     const url = `https://odata-inpn.mnhn.fr/taxa/${idTaxon}`; //
     return fetch(url)

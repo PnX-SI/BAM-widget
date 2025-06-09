@@ -23,19 +23,22 @@ const vernacularName = ref(taxon.vernacularName);
 function fetchTaxonImage() {
   speciesPhoto.value = [];
   if (taxon.taxonId) {
-    connector.value.fetchMedia(taxon.taxonId).then((response) => {
+    connector.fetchMedia(taxon.taxonId).then((response) => {
       speciesPhoto.value = response;
     });
   }
 }
 const mediaDisplayed = computed(() => {
+  if (!speciesPhoto.value) {
+    return new Media({ url: NO_IMAGE_URL });
+  }
   return speciesPhoto.value.length == 0
     ? new Media({ url: NO_IMAGE_URL })
     : randomChoice(speciesPhoto.value);
 });
 
 function refreshVernacularName() {
-  connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
+  connector.fetchVernacularName(taxon.taxonId).then((name) => {
     if (name) {
       vernacularName.value = name.split(",")[0];
     }
@@ -54,15 +57,16 @@ watch(lang, () => {
   <TaxonThumbnail
     v-if="mode == 'gallery'"
     :media="mediaDisplayed"
-    :vernacular-name="vernacularName ?? taxon.acceptedScientificName"
+    :vernacular-name="vernacularName || taxon.acceptedScientificName"
     :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
+    :accepted-scientific-name="taxon.acceptedScientificName"
   >
   </TaxonThumbnail>
   <TaxonDetailed
     v-else
     :media="mediaDisplayed"
     :accepted-scientific-name="taxon.acceptedScientificName"
-    :vernacular-name="vernacularName ?? taxon.acceptedScientificName"
+    :vernacular-name="vernacularName || taxon.acceptedScientificName"
     :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
     :nb-observations="taxon?.nbObservations"
     :last-seen-date="taxon?.lastSeenDate"

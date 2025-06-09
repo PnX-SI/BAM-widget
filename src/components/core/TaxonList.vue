@@ -2,7 +2,6 @@
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Loading from "@/components/commons/Loading.vue";
-import Pagination from "@/components/commons/Pagination.vue";
 import SortBy from "../commons/SortBy.vue";
 import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";
@@ -101,10 +100,7 @@ const speciesListShowed = computed(() => {
   return sortArray(filteredSpecies, {
     by: sortBy.value,
     order: orderBy.value,
-  }).slice(
-    pageIndex.value * itemsPerPage.value,
-    (pageIndex.value + 1) * itemsPerPage.value
-  );
+  }).slice(0, (pageIndex.value + 1) * itemsPerPage.value);
 });
 
 const fetchSpeciesList = (wkt) => {
@@ -113,7 +109,7 @@ const fetchSpeciesList = (wkt) => {
   loadingObservations = true;
   loadingError = false;
   speciesList.value = [];
-  connector.value
+  connector
     .fetchOccurrence({
       geometry: wkt,
       dateMin: dateMin.value,
@@ -132,13 +128,21 @@ const fetchSpeciesList = (wkt) => {
     });
 };
 
-watch(pageIndex, () => {
-  document.getElementById("taxon-list-content").scrollTo({ top: 0, left: 0 });
-});
-
 watch(searchString, () => {
   pageIndex.value = 0;
 });
+
+function onScroll(event) {
+  const container = event.target;
+  const threshold = 50; // Seuil en pixels pour déclencher le chargement
+
+  if (
+    container.scrollTop + container.clientHeight >=
+    container.scrollHeight - threshold
+  ) {
+    pageIndex.value++;
+  }
+}
 
 watch([wkt, class_, dateMin, dateMax, connector], () => {
   if (wkt.value) {
@@ -194,7 +198,7 @@ if (wkt.value) {
       <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
-      <div id="taxon-list-content" :class="classNames">
+      <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
         <div class="justify-content-center toggleMode">
           <button class="btn btn-secondary" @click="toggleMode()">
             <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
@@ -208,14 +212,7 @@ if (wkt.value) {
         />
       </div>
     </div>
-    <div v-if="speciesListShowed.length" class="card-footer">
-      <Pagination
-        :pageIndex="pageIndex"
-        :total-items="speciesList.length"
-        :itemPerPage="itemsPerPage"
-        @update:page="(index) => (pageIndex = index)"
-      />
-    </div>
+
     <div id="data-source-credits">
       {{ $t("source.title") }} {{ connector.name }}
       <BTooltip>
