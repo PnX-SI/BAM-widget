@@ -4,6 +4,7 @@ import { Media } from "@/lib/models";
 const props = defineProps({
   media: { type: Media },
   vernacularName: { type: String },
+  acceptedScientificName: { type: String },
   urlDetailPage: { type: String },
 });
 </script>
@@ -25,6 +26,16 @@ const props = defineProps({
         >
           <span>{{ props.vernacularName }} </span></a
         >
+        <BPopover
+          :click="true"
+          :close-on-hide="true"
+          :delay="{ show: 0, hide: 0 }"
+        >
+          <template #target>
+            <i class="bi bi-info-circle-fill info"></i>
+          </template>
+          {{ props.acceptedScientificName }}
+        </BPopover>
 
         <BPopover
           v-if="props.media.source"
@@ -62,6 +73,14 @@ const props = defineProps({
   position: absolute;
   bottom: 5px;
   right: 20px;
+  color: #fff;
+  text-shadow: none;
+}
+.info {
+  margin-left: 0.2em;
+  position: absolute;
+  bottom: 5px;
+  left: 15px;
   color: #fff;
   text-shadow: none;
 }
