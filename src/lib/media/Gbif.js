@@ -28,6 +28,37 @@ export class GBIFMediaSource extends MediaSource {
       });
   }
 
+  fetchSound(taxonID, connector) {
+    if (!this.isCompatible(connector)) {
+      throw new Error(
+        `The connector ${connector.name} is not available for the GBIF Media Source`
+      );
+    }
+    const url = `${connector.GBIF_ENDPOINT}/occurrence/search?limit=10&mediaType=Sound&speciesKey=${taxonID}`;
+    return fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.results.length > 0) {
+          const media = data.results[0].media[0];
+          for (let occ of data.results) {
+            for (let media of occ["media"]) {
+              if (
+                !["png", "jpg", "jpeg", "bmp", "gif"].includes(
+                  media.identifier.split(".").pop()
+                )
+              )
+                return new Media({
+                  url: media.identifier,
+                  typeMedia: "sound",
+                  license: media.license,
+                  source: `${media.rightsHolder} (${media.license})`,
+                });
+            }
+          }
+        }
+      });
+  }
+
   /**
    * Fetch medias with licence and rights holder informations
    * @param {Array} medias - The media data to process.
@@ -44,8 +75,9 @@ export class GBIFMediaSource extends MediaSource {
         (media) =>
           new Media({
             url: media.identifier,
-            licence: media.licence,
+            license: media.licence,
             source: `${media.rightsHolder} (${media.license})`,
+            typeMedia: "image",
           })
       );
   }

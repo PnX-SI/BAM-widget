@@ -18,6 +18,7 @@ const props = defineProps({
 
 const taxon = props.taxon;
 const speciesPhoto = ref([]);
+const speciesAudio = ref(null);
 const vernacularName = ref(taxon.vernacularName);
 
 function fetchTaxonImage() {
@@ -28,12 +29,23 @@ function fetchTaxonImage() {
     });
   }
 }
+function fetchTaxonAudio() {
+  speciesAudio.value = null;
+  if (taxon.taxonId) {
+    connector.mediaSource
+      .fetchSound(taxon.taxonId, connector)
+      .then((response) => {
+        speciesAudio.value = response;
+        console.log(speciesAudio.value);
+      });
+  }
+}
 const mediaDisplayed = computed(() => {
   if (!speciesPhoto.value) {
-    return new Media({ url: NO_IMAGE_URL });
+    return new Media({ url: NO_IMAGE_URL, typeMedia: "image" });
   }
   return speciesPhoto.value.length == 0
-    ? new Media({ url: NO_IMAGE_URL })
+    ? new Media({ url: NO_IMAGE_URL, typeMedia: "image" })
     : randomChoice(speciesPhoto.value);
 });
 
@@ -46,6 +58,7 @@ function refreshVernacularName() {
 }
 
 fetchTaxonImage();
+fetchTaxonAudio();
 refreshVernacularName();
 
 watch(lang, () => {
@@ -56,7 +69,8 @@ watch(lang, () => {
 <template>
   <TaxonThumbnail
     v-if="mode == 'gallery'"
-    :media="mediaDisplayed"
+    :picture="mediaDisplayed"
+    :audio="speciesAudio"
     :vernacular-name="vernacularName || taxon.acceptedScientificName"
     :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
     :accepted-scientific-name="taxon.acceptedScientificName"
@@ -64,7 +78,8 @@ watch(lang, () => {
   </TaxonThumbnail>
   <TaxonDetailed
     v-else
-    :media="mediaDisplayed"
+    :picture="mediaDisplayed"
+    :audio="speciesAudio"
     :accepted-scientific-name="taxon.acceptedScientificName"
     :vernacular-name="vernacularName || taxon.acceptedScientificName"
     :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"

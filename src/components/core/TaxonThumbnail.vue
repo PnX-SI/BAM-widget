@@ -1,20 +1,24 @@
 <script setup>
 import { Media } from "@/lib/models";
+import { useTemplateRef } from "vue";
 
 const props = defineProps({
-  media: { type: Media },
+  picture: { type: Media },
+  audio: { type: Media },
   vernacularName: { type: String },
   acceptedScientificName: { type: String },
   urlDetailPage: { type: String },
 });
+
+const audio = useTemplateRef("audio");
 </script>
 <template>
   <div class="col card thumbnail">
     <img
       class="card-img"
-      :src="props.media?.url"
-      :alt="props.media?.url"
-      :title="'Source: ' + props.media?.source"
+      :src="props.picture?.url"
+      :alt="props.picture?.url"
+      :title="'Source: ' + props.picture?.source"
     />
 
     <div class="card-img-overlay">
@@ -26,19 +30,14 @@ const props = defineProps({
         >
           <span>{{ props.vernacularName }} </span></a
         >
+        <div class="player">
+          <SingleButtonAudioPlayer
+            v-if="props.audio"
+            :audio="props.audio"
+          ></SingleButtonAudioPlayer>
+        </div>
         <BPopover
-          :click="true"
-          :close-on-hide="true"
-          :delay="{ show: 0, hide: 0 }"
-        >
-          <template #target>
-            <i class="bi bi-info-circle-fill info"></i>
-          </template>
-          {{ props.acceptedScientificName }}
-        </BPopover>
-
-        <BPopover
-          v-if="props.media.source"
+          v-if="props.picture.source"
           :click="true"
           :close-on-hide="true"
           :delay="{ show: 0, hide: 0 }"
@@ -46,7 +45,7 @@ const props = defineProps({
           <template #target>
             <i class="bi bi-c-square-fill copyright-icon"></i>
           </template>
-          {{ props.media.source }}
+          {{ props.picture.source }}
         </BPopover>
       </div>
     </div>
@@ -76,12 +75,13 @@ const props = defineProps({
   color: #fff;
   text-shadow: none;
 }
-.info {
+.player {
   margin-left: 0.2em;
   position: absolute;
   bottom: 5px;
   left: 15px;
-  color: #fff;
+  color: #fff !important;
   text-shadow: none;
+  font-size: 1.4rem;
 }
 </style>

@@ -63,6 +63,7 @@ function fetchImageFromWikidata(entityId) {
         new Media({
           url: imageUrl,
           source: "Wikidata",
+          typeMedia:'image'
         }),
       ];
     });

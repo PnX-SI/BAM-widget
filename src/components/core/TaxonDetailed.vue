@@ -2,25 +2,27 @@
 import { Media } from "@/lib/models";
 
 const props = defineProps({
-  media: { type: Media },
+  picture: { type: Media },
+  audio: { type: Media },
   vernacularName: { type: String },
   acceptedScientificName: { type: String },
   urlDetailPage: { type: String },
   nbObservations: { type: Number },
   lastSeenDate: { type: Object },
 });
+
 </script>
 <template>
   <div class="col">
     <div class="card h-100 mb-2">
-      <div class="taxon-photo" :class="props.media.url ? '' : 'placeholder'">
+      <div class="taxon-photo" :class="props.picture.url ? '' : 'placeholder'">
         <img
-          :src="props.media?.url"
-          :alt="props.media?.url"
-          :title="'Source: ' + props.media?.source"
+          :src="props.picture?.url"
+          :alt="props.picture?.url"
+          :title="'Source: ' + props.picture?.source"
         />
-        <span class="caption" v-if="props.media.source">{{
-          props.media.source
+        <span class="caption" v-if="props.picture.source">{{
+          props.picture.source
         }}</span>
       </div>
 
@@ -50,6 +52,9 @@ const props = defineProps({
             </a>
           </small>
           <br />
+      
+            <audio v-if="props.audio" class="mt-2" controls :src="props.audio.url" ref="audio"></audio>
+       
         </div>
       </div>
       <div class="card-footer">

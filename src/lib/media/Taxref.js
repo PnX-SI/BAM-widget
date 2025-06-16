@@ -20,8 +20,9 @@ export class TaxrefODATA extends MediaSource {
             mediaList.push(
               new Media({
                 url: media._links.thumbnail.href,
-                licence: media.licence,
+                license: media.licence,
                 source: media.copyright,
+                typeMedia: 'image'
               })
             );
           });

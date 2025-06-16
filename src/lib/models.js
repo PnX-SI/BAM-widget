@@ -34,11 +34,12 @@ class Media {
     // Required properties
     this.url = mediaInfo.url;
     this.source = mediaInfo.source;
+    this.typeMedia=mediaInfo.typeMedia;
 
     // Optional properties with default values
-    const { licence = "", author = "" } = mediaInfo;
+    const { license = "", author = "" } = mediaInfo;
 
-    this.licence = licence;
+    this.license = license;
     this.author = author;
   }
 }
