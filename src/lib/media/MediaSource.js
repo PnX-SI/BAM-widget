@@ -18,6 +18,13 @@ export class MediaSource {
     }
     throw new Error("Not implemented");
   }
+  fetchSound(taxonID, connector) {
+    if (!this.isCompatible(connector)) {
+      throw new Error("This media source is not available !");
+    }
+    return new Promise((_)=>{return null});
+  }
+
   isCompatible(connector) {
     throw new Error("Not Implemented");
   }
