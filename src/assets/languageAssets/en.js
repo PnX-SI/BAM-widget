@@ -30,6 +30,7 @@ const messagesEN = {
     filters: "Filters",
     showFilters: "Show Filters",
     filtersTitle: "Filters",
+    mapEditable: "Editable map",
     radius: "Radius",
     bufferSize: "Buffer Size:",
     dateMin: "Date Min",

@@ -32,6 +32,7 @@ const messagesFR = {
     filters: "Filtres",
     showFilters: "Afficher les filtres",
     filtersTitle: "Filtres",
+    mapEditable: "Carte éditable",
     radius: "Rayon",
     bufferSize: "Taille du buffer :",
     dateMin: "Date Min",

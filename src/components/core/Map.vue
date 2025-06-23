@@ -32,12 +32,12 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt, sourceGeometry } = ParameterStore.getInstance();
+const { radius, wkt, sourceGeometry, mapEditable } =
+  ParameterStore.getInstance();
 
 // Component Attributes
 const map = shallowRef();
 const geometry = shallowRef(new L.FeatureGroup());
-const editable = ref(props.editable);
 let drawEventData = null;
 
 // Computed Properties
@@ -47,6 +47,11 @@ const style = computed(() => `height: ${props.height};`);
 // Watchers
 watch(wkt, updateGeometryFromWKT);
 watch([radius, geometry], updateGeometry);
+watch(mapEditable, () => {
+  map.value.off();
+  map.value.remove();
+  setupMap();
+});
 
 // Functions
 function updateGeometryFromWKT() {
@@ -107,7 +112,7 @@ function setupMap() {
     focusOnGeometry();
   }
 
-  if (editable.value) {
+  if (mapEditable.value) {
     map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
     new LocateControl().addTo(map.value);
   }

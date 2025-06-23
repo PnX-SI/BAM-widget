@@ -26,6 +26,7 @@ class ParameterStore {
     this.itemsPerPage = ref(10);
     this.nbTaxonPerLine = ref(null);
     this.showFilters = ref(true);
+    this.mapEditable = ref(true);
     this.lang = locale;
     this.mode = ref("detailedList");
     this.sourceGeometry = ref(null);
@@ -35,7 +36,7 @@ class ParameterStore {
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode class connector"
+    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode class connector mapEditable"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -82,6 +83,7 @@ class ParameterStore {
     this.setParameterFromUrl("itemsPerPage", (value) => parseInt(value));
     this.setParameterFromUrl("nbTaxonPerLine", (value) => parseInt(value));
     this.setParameterFromUrl("showFilters", (value) => value === "true");
+    this.setParameterFromUrl("mapEditable", (value) => value === "true");
     this.setParameterFromUrl("lang", (value) => {
       if (availableLocales.includes(value)) {
         return value;

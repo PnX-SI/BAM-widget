@@ -36,7 +36,6 @@ function fetchTaxonAudio() {
       .fetchSound(taxon.taxonId, connector)
       .then((response) => {
         speciesAudio.value = response;
-        console.log(speciesAudio.value);
       });
   }
 }

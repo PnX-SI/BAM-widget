@@ -7,8 +7,10 @@ import BufferSizeFilter from "./filters/BufferSizeFilter.vue";
 import SourceFilter from "./filters/SourceFilter.vue";
 
 import MediaSourceSelector from "./filters/MediaSourceSelector.vue";
+import { watch } from "vue";
 
-const { dateMin, dateMax, showFilters } = ParameterStore.getInstance();
+const { dateMin, dateMax, showFilters, mapEditable } =
+  ParameterStore.getInstance();
 </script>
 
 <template>
@@ -45,6 +47,11 @@ const { dateMin, dateMax, showFilters } = ParameterStore.getInstance();
         <div class="col mt-3">
           <BFormCheckbox switch v-model="showFilters">{{
             $t("showFilters")
+          }}</BFormCheckbox>
+        </div>
+        <div class="col mt-3">
+          <BFormCheckbox switch v-model="mapEditable">{{
+            $t("mapEditable")
           }}</BFormCheckbox>
         </div>
         <div class="col mt-3">
