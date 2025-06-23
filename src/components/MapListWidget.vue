@@ -11,7 +11,7 @@ import Map from "./core/Map.vue";
         <Map height="100vh" :editable="true" />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
-        <TaxonList :nbTaxonPerLine="2" />
+        <TaxonList :nbTaxonPerLine="2" style="height: 100vh" />
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@ const config = ParameterStore.getInstance();
 <template>
   <div>
     <div v-if="config.wkt.value.length > 0">
-      <TaxonList :nbTaxonPerLine="4" />
+      <TaxonList :nbTaxonPerLine="4" style="height: 100vh" />
     </div>
     <div v-else>
       <h2 class="col-12 text-center m-3">Aucune géométrie fournie !</h2>
