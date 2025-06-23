@@ -6,15 +6,21 @@ const props = defineProps({
   audio: { type: Media, required: true },
 });
 
-const audio = useTemplateRef("audio");
+const audio = new Audio(props.audio.url);
 const play = ref(false);
+
+audio.addEventListener("ended", (e) => {
+  audio.currentTime = 0;
+  play.value = false;
+});
 
 function toggle() {
   if (play.value) {
-    audio.value.pause();
+    audio.pause();
+    audio.currentTime = 0;
     play.value = false;
   } else {
-    audio.value.play();
+    audio.play();
     play.value = true;
   }
 }
@@ -24,10 +30,4 @@ function toggle() {
     @click="toggle()"
     :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
   ></i>
-  <audio
-    controls
-    ref="audio"
-    style="display: none"
-    :src="props.audio.url"
-  ></audio>
 </template>
