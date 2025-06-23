@@ -8,7 +8,6 @@ const props = defineProps({
 });
 
 const pageIndex = ref(props.pageIndex);
-const itemsPerPage = ref(props.itemPerPage);
 const totalItems = ref(props.totalItems);
 
 const emit = defineEmits(["update:page"]);
@@ -48,7 +47,7 @@ function decrementPage() {
 }
 
 const maxNumberOfPages = computed(() => {
-  return Math.ceil(totalItems.value / itemsPerPage.value);
+  return Math.ceil(totalItems.value / 20);
 });
 
 const pageToShow = computed(() => {

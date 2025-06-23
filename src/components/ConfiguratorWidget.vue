@@ -2,7 +2,7 @@
 import "leaflet/dist/leaflet.css";
 import Map from "@/components/core/Map.vue";
 import TaxonList from "@/components/core/TaxonList.vue";
-import Filters from "@/components/core/Filters.vue";
+import Parameters from "@/components/core/Parameters.vue";
 import Share from "./core/Share.vue";
 import LanguageSwitch from "./commons/LanguageSwitch.vue";
 import Intro from "./core/Intro.vue";
@@ -36,11 +36,11 @@ import Intro from "./core/Intro.vue";
       <!-- Intro & Parameters -->
       <div class="col-12 col-lg-3 col-md-2">
         <Intro class="mb-2"></Intro>
-        <Filters />
+        <Parameters />
       </div>
       <!-- Map -->
       <div class="col-12 col-lg-6 col-md-6">
-        <Map height="100vh" />
+        <Map height="80vh" />
       </div>
       <!-- Taxon list -->
       <div class="col-12 col-lg-3 col-md-4">
@@ -53,7 +53,7 @@ import Intro from "./core/Intro.vue";
 <script type="module"></script>
 
 <style scoped>
-.row div {
+.row > div {
   max-height: 80vh;
 }
 </style>

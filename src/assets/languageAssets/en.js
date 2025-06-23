@@ -29,6 +29,10 @@ const messagesEN = {
     parameters: "Parameters",
     filters: "Filters",
     showFilters: "Show Filters",
+    RefreshFilters: "Refresh parameters",
+    IndicateGeoJSONUrl: "Indicate a URL towards a GeoJSON",
+    TaxonListModeSelection: "Taxon display mode",
+    UseGeoJSONSource: "Use a GeoJSON from the web",
     filtersTitle: "Filters",
     mapEditable: "Editable map",
     radius: "Radius",
@@ -86,6 +90,9 @@ const messagesEN = {
       seeMore: "See more",
       class: "Taxon's class",
     },
+    galleryMode: "Gallery",
+    detailedList: "Detailed",
+    numberOfTaxonPerLine: "Number of taxons per line",
   },
 };
 

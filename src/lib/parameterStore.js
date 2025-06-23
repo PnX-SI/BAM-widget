@@ -1,4 +1,4 @@
-import { reactive, ref, watch } from "vue";
+import { ref, shallowRef, watch } from "vue";
 import { getConnector } from "./connectors/utils";
 import { useRoute, useRouter } from "vue-router";
 import { parse, stringify } from "wellknown";
@@ -22,8 +22,7 @@ class ParameterStore {
     this.wkt = ref("");
     this.dateMin = ref(null);
     this.dateMax = ref(null);
-    this.connector = reactive(getConnector(null, paramsFromUrl));
-    this.itemsPerPage = ref(10);
+    this.connector = shallowRef(getConnector(null, paramsFromUrl));
     this.nbTaxonPerLine = ref(null);
     this.showFilters = ref(true);
     this.mapEditable = ref(true);
@@ -36,7 +35,7 @@ class ParameterStore {
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax itemsPerPage nbTaxonPerLine showFilters lang mode class connector mapEditable"
+    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -76,11 +75,10 @@ class ParameterStore {
       getConnector(value, { ...paramsFromUrl })
     );
     this.setParameterFromUrl("class", (value) =>
-      Object.keys(this.connector.taxonClass2SourceID)?.includes(value)
+      Object.keys(this.connector.value.taxonClass2SourceID)?.includes(value)
         ? value
         : null
     );
-    this.setParameterFromUrl("itemsPerPage", (value) => parseInt(value));
     this.setParameterFromUrl("nbTaxonPerLine", (value) => parseInt(value));
     this.setParameterFromUrl("showFilters", (value) => value === "true");
     this.setParameterFromUrl("mapEditable", (value) => value === "true");
@@ -118,7 +116,7 @@ class ParameterStore {
         params[key] = value.value;
       });
     params["connector"] = this.connector.name;
-    params = { ...params, ...this.connector.getParams() };
+    params = { ...params, ...this.connector.value.getParams() };
 
     if (params?.sourceGeometry != null && params?.wkt) {
       delete params["wkt"];
@@ -126,6 +124,22 @@ class ParameterStore {
     return params;
   }
 
+  static clearParameters(route, router) {
+    // TODO clean this up !
+    router.replace({ path: route.path, query: {} });
+    ParameterStore.instance.radius.value = 1;
+    ParameterStore.instance.wkt.value = "";
+    ParameterStore.instance.dateMin.value = null;
+    ParameterStore.instance.dateMax.value = null;
+    ParameterStore.instance.connector.value = getConnector(null, {});
+    ParameterStore.instance.nbTaxonPerLine.value = null;
+    ParameterStore.instance.showFilters.value = true;
+    ParameterStore.instance.mapEditable.value = true;
+    ParameterStore.instance.mode.value = "detailedList";
+    ParameterStore.instance.sourceGeometry.value = null;
+    ParameterStore.instance.class.value = null;
+    ParameterStore.instance.initializeFromUrl();
+  }
   static getInstance() {
     if (!ParameterStore.instance) {
       ParameterStore.instance = new ParameterStore();

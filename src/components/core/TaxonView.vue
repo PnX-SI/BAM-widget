@@ -24,7 +24,7 @@ const vernacularName = ref(taxon.vernacularName);
 function fetchTaxonImage() {
   speciesPhoto.value = [];
   if (taxon.taxonId) {
-    connector.fetchMedia(taxon.taxonId).then((response) => {
+    connector.value.fetchMedia(taxon.taxonId).then((response) => {
       speciesPhoto.value = response;
     });
   }
@@ -32,8 +32,8 @@ function fetchTaxonImage() {
 function fetchTaxonAudio() {
   speciesAudio.value = null;
   if (taxon.taxonId) {
-    connector.mediaSource
-      .fetchSound(taxon.taxonId, connector)
+    connector.value.mediaSource
+      .fetchSound(taxon.taxonId, connector.value)
       .then((response) => {
         speciesAudio.value = response;
       });
@@ -49,7 +49,7 @@ const mediaDisplayed = computed(() => {
 });
 
 function refreshVernacularName() {
-  connector.fetchVernacularName(taxon.taxonId).then((name) => {
+  connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
     if (name) {
       vernacularName.value = name.split(",")[0];
     }

@@ -9,21 +9,12 @@ import ParameterStore from "@/lib/parameterStore";
 import TaxonView from "./TaxonView.vue";
 
 const { t } = useI18n();
-const {
-  wkt,
-  dateMin,
-  dateMax,
-  nbTaxonPerLine,
-  showFilters,
-  itemsPerPage,
-  connector,
-  mode,
-} = ParameterStore.getInstance();
+const { wkt, dateMin, dateMax, nbTaxonPerLine, showFilters, connector, mode } =
+  ParameterStore.getInstance();
 
 const class_ = ParameterStore.getInstance().class;
 
 const props = defineProps({
-  itemsPerPage: Number,
   nbTaxonPerLine: {
     type: Number,
     default: 1,
@@ -100,7 +91,7 @@ const speciesListShowed = computed(() => {
   return sortArray(filteredSpecies, {
     by: sortBy.value,
     order: orderBy.value,
-  }).slice(0, (pageIndex.value + 1) * itemsPerPage.value);
+  }).slice(0, (pageIndex.value + 1) * 20);
 });
 
 const fetchSpeciesList = (wkt) => {
@@ -109,7 +100,7 @@ const fetchSpeciesList = (wkt) => {
   loadingObservations = true;
   loadingError = false;
   speciesList.value = [];
-  connector
+  connector.value
     .fetchOccurrence({
       geometry: wkt,
       dateMin: dateMin.value,
@@ -145,6 +136,7 @@ function onScroll(event) {
 }
 
 watch([wkt, class_, dateMin, dateMax, connector], () => {
+  speciesList.value = [];
   if (wkt.value) {
     fetchSpeciesList(wkt.value);
   }
@@ -230,7 +222,7 @@ if (wkt.value) {
 <style scoped>
 #taxon-list {
   padding: 0;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
 }

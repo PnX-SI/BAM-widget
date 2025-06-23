@@ -4,9 +4,15 @@ import { ref, watch } from "vue";
 import { getMediaSource } from "@/lib/media/media";
 const { connector } = ParameterStore.getInstance();
 
-const mediaSourceID = ref(connector.mediaSource.id);
+const mediaSourceID = ref(connector.value.mediaSource.id);
+watch(connector, () => {
+  mediaSourceID.value = connector.value.mediaSource.id;
+});
 watch(mediaSourceID, () => {
-  connector.mediaSource = getMediaSource(mediaSourceID.value);
+  connector.value = new connector.value.constructor({
+    ...connector.value.getParams(),
+    ...{ mediaSource: getMediaSource(mediaSourceID.value) },
+  });
 });
 </script>
 <template>

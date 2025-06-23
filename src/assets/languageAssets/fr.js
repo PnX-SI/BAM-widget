@@ -31,6 +31,10 @@ const messagesFR = {
     parameters: "Paramètres",
     filters: "Filtres",
     showFilters: "Afficher les filtres",
+    RefreshFilters: "Rafraichir les paramétres",
+    IndicateGeoJSONUrl: "Indiquer une URL vers un GeoJSON",
+    TaxonListModeSelection: "Mode d'affichage des taxons",
+    UseGeoJSONSource: "Utiliser une source GeoJSON",
     filtersTitle: "Filtres",
     mapEditable: "Carte éditable",
     radius: "Rayon",
@@ -88,6 +92,9 @@ const messagesFR = {
       seeMore: "En savoir plus",
       class: "Classe du Taxon",
     },
+    galleryMode: "Galerie",
+    detailedList: "Détaillé",
+    numberOfTaxonPerLine: "Nombre de taxons par ligne",
   },
 };
 
