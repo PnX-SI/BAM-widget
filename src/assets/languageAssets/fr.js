@@ -102,6 +102,7 @@ const messagesFR = {
       default:"Défaut"
     },
     numberOfTaxonPerLine: "Nombre de taxons par ligne",
+    widgetPreview:"Prévisualisation du widget"
   },
 };
 

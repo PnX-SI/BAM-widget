@@ -100,6 +100,7 @@ const messagesEN = {
       default:"Défaut"
     },
     numberOfTaxonPerLine: "Number of taxons per line",
+    widgetPreview:"Widget preview"
   },
 };
 

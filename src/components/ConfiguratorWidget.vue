@@ -6,6 +6,11 @@ import Parameters from "@/components/core/Parameters.vue";
 import Share from "./core/Share.vue";
 import LanguageSwitch from "./commons/LanguageSwitch.vue";
 import Intro from "./core/Intro.vue";
+import ParameterStore from "@/lib/parameterStore";
+
+const {
+  widgetType
+} = ParameterStore.getInstance();
 </script>
 
 <template>
@@ -34,17 +39,14 @@ import Intro from "./core/Intro.vue";
   <main class="container-fluid">
     <div class="row">
       <!-- Intro & Parameters -->
-      <div class="col-12 col-lg-3 col-md-2">
+      <div class="col-12 col-lg-3 col-md-2" style="height: 80vh;">
         <Intro class="mb-2"></Intro>
         <Parameters />
       </div>
-      <!-- Map -->
-      <div class="col-12 col-lg-6 col-md-6">
-        <Map height="80vh" />
-      </div>
-      <!-- Taxon list -->
-      <div class="col-12 col-lg-3 col-md-4">
-        <TaxonList :nb-taxon-per-line="1" />
+      <div class="col" id="preview" >
+        <h3>{{ $t("widgetPreview") }}</h3>
+        <ListWidget height="70vh" v-if="widgetType == 'list'"></ListWidget>
+        <MapListWidget height="70vh" v-else></MapListWidget>
       </div>
     </div>
   </main>
@@ -54,6 +56,29 @@ import Intro from "./core/Intro.vue";
 
 <style scoped>
 .row > div {
-  max-height: 80vh;
+  max-height: 83vh;
 }
+#preview{
+  padding-top: 0.5em;
+  background-color: #efefef;
+  border-radius: 10px;
+  margin-right: 0.5em;
+  height: 82.5vh;
+
+  h3{
+    color: #666;
+    width: max-content;
+    padding: 0.3em;
+    border-radius: 10px;
+
+  }
+}
+@media screen and (max-width: 770px) {
+  #preview {
+
+    margin-top: 4em;
+    margin-left: 0.5em;
+  }
+}
+
 </style>
