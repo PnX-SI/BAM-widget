@@ -147,7 +147,7 @@ class GbifConnector extends Connector {
   }
 
   fetchTaxonInfo(idTaxon) {
-    const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}?language=${this.language}`;
+    const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}?language=${this.language}`; // FIXME: this.language is not defined
     return fetch(url)
       .then((response) => response.json())
       .then((json) => ({
