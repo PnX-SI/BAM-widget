@@ -32,6 +32,7 @@ const messagesEN = {
     RefreshFilters: "Refresh parameters",
     IndicateGeoJSONUrl: "Indicate a URL towards a GeoJSON",
     TaxonListModeSelection: "Taxon display mode",
+    widgetTypeSelection: "Widget display mode",
     UseGeoJSONSource: "Use a GeoJSON from the web",
     filtersTitle: "Filters",
     mapEditable: "Editable map",
@@ -94,6 +95,10 @@ const messagesEN = {
     },
     galleryMode: "Gallery",
     detailedList: "Detailed",
+    widgetType:{
+      list:"Liste",
+      default:"Défaut"
+    },
     numberOfTaxonPerLine: "Number of taxons per line",
   },
 };

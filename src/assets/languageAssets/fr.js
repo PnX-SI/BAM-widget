@@ -34,11 +34,12 @@ const messagesFR = {
     RefreshFilters: "Rafraichir les paramétres",
     IndicateGeoJSONUrl: "Indiquer une URL vers un GeoJSON",
     TaxonListModeSelection: "Mode d'affichage des taxons",
+    widgetTypeSelection: "Mode d'affichage du widget",
     UseGeoJSONSource: "Utiliser une source GeoJSON",
     filtersTitle: "Filtres",
     mapEditable: "Carte éditable",
     radius: "Rayon",
-    bufferSize: "Taille du buffer :",
+    bufferSize: "Taille du buffer",
     dateMin: "Date Min",
     dateMax: "Date Max",
     search: "Rechercher",
@@ -96,6 +97,10 @@ const messagesFR = {
     },
     galleryMode: "Galerie",
     detailedList: "Détaillé",
+    widgetType:{
+      list:"Liste",
+      default:"Défaut"
+    },
     numberOfTaxonPerLine: "Nombre de taxons par ligne",
   },
 };

@@ -7,7 +7,7 @@ const { radius } = ParameterStore.getInstance();
 <template>
   <div class="row">
     <label for="radius" class="form-label col-8"
-      >{{ $t("bufferSize") }} {{ radius }} km</label
+      ><strong> {{ $t("bufferSize") }} <i class="fa-solid fa-up-right-and-down-left-from-center"></i></strong> {{ radius }} km</label
     >
     <input
       type="range"

@@ -3,6 +3,9 @@ import HTMLBuilder from "./HTMLBuilder.vue";
 import { computed, ref } from "vue";
 import ParameterStore from "@/lib/parameterStore";
 const config = ParameterStore.getInstance();
+const {
+  widgetType
+} = ParameterStore.getInstance();
 
 const width = ref("100wv");
 const height = ref("100vh");
@@ -16,7 +19,7 @@ const route = computed(() => {
     list: "/list",
     config: "/config",
   };
-  return routes[typeWidget.value] || "/";
+  return routes[widgetType.value] || "/";
 });
 
 const link = computed(() => {
