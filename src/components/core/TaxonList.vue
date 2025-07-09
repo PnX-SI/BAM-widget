@@ -207,7 +207,7 @@ if (wkt.value) {
 
     <div id="data-source-credits">
       {{ $t("source.title") }} {{ connector.name }}
-      <BTooltip>
+      <BTooltip v-if="connector.sourceDetailMessage()">
         <template #target>
           <a style="color: white; text-decoration: underline"
             ><i class="bi bi-info-circle"></i
