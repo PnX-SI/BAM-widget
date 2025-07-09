@@ -29,7 +29,8 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-  forceEditable: { // for parameters, we do not want to disable map edition
+  forceEditable: {
+    // for parameters, we do not want to disable map edition
     type: Boolean,
     default: false,
   },
@@ -43,8 +44,7 @@ const { radius, wkt, sourceGeometry, mapEditable } =
 const map = shallowRef();
 const geometry = shallowRef(new L.FeatureGroup());
 let drawEventData = null;
-const mapID =  (Math.random() + 1).toString(36).substring(7);
-
+const mapID = (Math.random() + 1).toString(36).substring(7);
 
 // Computed Properties
 const wktFromOutside = computed(() => !!wkt.value);
@@ -53,14 +53,13 @@ const style = computed(() => `height: ${props.height};`);
 // Watchers
 watch(wkt, updateGeometryFromWKT);
 watch([radius, geometry], updateGeometry);
-if (!props.forceEditable){
+if (!props.forceEditable) {
   watch(mapEditable, () => {
     map.value.off();
     map.value.remove();
     setupMap();
   });
 }
-
 
 // Functions
 function updateGeometryFromWKT() {
@@ -78,7 +77,7 @@ function focusOnGeometry() {
 
 updateGeometryFromWKT();
 function updateGeometry() {
-  console.log("mapiD",mapID)
+  console.log("mapiD", mapID);
   if (!drawEventData) return;
 
   geometry.value.clearLayers();
@@ -109,7 +108,6 @@ function updateGeometry() {
 }
 
 function setupMap() {
-  
   map.value = L.map(`map-${mapID}`);
   restoreMapState(map.value);
 
@@ -156,7 +154,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class='mapC' :id="`map-${mapID}`" :style="style"></div>
+  <div class="mapC" :id="`map-${mapID}`" :style="style"></div>
 </template>
 
 <style scoped>

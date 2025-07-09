@@ -15,6 +15,8 @@ watch(date, () => {
 });
 </script>
 <template>
-  <label :for="props.id"><strong>{{ props.label }} <i class="fa-solid fa-calendar-days"></i></strong></label>
+  <label :for="props.id"
+    ><strong>{{ props.label }} <i class="fa-solid fa-calendar-days"></i></strong
+  ></label>
   <input :id="props.id" class="form-control" type="date" v-model="date" />
 </template>

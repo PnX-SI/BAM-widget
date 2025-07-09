@@ -3,9 +3,7 @@ import HTMLBuilder from "./HTMLBuilder.vue";
 import { computed, ref } from "vue";
 import ParameterStore from "@/lib/parameterStore";
 const config = ParameterStore.getInstance();
-const {
-  widgetType
-} = ParameterStore.getInstance();
+const { widgetType } = ParameterStore.getInstance();
 
 const width = ref("100wv");
 const height = ref("100vh");

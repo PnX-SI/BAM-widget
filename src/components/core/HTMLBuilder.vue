@@ -2,21 +2,15 @@
 import { computed, ref, watch } from "vue";
 import ParameterStore from "@/lib/parameterStore";
 
-
-
 const width = ref("100wv");
 const height = ref("100vh");
-
 
 const props = defineProps({
   link: String,
   required: true,
 });
 
-const emit = defineEmits([
-  "update:width",
-  "update:height",
-]);
+const emit = defineEmits(["update:width", "update:height"]);
 
 watch([width, height], () => {
   emit("update:width", width.value);

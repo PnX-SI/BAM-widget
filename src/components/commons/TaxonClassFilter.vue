@@ -10,7 +10,11 @@ function updateClass(className) {
 </script>
 
 <template>
-  <label ><strong>{{ $t("taxon.class") }} <i class="fa-solid fa-leaf"></i> <i class="fa-solid fa-paw"></i></strong></label>
+  <label
+    ><strong
+      >{{ $t("taxon.class") }} <i class="fa-solid fa-leaf"></i>
+      <i class="fa-solid fa-paw"></i></strong
+  ></label>
   <div class="">
     <div class="row g-1 mt-1" id="classTaxonFilters">
       <div

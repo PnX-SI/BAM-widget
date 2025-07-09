@@ -30,7 +30,7 @@ class ParameterStore {
     this.mode = ref("detailedList");
     this.sourceGeometry = ref(null);
     this.class = ref(null);
-    this.widgetType = ref("default")
+    this.widgetType = ref("default");
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 

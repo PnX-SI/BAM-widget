@@ -47,19 +47,30 @@ const widgetTypeOptions = computed(() => {
     <div class="card-body">
       <div id="parameters">
         <div class="col text-center">
-          <label>{{ $t('drawGeometry') }} <i class="fa-solid fa-location-dot"></i></label>
-          <Map :forceEditable="true" :editable="true" height="40vh" class="mt-2"></Map>
+          <label
+            >{{ $t("drawGeometry") }} <i class="fa-solid fa-location-dot"></i
+          ></label>
+          <Map
+            :forceEditable="true"
+            :editable="true"
+            height="40vh"
+            class="mt-2"
+          ></Map>
         </div>
 
         <div class="parameter-section">
           <BFormCheckbox switch v-model="showFilters">
-            <strong>{{ $t("showFilters") }} <i class="bi bi-sort-down"></i></strong>
+            <strong
+              >{{ $t("showFilters") }} <i class="bi bi-sort-down"></i
+            ></strong>
           </BFormCheckbox>
         </div>
 
         <div class="parameter-section" v-if="widgetType === 'default'">
           <BFormCheckbox switch v-model="mapEditable">
-            <strong>{{ $t("mapEditable") }} <i class="fa-solid fa-map"></i></strong>
+            <strong
+              >{{ $t("mapEditable") }} <i class="fa-solid fa-map"></i
+            ></strong>
           </BFormCheckbox>
         </div>
         <div class="parameter-section">
@@ -89,10 +100,10 @@ const widgetTypeOptions = computed(() => {
           <TaxonClassFilter />
         </div>
 
-        
-
         <div class="parameter-section">
-          <label>{{ $t("UseGeoJSONSource") }} <i class="fa-solid fa-link"></i></label>
+          <label
+            >{{ $t("UseGeoJSONSource") }} <i class="fa-solid fa-link"></i
+          ></label>
           <BFormInput
             v-model="sourceGeometry"
             :placeholder="$t('IndicateGeoJSONUrl')"
@@ -100,23 +111,34 @@ const widgetTypeOptions = computed(() => {
         </div>
 
         <div class="parameter-section">
-          
-          <label>{{ $t("TaxonListModeSelection") }} <span><i class="fa-solid fa-list"></i> | 
-            <i class="fa-solid fa-grip-vertical"></i></span></label>
+          <label
+            >{{ $t("TaxonListModeSelection") }}
+            <span
+              ><i class="fa-solid fa-list"></i> |
+              <i class="fa-solid fa-grip-vertical"></i></span
+          ></label>
           <BFormSelect v-model="mode" :options="modeOptions" class="mt-1" />
         </div>
 
         <div class="parameter-section">
-          <label>{{ $t("widgetTypeSelection") }} <i class="fa-solid fa-display"></i></label>
-          <BFormSelect v-model="widgetType" :options="widgetTypeOptions" class="mt-1" />
+          <label
+            >{{ $t("widgetTypeSelection") }} <i class="fa-solid fa-display"></i
+          ></label>
+          <BFormSelect
+            v-model="widgetType"
+            :options="widgetTypeOptions"
+            class="mt-1"
+          />
         </div>
 
         <div class="parameter-section">
-          <label>{{ $t("numberOfTaxonPerLine") }} <i class="bi bi-123"></i> </label>
+          <label
+            >{{ $t("numberOfTaxonPerLine") }} <i class="bi bi-123"></i>
+          </label>
           <BFormInput type="number" v-model="nbTaxonPerLine" />
         </div>
 
-        <div class="parameter-section" >
+        <div class="parameter-section">
           <MediaSourceSelector />
         </div>
 
