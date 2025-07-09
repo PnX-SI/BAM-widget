@@ -8,9 +8,7 @@ import LanguageSwitch from "./commons/LanguageSwitch.vue";
 import Intro from "./core/Intro.vue";
 import ParameterStore from "@/lib/parameterStore";
 
-const {
-  widgetType
-} = ParameterStore.getInstance();
+const { widgetType } = ParameterStore.getInstance();
 </script>
 
 <template>
@@ -27,7 +25,6 @@ const {
       <BCollapse id="nav-collapse" is-nav>
         <BNavbarNav class="ms-auto mb-2 mb-lg-0">
           <BNavForm class="d-flex" right>
-            <Share />
             <LanguageSwitch></LanguageSwitch>
           </BNavForm>
         </BNavbarNav>
@@ -39,12 +36,15 @@ const {
   <main class="container-fluid">
     <div class="row">
       <!-- Intro & Parameters -->
-      <div class="col-12 col-lg-3 col-md-2" style="height: 80vh;">
+      <div class="col-12 col-lg-4 col-md-2" style="height: 80vh">
         <Intro class="mb-2"></Intro>
         <Parameters />
       </div>
-      <div class="col" id="preview" >
-        <h3>{{ $t("widgetPreview") }}</h3>
+      <div class="col" id="preview">
+        <div class="d-flex justify-content-start align-items-center">
+          <h3>{{ $t("widgetPreview") }}</h3>
+          <Share />
+        </div>
         <ListWidget height="70vh" v-if="widgetType == 'list'"></ListWidget>
         <MapListWidget height="70vh" v-else></MapListWidget>
       </div>
@@ -58,27 +58,24 @@ const {
 .row > div {
   max-height: 83vh;
 }
-#preview{
+#preview {
   padding-top: 0.5em;
   background-color: #efefef;
   border-radius: 10px;
   margin-right: 0.5em;
   height: 82.5vh;
 
-  h3{
+  h3 {
     color: #666;
     width: max-content;
     padding: 0.3em;
     border-radius: 10px;
-
   }
 }
 @media screen and (max-width: 770px) {
   #preview {
-
     margin-top: 4em;
     margin-left: 0.5em;
   }
 }
-
 </style>

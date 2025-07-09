@@ -3,28 +3,16 @@ const messagesEN = {
     title: "Biodiversity around me",
     subtitle: "Search for species around me",
     howto: "How does it work?",
-    intro: `<p><em>Biodiversity around me</em> is a widget dedicated to
-      <strong>exploring species <i class="bi bi-search"></i></strong>
-      ! This interface allows you to
-      <strong
-        >search species observed in a specific geographic area <i class="bi bi-geo-alt"></i></strong
-      >.
-    </p>
-    <p>
-      <strong>Use the interactive map <i class="bi bi-map"></i></strong>
-      to select the area where you want to perform your search. The
-      <strong
-        ><i class="fa fa-kiwi-bird"></i> list of species
-        <i class="fa fa-leaf"></i
-      ></strong>
-      found in the selected area will be displayed next to the map
-      <i class="bi bi-list-ul"></i>.
-    </p>
-    <p>
-      You can also
-      <strong>share your results <i class="bi bi-share"></i></strong>
-      to collaborate with other users.
-    </p>
+    intro: `*Biodiversity Around Me* is a widget dedicated to **exploring species 🔍**!
+
+This interface allows you to **search for species observed in a specific geographic area 🌍**.
+
+**Use the interactive map 🗺️** to select the area where you want to conduct your search.
+
+The **list of species 🥝🍃** found in the selected area will be displayed next to the map 📋.
+
+You can also **share your results 📤** to collaborate with other users.
+
     `,
     parameters: "Parameters",
     filters: "Filters",
@@ -95,12 +83,12 @@ const messagesEN = {
     },
     galleryMode: "Gallery",
     detailedList: "Detailed",
-    widgetType:{
-      list:"Liste",
-      default:"Défaut"
+    widgetType: {
+      list: "Liste",
+      default: "Défaut",
     },
     numberOfTaxonPerLine: "Number of taxons per line",
-    widgetPreview:"Widget preview"
+    widgetPreview: "Widget preview",
   },
 };
 

@@ -3,31 +3,16 @@ const messagesFR = {
     title: "Biodiversité autour de moi",
     subtitle: "Rechercher des espèces autour de moi",
     howto: "Comment ça marche ?",
-    intro: `<p>
-        <em>Biodiversité autour de moi</em> est un widget dédié à
-        <strong>l'exploration des espèces <i class="bi bi-search"></i></strong>
-        ! Cette interface vous permet de
-        <strong
-          >rechercher les espèces observées dans une zone
-          géographique spécifique <i class="bi bi-geo-alt"></i></strong
-        >.
-      </p>
-      <p>
-        <strong>Utilisez la carte interactive <i class="bi bi-map"></i></strong>
-        pour sélectionner la zone où vous souhaitez effectuer votre recherche.
-        La
-        <strong
-          ><i class="fa fa-kiwi-bird"></i> liste des espèces
-          <i class="fa fa-leaf"></i
-        ></strong>
-        trouvées dans la zone sélectionnée s'affichera à côté de la carte
-        <i class="bi bi-list-ul"></i>.
-      </p>
-      <p>
-        Vous pouvez également
-        <strong>partager vos résultats <i class="bi bi-share"></i></strong>
-        pour collaborer avec d'autres utilisateurs.
-      </p>`,
+    intro: `*Biodiversité autour de moi* est un widget dédié à **l'exploration des espèces 🔍** !
+
+Cette interface vous permet de **rechercher les espèces observées dans une zone géographique spécifique 🌍**.
+
+**Utilisez la carte interactive 🗺️** pour sélectionner la zone où vous souhaitez effectuer votre recherche.
+
+La **liste des espèces 🥝🍃** trouvées dans la zone sélectionnée s'affichera à côté de la carte 📋.
+
+Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'autres utilisateurs.
+`,
     parameters: "Paramètres",
     filters: "Filtres",
     showFilters: "Afficher les filtres",
@@ -97,12 +82,12 @@ const messagesFR = {
     },
     galleryMode: "Galerie",
     detailedList: "Détaillé",
-    widgetType:{
-      list:"Liste",
-      default:"Défaut"
+    widgetType: {
+      list: "Liste",
+      default: "Défaut",
     },
     numberOfTaxonPerLine: "Nombre de taxons par ligne",
-    widgetPreview:"Prévisualisation du widget"
+    widgetPreview: "Prévisualisation du widget",
   },
 };
 
