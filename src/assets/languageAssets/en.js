@@ -74,6 +74,7 @@ const messagesEN = {
       title: "Data Source",
       select: "Select a data source",
       modify: "Change the data source",
+      gbif: "The number of observations and the dates of the latest sightings are based on an aggregation of the latest 30,000 observations made within the selected area.",
     },
     desc: "Décroissant",
     asc: "Croissant",

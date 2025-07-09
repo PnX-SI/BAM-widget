@@ -76,6 +76,7 @@ const messagesFR = {
       title: "Source de données",
       select: "Sélectionner une source",
       modify: "Modifier la source de données",
+      gbif: "Le nombre d'observations et leurs dates sont basés sur une agrégation des 30 000 dernières observations effectuées dans la zone sélectionnée.",
     },
     desc: "Décroissant",
     asc: "Croissant",

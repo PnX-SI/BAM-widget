@@ -6,6 +6,7 @@ import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { WikiDataImageSource } from "../media/Wikidata";
 import { GBIFMediaSource } from "../media/Gbif";
 import { getMediaSource, SOURCE_ } from "../media/media";
+import { useI18n } from "vue-i18n";
 
 const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
 
@@ -184,7 +185,7 @@ class GbifConnector extends Connector {
   }
 
   sourceDetailMessage() {
-    return "The number of observations and the dates of the latest sightings are based on an aggregation of the latest 30,000 observations made within the selected area.";
+    return useI18n().t("source.gbif");
   }
 }
 
