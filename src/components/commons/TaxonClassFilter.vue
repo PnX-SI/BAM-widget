@@ -15,7 +15,7 @@ function updateClass(className) {
       >{{ $t("taxon.class") }} <i class="fa-solid fa-leaf"></i>
       <i class="fa-solid fa-paw"></i></strong
   ></label>
-  <div class="">
+  <div>
     <div class="row g-1 mt-1" id="classTaxonFilters">
       <div
         v-for="value of Object.keys(taxonClassIcons.Animalia)"

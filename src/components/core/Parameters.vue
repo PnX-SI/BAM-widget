@@ -26,8 +26,8 @@ const route = useRoute();
 
 const modeOptions = computed(() => {
   return [
-    { value: "gallery", text: t("galleryMode") },
-    { value: "detailedList", text: t("detailedList") },
+    { value: "gallery", text: t("mode.galleryMode") },
+    { value: "detailedList", text: t("mode.detailedList") },
   ];
 });
 

@@ -9,7 +9,8 @@ import MapListWidget from "./components/MapListWidget.vue";
 import ListWidget from "./components/ListWidget.vue";
 import ConfiguratorWidget from "./components/ConfiguratorWidget.vue";
 import Error404 from "./components/commons/Error404.vue";
-import { VueShowdown } from 'vue-showdown';
+import BrowseData from "./components/BrowseData.vue";
+import { VueShowdown } from "vue-showdown";
 
 import { createWebHashHistory, createRouter } from "vue-router";
 import { createI18n } from "vue-i18n";
@@ -41,6 +42,10 @@ const routes = [
     path: "/config",
     component: ConfiguratorWidget,
   },
+  {
+    path: "/browse",
+    component: BrowseData,
+  },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: Error404 },
 ];
 
@@ -56,4 +61,9 @@ Object.defineProperty(String.prototype, "capitalize", {
   enumerable: false,
 });
 
-createApp(App).use(router).use(i18n).use(createBootstrap()).component('VueShowdown', VueShowdown).mount("#app");
+createApp(App)
+  .use(router)
+  .use(i18n)
+  .use(createBootstrap())
+  .component("VueShowdown", VueShowdown)
+  .mount("#app");

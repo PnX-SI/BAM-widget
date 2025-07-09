@@ -1,36 +1,18 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
-import Map from "@/components/core/Map.vue";
-import TaxonList from "@/components/core/TaxonList.vue";
 import Parameters from "@/components/core/Parameters.vue";
 import Share from "./core/Share.vue";
 import LanguageSwitch from "./commons/LanguageSwitch.vue";
 import Intro from "./core/Intro.vue";
 import ParameterStore from "@/lib/parameterStore";
+import HeaderNav from "./commons/HeaderNav.vue";
 
 const { widgetType } = ParameterStore.getInstance();
 </script>
 
 <template>
   <!-- TOP MENU -->
-  <header>
-    <BNavbar
-      v-b-color-mode="'light'"
-      toggleable="lg"
-      variant="light"
-      class="mb-3"
-    >
-      <BNavbarBrand href="#/config">🐛 🐦 🌱 {{ $t("title") }}</BNavbarBrand>
-      <BNavbarToggle target="nav-collapse" />
-      <BCollapse id="nav-collapse" is-nav>
-        <BNavbarNav class="ms-auto mb-2 mb-lg-0">
-          <BNavForm class="d-flex" right>
-            <LanguageSwitch></LanguageSwitch>
-          </BNavForm>
-        </BNavbarNav>
-      </BCollapse>
-    </BNavbar>
-  </header>
+  <HeaderNav></HeaderNav>
 
   <!-- App -->
   <main class="container-fluid">

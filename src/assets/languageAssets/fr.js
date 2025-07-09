@@ -25,8 +25,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     mapEditable: "Carte éditable",
     radius: "Rayon",
     bufferSize: "Taille du buffer",
-    dateMin: "Date Min",
-    dateMax: "Date Max",
+    dateMin: "Date min",
+    dateMax: "Date max",
     search: "Rechercher",
     reset: "Réinitialiser",
     searchResults: "Résultats de la recherche",
@@ -80,8 +80,10 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       seeMore: "En savoir plus",
       class: "Classe du Taxon",
     },
-    galleryMode: "Galerie",
-    detailedList: "Détaillé",
+    mode: {
+      galleryMode: "Galerie",
+      detailedList: "Détaillé",
+    },
     widgetType: {
       list: "Liste",
       default: "Défaut",
