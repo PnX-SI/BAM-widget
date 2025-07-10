@@ -52,9 +52,14 @@ const props = defineProps({
             </a>
           </small>
           <br />
-      
-            <audio v-if="props.audio" class="mt-2" controls :src="props.audio.url" ref="audio"></audio>
-       
+
+          <audio
+            v-if="props.audio"
+            class="audio"
+            controls
+            :src="props.audio.url"
+            ref="audio"
+          ></audio>
         </div>
       </div>
       <div class="card-footer">
@@ -89,5 +94,10 @@ const props = defineProps({
   background-color: rgba(0, 0, 0, 0.5);
   padding: 5px;
   border-radius: 3px;
+}
+
+.audio {
+  margin-top: 0.5rem;
+  width: 100%;
 }
 </style>
