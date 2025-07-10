@@ -16,7 +16,10 @@ watch(mediaSourceID, () => {
 });
 </script>
 <template>
-  <label for="mediaSourceSelect">{{ $t("media.source") }}</label>
+  <label for="mediaSourceSelect"
+    ><strong>
+      {{ $t("media.source") }} <i class="fa-solid fa-photo-film"></i> </strong
+  ></label>
   <BFormSelect
     id="mediaSourceSelect"
     :options="connector.getCompatibleMediaSource()"

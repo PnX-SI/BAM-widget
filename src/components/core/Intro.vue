@@ -15,11 +15,13 @@ const visible = ref(false);
       </h4>
     </div>
     <BCollapse id="collapse-howto" v-model="visible">
-      <div
-        class="card-body"
-        style="overflow-y: scroll; height: 30vh"
-        v-html="$t('intro')"
-      ></div>
+      <div class="card-body" style="overflow-y: scroll; height: 30vh">
+        <VueShowdown
+          :markdown="$t('intro')"
+          flavor="github"
+          :options="{ emoji: true }"
+        />
+      </div>
     </BCollapse>
   </div>
 </template>

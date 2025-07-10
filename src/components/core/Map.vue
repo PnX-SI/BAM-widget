@@ -29,6 +29,11 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  forceEditable: {
+    // for parameters, we do not want to disable map edition
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Store
@@ -39,6 +44,7 @@ const { radius, wkt, sourceGeometry, mapEditable } =
 const map = shallowRef();
 const geometry = shallowRef(new L.FeatureGroup());
 let drawEventData = null;
+const mapID = (Math.random() + 1).toString(36).substring(7);
 
 // Computed Properties
 const wktFromOutside = computed(() => !!wkt.value);
@@ -47,15 +53,18 @@ const style = computed(() => `height: ${props.height};`);
 // Watchers
 watch(wkt, updateGeometryFromWKT);
 watch([radius, geometry], updateGeometry);
-watch(mapEditable, () => {
-  map.value.off();
-  map.value.remove();
-  setupMap();
-});
+if (!props.forceEditable) {
+  watch(mapEditable, () => {
+    map.value.off();
+    map.value.remove();
+    setupMap();
+  });
+}
 
 // Functions
 function updateGeometryFromWKT() {
   if (wkt.value) {
+    geometry.value.clearLayers();
     let tmp = L.geoJSON().addTo(geometry.value);
     tmp.addData(parse(wkt.value));
     focusOnGeometry();
@@ -68,6 +77,7 @@ function focusOnGeometry() {
 
 updateGeometryFromWKT();
 function updateGeometry() {
+  console.log("mapiD", mapID);
   if (!drawEventData) return;
 
   geometry.value.clearLayers();
@@ -98,7 +108,7 @@ function updateGeometry() {
 }
 
 function setupMap() {
-  map.value = L.map("map");
+  map.value = L.map(`map-${mapID}`);
   restoreMapState(map.value);
 
   L.tileLayer(OPEN_STREET_MAP_URL, {
@@ -144,16 +154,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="map" :style="style"></div>
+  <div class="mapC" :id="`map-${mapID}`" :style="style"></div>
 </template>
 
 <style scoped>
-#map {
+.mapC {
   border-radius: 10px;
 }
 
 @media screen and (max-width: 770px) {
-  #map {
+  .mapC {
     height: 50vh !important;
     margin-bottom: 1em;
     margin-top: 1em;

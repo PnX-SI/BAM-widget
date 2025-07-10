@@ -17,6 +17,7 @@ const {
   mapEditable,
   sourceGeometry,
   mode,
+  widgetType,
   nbTaxonPerLine,
 } = ParameterStore.getInstance();
 
@@ -25,8 +26,15 @@ const route = useRoute();
 
 const modeOptions = computed(() => {
   return [
-    { value: "gallery", text: t("galleryMode") },
-    { value: "detailedList", text: t("detailedList") },
+    { value: "gallery", text: t("mode.galleryMode") },
+    { value: "detailedList", text: t("mode.detailedList") },
+  ];
+});
+
+const widgetTypeOptions = computed(() => {
+  return [
+    { value: "default", text: t("widgetType.default") },
+    { value: "list", text: t("widgetType.list") },
   ];
 });
 </script>
@@ -38,6 +46,33 @@ const modeOptions = computed(() => {
     </h4>
     <div class="card-body">
       <div id="parameters">
+        <div class="col text-center">
+          <label
+            >{{ $t("drawGeometry") }} <i class="fa-solid fa-location-dot"></i
+          ></label>
+          <Map
+            :forceEditable="true"
+            :editable="true"
+            height="40vh"
+            class="mt-2"
+          ></Map>
+        </div>
+
+        <div class="parameter-section">
+          <BFormCheckbox switch v-model="showFilters">
+            <strong
+              >{{ $t("showFilters") }} <i class="bi bi-sort-down"></i
+            ></strong>
+          </BFormCheckbox>
+        </div>
+
+        <div class="parameter-section" v-if="widgetType === 'default'">
+          <BFormCheckbox switch v-model="mapEditable">
+            <strong
+              >{{ $t("mapEditable") }} <i class="fa-solid fa-map"></i
+            ></strong>
+          </BFormCheckbox>
+        </div>
         <div class="parameter-section">
           <BufferSizeFilter />
         </div>
@@ -66,19 +101,9 @@ const modeOptions = computed(() => {
         </div>
 
         <div class="parameter-section">
-          <BFormCheckbox switch v-model="showFilters">
-            {{ $t("showFilters") }}
-          </BFormCheckbox>
-        </div>
-
-        <div class="parameter-section">
-          <BFormCheckbox switch v-model="mapEditable">
-            {{ $t("mapEditable") }}
-          </BFormCheckbox>
-        </div>
-
-        <div class="parameter-section">
-          <label>{{ $t("UseGeoJSONSource") }}</label>
+          <label
+            >{{ $t("UseGeoJSONSource") }} <i class="fa-solid fa-link"></i
+          ></label>
           <BFormInput
             v-model="sourceGeometry"
             :placeholder="$t('IndicateGeoJSONUrl')"
@@ -86,12 +111,30 @@ const modeOptions = computed(() => {
         </div>
 
         <div class="parameter-section">
-          <label>{{ $t("TaxonListModeSelection") }}</label>
+          <label
+            >{{ $t("TaxonListModeSelection") }}
+            <span
+              ><i class="fa-solid fa-list"></i> |
+              <i class="fa-solid fa-grip-vertical"></i></span
+          ></label>
           <BFormSelect v-model="mode" :options="modeOptions" class="mt-1" />
         </div>
 
         <div class="parameter-section">
-          <label>{{ $t("numberOfTaxonPerLine") }}</label>
+          <label
+            >{{ $t("widgetTypeSelection") }} <i class="fa-solid fa-display"></i
+          ></label>
+          <BFormSelect
+            v-model="widgetType"
+            :options="widgetTypeOptions"
+            class="mt-1"
+          />
+        </div>
+
+        <div class="parameter-section">
+          <label
+            >{{ $t("numberOfTaxonPerLine") }} <i class="bi bi-123"></i>
+          </label>
           <BFormInput type="number" v-model="nbTaxonPerLine" />
         </div>
 
@@ -126,7 +169,7 @@ label {
 }
 
 .card-body {
-  height: 50vh;
+  height: 60vh;
   overflow-y: scroll;
 }
 

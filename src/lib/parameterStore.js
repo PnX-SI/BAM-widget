@@ -30,12 +30,13 @@ class ParameterStore {
     this.mode = ref("detailedList");
     this.sourceGeometry = ref(null);
     this.class = ref(null);
+    this.widgetType = ref("default");
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry"
+    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry widgetType"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -89,6 +90,9 @@ class ParameterStore {
     });
     this.setParameterFromUrl("mode", (value) =>
       ["detailedList", "gallery"].includes(value) ? value : "detailedList"
+    );
+    this.setParameterFromUrl("widgetType", (value) =>
+      ["default", "list"].includes(value) ? value : "default"
     );
   }
 

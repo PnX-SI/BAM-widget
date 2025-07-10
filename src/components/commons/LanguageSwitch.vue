@@ -14,3 +14,9 @@
     </select>
   </div>
 </template>
+
+<style lang="css" scoped>
+.input-group{
+  width:auto !important;
+}
+</style>

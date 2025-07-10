@@ -1,25 +1,20 @@
 <script setup>
 import { computed, ref, watch } from "vue";
+import ParameterStore from "@/lib/parameterStore";
 
 const width = ref("100wv");
 const height = ref("100vh");
-const typeWidget = ref("");
 
 const props = defineProps({
   link: String,
   required: true,
 });
 
-const emit = defineEmits([
-  "update:width",
-  "update:height",
-  "update:typeWidget",
-]);
+const emit = defineEmits(["update:width", "update:height"]);
 
-watch([typeWidget, width, height], () => {
+watch([width, height], () => {
   emit("update:width", width.value);
   emit("update:height", height.value);
-  emit("update:typeWidget", typeWidget.value);
 });
 
 const embed = computed(() => {
@@ -54,13 +49,5 @@ const embed = computed(() => {
       aria-label=".form-control-lg example"
       v-model="height"
     />
-  </div>
-  <div class="input-group">
-    <span class="input-group-text">{{ $t("typeWidget.title") }}</span>
-    <select class="form-select" v-model="typeWidget">
-      <option value="">{{ $t("typeWidget.default") }}</option>
-      <option value="list">{{ $t("typeWidget.list") }}</option>
-      <option value="config">{{ $t("typeWidget.config") }}</option>
-    </select>
   </div>
 </template>
