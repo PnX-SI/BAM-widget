@@ -9,7 +9,6 @@ import MapListWidget from "./components/MapListWidget.vue";
 import ListWidget from "./components/ListWidget.vue";
 import ConfiguratorWidget from "./components/ConfiguratorWidget.vue";
 import Error404 from "./components/commons/Error404.vue";
-import BrowseData from "./components/BrowseData.vue";
 import { VueShowdown } from "vue-showdown";
 
 import { createWebHashHistory, createRouter } from "vue-router";
@@ -41,10 +40,6 @@ const routes = [
   {
     path: "/config",
     component: ConfiguratorWidget,
-  },
-  {
-    path: "/browse",
-    component: BrowseData,
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: Error404 },
 ];
