@@ -92,6 +92,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       galleryMode: "Galerie",
       detailedList: "Détaillé",
       hybrid: "Hybride",
+      isTaxonListHybrid: "Mode de la liste de taxon modifiable",
     },
     widgetType: {
       list: "Liste",

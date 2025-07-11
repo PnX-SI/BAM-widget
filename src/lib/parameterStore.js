@@ -32,12 +32,13 @@ class ParameterStore {
     this.sourceGeometry = ref(null);
     this.class = ref(null);
     this.widgetType = ref(WIDGET_TYPE.default);
+    this.hybridTaxonList = ref(true);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry widgetType"
+    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry widgetType hybridTaxonList"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -84,6 +85,7 @@ class ParameterStore {
     this.setParameterFromUrl("nbTaxonPerLine", (value) => parseInt(value));
     this.setParameterFromUrl("showFilters", (value) => value === "true");
     this.setParameterFromUrl("mapEditable", (value) => value === "true");
+    this.setParameterFromUrl("hybridTaxonList", (value) => value === "true");
     this.setParameterFromUrl("lang", (value) => {
       if (availableLocales.includes(value)) {
         return value;

@@ -93,6 +93,7 @@ You can also **share your results 📤** to collaborate with other users.
       galleryMode: "Gallery",
       detailedList: "Detailed",
       hybrid: "Hybrid",
+      isTaxonListHybrid: "Mode de la liste de taxon modifiable",
     },
     widgetType: {
       list: "Liste",

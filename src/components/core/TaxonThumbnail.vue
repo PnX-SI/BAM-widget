@@ -28,7 +28,7 @@ const audio = useTemplateRef("audio");
           :href="props.urlDetailPage"
           target="_blank"
         >
-          <span>{{ props.vernacularName }} </span></a
+          <span>{{ props.vernacularName }}</span></a
         >
         <div class="player">
           <SingleButtonAudioPlayer

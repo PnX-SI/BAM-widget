@@ -10,8 +10,16 @@ import TaxonView from "./TaxonView.vue";
 import { TAXONLIST_DISPLAY_MODE } from "@/lib/enums";
 
 const { t } = useI18n();
-const { wkt, dateMin, dateMax, nbTaxonPerLine, showFilters, connector, mode } =
-  ParameterStore.getInstance();
+const {
+  hybridTaxonList,
+  wkt,
+  dateMin,
+  dateMax,
+  nbTaxonPerLine,
+  showFilters,
+  connector,
+  mode,
+} = ParameterStore.getInstance();
 
 const class_ = ParameterStore.getInstance().class;
 
@@ -195,10 +203,7 @@ if (wkt.value) {
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
       <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
-        <div
-          class="justify-content-center toggleMode"
-          v-if="mode === TAXONLIST_DISPLAY_MODE.hybrid"
-        >
+        <div class="justify-content-center toggleMode" v-if="hybridTaxonList">
           <button class="btn btn-secondary" @click="toggleMode()">
             <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
             <i v-else class="fa-solid fa-grip-vertical"></i>

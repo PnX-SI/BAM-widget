@@ -20,6 +20,7 @@ const {
   mode,
   widgetType,
   nbTaxonPerLine,
+  hybridTaxonList,
 } = ParameterStore.getInstance();
 
 const router = useRouter();
@@ -31,10 +32,6 @@ const modeOptions = computed(() => {
     {
       value: TAXONLIST_DISPLAY_MODE.detailedList,
       text: t("mode.detailedList"),
-    },
-    {
-      value: TAXONLIST_DISPLAY_MODE.hybrid,
-      text: t("mode.hybrid"),
     },
   ];
 });
@@ -84,6 +81,7 @@ const widgetTypeOptions = computed(() => {
             ></strong>
           </BFormCheckbox>
         </div>
+
         <div class="parameter-section">
           <BufferSizeFilter />
         </div>
@@ -129,6 +127,12 @@ const widgetTypeOptions = computed(() => {
               <i class="fa-solid fa-grip-vertical"></i></span
           ></label>
           <BFormSelect v-model="mode" :options="modeOptions" class="mt-1" />
+        </div>
+
+        <div class="parameter-section">
+          <BFormCheckbox switch v-model="hybridTaxonList">
+            <strong>{{ $t("mode.isTaxonListHybrid") }} </strong>
+          </BFormCheckbox>
         </div>
 
         <div class="parameter-section">
