@@ -1,0 +1,30 @@
+name: Build and deploy documentation
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: 📥 Install dependencies
+        run: npm install
+        working-directory: ./docs
+
+      - name: 🏗️ Build
+        run: npm run build
+        working-directory: ./docs
+
+      - name: 🚀Deploy to GitHub Pages🚀  // --> this deploys to gh-pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: ./docs
