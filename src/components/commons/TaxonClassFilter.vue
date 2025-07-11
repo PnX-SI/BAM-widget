@@ -66,9 +66,16 @@ function updateClass(className) {
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-#classTaxonFilters {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  flex-wrap: nowrap;
+@media screen and (max-width: 800px) {
+  #classTaxonFilters {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    flex-wrap: nowrap;
+  }
+}
+@media screen and (min-width: 800px) {
+  #classTaxonFilters {
+    overflow-x: scroll;
+  }
 }
 </style>
