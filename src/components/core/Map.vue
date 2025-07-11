@@ -123,10 +123,17 @@ function setupMap() {
 
   if (mapEditable.value) {
     map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
-    new LocateControl().addTo(map.value);
+    new LocateControl({}).addTo(map.value);
   }
 
   map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
+  map.value.on("locationfound", (e) => {
+    geometry.value.clearLayers();
+    const marker = L.marker(e.latlng);
+    drawEventData = { layer: marker, layerType: "marker" };
+    geometry.value.addLayer(marker);
+    updateGeometry();
+  });
 }
 
 function handleGeometryCreation(event) {
