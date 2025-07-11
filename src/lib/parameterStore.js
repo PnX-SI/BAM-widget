@@ -119,7 +119,7 @@ class ParameterStore {
       .forEach(([key, value]) => {
         params[key] = value.value;
       });
-    params["connector"] = this.connector.name;
+    params["connector"] = this.connector.value.name;
     params = { ...params, ...this.connector.value.getParams() };
 
     if (params?.sourceGeometry != null && params?.wkt) {
