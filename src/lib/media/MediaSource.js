@@ -22,7 +22,9 @@ export class MediaSource {
     if (!this.isCompatible(connector)) {
       throw new Error("This media source is not available !");
     }
-    return new Promise((_)=>{return null});
+    return new Promise((_) => {
+      return null;
+    });
   }
 
   isCompatible(connector) {

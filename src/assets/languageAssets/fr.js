@@ -71,7 +71,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       apiEndpoint: "Adresse de l'API du GBIF",
     },
     geonature: {
-      export_api_endpoint: "Adresse de l'API d'un export GeoNature",
+      api_endpoint: "Adresse de l'API de GeoNature",
+      id_export: "Identifiant de l'export",
     },
     desc: "Décroissant",
     asc: "Croissant",

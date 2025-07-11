@@ -72,7 +72,8 @@ You can also **share your results 📤** to collaborate with other users.
       apiEndpoint: "API endpoint of the GBIF",
     },
     geonature: {
-      export_api_endpoint: "GeoNature export's API endpoint",
+      api_endpoint: "GeoNature  API endpoint",
+      id_export: "Export's id",
     },
     desc: "Décroissant",
     asc: "Croissant",

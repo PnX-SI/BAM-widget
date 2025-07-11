@@ -116,7 +116,7 @@ class ParameterStore {
       return null;
     });
 
-    if (this.x && this.y) {
+    if (this.x.value && this.y.value) {
       this.wkt.value = validateWKT(
         stringify({
           type: "Point",

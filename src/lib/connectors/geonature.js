@@ -9,13 +9,14 @@ import { CONNECTORS } from "./connectors";
 const GEONATURE_DEFAULT_LIMIT = "ALL";
 
 class GeoNatureConnector extends Connector {
-  EXPORT_API_ENDPOINT;
+  API_ENDPOINT;
 
   constructor(options) {
     super(options);
     this.name = CONNECTORS.GeoNature;
     // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
-    this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
+    this.API_ENDPOINT = options?.API_ENDPOINT;
+    this.ID_EXPORT = options?.ID_EXPORT || 35;
     this.LIMIT = this.options?.LIMIT || GEONATURE_DEFAULT_LIMIT;
     this.referential = TAXON_REFERENTIAL.TAXREF;
 
@@ -27,10 +28,16 @@ class GeoNatureConnector extends Connector {
     const { t } = useI18n();
     return [
       {
-        name: "EXPORT_API_ENDPOINT",
-        label: t("geonature.export_api_endpoint"),
+        name: "API_ENDPOINT",
+        label: t("geonature.api_endpoint"),
         type: String,
-        default: "http://localhost:8000/exports/api/20",
+        default: "https://demo.geonature.fr/geonature/api",
+      },
+      {
+        name: "ID_EXPORT",
+        label: t("geonature.id_export"),
+        type: Number,
+        default: 35,
       },
       {
         name: "LIMIT",
@@ -42,7 +49,9 @@ class GeoNatureConnector extends Connector {
   }
 
   fetchOccurrence(params = {}) {
-    let urlWithParams = new URL(this.EXPORT_API_ENDPOINT);
+    let urlWithParams = new URL(
+      `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`
+    );
     params = { ...params, limit: this.LIMIT };
     for (const [key, value] of Object.entries(params)) {
       urlWithParams.searchParams.append(key, value);
