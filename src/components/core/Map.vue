@@ -77,7 +77,6 @@ function focusOnGeometry() {
 
 updateGeometryFromWKT();
 function updateGeometry() {
-  console.log("mapiD", mapID);
   if (!drawEventData) return;
 
   geometry.value.clearLayers();
