@@ -22,7 +22,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     widgetTypeSelection: "Mode d'affichage du widget",
     UseGeoJSONSource: "Utiliser une source GeoJSON",
     filtersTitle: "Filtres",
-    mapEditable: "Carte éditable",
+    mapEditable: " Zone de recherche éditable",
     radius: "Rayon",
     bufferSize: "Taille du buffer",
     dateMin: "Date min",

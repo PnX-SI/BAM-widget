@@ -23,7 +23,7 @@ You can also **share your results 📤** to collaborate with other users.
     widgetTypeSelection: "Widget display mode",
     UseGeoJSONSource: "Use a GeoJSON from the web",
     filtersTitle: "Filters",
-    mapEditable: "Editable map",
+    mapEditable: "Editable research zone",
     radius: "Radius",
     bufferSize: "Buffer Size:",
     dateMin: "Date Min",
