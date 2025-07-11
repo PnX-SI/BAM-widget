@@ -41,7 +41,9 @@ class GbifConnector extends Connector {
     this.NB_PAGES = this.options?.NB_PAGES || GBIF_DEFAULT_NB_PAGES;
 
     this.referential = TAXON_REFERENTIAL.GBIF;
-    this.mediaSource = this.mediaSource || getMediaSource(SOURCE_.WIKIDATA);
+
+    this.imageSource = this.imageSource || getMediaSource(SOURCE_.WIKIDATA);
+    this.soundSource = this.soundSource || getMediaSource(SOURCE_.GBIF);
 
     this.taxonClass2SourceID = {
       Aves: 212,

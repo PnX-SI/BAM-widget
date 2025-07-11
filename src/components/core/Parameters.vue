@@ -21,6 +21,7 @@ const {
   widgetType,
   nbTaxonPerLine,
   hybridTaxonList,
+  connector,
 } = ParameterStore.getInstance();
 
 const router = useRouter();
@@ -154,7 +155,17 @@ const widgetTypeOptions = computed(() => {
         </div>
 
         <div class="parameter-section">
-          <MediaSourceSelector />
+          <MediaSourceSelector
+            :mediaSourceID="connector.imageSource.id"
+            typeMedia="image"
+          />
+        </div>
+
+        <div class="parameter-section">
+          <MediaSourceSelector
+            :mediaSourceID="connector.soundSource.id"
+            typeMedia="sound"
+          />
         </div>
 
         <div class="d-flex justify-content-center parameter-section">

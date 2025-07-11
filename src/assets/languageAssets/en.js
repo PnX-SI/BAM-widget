@@ -78,6 +78,8 @@ You can also **share your results 📤** to collaborate with other users.
     asc: "Croissant",
     media: {
       source: "Media source",
+      image: "Image Source",
+      sound: "Sound Source",
       select: "Select a media source",
     },
     taxon: {

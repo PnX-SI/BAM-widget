@@ -8,7 +8,7 @@ export class UrlMediaSource extends MediaSource {
     return true;
   }
 
-  fetchMedia(taxonID) {
+  fetchPicture(taxonID, connector) {
     const apiUrl = this.url.replace("{taxonID}", taxonID);
     return fetch(apiUrl)
       .then((response) => response.json())

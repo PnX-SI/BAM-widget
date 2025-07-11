@@ -24,15 +24,17 @@ const vernacularName = ref(taxon.vernacularName);
 function fetchTaxonImage() {
   speciesPhoto.value = [];
   if (taxon.taxonId) {
-    connector.value.fetchMedia(taxon.taxonId).then((response) => {
-      speciesPhoto.value = response;
-    });
+    connector.value.imageSource
+      .fetchPicture(taxon.taxonId, connector.value)
+      .then((response) => {
+        speciesPhoto.value = response;
+      });
   }
 }
 function fetchTaxonAudio() {
   speciesAudio.value = null;
   if (taxon.taxonId) {
-    connector.value.mediaSource
+    connector.value.soundSource
       .fetchSound(taxon.taxonId, connector.value)
       .then((response) => {
         speciesAudio.value = response;

@@ -77,6 +77,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     asc: "Croissant",
     media: {
       source: "Source de médias",
+      image: "Source d'image",
+      sound: "Source de son",
       select: "Sélectionner une source de média",
     },
     taxon: {

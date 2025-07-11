@@ -7,6 +7,7 @@ export class TaxrefODATA extends MediaSource {
   constructor(parameters) {
     super("Taxref", SOURCE_.TAXREF_ODATA);
   }
+
   fetchPicture(taxonID, connector) {
     const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${taxonID}&visibility=PUBLIC`;
     return fetch(url)
@@ -22,7 +23,7 @@ export class TaxrefODATA extends MediaSource {
                 url: media._links.thumbnail.href,
                 license: media.licence,
                 source: media.copyright,
-                typeMedia: 'image'
+                typeMedia: "image",
               })
             );
           });

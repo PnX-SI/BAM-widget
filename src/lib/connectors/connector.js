@@ -9,7 +9,15 @@ class Connector {
   constructor(options) {
     this.options = options;
 
-    this.mediaSource = options?.mediaSource;
+    this.imageSource = this.parseMediaSource(options?.imageSource);
+    this.soundSource = this.parseMediaSource(options?.soundSource);
+  }
+
+  parseMediaSource(mediaSource) {
+    if (typeof mediaSource == "string") {
+      return getMediaSource(mediaSource);
+    }
+    return mediaSource;
   }
   verifyOptions(params_names = []) {
     params_names.forEach((name) => {
@@ -38,15 +46,20 @@ class Connector {
             "name",
             "taxonClass2SourceID",
             "referential",
-            "mediaSource",
+            "soundSource",
+            "imageSource",
           ].includes(key)
       )
       .filter(([key, value]) => typeof value != typeof {})
       .forEach(([key, value]) => {
         params[key] = value;
       });
-    if (this.mediaSource) {
-      params["mediaSource"] = this.mediaSource.id;
+
+    if (this.soundSource) {
+      params["soundSource"] = this.soundSource.id;
+    }
+    if (this.imageSource) {
+      params["imageSource"] = this.imageSource.id;
     }
     return params;
   }
@@ -58,18 +71,6 @@ class Connector {
    */
   fetchOccurrence(params) {
     throw new Error("Not implemented");
-  }
-
-  /**
-   * Fetches media for a given taxon ID.
-   * @param {string} idTaxon - The ID of the taxon.
-   * @returns {Promise<Array>} A promise that resolves to the list of media.
-   */
-  fetchMedia(idTaxon) {
-    if (!this.mediaSource.isCompatible(this))
-      throw new Error("Media Source incompatible");
-
-    return this.mediaSource.fetchPicture(idTaxon, this);
   }
 
   /**

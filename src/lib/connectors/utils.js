@@ -4,9 +4,6 @@ import { GbifConnector } from "./gbif";
 import { GeoNatureConnector } from "./geonature";
 
 function getConnector(connectorName = "GBIF", params = {}) {
-  if (params.hasOwnProperty("mediaSource")) {
-    params["mediaSource"] = getMediaSource(params.mediaSource);
-  }
   switch (connectorName) {
     case CONNECTORS.GBIF:
       return new GbifConnector(params);
