@@ -30,6 +30,8 @@ You can also **share your results 📤** to collaborate with other users.
     dateMax: "Date Max",
     search: "Search",
     reset: "Reset",
+    limit: "Limite",
+    nbPages: "Number of pages",
     searchResults: "Search results",
     noResults: "No results",
     noSpeciesObserved: "No species observed in this area !",
@@ -65,6 +67,12 @@ You can also **share your results 📤** to collaborate with other users.
       modify: "Change the data source",
       gbifWarning:
         "The number of observations and the dates of the latest sightings are based on an aggregation of the latest 30,000 observations made within the selected area.",
+    },
+    gbif: {
+      apiEndpoint: "API endpoint of the GBIF",
+    },
+    geonature: {
+      export_api_endpoint: "GeoNature export's API endpoint",
     },
     desc: "Décroissant",
     asc: "Croissant",

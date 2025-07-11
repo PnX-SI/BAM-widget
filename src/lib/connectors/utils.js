@@ -1,4 +1,5 @@
 import { getMediaSource } from "../media/media";
+import { CONNECTORS } from "./connectors";
 import { GbifConnector } from "./gbif";
 import { GeoNatureConnector } from "./geonature";
 
@@ -7,9 +8,9 @@ function getConnector(connectorName = "GBIF", params = {}) {
     params["mediaSource"] = getMediaSource(params.mediaSource);
   }
   switch (connectorName) {
-    case "GBIF":
+    case CONNECTORS.GBIF:
       return new GbifConnector(params);
-    case "GeoNature":
+    case CONNECTORS.GeoNature:
       return new GeoNatureConnector(params);
     default:
       return new GbifConnector(params);

@@ -3,13 +3,13 @@ import { Media, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
 import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
-import { WikiDataImageSource } from "../media/Wikidata";
-import { GBIFMediaSource } from "../media/Gbif";
 import { getMediaSource, SOURCE_ } from "../media/media";
 import { useI18n } from "vue-i18n";
+import { CONNECTORS } from "./connectors";
 
 const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
-
+const GBIF_DEFAULT_LIMIT = 300;
+const GBIF_DEFAULT_NB_PAGES = 10;
 /**
  * Calls the GBIF occurrence API with the given parameters.
  * @param {Object} params - The parameters to pass to the API.
@@ -33,10 +33,15 @@ class GbifConnector extends Connector {
    */
   constructor(options) {
     super(options);
-    this.name = "GBIF";
-    this.GBIF_ENDPOINT = this.options.GBIF_ENDPOINT || GBIF_ENDPOINT_DEFAULT;
+    this.name = CONNECTORS.GBIF;
+
+    // specific parameters
+    this.GBIF_ENDPOINT = this.options?.GBIF_ENDPOINT || GBIF_ENDPOINT_DEFAULT;
+    this.LIMIT = this.options?.LIMIT || GBIF_DEFAULT_LIMIT;
+    this.NB_PAGES = this.options?.NB_PAGES || GBIF_DEFAULT_NB_PAGES;
+
     this.referential = TAXON_REFERENTIAL.GBIF;
-    this.mediaSource = this.mediaSource || getMediaSource(SOURCE_.GBIF);
+    this.mediaSource = this.mediaSource || getMediaSource(SOURCE_.WIKIDATA);
 
     this.taxonClass2SourceID = {
       Aves: 212,
@@ -51,6 +56,30 @@ class GbifConnector extends Connector {
       Liliopsida: 196,
       Pinopsida: 194,
     };
+  }
+
+  getParamsSchema() {
+    const { t } = useI18n();
+    return [
+      {
+        name: "GBIF_ENDPOINT",
+        label: "Adresse de l'API du GBIF",
+        type: String,
+        default: "https://api.gbif.org/v1",
+      },
+      {
+        name: "LIMIT",
+        label: t("limit"),
+        type: Number,
+        default: GBIF_DEFAULT_LIMIT,
+      },
+      {
+        name: "NB_PAGES",
+        label: t("nbPages"),
+        type: Number,
+        default: GBIF_DEFAULT_NB_PAGES,
+      },
+    ];
   }
 
   /**
@@ -78,7 +107,11 @@ class GbifConnector extends Connector {
   }
 
   fetchOccurrence(params) {
-    let defaultParams = { limit: 300, maxPage: 10, ...params };
+    let defaultParams = {
+      limit: this.LIMIT,
+      maxPage: this.NB_PAGES,
+      ...params,
+    };
     if (defaultParams.dateMin && defaultParams.dateMax) {
       defaultParams.eventDate = `${defaultParams.dateMin},${defaultParams.dateMax}`;
     }
@@ -95,7 +128,6 @@ class GbifConnector extends Connector {
         Math.ceil(countOccurrence / defaultParams.limit),
         defaultParams.maxPage
       );
-
       const taxonsData = {};
 
       // Function to fetch page data

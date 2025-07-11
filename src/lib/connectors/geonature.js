@@ -3,21 +3,45 @@ import { Taxon } from "../models";
 import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { getMediaSource, SOURCE_ } from "../media/media";
+import { useI18n } from "vue-i18n";
+import { CONNECTORS } from "./connectors";
+
+const GEONATURE_DEFAULT_LIMIT = "ALL";
+
 class GeoNatureConnector extends Connector {
   EXPORT_API_ENDPOINT;
 
   constructor(options) {
     super(options);
-    this.name = "GeoNature";
+    this.name = CONNECTORS.GeoNature;
     // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
     this.EXPORT_API_ENDPOINT = options?.EXPORT_API_ENDPOINT;
+    this.LIMIT = this.options?.LIMIT || GEONATURE_DEFAULT_LIMIT;
     this.referential = TAXON_REFERENTIAL.TAXREF;
     this.mediaSource = this.mediaSource ?? getMediaSource(SOURCE_.TAXREF_ODATA);
   }
 
+  getParamsSchema() {
+    const { t } = useI18n();
+    return [
+      {
+        name: "EXPORT_API_ENDPOINT",
+        label: t("geonature.export_api_endpoint"),
+        type: String,
+        default: "http://localhost:8000/exports/api/20",
+      },
+      {
+        name: "LIMIT",
+        label: t("limit"),
+        type: Number,
+        default: GEONATURE_DEFAULT_LIMIT,
+      },
+    ];
+  }
+
   fetchOccurrence(params = {}) {
     let urlWithParams = new URL(this.EXPORT_API_ENDPOINT);
-    params = { ...params, limit: "ALL" };
+    params = { ...params, limit: this.LIMIT };
     for (const [key, value] of Object.entries(params)) {
       urlWithParams.searchParams.append(key, value);
     }

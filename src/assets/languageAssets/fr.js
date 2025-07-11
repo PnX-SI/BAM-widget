@@ -29,6 +29,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     dateMax: "Date max",
     search: "Rechercher",
     reset: "Réinitialiser",
+    limit: "Limite",
+    nbPages: "Nombre de pages",
     searchResults: "Résultats de la recherche",
     noResults: "Aucun résultat",
     previousPage: "Précedent",
@@ -64,6 +66,12 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       modify: "Modifier la source de données",
       gbifWarning:
         "Le nombre d'observations et leurs dates sont basés sur une agrégation des 30 000 dernières observations effectuées dans la zone sélectionnée.",
+    },
+    gbif: {
+      apiEndpoint: "Adresse de l'API du GBIF",
+    },
+    geonature: {
+      export_api_endpoint: "Adresse de l'API d'un export GeoNature",
     },
     desc: "Décroissant",
     asc: "Croissant",

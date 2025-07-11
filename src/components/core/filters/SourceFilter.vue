@@ -3,39 +3,31 @@ import { reactive, ref, watch } from "vue";
 
 import ParameterStore from "@/lib/parameterStore";
 import { getConnector } from "@/lib/connectors/utils";
+import { GeoNatureConnector } from "@/lib/connectors/geonature";
+import { GbifConnector } from "@/lib/connectors/gbif";
+import { CONNECTORS } from "@/lib/connectors/connectors";
 
 const { connector } = ParameterStore.getInstance();
 
-const sources = {
-  GBIF: [
-    {
-      name: "API_ENPOINT",
-      label: "Adresse de l'API du GBIF",
-      type: String,
-      default: "https://api.gbif.org/v1",
-    },
-  ],
-  GeoNature: [
-    {
-      name: "EXPORT_API_ENDPOINT",
-      label: "Adresse de l'API d'un export GeoNature",
-      type: String,
-      default: "http://localhost:8000/exports/api/20",
-    },
-  ],
+const sourcesParams = {
+  [CONNECTORS.GBIF]: new GbifConnector().getParamsSchema(),
+  [CONNECTORS.GeoNature]: new GeoNatureConnector().getParamsSchema(),
 };
 
 const sourceName = ref(connector.value.name);
 let params = reactive(
   Object.fromEntries(
-    sources[sourceName.value].map((form) => [form.name, form.default])
+    sourcesParams[sourceName.value].map((form) => [
+      form.name,
+      connector.value[form.name] || form.default,
+    ])
   )
 );
 
 watch([sourceName], () => {
   params = reactive(
     Object.fromEntries(
-      sources[sourceName.value].map((form) => [form.name, form.default])
+      sourcesParams[sourceName.value].map((form) => [form.name, form.default])
     )
   );
 });
@@ -68,11 +60,14 @@ function updateSource(a) {
     <div class="sourceParam">
       <label for="sourceName"> {{ $t("source.select") }}</label>
       <select v-model="sourceName" class="form-select">
-        <option v-for="(source, sourceName) in sources" :value="sourceName">
+        <option
+          v-for="(source, sourceName) in sourcesParams"
+          :value="sourceName"
+        >
           {{ sourceName }}
         </option>
       </select>
-      <div class="parameters" v-for="form in sources[sourceName]">
+      <div class="parameters" v-for="form in sourcesParams[sourceName]">
         <label :for="form.name">{{ form.label }}</label>
         <input
           v-if="form.type === String"
@@ -92,7 +87,7 @@ function updateSource(a) {
           class="form-select"
           v-model="params[form.name]"
         >
-          <option v-for="option in form.type" :key="option" :value="option">
+          <option v-for="option in form.values" :key="option" :value="option">
             {{ option }}
           </option>
         </select>

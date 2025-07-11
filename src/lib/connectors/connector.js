@@ -19,6 +19,14 @@ class Connector {
     });
   }
 
+  getParamsSchema() {
+    return {};
+  }
+
+  /**
+   * Returns specific parameters for a Connector
+   * @returns {Object}
+   */
   getParams() {
     const params = {};
     Object.entries(this)
@@ -42,6 +50,7 @@ class Connector {
     }
     return params;
   }
+
   /**
    * Fetches occurrences based on the given parameters.
    * @param {Object} params - The parameters for the occurrence query.
@@ -112,7 +121,7 @@ class Connector {
    * @returns source detail
    */
   sourceDetailMessage() {
-    return "";
+    return null;
   }
   getCompatibleMediaSource() {
     const availableSource = [];
