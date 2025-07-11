@@ -33,6 +33,8 @@ class ParameterStore {
     this.class = ref(null);
     this.widgetType = ref(WIDGET_TYPE.default);
     this.hybridTaxonList = ref(true);
+    this.x = ref(null);
+    this.y = ref(null);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
@@ -99,6 +101,30 @@ class ParameterStore {
     this.setParameterFromUrl("widgetType", (value) =>
       Object.keys(WIDGET_TYPE).includes(value) ? value : "default"
     );
+    this.setParameterFromUrl("x", (value) => {
+      const x = parseInt(value);
+      if (-180 < x < 180) {
+        return x;
+      }
+      return null;
+    });
+    this.setParameterFromUrl("y", (value) => {
+      const y = parseInt(value);
+      if (-90 < y < 90) {
+        return y;
+      }
+      return null;
+    });
+
+    if (this.x && this.y) {
+      this.wkt.value = validateWKT(
+        stringify({
+          type: "Point",
+          coordinates: [this.x.value, this.y.value],
+        }),
+        this.radius.value
+      );
+    }
   }
 
   setParameterFromUrl(paramName, transformFn, setValueInFunction = false) {
