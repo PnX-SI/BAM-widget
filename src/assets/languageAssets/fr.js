@@ -91,6 +91,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     mode: {
       galleryMode: "Galerie",
       detailedList: "Détaillé",
+      hybrid: "Hybride",
     },
     widgetType: {
       list: "Liste",

@@ -8,6 +8,7 @@ import MediaSourceSelector from "./filters/MediaSourceSelector.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
+import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "@/lib/enums";
 const { t } = useI18n();
 
 const {
@@ -26,15 +27,22 @@ const route = useRoute();
 
 const modeOptions = computed(() => {
   return [
-    { value: "gallery", text: t("mode.galleryMode") },
-    { value: "detailedList", text: t("mode.detailedList") },
+    { value: TAXONLIST_DISPLAY_MODE.gallery, text: t("mode.galleryMode") },
+    {
+      value: TAXONLIST_DISPLAY_MODE.detailedList,
+      text: t("mode.detailedList"),
+    },
+    {
+      value: TAXONLIST_DISPLAY_MODE.hybrid,
+      text: t("mode.hybrid"),
+    },
   ];
 });
 
 const widgetTypeOptions = computed(() => {
   return [
-    { value: "default", text: t("widgetType.default") },
-    { value: "list", text: t("widgetType.list") },
+    { value: WIDGET_TYPE.default, text: t("widgetType.default") },
+    { value: WIDGET_TYPE.list, text: t("widgetType.list") },
   ];
 });
 </script>
@@ -66,7 +74,10 @@ const widgetTypeOptions = computed(() => {
           </BFormCheckbox>
         </div>
 
-        <div class="parameter-section" v-if="widgetType === 'default'">
+        <div
+          class="parameter-section"
+          v-if="widgetType === WIDGET_TYPE.default"
+        >
           <BFormCheckbox switch v-model="mapEditable">
             <strong
               >{{ $t("mapEditable") }} <i class="fa-solid fa-map"></i

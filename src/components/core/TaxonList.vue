@@ -7,6 +7,7 @@ import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
 import TaxonView from "./TaxonView.vue";
+import { TAXONLIST_DISPLAY_MODE } from "@/lib/enums";
 
 const { t } = useI18n();
 const { wkt, dateMin, dateMax, nbTaxonPerLine, showFilters, connector, mode } =
@@ -41,7 +42,7 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    validator: (value) => ["detailedList", "gallery"].includes(value),
+    validator: (value) => Object.keys(TAXONLIST_DISPLAY_MODE).includes(value),
   },
 });
 
@@ -67,7 +68,10 @@ const sortByAvailable = [
 
 mode.value = props.mode ?? mode.value;
 function toggleMode() {
-  mode.value = mode.value == "gallery" ? "detailedList" : "gallery";
+  mode.value =
+    mode.value == TAXONLIST_DISPLAY_MODE.gallery
+      ? TAXONLIST_DISPLAY_MODE.detailedList
+      : TAXONLIST_DISPLAY_MODE.gallery;
 }
 
 const classNames = computed(() => {
@@ -191,7 +195,10 @@ if (wkt.value) {
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
       <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
-        <div class="justify-content-center toggleMode">
+        <div
+          class="justify-content-center toggleMode"
+          v-if="mode === TAXONLIST_DISPLAY_MODE.hybrid"
+        >
           <button class="btn btn-secondary" @click="toggleMode()">
             <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
             <i v-else class="fa-solid fa-grip-vertical"></i>

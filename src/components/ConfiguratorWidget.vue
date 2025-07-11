@@ -2,10 +2,10 @@
 import "leaflet/dist/leaflet.css";
 import Parameters from "@/components/core/Parameters.vue";
 import Share from "./core/Share.vue";
-import LanguageSwitch from "./commons/LanguageSwitch.vue";
 import Intro from "./core/Intro.vue";
 import ParameterStore from "@/lib/parameterStore";
 import HeaderNav from "./commons/HeaderNav.vue";
+import { WIDGET_TYPE } from "@/lib/enums";
 
 const { widgetType } = ParameterStore.getInstance();
 </script>
@@ -27,7 +27,10 @@ const { widgetType } = ParameterStore.getInstance();
           <h3>{{ $t("widgetPreview") }}</h3>
           <Share />
         </div>
-        <ListWidget height="70vh" v-if="widgetType == 'list'"></ListWidget>
+        <ListWidget
+          height="70vh"
+          v-if="widgetType == WIDGET_TYPE.list"
+        ></ListWidget>
         <MapListWidget height="70vh" v-else></MapListWidget>
       </div>
     </div>

@@ -34,7 +34,7 @@ class Media {
     // Required properties
     this.url = mediaInfo.url;
     this.source = mediaInfo.source;
-    this.typeMedia=mediaInfo.typeMedia;
+    this.typeMedia = mediaInfo.typeMedia;
 
     // Optional properties with default values
     const { license = "", author = "" } = mediaInfo;

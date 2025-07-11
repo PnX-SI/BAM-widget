@@ -15,7 +15,6 @@ const pathName = window.location.pathname;
 const route = computed(() => {
   const routes = {
     list: "/list",
-    config: "/config",
   };
   return routes[widgetType.value] || "/";
 });

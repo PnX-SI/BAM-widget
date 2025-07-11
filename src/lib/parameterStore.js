@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { parse, stringify } from "wellknown";
 import { buffer } from "@turf/turf";
 import { useI18n } from "vue-i18n";
+import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "./enums";
 
 class ParameterStore {
   static instance = null;
@@ -27,10 +28,10 @@ class ParameterStore {
     this.showFilters = ref(true);
     this.mapEditable = ref(true);
     this.lang = locale;
-    this.mode = ref("detailedList");
+    this.mode = ref(TAXONLIST_DISPLAY_MODE.detailedList);
     this.sourceGeometry = ref(null);
     this.class = ref(null);
-    this.widgetType = ref("default");
+    this.widgetType = ref(WIDGET_TYPE.default);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
@@ -89,10 +90,12 @@ class ParameterStore {
       }
     });
     this.setParameterFromUrl("mode", (value) =>
-      ["detailedList", "gallery"].includes(value) ? value : "detailedList"
+      Object.keys(TAXONLIST_DISPLAY_MODE).includes(value)
+        ? value
+        : TAXONLIST_DISPLAY_MODE.detailedList
     );
     this.setParameterFromUrl("widgetType", (value) =>
-      ["default", "list"].includes(value) ? value : "default"
+      Object.keys(WIDGET_TYPE).includes(value) ? value : "default"
     );
   }
 

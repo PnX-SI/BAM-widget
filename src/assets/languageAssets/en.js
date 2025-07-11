@@ -89,7 +89,11 @@ You can also **share your results 📤** to collaborate with other users.
       seeMore: "See more",
       class: "Taxon's class",
     },
-    mode: { galleryMode: "Gallery", detailedList: "Detailed" },
+    mode: {
+      galleryMode: "Gallery",
+      detailedList: "Detailed",
+      hybrid: "Hybrid",
+    },
     widgetType: {
       list: "Liste",
       default: "Défaut",
