@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Héberger le générateur de widget
 
 ## Project Setup

@@ -19,11 +19,11 @@ jobs:
         run: npm install
         working-directory: ./docs
 
-      - name: 🏗️ Build
+      - name: 🏗️ Build the documentation
         run: npm run build
         working-directory: ./docs
 
-      - name: 🚀Deploy to GitHub Pages🚀  // --> this deploys to gh-pages
+      - name: 🚀Deploy to GitHub Pages🚀
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
