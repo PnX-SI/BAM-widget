@@ -19,28 +19,57 @@ class ParameterStore {
     const router = useRouter();
     const paramsFromUrl = route?.query;
 
+    // If a marker or line given, a buffer is applied with a given radius
     this.radius = ref(1);
+
+    // WKT (WellKnown-Text Representation of the search zone)
     this.wkt = ref("");
+
+    // Date that defines the period of observations
     this.dateMin = ref(null);
     this.dateMax = ref(null);
+
+    // Connector used to fetch observations data
     this.connector = shallowRef(getConnector(null, paramsFromUrl));
+
+    // Number of taxon per line
     this.nbTaxonPerLine = ref(null);
+
+    // Are filters of the taxons list shown
     this.showFilters = ref(true);
+
+    // Can the geometry be changed on the map
     this.mapEditable = ref(true);
+
+    // Language of the widget
     this.lang = locale;
+
+    // Display mode of the taxon list (gallery or detailed)
     this.mode = ref(TAXONLIST_DISPLAY_MODE.detailedList);
+
+    // URL of a GeoJSON
     this.sourceGeometry = ref(null);
+
+    // Taxons' class selected
     this.class = ref(null);
+
+    // Widget display mode
     this.widgetType = ref(WIDGET_TYPE.default);
+
+    // if user can switch between different mode of display in the taxon list
     this.hybridTaxonList = ref(true);
-    this.x = ref(null);
-    this.y = ref(null);
+
+    this.x = ref(null); // longitude
+    this.y = ref(null); // latitude
+
+    // Url template to redirect the user to a page different from the default one indicated by the connector to a datasource
+    this.customDetailPage = ref(null);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
     ParameterStore.instance = this;
 
-    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry widgetType hybridTaxonList"
+    "radius wkt dateMin dateMax nbTaxonPerLine showFilters lang mode class connector mapEditable sourceGeometry widgetType hybridTaxonList customDetailPage"
       .split(" ")
       .forEach((param) => {
         watch(this[param], () => {
@@ -125,6 +154,8 @@ class ParameterStore {
         this.radius.value
       );
     }
+
+    this.setParameterFromUrl("customDetailPage", (value) => value);
   }
 
   setParameterFromUrl(paramName, transformFn, setValueInFunction = false) {

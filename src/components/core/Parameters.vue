@@ -22,6 +22,7 @@ const {
   nbTaxonPerLine,
   hybridTaxonList,
   connector,
+  customDetailPage,
 } = ParameterStore.getInstance();
 
 const router = useRouter();
@@ -117,6 +118,16 @@ const widgetTypeOptions = computed(() => {
           <BFormInput
             v-model="sourceGeometry"
             :placeholder="$t('IndicateGeoJSONUrl')"
+          />
+        </div>
+
+        <div class="parameter-section">
+          <label
+            >{{ $t("UseCustomDetailPage") }} <i class="fa-solid fa-link"></i
+          ></label>
+          <BFormInput
+            v-model="customDetailPage"
+            :placeholder="$t('IndicateDetailTemplateUrl')"
           />
         </div>
 

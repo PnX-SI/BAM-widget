@@ -19,9 +19,12 @@ You can also **share your results 📤** to collaborate with other users.
     showFilters: "Show Filters",
     RefreshFilters: "Refresh parameters",
     IndicateGeoJSONUrl: "Indicate a URL towards a GeoJSON",
+    IndicateDetailTemplateUrl: "https://<urlTaxonSheet>/\\{taxonID\\}",
     TaxonListModeSelection: "Taxon display mode",
     widgetTypeSelection: "Widget display mode",
     UseGeoJSONSource: "Use a GeoJSON from the web",
+    UseCustomDetailPage: 'Change the redirection of the "See More" button',
+
     filtersTitle: "Filters",
     mapEditable: "Editable research zone",
     radius: "Radius",

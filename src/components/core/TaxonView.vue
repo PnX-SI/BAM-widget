@@ -10,7 +10,8 @@ import { randomChoice } from "@/lib/utils";
 import TaxonThumbnail from "./TaxonThumbnail.vue";
 import TaxonDetailed from "./TaxonDetailed.vue";
 
-const { mode, connector, lang } = ParameterStore.getInstance();
+const { mode, connector, lang, customDetailPage } =
+  ParameterStore.getInstance();
 
 const props = defineProps({
   taxon: Taxon,
@@ -20,6 +21,14 @@ const taxon = props.taxon;
 const speciesPhoto = ref([]);
 const speciesAudio = ref(null);
 const vernacularName = ref(taxon.vernacularName);
+
+function fetchDetailUrl(taxonID) {
+  if (customDetailPage.value) {
+    const url = customDetailPage.value.replace("{taxonID}", taxonID);
+    return url;
+  }
+  return connector.value.getTaxonDetailPage(taxon.taxonId);
+}
 
 function fetchTaxonImage() {
   speciesPhoto.value = [];
@@ -73,7 +82,7 @@ watch(lang, () => {
     :picture="mediaDisplayed"
     :audio="speciesAudio"
     :vernacular-name="vernacularName || taxon.acceptedScientificName"
-    :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
+    :url-detail-page="fetchDetailUrl(taxon.taxonId)"
     :accepted-scientific-name="taxon.acceptedScientificName"
   >
   </TaxonThumbnail>
@@ -83,7 +92,7 @@ watch(lang, () => {
     :audio="speciesAudio"
     :accepted-scientific-name="taxon.acceptedScientificName"
     :vernacular-name="vernacularName || taxon.acceptedScientificName"
-    :url-detail-page="connector.getTaxonDetailPage(taxon.taxonId)"
+    :url-detail-page="fetchDetailUrl(taxon.taxonId)"
     :nb-observations="taxon?.nbObservations"
     :last-seen-date="taxon?.lastSeenDate"
   />
