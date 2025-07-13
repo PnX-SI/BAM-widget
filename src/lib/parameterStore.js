@@ -2,7 +2,7 @@ import { ref, shallowRef, watch } from "vue";
 import { getConnector } from "./connectors/utils";
 import { useRoute, useRouter } from "vue-router";
 import { parse, stringify } from "wellknown";
-import { buffer } from "@turf/turf";
+import { buffer, simplify } from "@turf/turf";
 import { useI18n } from "vue-i18n";
 import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "./enums";
 
@@ -61,7 +61,7 @@ class ParameterStore {
       async (value) => {
         this.sourceGeometry.value = value;
         try {
-          const response = await fetch(value);
+          const response = await fetch(decodeURI(value));
           const geojson = await response.json();
           this.wkt.value = validateWKT(
             stringify(geojson.geometry),
@@ -185,7 +185,10 @@ class ParameterStore {
 
 const validateWKT = (wkt, radius) => {
   if (wkt && (wkt.includes("POINT") || wkt.includes("LINESTRING"))) {
-    const buffered = buffer(parse(wkt), radius);
+    const buffered = simplify(buffer(parse(wkt), radius), {
+      tolerance: 0.001,
+      highQuality: true,
+    });
     return stringify(buffered);
   }
   return wkt;
