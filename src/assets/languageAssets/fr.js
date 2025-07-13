@@ -104,7 +104,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       default: "Défaut",
     },
     numberOfTaxonPerLine: "Nombre de taxons par ligne",
-    widgetPreview: "Prévisualisation du widget",
+    widgetPreview: "Prévisualisation",
     taxonsClass: {
       Animalia: {
         Mammalia: "Mammifères",

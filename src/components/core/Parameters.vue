@@ -71,7 +71,7 @@ const widgetTypeOptions = computed(() => {
 <template>
   <div class="card">
     <h4 class="card-header">
-      {{ $t("parameters") }}
+      <i class="bi bi-gear-fill"></i> {{ $t("parameters") }}
     </h4>
     <div class="card-body">
       <div id="parameters">

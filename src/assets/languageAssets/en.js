@@ -106,7 +106,7 @@ You can also **share your results 📤** to collaborate with other users.
       default: "Défaut",
     },
     numberOfTaxonPerLine: "Number of taxons per line",
-    widgetPreview: "Widget preview",
+    widgetPreview: "Preview",
     taxonsClass: {
       Animalia: {
         Mammalia: "Mammals",

@@ -30,42 +30,47 @@ const embed = computed(() => {
 </script>
 
 <template>
-  <span class="input-group-text d-flex justify-content-start align-items-center"
-    ><i class="bi bi-code-slash" style="margin-right: 0.5em"></i>
-    {{ $t("browserIntegration") }}
-    <button
-      class="btn btn-outline-secondary mb-3"
-      id="shareButton"
-      @click="copy"
-    >
-      <div v-if="copied">
-        <i class="bi bi-check2-circle"></i> {{ $t("copied") }}!
+  <div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+      <h4>
+        <i class="bi bi-code-slash" style="margin-right: 0.5em"></i>
+        {{ $t("browserIntegration") }}
+      </h4>
+    </div>
+    <div class="card-body">
+      <div class="input-group mb-3">
+        <textarea
+          class="form-control"
+          placeholder="Embed URL"
+          aria-label=".form-control-lg example"
+          :value="embed"
+          style="height: 80px"
+        />
+        <button class="btn btn-outline-secondary" @click="copy">
+          <div v-if="copied">
+            <i class="bi bi-check2-circle"></i> {{ $t("copied") }}!
+          </div>
+          <div v-else><i class="bi bi-copy"></i></div>
+        </button>
       </div>
-      <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
-    </button></span
-  >
-  <textarea
-    class="form-control"
-    placeholder="Embed URL"
-    aria-label=".form-control-lg example"
-    :value="embed"
-  />
-  <div class="input-group mb-3">
-    <span class="input-group-text">{{ $t("size.width") }}</span>
-    <input
-      class="form-control"
-      type="text"
-      placeholder="Width"
-      aria-label=".form-control-lg example"
-      v-model="width"
-    />
-    <span class="input-group-text">{{ $t("size.height") }}</span>
-    <input
-      class="form-control"
-      type="text"
-      placeholder="Height"
-      aria-label=".form-control-lg example"
-      v-model="height"
-    />
+      <div class="input-group mb-3">
+        <span class="input-group-text">{{ $t("size.width") }}</span>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Width"
+          aria-label=".form-control-lg example"
+          v-model="width"
+        />
+        <span class="input-group-text">{{ $t("size.height") }}</span>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Height"
+          aria-label=".form-control-lg example"
+          v-model="height"
+        />
+      </div>
+    </div>
   </div>
 </template>

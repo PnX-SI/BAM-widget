@@ -206,7 +206,7 @@ if (wkt.value) {
         <div class="justify-content-center toggleMode" v-if="hybridTaxonList">
           <button class="btn btn-secondary" @click="toggleMode()">
             <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
-            <i v-else class="fa-solid fa-grip-vertical"></i>
+            <i v-else class="bi bi-grid-fill"></i>
           </button>
         </div>
         <TaxonView

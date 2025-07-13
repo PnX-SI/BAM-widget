@@ -23,7 +23,7 @@ const { widgetType } = ParameterStore.getInstance();
       </div>
       <div class="col" id="preview">
         <div>
-          <h3>{{ $t("widgetPreview") }}</h3>
+          <h3><i class="bi bi-easel"></i> {{ $t("widgetPreview") }}</h3>
         </div>
         <ListWidget
           height="70vh"
@@ -49,7 +49,7 @@ const { widgetType } = ParameterStore.getInstance();
   height: 82.5vh;
 
   h3 {
-    color: #666;
+    /* color: #666; */
     width: max-content;
     padding: 0.3em;
     border-radius: 10px;
