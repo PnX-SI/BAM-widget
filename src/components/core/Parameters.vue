@@ -9,6 +9,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "@/lib/enums";
+import HTMLBuilder from "./HTMLBuilder.vue";
 const { t } = useI18n();
 
 const {
@@ -23,10 +24,31 @@ const {
   hybridTaxonList,
   connector,
   customDetailPage,
+  getParams,
 } = ParameterStore.getInstance();
 
 const router = useRouter();
 const route = useRoute();
+
+const host = window.location.origin;
+const pathName = window.location.pathname;
+
+const route_ = computed(() => {
+  const routes = {
+    list: "/list",
+  };
+  return routes[widgetType.value] || "/";
+});
+
+const link = computed(() => {
+  const paramsArray = Object.entries(
+    ParameterStore.getInstance().getParams()
+  ).map(([key, value]) => `${key}=${value}`);
+
+  const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
+
+  return `${host}${pathName}#${route_.value}${params}`;
+});
 
 const modeOptions = computed(() => {
   return [
@@ -178,7 +200,9 @@ const widgetTypeOptions = computed(() => {
             typeMedia="sound"
           />
         </div>
-
+        <div class="parameter-section">
+          <SourceFilter />
+        </div>
         <div class="d-flex justify-content-center parameter-section">
           <BButton
             variant="danger"
@@ -190,9 +214,8 @@ const widgetTypeOptions = computed(() => {
       </div>
     </div>
   </div>
-
-  <div class="parameter-section">
-    <SourceFilter />
+  <div class="mt-2">
+    <HTMLBuilder :link="link"></HTMLBuilder>
   </div>
 </template>
 

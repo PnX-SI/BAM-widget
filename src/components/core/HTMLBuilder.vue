@@ -1,14 +1,21 @@
 <script setup>
 import { computed, ref, watch } from "vue";
-import ParameterStore from "@/lib/parameterStore";
-
-const width = ref("100wv");
-const height = ref("100vh");
 
 const props = defineProps({
   link: String,
   required: true,
 });
+const width = ref("500px");
+const height = ref("400px");
+
+const copied = ref(false);
+function copy() {
+  navigator.clipboard.writeText(embed.value);
+  copied.value = true;
+  setTimeout(() => {
+    copied.value = false;
+  }, 3000);
+}
 
 const emit = defineEmits(["update:width", "update:height"]);
 
@@ -23,8 +30,19 @@ const embed = computed(() => {
 </script>
 
 <template>
-  <span class="input-group-text"
-    ><i class="bi bi-code-slash"></i> {{ $t("browserIntegration") }}</span
+  <span class="input-group-text d-flex justify-content-start align-items-center"
+    ><i class="bi bi-code-slash" style="margin-right: 0.5em"></i>
+    {{ $t("browserIntegration") }}
+    <button
+      class="btn btn-outline-secondary mb-3"
+      id="shareButton"
+      @click="copy"
+    >
+      <div v-if="copied">
+        <i class="bi bi-check2-circle"></i> {{ $t("copied") }}!
+      </div>
+      <div v-else><i class="bi bi-copy"></i> {{ $t("copy") }}</div>
+    </button></span
   >
   <textarea
     class="form-control"
@@ -35,7 +53,7 @@ const embed = computed(() => {
   <div class="input-group mb-3">
     <span class="input-group-text">{{ $t("size.width") }}</span>
     <input
-      class="form-control form-control-lg"
+      class="form-control"
       type="text"
       placeholder="Width"
       aria-label=".form-control-lg example"
@@ -43,7 +61,7 @@ const embed = computed(() => {
     />
     <span class="input-group-text">{{ $t("size.height") }}</span>
     <input
-      class="form-control form-control-lg"
+      class="form-control"
       type="text"
       placeholder="Height"
       aria-label=".form-control-lg example"

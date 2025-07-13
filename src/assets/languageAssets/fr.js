@@ -18,7 +18,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     showFilters: "Afficher les filtres",
     RefreshFilters: "Rafraichir les paramétres",
     IndicateGeoJSONUrl: "Indiquer une URL vers un GeoJSON",
-    IndicateDetailTemplateUrl: "https://<urlFicheDeTaxon>/\\{taxonID\\}",
+    IndicateDetailTemplateUrl: "https://<urlFicheDeTaxon>/taxonID",
     TaxonListModeSelection: "Mode d'affichage des taxons",
     widgetTypeSelection: "Mode d'affichage du widget",
     UseGeoJSONSource: "Utiliser une source GeoJSON",

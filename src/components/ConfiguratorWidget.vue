@@ -1,7 +1,6 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
 import Parameters from "@/components/core/Parameters.vue";
-import Share from "./core/Share.vue";
 import Intro from "./core/Intro.vue";
 import ParameterStore from "@/lib/parameterStore";
 import HeaderNav from "./commons/HeaderNav.vue";
@@ -23,9 +22,8 @@ const { widgetType } = ParameterStore.getInstance();
         <Parameters />
       </div>
       <div class="col" id="preview">
-        <div class="d-flex justify-content-start align-items-center">
+        <div>
           <h3>{{ $t("widgetPreview") }}</h3>
-          <Share />
         </div>
         <ListWidget
           height="70vh"
