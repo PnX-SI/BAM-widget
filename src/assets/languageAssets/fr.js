@@ -105,6 +105,23 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     },
     numberOfTaxonPerLine: "Nombre de taxons par ligne",
     widgetPreview: "Prévisualisation du widget",
+    taxonsClass: {
+      Animalia: {
+        Mammalia: "Mammifères",
+        Aves: "Oiseaux",
+        Reptilia: "Reptiles",
+        Amphibia: "Amphibiens",
+        Insecta: "Insectes",
+        Arachnida: "Arachnides",
+        Gastropoda: "Gastéropodes",
+        Bivalvia: "Bivalves",
+      },
+      Plantae: {
+        Magnoliopsida: "Magnoliopsida",
+        Liliopsida: "Liliopsidées",
+        Pinopsida: "Conifères",
+      },
+    },
   },
 };
 

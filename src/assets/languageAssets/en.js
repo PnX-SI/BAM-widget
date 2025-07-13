@@ -107,6 +107,23 @@ You can also **share your results 📤** to collaborate with other users.
     },
     numberOfTaxonPerLine: "Number of taxons per line",
     widgetPreview: "Widget preview",
+    taxonsClass: {
+      Animalia: {
+        Mammalia: "Mammals",
+        Aves: "Birds",
+        Reptilia: "Reptiles",
+        Amphibia: "Amphibians",
+        Insecta: "Insects",
+        Arachnida: "Arachnids",
+        Gastropoda: "Gastropods",
+        Bivalvia: "Bivalves",
+      },
+      Plantae: {
+        Magnoliopsida: "Magnoliopsida",
+        Liliopsida: "Monocotyledons",
+        Pinopsida: "Conifers",
+      },
+    },
   },
 };
 

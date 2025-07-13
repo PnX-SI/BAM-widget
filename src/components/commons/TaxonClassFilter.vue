@@ -27,7 +27,7 @@ function updateClass(className) {
           variant="outline-primary"
           :pressed="class_ == value"
           @click="updateClass(value)"
-          >{{ value }}</BButton
+          >{{ $t(`taxonsClass.Animalia.${value}`) }}</BButton
         >
       </div>
       <div
@@ -40,7 +40,7 @@ function updateClass(className) {
           variant="outline-success"
           :pressed="class_ == value"
           @click="updateClass(value)"
-          >{{ value }}</BButton
+          >{{ $t(`taxonsClass.Plantae.${value}`) }}</BButton
         >
       </div>
     </div>
