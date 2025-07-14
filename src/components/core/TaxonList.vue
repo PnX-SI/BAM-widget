@@ -8,6 +8,7 @@ import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
 import TaxonView from "./TaxonView.vue";
 import { TAXONLIST_DISPLAY_MODE } from "@/lib/enums";
+import TaxonClassFilterBadge from "../commons/TaxonClassFilterBadge.vue";
 
 const { t } = useI18n();
 const {
@@ -65,6 +66,8 @@ const pageIndex = ref(0);
 const sortBy = ref(props.sortBy || "lastSeenDate");
 const orderBy = ref(props.order || "desc");
 
+const filterClass = ref(null);
+
 const searchString = ref("");
 
 const sortByAvailable = [
@@ -100,6 +103,9 @@ const speciesListShowed = computed(() => {
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
+  filteredSpecies = filteredSpecies.filter((taxon) => {
+    return filterClass.value ? taxon.class == filterClass.value : true;
+  });
   return sortArray(filteredSpecies, {
     by: sortBy.value,
     order: orderBy.value,
@@ -209,6 +215,11 @@ if (wkt.value) {
             <i v-else class="bi bi-grid-fill"></i>
           </button>
         </div>
+        <div class="justify-content-center filterDropdown">
+          <TaxonClassFilterBadge
+            @select:class="(newClass) => (filterClass = newClass)"
+          ></TaxonClassFilterBadge>
+        </div>
         <TaxonView
           v-for="observation in speciesListShowed"
           :key="observation.taxonId"
@@ -290,6 +301,15 @@ if (wkt.value) {
   position: absolute;
   top: 0;
   left: 0;
+  width: max-content;
+}
+
+.filterDropdown {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  width: max-content;
 }
 .card-body {
   position: relative; /* Assurez-vous que le conteneur parent est positionné de manière relative */

@@ -33,8 +33,6 @@ watch([sourceName], () => {
 });
 
 function updateSource(a) {
-  // Object.assign(connector, getConnector(sourceName.value, params));
-  // console.log(connector, sourceName.value);
   connector.value = getConnector(sourceName.value, params);
 }
 </script>
