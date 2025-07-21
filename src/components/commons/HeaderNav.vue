@@ -16,6 +16,9 @@ import LanguageSwitch from "./LanguageSwitch.vue";
           <BNavForm class="d-flex" right>
             <LanguageSwitch></LanguageSwitch>
           </BNavForm>
+          <BNavItem href="https://pnx-si.github.io/widget-gtsi/docs/#/"
+            ><i class="bi bi-file-text-fill"></i> Documentation</BNavItem
+          >
         </BNavbarNav>
       </BCollapse>
     </BNavbar>
