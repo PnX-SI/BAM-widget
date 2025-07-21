@@ -29,9 +29,9 @@ Generate your widget -> [https://pnx-si.github.io/widget-gtsi/#/config](https://
 ## 🖼️ Display Options
 
 - Map view 🗺️
-  <img style="width:400px" src="docs/images/maplist_mode.png"/>
+  <img style="width:400px" src="images/maplist_mode.png"/>
 - List of species 📋
-  <img style="width:400px" src="docs/images/first_result_gallery.png"/>
+  <img style="width:400px" src="images/first_result_gallery.png"/>
 
 ## 🎛️ Widget customization
 
