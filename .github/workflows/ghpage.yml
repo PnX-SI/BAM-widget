@@ -25,7 +25,7 @@ jobs:
       - name: Copy README
         run: |
           cat README.md | sed "s/docs\///" > ./docs/README.md
-          cp docs ./dist
+          cp -r docs ./dist
 
       - name: 🚀 Deploy to GitHub Pages 🚀
         if: github.ref == 'refs/heads/main'
