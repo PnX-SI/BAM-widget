@@ -1,4 +1,4 @@
-- [Accueil](/)
+- [Home](/)
 - [Get Started](GetStarted.md)
-- Customize
+- [Widget Customization](customize.md)
 - [Different data sources](different-sources.md)
