@@ -6,7 +6,7 @@ To begin, go to the following address: https://pnx-si.github.io/widget-gtsi/#/co
 
 The following interface should appear:
 
-![Configurator Interface](./images/config_page.png)
+![Configurator Interface](images/config_page.png)
 
 The interface is divided into five parts:
 
@@ -24,21 +24,21 @@ The interface is divided into five parts:
 
 In the parameters block, draw a geometry (polygon, circle, line, etc.) in which you want to search for taxa.
 
-![Select Geometry](./images/select_geometry.gif)
+![Select Geometry](images/select_geometry.gif)
 
 You should see a loading indicator in the preview block, followed by a list of taxa, as in the screenshot below:
 
-![Taxa Search Result](./images/first_result.png)
+![Taxa Search Result](images/first_result.png)
 
 You can change the style of the list by clicking on the top left icon ☷ or ☰.
 
-![Gallery View Display](./images/first_result_gallery.png)
+![Gallery View Display](images/first_result_gallery.png)
 
 ## Integrate the Widget into Your Website
 
 In the bottom-left block of the interface, copy the HTML code.
 
-![Share Button](./images/share_button2.png)
+![Share Button](images/share_button2.png)
 
 Then, copy the HTML code into your webpage:
 

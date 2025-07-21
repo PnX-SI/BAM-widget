@@ -1,7 +1,5 @@
 # Biodiversity around me 🐛🐦🌱
 
-## A widget to display species within an area
-
 **Biodiversity around me** is a web widget that retrieves and displays species observed within a selected area.  
 It supports multiple sources of biodiversity data such as [GBIF](https://www.gbif.org/) 🦋 and a [GeoNature](https://geonature.fr/) instance 🌱, with plans for additional sources.  
 The widget provides several display modes, including map 🗺️, species list 📋.
