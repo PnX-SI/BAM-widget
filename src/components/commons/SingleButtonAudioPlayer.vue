@@ -14,7 +14,7 @@ audio.addEventListener("ended", (e) => {
   play.value = false;
 });
 
-function toggle() {
+function toggleAudio() {
   if (play.value) {
     audio.pause();
     audio.currentTime = 0;
@@ -27,7 +27,7 @@ function toggle() {
 </script>
 <template>
   <i
-    @click="toggle()"
+    @click="toggleAudio()"
     :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
   ></i>
 </template>
