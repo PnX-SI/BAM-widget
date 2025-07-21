@@ -1,48 +1,46 @@
-# Get Started
+# Getting Started
 
-## Open the configurator
+## Open the Configurator
 
-First, go to the following address : https://pnx-si.github.io/widget-gtsi/#/config
+To begin, go to the following address: https://pnx-si.github.io/widget-gtsi/#/config.
 
 The following interface should appear:
 
-![alt](./images/config_page.png)
+![Configurator Interface](./images/config_page.png)
 
-The interface is divided in 4 parts :
+The interface is divided into five parts:
 
-1.  This block contains the widget parameters. First, this block enables to indicate the zone in which you are
+1. **Widget Parameters**: This section allows you to specify the area where to you want to search for species. In addition, various parameters may be changed such as: _data source_, _media source_, _taxon class_, _display mode_, etc.
 
-    looking for species. Second, it allows you to customize differents parameters of your widget like the data source, the media source, the class
+2. **Export Embed Code**: This section allows you to export the `<embed>` code required to integrate the widget into your website.
 
-    of animal, the display mode, etc..
+3. **Widget Preview**: This section shows you a preview of the widget as it will appear on your website or application.
 
-2.  This block shows you a preview of the widget as it will appear in your website/application.
+4. **Default Display**: By default, the widget is divided into two blocks: one to display the location of the area and the other to list the species present in that area. To change the display mode to `List` go to the parameters and change the `Widget display mode` setting.
 
-3.  In default mode, the widget is separated into two blocks, one to display the zone location and the second to show the species listed in the latter.
+5. **Language Change**: This section allows you to change the language of the user interface.
 
-4.  Allows you to change the language of GUI.
+## Create Your First Widget
 
-### You first widget
+In the parameters block, draw a geometry (polygon, circle, line, etc.) in which you want to search for taxa.
 
-In the parameter block, draw a geometry (polygon, circle, line,...) in which you want to look for taxons.
+![Select Geometry](./images/select_geometry.gif)
 
-![alt](./images/select_geometry.gif)
+You should see a loading indicator in the preview block, followed by a list of taxa, as in the screenshot below:
 
-You should see a loading indicator in the preview block followed by a list of taxons like in the screenshot below
+![Taxa Search Result](./images/first_result.png)
 
-![alt](./images/first_result.png)
+You can change the style of the list by clicking on the top left icon ☷ or ☰.
 
-You can change the style of the list by clicking on top left icon ☷ or ☰.
+![Gallery View Display](./images/first_result_gallery.png)
 
-![alt](./images/first_result_gallery.png)
+## Integrate the Widget into Your Website
 
-### Integrate the widget in your website
+In the bottom-left block of the interface, copy the HTML code.
 
-Use the `Share` button to open the following modal.
+![Share Button](./images/share_button2.png)
 
-![alt](./images/share_button.png)
-
-Then, copy the HTML code in your webpage.
+Then, copy the HTML code into your webpage:
 
 ```html
 <html>
@@ -53,68 +51,15 @@ Then, copy the HTML code in your webpage.
   <body>
     <div>
       <embed
-        src="https://pnx-si.github.io/widget-gtsi/#/?radius=1&wkt=POLYGON
-
-
-      ((6.056916750121133 44.57703998098364, 6.056876644804486
-
-
-      44.577330104383925, 6.0567578484837306 44.57760907986982,
-
-
-      6.0565649254490435 44.577866186335314, 6.056305288965714
-
-
-      44.57809154297202, 6.055988916486816 44.578276489036675,
-
-
-      6.0556279662605315 44.57841391674158, 6.055236310060284 44.578498544466,
-
-
-      6.054829 44.57852711977936, 6.054421689939716 44.578498544466,
-
-
-      6.054030033739469 44.57841391674158, 6.053669083513184 44.578276489036675,
-
-
-      6.053352711034287 44.57809154297202, 6.053093074550957 44.577866186335314,
-
-
-      6.052900151516269 44.57760907986982, 6.052781355195513 44.577330104383925,
-
-
-      6.052741249878866 44.57703998098364, 6.0527813756283795
-
-
-      44.576749859030905, 6.052900189271284 44.57647088766723, 6.05309312388026
-
-
-      44.5762137873711, 6.053352764427941 44.57598843801162, 6.053669132842488
-
-
-      44.575803499224214, 6.054030071494483 44.57566607768865, 6.054421710372583
-
-
-      44.575581454086446, 6.054829 44.57555288022062, 6.055236289627418
-
-
-      44.575581454086446, 6.055627928505517 44.57566607768865, 6.055988867157512
-
-
-      44.575803499224214, 6.05630523557206 44.57598843801162, 6.05656487611974
-
-
-      44.5762137873711, 6.056757810728716 44.57647088766723, 6.05687662437162
-
-
-      44.576749859030905, 6.056916750121133
-
-
-      44.57703998098364))&connector=gbif&nbTaxonPerLine=2&showFilters=true&mapEditable=true&lang=fr&mode=gallery&widgetType=default&GBIF_ENDPOINT=https://api.gbif.org/v1&mediaSource=gbif"
+        src="https://pnx-si.github.io/widget-gtsi/#/?radius=1&wkt=POLYGON ((6.065733348121989 44.576553304564825, 6.0654911292327265 44.57830781799968, 6.064772991141251 44.57999495639761, 6.063606495426499 44.581549875401485, 6.062036445756115 44.58291280750781, 6.060123169780968 44.58403136085271, 6.057940202071561 44.584862534908495, 6.055571456941543 44.58537437527727, 6.053108 44.585547203637255, 6.050644543058457 44.58537437527727, 6.048275797928439 44.584862534908495, 6.046092830219032 44.58403136085271, 6.044179554243885 44.58291280750781, 6.042609504573501 44.581549875401485, 6.0414430088587485 44.57999495639761, 6.040724870767273 44.57830781799968, 6.040482651878011 44.576553304564825, 6.040725617998898 44.57479884406682, 6.041444389562768 44.57311185642028, 6.04261130855026 44.57155716303179, 6.044181506854287 44.57019449705699, 6.046094634195841 44.56907620984364, 6.04827717863253 44.56824526140327, 6.050645290290133 44.5677335717859, 6.053108 44.56756079636277, 6.055570709709867 44.5677335717859, 6.05793882136747 44.56824526140327, 6.060121365804159 44.56907620984364, 6.062034493145714 44.57019449705699, 6.06360469144974 44.57155716303179, 6.064771610437232 44.57311185642028, 6.0654903820011015 44.57479884406682, 6.065733348121989 44.576553304564825))&connector=GBIF&nbTaxonPerLine=1&showFilters=true&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata"
         type=""
-        style="width: 100%; height: 500px;"
+        style="width: 500px; height: 400px"
       />
     </div>
   </body>
 </html>
 ```
+
+It should the render the following widget :
+
+<embed src="https://pnx-si.github.io/widget-gtsi/#/?radius=1&wkt=POLYGON ((6.065733348121989 44.576553304564825, 6.0654911292327265 44.57830781799968, 6.064772991141251 44.57999495639761, 6.063606495426499 44.581549875401485, 6.062036445756115 44.58291280750781, 6.060123169780968 44.58403136085271, 6.057940202071561 44.584862534908495, 6.055571456941543 44.58537437527727, 6.053108 44.585547203637255, 6.050644543058457 44.58537437527727, 6.048275797928439 44.584862534908495, 6.046092830219032 44.58403136085271, 6.044179554243885 44.58291280750781, 6.042609504573501 44.581549875401485, 6.0414430088587485 44.57999495639761, 6.040724870767273 44.57830781799968, 6.040482651878011 44.576553304564825, 6.040725617998898 44.57479884406682, 6.041444389562768 44.57311185642028, 6.04261130855026 44.57155716303179, 6.044181506854287 44.57019449705699, 6.046094634195841 44.56907620984364, 6.04827717863253 44.56824526140327, 6.050645290290133 44.5677335717859, 6.053108 44.56756079636277, 6.055570709709867 44.5677335717859, 6.05793882136747 44.56824526140327, 6.060121365804159 44.56907620984364, 6.062034493145714 44.57019449705699, 6.06360469144974 44.57155716303179, 6.064771610437232 44.57311185642028, 6.0654903820011015 44.57479884406682, 6.065733348121989 44.576553304564825))&connector=GBIF&nbTaxonPerLine=1&showFilters=true&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata" type="" style="width: 500px; height: 400px" />

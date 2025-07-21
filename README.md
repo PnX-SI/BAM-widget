@@ -1,17 +1,13 @@
-# 🐾 Biodiversity around me
+# Biodiversity around me 🐛🐦🌱
 
-🌍 **Widget to display taxon data around a geometry**
-
-## Overview
+## A widget to display species within an area
 
 **Biodiversity around me** is a web widget that retrieves and displays species observed within a selected area.  
-It supports multiple sources of biodiversity data such as [GBIF](https://www.gbif.org/) 🦋 and (currently) a GeoNature instance 🌱, with plans for additional sources.  
-The widget provides several display modes, including map 🗺️, species list 📋, or both.
+It supports multiple sources of biodiversity data such as [GBIF](https://www.gbif.org/) 🦋 and a [GeoNature](https://geonature.fr/) instance 🌱, with plans for additional sources.  
+The widget provides several display modes, including map 🗺️, species list 📋.
 
 The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet🗺️, and Bootstrap 🅱.  
 It supports multilingual interfaces 🌐 and a modern design.
-
-![widget preview](docs/images/first_result_gallery.png)
 
 ## ✨ Features
 
@@ -25,42 +21,43 @@ It supports multilingual interfaces 🌐 and a modern design.
 
 ## 🚀 Generate your widget !
 
-Generate your widget here  
-[https://pnx-si.github.io/widget-gtsi/#/config](https://pnx-si.github.io/widget-gtsi/#/config)
+Generate your widget -> [https://pnx-si.github.io/widget-gtsi/#/config](https://pnx-si.github.io/widget-gtsi/#/config)
 
 ## 🔗 Data Sources
 
 - **GBIF**: Global Biodiversity Information Facility API.
-- **GeoNature**: A naturalist data collect platform
+- **GeoNature**: A naturalist data collect self-hosted platform
 
 ## 🖼️ Display Options
 
 - Map view 🗺️
+  <img style="width:400px" src="docs/images/maplist_mode.png"/>
 - List of species 📋
+  <img style="width:400px" src="docs/images/first_result_gallery.png"/>
 
-## 🎛️ Customization
+## 🎛️ Widget customization
 
-Each parameter can be set via URL query, configuration, or through the widget’s interface.
+Each parameter can be set via URL query or through the widget’s configuration interface [/config](https://pnx-si.github.io/widget-gtsi/#/config).
 
-| Parameter          | Type    | Purpose / Usage                                                                        | Example / Values      |
-| ------------------ | ------- | -------------------------------------------------------------------------------------- | --------------------- |
-| `radius`           | number  | Buffer radius for search area (km)                                                     | `1`                   |
-| `wkt`              | string  | [Well-Know Text](https://fr.wikipedia.org/wiki/Well-known_text) geometry (search area) | `"POINT(2.35 48.85)"` |
-| `dateMin`          | string  | Minimum observation date                                                               | `"2024-01-01"`        |
-| `dateMax`          | string  | Maximum observation date                                                               | `"2024-12-31"`        |
-| `connector`        | object  | Data source connector (GBIF, GeoNature, ...)                                           | `"GBIF"`              |
-| `nbTaxonPerLine`   | number  | Number of taxons per line in the list view                                             | `4`                   |
-| `showFilters`      | boolean | Show/hide filters in the taxon list                                                    | `true` / `false`      |
-| `mapEditable`      | boolean | Allow editing geometry on the map                                                      | `true` / `false`      |
-| `lang`             | string  | Language code for UI                                                                   | `"en"`, `"fr"`        |
-| `mode`             | string  | Taxon list display mode (`gallery`, `detailedList`)                                    | `"detailedList"`      |
-| `sourceGeometry`   | string  | URL to GeoJSON geometry source                                                         | `"https://..."`       |
-| `class`            | string  | Taxonomic class filter (e.g., Mammalia, Aves)                                          | `"Mammalia"`          |
-| `widgetType`       | string  | Widget display mode (`default`, others)                                                | `"default"`           |
-| `hybridTaxonList`  | boolean | Enable switching between list/gallery taxon display modes                              | `true` / `false`      |
-| `x`                | number  | Longitude for point geometry                                                           | `2.35`                |
-| `y`                | number  | Latitude for point geometry                                                            | `48.85`               |
-| `customDetailPage` | string  | Custom URL for taxon detail redirection                                                | `"https://..."`       |
+| Parameter          | Type    | Purpose / Usage                                                                                                                                                                                                         | Example / Values         |
+| ------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `radius`           | number  | Buffer radius for search area (km)                                                                                                                                                                                      | `1`                      |
+| `wkt`              | string  | [Well-Know Text](https://fr.wikipedia.org/wiki/Well-known_text) geometry (search area)                                                                                                                                  | `"POINT(2.35 48.85)"`    |
+| `dateMin`          | string  | Minimum observation date                                                                                                                                                                                                | `"2024-01-01"`           |
+| `dateMax`          | string  | Maximum observation date                                                                                                                                                                                                | `"2024-12-31"`           |
+| `connector`        | object  | Data source connector (GBIF, GeoNature, ...)                                                                                                                                                                            | `"GBIF"`                 |
+| `nbTaxonPerLine`   | number  | Number of taxons per line in the list view                                                                                                                                                                              | `4`                      |
+| `showFilters`      | boolean | Show/hide filters in the taxon list                                                                                                                                                                                     | `true` / `false`         |
+| `mapEditable`      | boolean | Allow editing geometry on the map                                                                                                                                                                                       | `true` / `false`         |
+| `lang`             | string  | Language code for UI                                                                                                                                                                                                    | `"en"`, `"fr"`           |
+| `mode`             | string  | Taxon list display mode (`gallery`, `detailedList`)                                                                                                                                                                     | `"detailedList"`         |
+| `sourceGeometry`   | string  | a URL to a GeoJSON that will be used to define the selected area. The given geometry is simplified due to the character limit of a URL.                                                                                 | `"https://..."`          |
+| `class`            | string  | Taxonomic class filter (e.g., Mammalia, Aves) Check [taxonclass2icon.js](https://github.com/PnX-SI/widget-gtsi/blob/main/src/assets/taxonclass2icon.js) for more detail.                                                | `"Mammalia"`             |
+| `widgetType`       | string  | Widget display mode (`default`, others)                                                                                                                                                                                 | `"default"`              |
+| `hybridTaxonList`  | boolean | Enable switching between list/gallery taxon display modes                                                                                                                                                               | `true` / `false`         |
+| `x`                | number  | Longitude for point geometry                                                                                                                                                                                            | `2.35`                   |
+| `y`                | number  | Latitude for point geometry                                                                                                                                                                                             | `48.85`                  |
+| `customDetailPage` | string  | Custom URL for taxon detail redirection. The taxon ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced by the actual taxon's ID. For example, `https://www.gbif.org/species/{taxonID}` | `"https://...{taxonID}"` |
 
 ## ⚙️ Project Setup
 
@@ -82,13 +79,14 @@ npm run build
 
 ## 👥 Contributors
 
-Developed by:
+**Developed and conceived by**
 
-- @jacquesfize
+- @jacquesfize (Parc National des Écrins)
 - @CynthiaBorotPNV
 - @EcMerc
-- @amandine-sahl
-- Simon Chevreau
+- @amandine-sahl (Parc National des Cévennes)
+- Simon Chevreau (Office Français de la Biodiversité)
+- @camillemonchicourt (Parc National des Écrins)
 
 ## 📄 License
 
