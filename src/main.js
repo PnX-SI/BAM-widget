@@ -7,7 +7,7 @@ import App from "./App.vue";
 
 import MapListWidget from "./components/MapListWidget.vue";
 import ListWidget from "./components/ListWidget.vue";
-import ConfiguratorWidget from "./components/ConfiguratorWidget.vue";
+import Configurator from "./components/Configurator.vue";
 import Error404 from "./components/commons/Error404.vue";
 import { VueShowdown } from "vue-showdown";
 
@@ -39,7 +39,7 @@ const routes = [
   },
   {
     path: "/config",
-    component: ConfiguratorWidget,
+    component: Configurator,
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: Error404 },
 ];
