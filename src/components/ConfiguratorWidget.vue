@@ -18,18 +18,21 @@ const { widgetType } = ParameterStore.getInstance();
     <div class="row">
       <!-- Intro & Parameters -->
       <div class="col-12 col-lg-4 col-md-2" style="height: 80vh">
-        <!-- <Intro class="mb-2"></Intro> -->
         <Parameters />
       </div>
-      <div class="col" id="preview">
-        <div>
-          <h3><i class="bi bi-easel"></i> {{ $t("widgetPreview") }}</h3>
+      <div class="col">
+        <div class="card">
+          <h3 class="card-header">
+            <i class="bi bi-easel"></i> {{ $t("widgetPreview") }}
+          </h3>
+          <div class="card-body">
+            <ListWidget
+              height="70vh"
+              v-if="widgetType == WIDGET_TYPE.list"
+            ></ListWidget>
+            <MapListWidget height="70vh" v-else></MapListWidget>
+          </div>
         </div>
-        <ListWidget
-          height="70vh"
-          v-if="widgetType == WIDGET_TYPE.list"
-        ></ListWidget>
-        <MapListWidget height="70vh" v-else></MapListWidget>
       </div>
     </div>
   </main>

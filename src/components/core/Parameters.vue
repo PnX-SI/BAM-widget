@@ -69,12 +69,12 @@ const widgetTypeOptions = computed(() => {
 </script>
 
 <template>
-  <div class="card">
-    <h4 class="card-header">
-      <i class="bi bi-gear-fill"></i> {{ $t("parameters") }}
-    </h4>
-    <div class="card-body">
-      <div id="parameters">
+  <div id="left-panel">
+    <div class="card">
+      <h3 class="card-header">
+        <i class="bi bi-gear-fill"></i> {{ $t("parameters") }}
+      </h3>
+      <div class="card-body" id="parameters">
         <div class="col text-center">
           <label
             >{{ $t("drawGeometry") }} <i class="fa-solid fa-location-dot"></i
@@ -213,27 +213,26 @@ const widgetTypeOptions = computed(() => {
         </div>
       </div>
     </div>
-  </div>
-  <div class="mt-2">
-    <HTMLBuilder :link="link"></HTMLBuilder>
+    <div class="mt-2">
+      <HTMLBuilder :link="link"></HTMLBuilder>
+    </div>
   </div>
 </template>
 
 <style scoped>
-#parameters {
-  background-color: white;
-}
-
 label {
   font-weight: bold;
 }
 
-.card-body {
-  height: 60vh;
+#parameters {
   overflow-y: scroll;
+  height: 50vh;
 }
 
 .parameter-section {
   margin-top: 1rem;
+}
+#left-panel {
+  height: 100vh;
 }
 </style>

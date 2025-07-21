@@ -32,10 +32,10 @@ const embed = computed(() => {
 <template>
   <div class="card">
     <div class="card-header d-flex align-items-center justify-content-between">
-      <h4>
+      <h3>
         <i class="bi bi-code-slash" style="margin-right: 0.5em"></i>
         {{ $t("browserIntegration") }}
-      </h4>
+      </h3>
     </div>
     <div class="card-body">
       <div class="input-group mb-3">
