@@ -1,4 +1,4 @@
-# Biodiversity around me
+# Biodiversity around me 🐛🐦🌱
 
 > A widget generator to explore and show biodiversity data
 
