@@ -8,7 +8,7 @@ Go to https://pnx-si.github.io/widget-gtsi/#/config
 
 ## Customize configuration
 
-(Not for the moment)
+(Not for the moments)
 
 ## Project Setup
 
