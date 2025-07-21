@@ -1,12 +1,15 @@
-name: Build Vue
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
+name: Build Vue and Deploy Docs
 
+on: [push]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: 🛎️ Checkout code
         uses: actions/checkout@v4
+        with:
+          lfs: "true"
 
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
@@ -19,27 +22,14 @@ jobs:
       - name: 🏗️ Build
         run: npm run build
 
-      - name: 🚀Deploy to GitHub Pages🚀
+      - name: Copy README
+        run: |
+          cat README.md | sed "s/docs\///" > ./docs/README.md
+          cp docs ./dist
+
+      - name: 🚀 Deploy to GitHub Pages 🚀
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-  docs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 🛎️ Checkout code
-        uses: actions/checkout@v4
-        with:
-          lfs: "true"
-      - name: Copy README
-        run: cat README.md  | sed "s/docs\///" > ./docs/README.md
-      - name: 🚀Deploy to GitHub Pages🚀
-
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          destination_dir: docs
