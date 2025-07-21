@@ -49,6 +49,7 @@ const mapID = (Math.random() + 1).toString(36).substring(7);
 // Computed Properties
 const wktFromOutside = computed(() => !!wkt.value);
 const style = computed(() => `height: ${props.height};`);
+let locate = null;
 
 // Watchers
 watch(wkt, updateGeometryFromWKT);
@@ -123,7 +124,7 @@ function setupMap() {
 
   if (mapEditable.value) {
     map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
-    new LocateControl({}).addTo(map.value);
+    locate = new LocateControl({}).addTo(map.value);
   }
 
   map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
@@ -133,6 +134,7 @@ function setupMap() {
     drawEventData = { layer: marker, layerType: "marker" };
     geometry.value.addLayer(marker);
     updateGeometry();
+    locate.stop();
   });
 }
 
