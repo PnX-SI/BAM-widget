@@ -28,7 +28,7 @@ Minimum observation date for filtering results.
 
 - **Example:** `"2024-01-01"`
 
-### `connector` (**Type:** object)
+### `connector` (**Type:** string)
 
 Specifies the data source connector, such as GBIF, GeoNature, etc.
 
@@ -38,15 +38,13 @@ Specifies the data source connector, such as GBIF, GeoNature, etc.
 
 Number of taxa displayed per line in the list view.
 
-- **Example / Values:** `4`
+- **Example:** `4`
 
 ### `showFilters` (**Type:** boolean)
 
 Determines whether to show or hide filters in the taxon list.
 
 ![alt](images/customize/filter_switch.gif)
-
-- **Example / Values:** `true` / `false`
 
 ### `mapEditable` (**Type:** boolean)
 
@@ -90,7 +88,7 @@ Taxonomic class filter, such as Mammalia or Aves. For more details, check [taxon
 
 Display mode for the widget, with `default` being the standard option.
 
-**Example / Values:** `"default"`
+**Available Values:** `[default, list]`
 
 #### Default mode
 
