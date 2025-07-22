@@ -76,8 +76,6 @@ A detailed view for each taxon.
 
 A URL to a GeoJSON file that defines the selected area. The geometry is simplified due to URL character limits.
 
-**Example / Values:** `"https://..."`
-
 ### `class` (**Type:** string)
 
 Taxonomic class filter, such as Mammalia or Aves. For more details, check [taxonclass2icon.js](https://github.com/PnX-SI/widget-gtsi/blob/main/src/assets/taxonclass2icon.js).
@@ -104,8 +102,6 @@ Enables switching between list and gallery display modes for taxa.
 
 ![hybrid_switch](images/customize/hybrid_switch.gif)
 
-**Example / Values:** `true` / `false`
-
 ### `x` and `y` (**Type:** number)
 
 Longitude and latitude for point geometry.
@@ -125,7 +121,7 @@ Custom URL for redirecting to a taxon detail page. The taxon ID part of the URL 
 
 Name of the data source use to fetch taxa pictures.
 
-**Available source:**
+**Available sources:**
 
 - `wikidata` GBIF and GeoNature compatible
 - `gbif` GBIF compatible
