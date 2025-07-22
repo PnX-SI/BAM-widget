@@ -25,6 +25,7 @@ jobs:
       - name: Copy README
         run: |
           cat README.md | sed "s/docs\///" > ./docs/README.md
+          cp CHANGELOG.md ./docs/CHANGELOG.md
           cp -r docs ./dist
 
       - name: 🚀 Deploy to GitHub Pages 🚀
