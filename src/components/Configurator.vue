@@ -1,7 +1,6 @@
 <script setup>
 import "leaflet/dist/leaflet.css";
 import Parameters from "@/components/core/Parameters.vue";
-import Intro from "./core/Intro.vue";
 import ParameterStore from "@/lib/parameterStore";
 import HeaderNav from "./commons/HeaderNav.vue";
 import { WIDGET_TYPE } from "@/lib/enums";
@@ -25,7 +24,7 @@ const { widgetType } = ParameterStore.getInstance();
           <h3 class="card-header">
             <i class="bi bi-easel"></i> {{ $t("widgetPreview") }}
           </h3>
-          <div class="card-body">
+          <div class="card-body" id="preview">
             <ListWidget
               height="70vh"
               v-if="widgetType == WIDGET_TYPE.list"
