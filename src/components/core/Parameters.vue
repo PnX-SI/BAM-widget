@@ -177,11 +177,16 @@
                         v-model="mode"
                         :options="modeOptions"
                         class="mt-1"
+                        aria-label="ModeSelection"
                     />
                 </div>
 
                 <div class="parameter-section">
-                    <BFormCheckbox switch v-model="switchModeAvailable">
+                    <BFormCheckbox
+                        switch
+                        v-model="switchModeAvailable"
+                        aria-label="activateTaxonListModeSwitch"
+                    >
                         <strong>{{ $t('mode.isTaxonListHybrid') }} </strong>
                     </BFormCheckbox>
                 </div>
@@ -195,6 +200,7 @@
                         v-model="widgetType"
                         :options="widgetTypeOptions"
                         class="mt-1"
+                        aria-label="widgetType"
                     />
                 </div>
                 <div class="parameter-section">
@@ -202,7 +208,11 @@
                         >{{ $t('numberOfTaxonPerLine') }}
                         <i class="bi bi-123"></i>
                     </label>
-                    <BFormInput type="number" v-model="nbTaxonPerLine" />
+                    <BFormInput
+                        type="number"
+                        v-model="nbTaxonPerLine"
+                        aria-label="numberOfTaxonPerLine"
+                    />
                 </div>
                 <div class="parameter-section">
                     <label
