@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="">
 import { Media } from "@/lib/models";
 import { useTemplateRef, ref } from "vue";
 

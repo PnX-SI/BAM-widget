@@ -5,7 +5,33 @@ import { MediaSource } from "./MediaSource";
 
 const { GBIF, TAXREF } = TAXON_REFERENTIAL;
 
-function fetchWikidataEntityByTaxrefId(cdNom) {
+interface WikidataResponse {
+  results: {
+    bindings: Array<{
+      item: {
+        value: string;
+      };
+    }>;
+  };
+}
+
+interface WikidataEntity {
+  entities: {
+    [key: string]: {
+      claims?: {
+        P18?: Array<{
+          mainsnak: {
+            datavalue: {
+              value: string;
+            };
+          };
+        }>;
+      };
+    };
+  };
+}
+
+function fetchWikidataEntityByTaxrefId(cdNom: string): Promise<string | null> {
   const url = "https://query.wikidata.org/sparql";
   const query = `
     SELECT ?item WHERE {
@@ -13,17 +39,17 @@ function fetchWikidataEntityByTaxrefId(cdNom) {
     }`;
 
   return fetch(url + "?format=json&query=" + encodeURIComponent(query))
-    .then((response) => response.json())
+    .then((response) => response.json() as Promise<WikidataResponse>)
     .then((data) => {
       if (!data.results.bindings.length) {
         return null;
       }
       const entityId = data.results.bindings[0].item.value.split("/").pop();
-      return entityId;
+      return entityId || null;
     });
 }
 
-function fetchWikidataEntityByGbifId(gbifId) {
+function fetchWikidataEntityByGbifId(gbifId: string): Promise<string | null> {
   const url = "https://query.wikidata.org/sparql";
   const query = `
     SELECT ?item WHERE {
@@ -31,23 +57,24 @@ function fetchWikidataEntityByGbifId(gbifId) {
     }`;
 
   return fetch(url + "?format=json&query=" + encodeURIComponent(query))
-    .then((response) => response.json())
+    .then((response) => response.json() as Promise<WikidataResponse>)
     .then((data) => {
       if (!data.results.bindings.length) {
         return null;
       }
       const entityId = data.results.bindings[0].item.value.split("/").pop();
-      return entityId;
+      return entityId || null;
     });
 }
-function fetchImageFromWikidata(entityId) {
-  if (!entityId) return;
-  // Step 2: Retrieve the entity data from Wikidata
+
+function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
+  if (!entityId) return Promise.resolve("No image found for this entity.");
+
   const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
+
   return fetch(url)
-    .then((response) => response.json())
+    .then((response) => response.json() as Promise<WikidataEntity>)
     .then((data) => {
-      // Extract the image filename
       const entity = data.entities[entityId];
       const claims = entity.claims || {};
       const imageClaims = claims.P18 || [];
@@ -55,27 +82,34 @@ function fetchImageFromWikidata(entityId) {
       if (!imageClaims.length) {
         return "No image found for this entity.";
       }
-      // Get the filename from the first image claim
+
       const imageFilename = imageClaims[0].mainsnak.datavalue.value;
-      // Step 3: Construct the URL to fetch the image from Wikimedia Commons
       const imageUrl = `https://commons.wikimedia.org/w/thumb.php?width=500&f=${imageFilename}`;
+
       return [
-        new Media({
+        {
           url: imageUrl,
           source: "Wikidata",
-          typeMedia:'image'
-        }),
+          typeMedia: "image",
+        },
       ];
     });
 }
 
-function fetchWikidataImage(idTaxon, connector, wikidataEntryID = null) {
-  if (!idTaxon) throw new Error("No taxonId given !");
+function fetchWikidataImage(
+  idTaxon: string,
+  connector: { referential: string },
+  wikidataEntryID: string | null = null
+): Promise<Media[] | undefined> {
+  if (!idTaxon) throw new Error("No taxonId given!");
 
   if (wikidataEntryID) {
-    return fetchImageFromWikidata(wikidataEntryID);
-  } else if (idTaxon) {
-    let fetchIDPromise = null;
+    return fetchImageFromWikidata(wikidataEntryID) as Promise<
+      Media[] | undefined
+    >;
+  } else {
+    let fetchIDPromise: Promise<string | null> | null = null;
+
     switch (connector.referential) {
       case TAXON_REFERENTIAL.GBIF:
         fetchIDPromise = fetchWikidataEntityByGbifId(idTaxon);
@@ -86,10 +120,12 @@ function fetchWikidataImage(idTaxon, connector, wikidataEntryID = null) {
       default:
         break;
     }
-    if (!fetchIDPromise) return;
 
-    return fetchIDPromise.then((idWikidata) => {
+    if (!fetchIDPromise) return Promise.resolve(undefined);
+
+    fetchIDPromise.then((idWikidata) => {
       if (idWikidata) return fetchImageFromWikidata(idWikidata);
+      return "No image found for this entity.";
     });
   }
 }
@@ -98,19 +134,18 @@ class WikiDataImageSource extends MediaSource {
   constructor() {
     super("WikidataMediaSource", SOURCE_.WIKIDATA);
   }
-  fetchPicture(taxonID, connector) {
+
+  fetchPicture(taxonID: string, connector: any): Promise<Media[] | undefined> {
     if (!this.isCompatible(connector)) {
       throw new Error(
-        `Wikidata Image source is only compatible with the GBIF and a TAXREF referential based connector `
+        `Wikidata Image source is only compatible with the GBIF and a TAXREF referential based connector`
       );
     }
     return fetchWikidataImage(taxonID, connector);
   }
-  isCompatible(connector) {
-    if ([GBIF, TAXREF].includes(connector.referential)) {
-      return true;
-    }
-    return false;
+
+  isCompatible(connector: any): boolean {
+    return [GBIF, TAXREF].includes(connector.referential);
   }
 }
 
