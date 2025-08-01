@@ -153,11 +153,20 @@ const widgetTypeOptions = computed(() => {
               ><i class="fa-solid fa-list"></i> |
               <i class="fa-solid fa-grip-vertical"></i></span
           ></label>
-          <BFormSelect v-model="mode" :options="modeOptions" class="mt-1" />
+          <BFormSelect
+            v-model="mode"
+            :options="modeOptions"
+            aria-label="ModeSelection"
+            class="mt-1"
+          />
         </div>
 
         <div class="parameter-section">
-          <BFormCheckbox switch v-model="hybridTaxonList">
+          <BFormCheckbox
+            switch
+            v-model="hybridTaxonList"
+            aria-label="activateTaxonListModeSwitch"
+          >
             <strong>{{ $t("mode.isTaxonListHybrid") }} </strong>
           </BFormCheckbox>
         </div>
@@ -170,6 +179,7 @@ const widgetTypeOptions = computed(() => {
             v-model="widgetType"
             :options="widgetTypeOptions"
             class="mt-1"
+            aria-label="widgetType"
           />
         </div>
 
@@ -177,7 +187,11 @@ const widgetTypeOptions = computed(() => {
           <label
             >{{ $t("numberOfTaxonPerLine") }} <i class="bi bi-123"></i>
           </label>
-          <BFormInput type="number" v-model="nbTaxonPerLine" />
+          <BFormInput
+            type="number"
+            v-model="nbTaxonPerLine"
+            aria-label="numberOfTaxonPerLine"
+          />
         </div>
 
         <div class="parameter-section">
