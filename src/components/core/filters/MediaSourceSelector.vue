@@ -52,6 +52,7 @@ watch(mediaSourceID, () => {
     id="mediaSourceSelect"
     :options="connector.getCompatibleMediaSource()"
     v-model="mediaSourceID"
+    :aria-label="'MediaSourceSelector_' + props.typeMedia"
   >
     <template #first>
       <BFormSelectOption :value="null" disabled>{{
