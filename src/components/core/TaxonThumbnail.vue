@@ -1,16 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { Media } from "@/lib/models";
-import { useTemplateRef } from "vue";
 
 const props = defineProps({
-  picture: { type: Media },
-  audio: { type: Media },
+  picture: { type: Object as () => Media },
+  audio: { type: Object as () => Media },
   vernacularName: { type: String },
   acceptedScientificName: { type: String },
   urlDetailPage: { type: String },
 });
-
-const audio = useTemplateRef("audio");
 </script>
 <template>
   <div class="col card thumbnail">
