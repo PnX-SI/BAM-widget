@@ -9,6 +9,7 @@ import imgUrl from '@/assets/images/BAM-logo.png'
       toggleable="lg"
       variant="light"
       class="mb-3"
+      data-testid="Toolbar"
     >
       <BNavbarBrand href="#/config"><img style="width:35px" :src="imgUrl"></img> {{ $t("title") }}</BNavbarBrand>
       <BNavbarToggle target="nav-collapse" />
