@@ -41,6 +41,7 @@ function checkImageExists() {
 function onImageLoaded() {
   imageLoaded.value = true;
 }
+
 checkImageExists();
 </script>
 
@@ -52,6 +53,7 @@ checkImageExists();
     :alt="props?.alt"
     :aria-label="props?.ariaLabel"
     :class="props?.class"
+    :key="props.imageUrl"
   />
   <!-- TODO : Fix the loading class -->
   <!-- :class="!imageLoaded ? 'placeholder placeholder-wave' : '' + props?.class" -->
