@@ -7,7 +7,7 @@ import { getMediaSource, SOURCE_ } from "../media/media";
 import { useI18n } from "vue-i18n";
 import { CONNECTORS } from "./connectors";
 
-const GBIF_ENDPOINT_DEFAULT = "https://api.gbif-uat.org/v1";
+const GBIF_ENDPOINT_DEFAULT = "https://api.gbif.org/v1";
 const GBIF_DEFAULT_LIMIT = 300;
 const GBIF_DEFAULT_NB_PAGES = 10;
 

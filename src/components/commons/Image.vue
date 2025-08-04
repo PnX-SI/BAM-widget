@@ -10,6 +10,7 @@ const props = defineProps({
   },
   ariaLabel: String,
   alt: String,
+  class: String,
 });
 
 const imageExists = ref(false);
@@ -50,7 +51,7 @@ checkImageExists();
     :src="props.imageUrl"
     :alt="props?.alt"
     :aria-label="props?.ariaLabel"
-    :class="!imageLoaded ? 'placeholder placeholder-wave' : ''"
+    :class="!imageLoaded ? 'placeholder placeholder-wave' : '' + props?.class"
   />
   <!-- <div v-else class="col placeholder-glow">
     <div style="height: 300px; width: 100%" class="placeholder"></div>

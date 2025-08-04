@@ -15,6 +15,7 @@ const props = defineProps<{
       :image-url="props.picture?.url"
       :alt="props.picture?.url"
       :title="'Source: ' + props.picture?.source"
+      class="card-img"
     ></Image>
 
     <div class="card-img-overlay">
