@@ -51,6 +51,7 @@ function updateSource(a) {
       :variant="props.variant"
       size="md"
       class="col-12 mb-3"
+      data-testid="button to open the source change modal"
       ><i class="fa fa-leaf"></i> {{ $t("source.modify") }} ({{
         sourceName
       }})</BButton
@@ -62,10 +63,15 @@ function updateSource(a) {
     centered
     :title="$t('source.title')"
     @ok="updateSource"
+    data-testid="Data source modification modal"
   >
     <div class="sourceParam">
       <label for="sourceName"> {{ $t("source.select") }}</label>
-      <select v-model="sourceName" class="form-select">
+      <select
+        v-model="sourceName"
+        class="form-select"
+        data-testid="Source selection select form"
+      >
         <option
           v-for="(source, sourceName) in sourcesParams"
           :value="sourceName"
@@ -73,7 +79,11 @@ function updateSource(a) {
           {{ sourceName }}
         </option>
       </select>
-      <div class="parameters" v-for="form in sourcesParams[sourceName]">
+      <div
+        class="parameters"
+        v-for="form in sourcesParams[sourceName]"
+        data-testid="Data source parameter div"
+      >
         <label :for="form.name">{{ form.label }}</label>
         <input
           v-if="form.type === String"
