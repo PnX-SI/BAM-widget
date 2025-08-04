@@ -7,7 +7,7 @@ import L from "leaflet";
  * @param choices - The array of choices
  * @returns The randomly selected item
  */
-function randomChoice<T>(choices: T[]): T {
+function randomChoice(choices) {
   const index = Math.floor(Math.random() * choices.length);
   return choices[index];
 }
@@ -53,7 +53,7 @@ function toWKT(
  * @param map - The Leaflet map instance
  */
 function restoreMapState(map: L.Map): void {
-  const savedState = localStorage.getItem("mapState");
+  const savedState: string = localStorage.getItem("mapState");
   if (savedState) {
     const state = JSON.parse(savedState);
     map.setView([state.center.lat, state.center.lng], state.zoom);

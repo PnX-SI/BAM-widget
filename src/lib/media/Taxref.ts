@@ -2,6 +2,7 @@ import { Media } from "../models";
 import { MediaSource } from "./MediaSource";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { SOURCE_ } from "./media";
+import { Connector } from "../connectors/connector";
 
 interface Photo {
   _links: {
@@ -23,13 +24,13 @@ interface TaxrefODATAResponse {
 
 export class TaxrefODATA extends MediaSource {
   constructor(parameters) {
-    super("Taxref", SOURCE_.TAXREF_ODATA);
+    super("Taxref", SOURCE_.taxref_odata);
   }
 
   fetchPicture(
     taxonID: string,
-    connector: { referential: string }
-  ): Promise<Media[]> {
+    connector: Connector
+  ): Promise<Media[] | undefined> {
     const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${taxonID}&visibility=PUBLIC`;
 
     return fetch(url)

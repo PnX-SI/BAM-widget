@@ -24,8 +24,8 @@ export class GeoNatureConnector extends Connector {
     this.LIMIT = this.options?.LIMIT ?? GEONATURE_DEFAULT_LIMIT;
     this.referential = TAXON_REFERENTIAL.TAXREF;
 
-    this.imageSource = this.imageSource ?? getMediaSource(SOURCE_.TAXREF_ODATA);
-    this.soundSource = this.soundSource ?? getMediaSource(SOURCE_.TAXREF_ODATA);
+    this.imageSource = this.imageSource ?? getMediaSource(SOURCE_.taxref_odata);
+    this.soundSource = this.soundSource ?? getMediaSource(SOURCE_.taxref_odata);
   }
 
   getParamsSchema(): Array<Record<string, any>> {

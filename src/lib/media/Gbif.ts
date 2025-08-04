@@ -6,14 +6,17 @@ import { Connector } from "../connectors/connector";
 
 export class GBIFMediaSource extends MediaSource {
   constructor(parameters?: any) {
-    super("GBIFMediaSource", SOURCE_.GBIF);
+    super("GBIFMediaSource", SOURCE_.gbif);
   }
 
   isCompatible(connector: Connector): boolean {
     return connector.referential === TAXON_REFERENTIAL.GBIF;
   }
 
-  fetchPicture(taxonID: string, connector: Connector): Promise<Media[]> {
+  fetchPicture(
+    taxonID: string,
+    connector: Connector
+  ): Promise<Media[] | undefined> {
     if (!this.isCompatible(connector)) {
       throw new Error(
         `The connector ${connector.name} is not available for the GBIF Media Source`
@@ -34,7 +37,7 @@ export class GBIFMediaSource extends MediaSource {
   fetchSound(
     taxonID: string,
     connector: Connector
-  ): Promise<Media | undefined> {
+  ): Promise<Media[] | undefined> {
     if (!this.isCompatible(connector)) {
       throw new Error(
         `The connector ${connector.name} is not available for the GBIF Media Source`
@@ -49,12 +52,14 @@ export class GBIFMediaSource extends MediaSource {
             for (let media of occ["media"]) {
               const ext = media.identifier.split(".").pop();
               if (!["png", "jpg", "jpeg", "bmp", "gif"].includes(ext)) {
-                return {
-                  url: media.identifier,
-                  typeMedia: "sound",
-                  license: media.license,
-                  source: `${media.rightsHolder} (${media.license})`,
-                };
+                return [
+                  {
+                    url: media.identifier,
+                    typeMedia: "sound",
+                    license: media.license,
+                    source: `${media.rightsHolder} (${media.license})`,
+                  },
+                ];
               }
             }
           }

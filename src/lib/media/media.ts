@@ -4,10 +4,10 @@ import { TaxrefODATA } from "./Taxref";
 import { WikiDataImageSource } from "./Wikidata";
 import { MediaSource } from "./MediaSource";
 export enum SOURCE_ {
-  GBIF = "gbif",
-  TAXREF_ODATA = "taxref_odata",
-  WIKIDATA = "wikidata",
-  TAXHUB = "taxhub",
+  gbif = "gbif",
+  taxref_odata = "taxref_odata",
+  wikidata = "wikidata",
+  taxhub = "taxhub",
   // CUSTOM = "custom",
 }
 
@@ -20,13 +20,13 @@ export function getMediaSource(
   params: MediaSourceParams = {}
 ): MediaSource {
   switch (id) {
-    case SOURCE_.GBIF:
+    case SOURCE_.gbif:
       return new GBIFMediaSource(params);
-    case SOURCE_.TAXREF_ODATA:
+    case SOURCE_.taxref_odata:
       return new TaxrefODATA(params);
-    case SOURCE_.WIKIDATA:
+    case SOURCE_.wikidata:
       return new WikiDataImageSource();
-    case SOURCE_.TAXHUB:
+    case SOURCE_.taxhub:
       return new TaxHubMediaSource(params);
     // case SOURCE_.CUSTOM:
     //   return new UrlMediaSource(params);

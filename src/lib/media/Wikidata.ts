@@ -1,3 +1,4 @@
+import { Connector } from "../connectors/connector";
 import { Media } from "../models";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { SOURCE_ } from "./media";
@@ -98,7 +99,7 @@ function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
 
 function fetchWikidataImage(
   idTaxon: string,
-  connector: { referential: string },
+  connector: Connector,
   wikidataEntryID: string | null = null
 ): Promise<Media[] | undefined> {
   if (!idTaxon) throw new Error("No taxonId given!");
@@ -123,7 +124,7 @@ function fetchWikidataImage(
 
     if (!fetchIDPromise) return Promise.resolve(undefined);
 
-    fetchIDPromise.then((idWikidata) => {
+    return fetchIDPromise.then((idWikidata) => {
       if (idWikidata) return fetchImageFromWikidata(idWikidata);
       return "No image found for this entity.";
     });
@@ -132,10 +133,13 @@ function fetchWikidataImage(
 
 class WikiDataImageSource extends MediaSource {
   constructor() {
-    super("WikidataMediaSource", SOURCE_.WIKIDATA);
+    super("WikidataMediaSource", SOURCE_.wikidata);
   }
 
-  fetchPicture(taxonID: string, connector: any): Promise<Media[] | undefined> {
+  fetchPicture(
+    taxonID: string,
+    connector: Connector
+  ): Promise<Media[] | undefined> {
     if (!this.isCompatible(connector)) {
       throw new Error(
         `Wikidata Image source is only compatible with the GBIF and a TAXREF referential based connector`

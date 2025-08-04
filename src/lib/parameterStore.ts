@@ -11,26 +11,113 @@ import { buffer, simplify } from "@turf/turf";
 import { useI18n } from "vue-i18n";
 import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "./enums";
 import { Connector } from "./connectors/connector";
+import { CONNECTORS } from "./connectors/connectors";
 
 class ParameterStore {
+  /**
+   * @type {ParameterStore | null}
+   */
   private static instance: ParameterStore | null = null;
 
+  /**
+   * If a marker or line is given, a buffer is applied with a given radius.
+   * @type {Ref<number>}
+   */
   radius: Ref<number>;
+
+  /**
+   * WKT (Well-Known Text Representation of the search zone).
+   * @type {Ref<string>}
+   */
   wkt: Ref<string>;
+
+  /**
+   * Dates that define the period of observations.
+   * @type {Ref<Date | null>}
+   */
   dateMin: Ref<Date | null>;
+
+  /**
+   * @type {Ref<Date | null>}
+   */
   dateMax: Ref<Date | null>;
+
+  /**
+   * Connector used to fetch observations data.
+   * @type {ShallowRef<Connector>}
+   */
   connector: ShallowRef<Connector>;
+
+  /**
+   * Number of taxa per line.
+   * @type {Ref<number | null>}
+   */
   nbTaxonPerLine: Ref<number | null>;
+
+  /**
+   * Are filters of the taxa list shown.
+   * @type {Ref<boolean>}
+   */
   showFilters: Ref<boolean>;
+
+  /**
+   * Can the geometry be changed on the map.
+   * @type {Ref<boolean>}
+   */
   mapEditable: Ref<boolean>;
+
+  /**
+   * Language of the widget.
+   * @type {any}
+   */
   lang: any;
+
+  /**
+   * Display mode of the taxon list (gallery or detailed).
+   * @type {Ref<string>}
+   */
   mode: Ref<string>;
+
+  /**
+   * URL of a GeoJSON.
+   * @type {Ref<string | null>}
+   */
   sourceGeometry: Ref<string | null>;
+
+  /**
+   * Taxa's class selected.
+   * @type {Ref<string | null>}
+   */
   class: Ref<string | null>;
+
+  /**
+   * Widget display mode.
+   * @type {Ref<string>}
+   */
   widgetType: Ref<string>;
+
+  /**
+   * If the user can switch between different modes of display in the taxon list.
+   * @type {Ref<boolean>}
+   */
   hybridTaxonList: Ref<boolean>;
+
+  /**
+   * Longitude.
+   * @type {Ref<number | null>}
+   */
   x: Ref<number | null>;
+
+  /**
+   * Latitude.
+   * @type {Ref<number | null>}
+   */
   y: Ref<number | null>;
+
+  /**
+   * URL template to redirect the user to a page different from the default one indicated by the connector to a data source.
+   * @type {Ref<string | null>}
+   */
   customDetailPage: Ref<string | null>;
 
   private constructor() {
@@ -120,7 +207,8 @@ class ParameterStore {
       },
       dateMin: (value: string) => new Date(value),
       dateMax: (value: string) => new Date(value),
-      connector: (value: string) => getConnector(value, { ...paramsFromUrl }),
+      connector: (value: string) =>
+        getConnector(CONNECTORS[value], { ...paramsFromUrl }),
       class: (value: string) =>
         Object.keys(this.connector.value.taxonClass2SourceID)?.includes(value)
           ? value
@@ -196,18 +284,7 @@ class ParameterStore {
     router: Router
   ) {
     router.replace({ path: route.path, query: {} });
-    const instance = ParameterStore.getInstance();
-    instance.radius.value = 1;
-    instance.wkt.value = "";
-    instance.dateMin.value = null;
-    instance.dateMax.value = null;
-    instance.connector.value = getConnector(null, {});
-    instance.nbTaxonPerLine.value = null;
-    instance.showFilters.value = true;
-    instance.mapEditable.value = true;
-    instance.mode.value = TAXONLIST_DISPLAY_MODE.detailedList;
-    instance.sourceGeometry.value = null;
-    instance.class.value = null;
+    ParameterStore.instance = new ParameterStore();
   }
 }
 

@@ -13,7 +13,7 @@ function isUrlImage(url) {
 }
 export class TaxHubMediaSource extends MediaSource {
   constructor(parameters) {
-    super("TaxHub", SOURCE_.TAXHUB);
+    super("TaxHub", SOURCE_.taxhub);
   }
 
   fetchPicture(taxonID, connector) {
