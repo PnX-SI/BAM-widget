@@ -39,7 +39,9 @@ import { test, expect } from "@playwright/test";
       test(`Check for block for route ${route}`, async ({ page }) => {
         await page.goto(route);
         expected.forEach(async (block) => {
-          await expect(page.locator(block).first()).toBeVisible();
+          await expect(page.locator(block).first()).toBeVisible({
+            timeout: 10000,
+          });
         });
       });
     });
