@@ -132,7 +132,7 @@ test.describe("Form parameters testing", () => {
    */
 
   test("Draw a geometry", async ({ page }) => {
-    drawGeometry(page);
+    await drawGeometry(page);
     waitForLoading(page);
   });
 });
