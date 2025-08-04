@@ -7,8 +7,8 @@ const props = defineProps<{
   vernacularName: string;
   acceptedScientificName: string;
   urlDetailPage: string;
-  nbObservations: string;
-  lastSeenDate: string;
+  nbObservations: number;
+  lastSeenDate: Date;
 }>();
 </script>
 <template>

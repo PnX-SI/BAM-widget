@@ -1,6 +1,7 @@
 import { toast } from "vue3-toastify";
 import { getMediaSource, SOURCE_ } from "../media/media";
 import { MediaSource } from "../media/MediaSource";
+import { TAXON_REFERENTIAL } from "../taxonReferential";
 
 export interface ConnectorOptions {
   imageSource?: string | MediaSource;
@@ -9,11 +10,40 @@ export interface ConnectorOptions {
 }
 
 export class Connector {
-  name?: string;
+  /**
+   * Name of the Connector
+   * @type {string}
+   */
+  name: string;
+
+  /**
+   * Mapping between a taxon's class and the corresponding ID in the referential used by the connector
+   * @type {Record}
+   */
   taxonClass2SourceID: Record<string, number> = {};
-  referential?: string;
+
+  /**
+   * ID of taxon's referential used by the datasource (for example: GBIF, Taxref)
+   * @type {TAXON_REFERENTIAL}
+   */
+  referential?: TAXON_REFERENTIAL;
+
+  /**
+   * Contains parameters that will or not be used by the connector.
+   * @type {ConnectorOptions}
+   */
   options: ConnectorOptions;
+
+  /**
+   * The source that will be used to fetch a taxon picture
+   * @type {MediaSource}
+   */
   imageSource?: MediaSource;
+
+  /**
+   * The source that will be use to fetch sound made by an animal
+   * @type {MediaSource}
+   */
   soundSource?: MediaSource;
 
   constructor(options: ConnectorOptions) {
@@ -23,6 +53,11 @@ export class Connector {
     this.soundSource = this.parseMediaSource(options?.soundSource);
   }
 
+  /**
+   * Used to parse the imageSource and soundSource parameter.
+   * @param {MediaSource | string} mediaSource
+   * @returns {MediaSource}
+   */
   parseMediaSource(
     mediaSource?: string | MediaSource
   ): MediaSource | undefined {
@@ -32,14 +67,10 @@ export class Connector {
     return mediaSource;
   }
 
-  verifyOptions(params_names: string[] = []): void {
-    params_names.forEach((name) => {
-      if (!this.options.hasOwnProperty(name)) {
-        toast.error(`Please indicate the ${name} parameter`);
-      }
-    });
-  }
-
+  /**
+   * Return a list of parameters definition, its type, its name, its label, etc.
+   * @returns Record<string,any> parameters definition
+   */
   getParamsSchema(): Record<string, any> {
     return {};
   }

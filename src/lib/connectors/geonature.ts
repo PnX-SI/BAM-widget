@@ -18,7 +18,6 @@ export class GeoNatureConnector extends Connector {
   constructor(options: ConnectorOptions) {
     super(options);
     this.name = CONNECTORS.GeoNature;
-    // this.verifyOptions(["EXPORT_API_ENDPOINT"]);
     this.API_ENDPOINT = options?.API_ENDPOINT;
     this.ID_EXPORT = options?.ID_EXPORT ?? 35;
     this.LIMIT = this.options?.LIMIT ?? GEONATURE_DEFAULT_LIMIT;

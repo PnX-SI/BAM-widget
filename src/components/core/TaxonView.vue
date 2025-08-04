@@ -2,7 +2,7 @@
 import { ref, computed, watch } from "vue";
 
 import { NO_IMAGE_URL } from "@/assets/constant";
-import { Media, Taxon } from "@/lib/models";
+import { Taxon } from "@/lib/models";
 import ParameterStore from "@/lib/parameterStore";
 import { randomChoice } from "@/lib/utils";
 
