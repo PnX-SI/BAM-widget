@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Media } from "@/lib/models";
 
-const props = defineProps({
-  picture: { type: Object as () => Media },
-  audio: { type: Object as () => Media },
-  vernacularName: { type: String },
-  acceptedScientificName: { type: String },
-  urlDetailPage: { type: String },
-});
+const props = defineProps<{
+  picture: Media;
+  audio: Media;
+  vernacularName: string;
+  acceptedScientificName: string;
+  urlDetailPage: string;
+}>();
 </script>
 <template>
   <div class="col card thumbnail">

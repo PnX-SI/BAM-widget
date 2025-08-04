@@ -13,9 +13,9 @@ import TaxonDetailed from "./TaxonDetailed.vue";
 const { mode, connector, lang, customDetailPage } =
   ParameterStore.getInstance();
 
-const props = defineProps({
-  taxon: Object as () => Taxon,
-});
+const props = defineProps<{
+  taxon: Taxon;
+}>();
 
 const taxon = props.taxon;
 const speciesPhoto = ref([]);
