@@ -11,12 +11,11 @@ const props = defineProps({
 </script>
 <template>
   <div class="col card thumbnail">
-    <img
-      class="card-img"
-      :src="props.picture?.url"
+    <Image
+      :image-url="props.picture?.url"
       :alt="props.picture?.url"
       :title="'Source: ' + props.picture?.source"
-    />
+    ></Image>
 
     <div class="card-img-overlay">
       <div class="card-title h6">

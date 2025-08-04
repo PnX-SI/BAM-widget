@@ -46,7 +46,7 @@ function fetchTaxonAudio() {
     connector.value.soundSource
       .fetchSound(taxon.taxonId, connector.value)
       .then((response) => {
-        speciesAudio.value = response;
+        if (response) speciesAudio.value = response[0];
       });
   }
 }
