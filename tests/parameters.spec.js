@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 async function drawGeometry(page) {
-  const map = await page.locator("#parameters").locator(".mapC");
+  const map = await page
+    .getByTestId("Parameters list div")
+    .getByTestId("Map container");
   await map.scrollIntoViewIfNeeded();
   const box = await map.boundingBox();
   await map.getByRole("link", { name: "Draw a polygon" }).click();
@@ -40,13 +42,10 @@ test.describe("Form parameters testing", () => {
   });
 
   test("enable/disable filter", async ({ page }) => {
-    const checkBox = page.getByRole("checkbox", {
-      name: /Afficher les filtres/,
-    });
-    const filterBlock = page
-      .locator("#taxon-list div")
-      .filter({ hasText: "Nom vernaculaireNom" })
-      .first();
+    const checkBox = await page.getByTestId(
+      "Show/Hide results filters checkbox"
+    );
+    const filterBlock = await page.getByTestId("Search taxon input form");
     await checkBox.uncheck();
     await expect(filterBlock).toBeHidden();
     await checkBox.check();
@@ -54,24 +53,19 @@ test.describe("Form parameters testing", () => {
   });
 
   test("Search zone editable", async ({ page }) => {
-    const checkBox = await page.getByRole("checkbox", {
-      name: /Zone de recherche éditable/,
-    });
+    const checkBox = await page.getByTestId("Show/Hide drawing tools checkbox");
 
     await checkBox.uncheck();
-    const drawPolygonLink = await page
-      .locator("#preview")
-      .last()
-      .getByRole("link", {
-        name: "Draw a rectangle",
-      });
+    const drawPolygonLink = page
+      .getByTestId("Preview area")
+      .getByRole("link", { name: "Draw a rectangle" });
     await expect(drawPolygonLink).toBeHidden();
     await checkBox.check();
     await expect(drawPolygonLink).toBeVisible();
   });
 
   test("BufferSize parameter", async ({ page }) => {
-    await page.getByRole("slider", { name: /Taille du buffer/ }).fill("10");
+    await page.getByTestId("Buffer selection form").fill("10");
     await page.waitForTimeout(500);
     checkForParameterChange(page, "radius", 10);
   });
@@ -97,17 +91,13 @@ test.describe("Form parameters testing", () => {
   });
   test("Set GeoJSON", async ({ page }) => {
     const urlGeoJSON = "http://test.com/fichier.geojson";
-    await page
-      .getByRole("textbox", { name: "Indiquer une URL vers un GeoJSON" })
-      .fill(urlGeoJSON);
+    await page.getByTestId("GeoJSON form").fill(urlGeoJSON);
     await page.waitForTimeout(200);
     await checkForParameterChange(page, "sourceGeometry", urlGeoJSON);
   });
   test("Change url to taxon detail", async ({ page }) => {
     const urlTaxonDetail = "http://test.com/species/{taxonID}";
-    await page
-      .getByRole("textbox", { name: "https://<urlFicheDeTaxon>/" })
-      .fill(urlTaxonDetail);
+    await page.getByTestId("Custom detail page form").fill(urlTaxonDetail);
     await page.waitForTimeout(200);
     await checkForParameterChange(page, "customDetailPage", urlTaxonDetail);
   });
@@ -115,21 +105,11 @@ test.describe("Form parameters testing", () => {
   test("Change display mode for the taxon list", async ({ page }) => {
     await drawGeometry(page);
     await page.waitForTimeout(10000);
-    const modeSelect = await page.getByLabel("ModeSelection");
+    const modeSelect = await page.getByTestId("Widget type selection form");
     await modeSelect.selectOption("gallery");
     //
     await modeSelect.selectOption("detailedList");
   });
-
-  /**
-   *
-   * await page.getByLabel('widgetType')
-   * await page.getByRole('spinbutton', { name: 'numberOfTaxonPerLine' })
-   * await page.getByLabel('MediaSourceSelector_image')
-   * getByLabel('MediaSourceSelector_sound')
-   * getByRole('button', { name: /Modifier la source de données/ })
-   * getByRole('button', { name: /Rafraichir les paramétres/ })
-   */
 
   test("Draw a geometry", async ({ page }) => {
     await drawGeometry(page);
