@@ -13,7 +13,7 @@ function isUrlImage(url) {
 }
 export class TaxHubMediaSource extends MediaSource {
   constructor(parameters) {
-    super("TaxHub", SOURCE_.TAXHUB);
+    super("TaxHub", SOURCE_.taxhub);
   }
 
   fetchPicture(taxonID, connector) {
@@ -25,16 +25,14 @@ export class TaxHubMediaSource extends MediaSource {
       .then(function (json) {
         let mediaList = [];
         try {
-          Object.values(json?.medias).forEach((media) => {
+          Object.values(json?.medias).forEach((media: any) => {
             if (media.is_public && isUrlImage(media.media_url)) {
-              mediaList.push(
-                new Media({
-                  url: media.media_url,
-                  license: media.licence,
-                  source: media.auteur,
-                  typeMedia: "image",
-                })
-              );
+              mediaList.push({
+                url: media.media_url,
+                license: media.licence,
+                source: media.auteur,
+                typeMedia: "image",
+              });
             }
           });
           return mediaList;

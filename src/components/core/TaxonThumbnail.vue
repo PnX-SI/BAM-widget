@@ -1,25 +1,22 @@
-<script setup>
+<script setup lang="ts">
 import { Media } from "@/lib/models";
-import { useTemplateRef } from "vue";
 
-const props = defineProps({
-  picture: { type: Media },
-  audio: { type: Media },
-  vernacularName: { type: String },
-  acceptedScientificName: { type: String },
-  urlDetailPage: { type: String },
-});
-
-const audio = useTemplateRef("audio");
+const props = defineProps<{
+  picture: Media;
+  audio: Media;
+  vernacularName: string;
+  acceptedScientificName: string;
+  urlDetailPage: string;
+}>();
 </script>
 <template>
   <div class="col card thumbnail">
-    <img
-      class="card-img"
-      :src="props.picture?.url"
+    <Image
+      :image-url="props.picture?.url"
       :alt="props.picture?.url"
       :title="'Source: ' + props.picture?.source"
-    />
+      class="card-img"
+    ></Image>
 
     <div class="card-img-overlay">
       <div class="card-title h6">

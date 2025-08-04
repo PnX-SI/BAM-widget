@@ -30,5 +30,8 @@ coverage
 *.tsbuildinfo
 
 
+# usually appears when building the doc
 docs/README.md
 docs/CHANGELOG.md
+# dev file
+components.d.ts

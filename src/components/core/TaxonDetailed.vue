@@ -1,26 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import { Media } from "@/lib/models";
 
-const props = defineProps({
-  picture: { type: Media },
-  audio: { type: Media },
-  vernacularName: { type: String },
-  acceptedScientificName: { type: String },
-  urlDetailPage: { type: String },
-  nbObservations: { type: Number },
-  lastSeenDate: { type: Object },
-});
-
+const props = defineProps<{
+  picture: Media;
+  audio: Media;
+  vernacularName: string;
+  acceptedScientificName: string;
+  urlDetailPage: string;
+  nbObservations: number;
+  lastSeenDate: Date;
+}>();
 </script>
 <template>
   <div class="col">
     <div class="card h-100 mb-2">
       <div class="taxon-photo" :class="props.picture.url ? '' : 'placeholder'">
-        <img
-          :src="props.picture?.url"
+        <Image
+          :image-url="props.picture?.url"
           :alt="props.picture?.url"
           :title="'Source: ' + props.picture?.source"
-        />
+        ></Image>
         <span class="caption" v-if="props.picture.source">{{
           props.picture.source
         }}</span>

@@ -1,14 +1,19 @@
-export class UrlMediaSource extends MediaSource {
+import { Media } from "../models";
+import { MediaSource } from "./MediaSource";
+
+class UrlMediaSource extends MediaSource {
+  private url: string;
+
   constructor(params) {
-    super("UrlMediaSource");
-    this.url = params.urlTemplate;
+    super(params, null);
+    // this.url = params.urlTemplate;
   }
 
-  isCompatible(connector) {
+  isCompatible(connector: any): boolean {
     return true;
   }
 
-  fetchPicture(taxonID, connector) {
+  fetchPicture(taxonID: string, connector: any): Promise<Media[] | undefined> {
     const apiUrl = this.url.replace("{taxonID}", taxonID);
     return fetch(apiUrl)
       .then((response) => response.json())
@@ -30,8 +35,8 @@ export class UrlMediaSource extends MediaSource {
       });
   }
 
-  findImageUrlInResponse(data) {
-    if (typeof data === "object") {
+  findImageUrlInResponse(data: any): string | null {
+    if (typeof data === "object" && data !== null) {
       for (const key in data) {
         if (key.includes("image") || key.includes("url")) {
           const value = data[key];
@@ -44,7 +49,7 @@ export class UrlMediaSource extends MediaSource {
           ) {
             return value;
           }
-        } else if (typeof data[key] === "object") {
+        } else if (typeof data[key] === "object" && data[key] !== null) {
           const nestedUrl = this.findImageUrlInResponse(data[key]);
           if (nestedUrl) {
             return nestedUrl;

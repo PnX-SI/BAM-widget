@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { Media } from "@/lib/models";
-import { useTemplateRef, ref } from "vue";
+import { ref } from "vue";
 
-const props = defineProps({
-  audio: { type: Media, required: true },
-});
+const props = defineProps<{
+  audio: Media;
+}>();
 
 const audio = new Audio(props.audio.url);
 const play = ref(false);

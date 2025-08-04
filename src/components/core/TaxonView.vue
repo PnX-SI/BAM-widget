@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from "vue";
 
 import { NO_IMAGE_URL } from "@/assets/constant";
-import { Media, Taxon } from "@/lib/models";
+import { Taxon } from "@/lib/models";
 import ParameterStore from "@/lib/parameterStore";
 import { randomChoice } from "@/lib/utils";
 
@@ -13,9 +13,9 @@ import TaxonDetailed from "./TaxonDetailed.vue";
 const { mode, connector, lang, customDetailPage } =
   ParameterStore.getInstance();
 
-const props = defineProps({
-  taxon: Taxon,
-});
+const props = defineProps<{
+  taxon: Taxon;
+}>();
 
 const taxon = props.taxon;
 const speciesPhoto = ref([]);
@@ -46,16 +46,16 @@ function fetchTaxonAudio() {
     connector.value.soundSource
       .fetchSound(taxon.taxonId, connector.value)
       .then((response) => {
-        speciesAudio.value = response;
+        if (response) speciesAudio.value = response[0];
       });
   }
 }
 const mediaDisplayed = computed(() => {
   if (!speciesPhoto.value) {
-    return new Media({ url: NO_IMAGE_URL, typeMedia: "image" });
+    return { url: NO_IMAGE_URL, typeMedia: "image" };
   }
   return speciesPhoto.value.length == 0
-    ? new Media({ url: NO_IMAGE_URL, typeMedia: "image" })
+    ? { url: NO_IMAGE_URL, typeMedia: "image" }
     : randomChoice(speciesPhoto.value);
 });
 

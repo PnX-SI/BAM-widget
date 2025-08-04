@@ -2,8 +2,14 @@ import { getMediaSource } from "../media/media";
 import { CONNECTORS } from "./connectors";
 import { GbifConnector } from "./gbif";
 import { GeoNatureConnector } from "./geonature";
+import { Connector } from "./connector";
 
-function getConnector(connectorName = "GBIF", params = {}) {
+type ConnectorParams = Record<string, any>;
+
+function getConnector(
+  connectorName: keyof typeof CONNECTORS = "GBIF",
+  params: ConnectorParams = {}
+): Connector {
   switch (connectorName) {
     case CONNECTORS.GBIF:
       return new GbifConnector(params);
