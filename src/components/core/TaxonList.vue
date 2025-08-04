@@ -167,11 +167,11 @@ if (wkt.value) {
 
 <template>
   <div id="taxon-list" class="card">
-    <div class="card-header" v-if="showFilters">
-      <SearchForm
+    <div class="card-header" v-if="showFilters"">
+      <SearchForm 
         @update:searchString="
           (newSearchString) => (searchString = newSearchString)
-        "
+        " 
       />
       <SortBy
         :sort-by-available="sortByAvailable"
@@ -179,16 +179,18 @@ if (wkt.value) {
         @update:orderBy="(neworder) => (orderBy = neworder)"
         :sortBy="sortBy"
         :orderBy="orderBy"
+        
       />
     </div>
     <div class="card-body">
       <Loading id="loadingObs" :loadingStatus="loadingObservations" />
       <div
         id="no-geometry-message"
+        data-testid="No geometry message"
         class="col-6"
         v-if="!wkt.length && !loadingObservations && !loadingError"
       >
-        <h5>{{ $t("drawGeometry") }}</h5>
+        <h5 data-testid="Message to ask the user to draw a zone in the map">{{ $t("drawGeometry") }}</h5>
         <h5>
           <i class="bi bi-square-fill"></i> <i class="bi bi-hexagon-fill"></i>
           <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
@@ -196,6 +198,7 @@ if (wkt.value) {
       </div>
       <div
         id="no-observations-message"
+        data-testid="No taxon found in the area"
         v-if="
           wkt.length &&
           !loadingObservations &&
@@ -205,10 +208,10 @@ if (wkt.value) {
       >
         {{ $t("noSpeciesObserved") }}
       </div>
-      <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
+      <div id="loading-error" class="col-6 bg-danger" v-if="loadingError" data-testid="Error message when loading data">
         <h5><i class="bi bi-bug"></i> Erreur de chargement des données</h5>
       </div>
-      <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
+      <div id="taxon-list-content" :class="classNames" @scroll="onScroll" data-testid="List of taxon found">
         <div class="justify-content-center toggleMode" v-if="hybridTaxonList">
           <button class="btn btn-secondary" @click="toggleMode()">
             <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
@@ -217,20 +220,21 @@ if (wkt.value) {
         </div>
         <div class="justify-content-center filterDropdown">
           <TaxonClassFilterBadge
-            @select:class="(newClass) => (filterClass = newClass)"
+            @select:class="(newClass) => (filterClass = newClass)" data-testid="Badge to filter list of taxons based on their class"
           ></TaxonClassFilterBadge>
         </div>
         <TaxonView
           v-for="observation in speciesListShowed"
           :key="observation.taxonId"
           :taxon="observation"
+          data-testid="Taxon found"
         />
       </div>
     </div>
 
-    <div id="data-source-credits">
+    <div id="data-source-credits" data-testid="Data source credits">
       {{ $t("source.title") }} {{ connector.name }}
-      <BTooltip v-if="connector.sourceDetailMessage()">
+      <BTooltip v-if="connector.sourceDetailMessage()" data-testid="Tooltip for a data source">
         <template #target>
           <a style="color: white; text-decoration: underline"
             ><i class="bi bi-info-circle"></i

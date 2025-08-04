@@ -24,7 +24,12 @@ watch(sortBy, (newVal) => {
 
 <template>
   <div class="input-group">
-    <select v-model="sortBy" class="form-select" id="sortby">
+    <select
+      v-model="sortBy"
+      class="form-select"
+      id="sortby"
+      data-testid="Sorting taxons input form"
+    >
       <option
         v-for="field in sortByAvailable"
         :key="`sort-${field.field_name}`"
@@ -33,7 +38,11 @@ watch(sortBy, (newVal) => {
         {{ field.label }}
       </option>
     </select>
-    <button class="btn btn-outline-secondary" @click="changeOrder">
+    <button
+      class="btn btn-outline-secondary"
+      @click="changeOrder"
+      data-testid="Change sorting order button"
+    >
       <i v-if="orderBy === 'asc'" class="bi bi-sort-up"></i>
       <i v-else class="bi bi-sort-down"></i>
     </button>

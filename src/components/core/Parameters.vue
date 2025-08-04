@@ -74,7 +74,7 @@ const widgetTypeOptions = computed(() => {
       <h3 class="card-header">
         <i class="bi bi-gear-fill"></i> {{ $t("parameters") }}
       </h3>
-      <div class="card-body" id="parameters">
+      <div class="card-body" id="parameters" data-testid="Parameters list div">
         <div class="col text-center">
           <label
             >{{ $t("drawGeometry") }} <i class="fa-solid fa-location-dot"></i
@@ -88,7 +88,11 @@ const widgetTypeOptions = computed(() => {
         </div>
 
         <div class="parameter-section">
-          <BFormCheckbox switch v-model="showFilters">
+          <BFormCheckbox
+            switch
+            v-model="showFilters"
+            data-testid="Show/Hide results filters checkbox"
+          >
             <strong
               >{{ $t("showFilters") }} <i class="bi bi-sort-down"></i
             ></strong>
@@ -99,7 +103,11 @@ const widgetTypeOptions = computed(() => {
           class="parameter-section"
           v-if="widgetType === WIDGET_TYPE.default"
         >
-          <BFormCheckbox switch v-model="mapEditable">
+          <BFormCheckbox
+            switch
+            v-model="mapEditable"
+            data-testid="Show/Hide drawing tools checkbox"
+          >
             <strong
               >{{ $t("mapEditable") }} <i class="fa-solid fa-map"></i
             ></strong>
@@ -140,6 +148,7 @@ const widgetTypeOptions = computed(() => {
           <BFormInput
             v-model="sourceGeometry"
             :placeholder="$t('IndicateGeoJSONUrl')"
+            data-testid="GeoJSON form"
           />
         </div>
 
@@ -150,6 +159,7 @@ const widgetTypeOptions = computed(() => {
           <BFormInput
             v-model="customDetailPage"
             :placeholder="$t('IndicateDetailTemplateUrl')"
+            data-testid="Custom detail page form"
           />
         </div>
 
@@ -163,7 +173,7 @@ const widgetTypeOptions = computed(() => {
           <BFormSelect
             v-model="mode"
             :options="modeOptions"
-            aria-label="ModeSelection"
+            data-testid="Mode select form"
             class="mt-1"
           />
         </div>
@@ -172,7 +182,7 @@ const widgetTypeOptions = computed(() => {
           <BFormCheckbox
             switch
             v-model="hybridTaxonList"
-            aria-label="activateTaxonListModeSwitch"
+            data-testid="Show/Hide taxon list mode switch"
           >
             <strong>{{ $t("mode.isTaxonListHybrid") }} </strong>
           </BFormCheckbox>
@@ -186,7 +196,7 @@ const widgetTypeOptions = computed(() => {
             v-model="widgetType"
             :options="widgetTypeOptions"
             class="mt-1"
-            aria-label="widgetType"
+            data-testid="Widget type selection form"
           />
         </div>
 
@@ -197,7 +207,7 @@ const widgetTypeOptions = computed(() => {
           <BFormInput
             type="number"
             v-model="nbTaxonPerLine"
-            aria-label="numberOfTaxonPerLine"
+            data-testid="Number of taxon per line form"
           />
         </div>
 
@@ -220,6 +230,7 @@ const widgetTypeOptions = computed(() => {
         <div class="d-flex justify-content-center parameter-section">
           <BButton
             variant="danger"
+            data-testid="Refresh parameters button"
             @click="ParameterStore.clearParameters(route, router)"
           >
             <i class="bi bi-arrow-clockwise"></i> {{ $t("RefreshFilters") }}

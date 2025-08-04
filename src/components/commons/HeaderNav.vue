@@ -8,6 +8,7 @@ import LanguageSwitch from "./LanguageSwitch.vue";
       toggleable="lg"
       variant="light"
       class="mb-3"
+      data-testid="Toolbar"
     >
       <BNavbarBrand href="#/config">🐛 🐦 🌱 {{ $t("title") }}</BNavbarBrand>
       <BNavbarToggle target="nav-collapse" />

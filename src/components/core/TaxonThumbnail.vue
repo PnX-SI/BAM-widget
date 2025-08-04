@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-  <div class="col card thumbnail">
+  <div class="col card thumbnail" data-testid="Taxon thumbnail view">
     <Image
       :image-url="props.picture?.url"
       :alt="props.picture?.url"
@@ -25,7 +25,9 @@ const props = defineProps<{
           :href="props.urlDetailPage"
           target="_blank"
         >
-          <span>{{ props.vernacularName }}</span></a
+          <span data-testid="Vernacular name">{{
+            props.vernacularName
+          }}</span></a
         >
         <div class="player">
           <SingleButtonAudioPlayer
@@ -38,6 +40,7 @@ const props = defineProps<{
           :click="true"
           :close-on-hide="true"
           :delay="{ show: 0, hide: 0 }"
+          data-testid="Picture copyright"
         >
           <template #target>
             <i class="bi bi-c-square-fill copyright-icon"></i>

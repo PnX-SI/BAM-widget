@@ -12,30 +12,41 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-  <div class="col">
+  <div class="col" data-testid="Taxon detailed view">
     <div class="card h-100 mb-2">
-      <div class="taxon-photo" :class="props.picture.url ? '' : 'placeholder'">
+      <div
+        class="taxon-photo"
+        :class="props.picture.url ? '' : 'placeholder'"
+        data-testid="Taxon picture"
+      >
         <Image
           :image-url="props.picture?.url"
           :alt="props.picture?.url"
           :title="'Source: ' + props.picture?.source"
         ></Image>
-        <span class="caption" v-if="props.picture.source">{{
-          props.picture.source
-        }}</span>
+        <span
+          class="caption"
+          data-testid="Picture caption"
+          v-if="props.picture.source"
+          >{{ props.picture.source }}</span
+        >
       </div>
 
       <div class="card-body">
         <div class="card-text">
-          <h5 class="card-title text-wrap">
+          <h5 class="card-title text-wrap" data-testid="Vernacular name">
             {{ props.vernacularName }}
           </h5>
-          <small class="text-body-secondary"
+          <small class="text-body-secondary" data-testid="Scientific name"
             ><strong>{{ $t("taxon.scientificName") }} :</strong>
             {{ props.acceptedScientificName }}</small
           ><br />
 
-          <small v-if="props.nbObservations" class="text-body-secondary">
+          <small
+            data-testid="Number of observations"
+            v-if="props.nbObservations"
+            class="text-body-secondary"
+          >
             <strong>{{ $t("taxon.nbObservations") }} : </strong
             >{{ props.nbObservations }}
           </small>
@@ -46,6 +57,7 @@ const props = defineProps<{
             <a
               :href="props.urlDetailPage"
               target="_blank"
+              data-testid="Taxon detail redirect link"
               class="badge bg-light text-primary border border-primary text-decoration-none"
               ><strong>{{ $t("taxon.seeMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
@@ -57,12 +69,12 @@ const props = defineProps<{
             class="audio"
             controls
             :src="props.audio.url"
-            ref="audio"
+            data-testid="animal sound"
           ></audio>
         </div>
       </div>
       <div class="card-footer">
-        <small class="text-body-secondary"
+        <small class="text-body-secondary" data-testid="Last seen date"
           >{{ $t("taxon.lastSeenDate") }} :
           {{ props?.lastSeenDate.toLocaleDateString() }}</small
         >

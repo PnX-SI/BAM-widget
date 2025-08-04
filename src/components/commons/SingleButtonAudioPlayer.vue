@@ -28,6 +28,7 @@ function toggleAudio() {
 <template>
   <i
     @click="toggleAudio()"
+    data-testid="Toggle to play animal sound"
     :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
   ></i>
 </template>

@@ -13,10 +13,14 @@ const { widgetType } = ParameterStore.getInstance();
   <HeaderNav></HeaderNav>
 
   <!-- App -->
-  <main class="container-fluid">
+  <main class="container-fluid" data-testid="Configuration interface">
     <div class="row">
-      <!-- Intro & Parameters -->
-      <div class="col-12 col-lg-4 col-md-2" style="height: 80vh">
+      <!-- Parameters -->
+      <div
+        class="col-12 col-lg-4 col-md-2"
+        style="height: 80vh"
+        data-testid="Parameter block"
+      >
         <Parameters />
       </div>
       <div class="col">
@@ -24,7 +28,7 @@ const { widgetType } = ParameterStore.getInstance();
           <h3 class="card-header">
             <i class="bi bi-easel"></i> {{ $t("widgetPreview") }}
           </h3>
-          <div class="card-body" id="preview">
+          <div class="card-body" id="preview" data-testid="Preview area">
             <ListWidget
               height="70vh"
               v-if="widgetType == WIDGET_TYPE.list"
