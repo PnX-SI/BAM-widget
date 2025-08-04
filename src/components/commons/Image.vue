@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NO_IMAGE_URL } from "@/assets/constant";
-import { ref, useTemplateRef } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
   imageUrl: {
@@ -14,9 +14,12 @@ const props = defineProps({
 
 const imageExists = ref(false);
 const imageLoaded = ref(false);
+
+const imageUrl = ref(props.imageUrl);
+
 function checkImageExists() {
   // Use a simple GET request to check if the image exists
-  fetch(props.imageUrl, {
+  fetch(imageUrl.value, {
     method: "HEAD",
   })
     .then((response) => {
@@ -24,24 +27,32 @@ function checkImageExists() {
         imageExists.value = true;
       } else {
         imageExists.value = false;
+        imageUrl.value = NO_IMAGE_URL;
       }
     })
     .catch((error) => {
       console.error("Error checking image:", error);
-      this.imageExists = false;
+      imageExists.value = false;
+      imageUrl.value = NO_IMAGE_URL;
     });
 }
+
+function onImageLoaded() {
+  imageLoaded.value = true;
+}
 checkImageExists();
-const imgHtmlTag = useTemplateRef("image");
 </script>
 
 <template>
   <img
-    v-if="imageExists"
     ref="image"
+    @load="onImageLoaded"
     :src="props.imageUrl"
     :alt="props?.alt"
     :aria-label="props?.ariaLabel"
+    :class="!imageLoaded ? 'placeholder placeholder-wave' : ''"
   />
-  <img v-else :src="NO_IMAGE_URL" :alt="props?.alt" />
+  <!-- <div v-else class="col placeholder-glow">
+    <div style="height: 300px; width: 100%" class="placeholder"></div>
+  </div> -->
 </template>
