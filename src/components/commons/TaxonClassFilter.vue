@@ -27,6 +27,7 @@
                     variant="outline-primary"
                     :pressed="class_ == value"
                     @click="updateClass(value)"
+                    data-testid="Animalia button parameter"
                     >{{ $t(`taxonsClass.Animalia.${value}`) }}</BButton
                 >
             </div>
@@ -40,6 +41,7 @@
                     variant="outline-success"
                     :pressed="class_ == value"
                     @click="updateClass(value)"
+                    data-testid="Plantae button parameter"
                     >{{ $t(`taxonsClass.Plantae.${value}`) }}</BButton
                 >
             </div>

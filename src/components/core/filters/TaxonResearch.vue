@@ -26,7 +26,7 @@
             class="form-control"
             v-model="typedSearch"
             list="my-list-id"
-            aria-label="Name of taxon"
+            data-testid="Name of taxon"
         />
     </div>
     <datalist id="my-list-id">

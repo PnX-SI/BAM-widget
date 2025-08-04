@@ -10,6 +10,7 @@
         ariaLabel: String,
         alt: String,
         class: String,
+        testID: String,
     });
 
     const currentImageUrl = ref(NO_IMAGE_URL);
@@ -52,6 +53,7 @@
             :src="currentImageUrl"
             :alt="alt"
             :aria-label="ariaLabel"
+            :data-testid="props?.testID"
             :class="imageLoaded ? 'loaded' : ''"
         />
     </div>

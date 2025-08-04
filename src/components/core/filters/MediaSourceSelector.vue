@@ -57,7 +57,7 @@
             <BFormSelectOption
                 :value="null"
                 disabled
-                :aria-label="'MediaSourceSelector_' + props.typeMedia"
+                :data-testid="'Media Source Selector for' + props.typeMedia"
                 >{{ $t('media.select') }}</BFormSelectOption
             >
         </template>

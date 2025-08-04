@@ -81,7 +81,11 @@
             <h3 class="card-header">
                 <i class="bi bi-gear-fill"></i> {{ $t('parameters') }}
             </h3>
-            <div class="card-body" id="parameters">
+            <div
+                class="card-body"
+                id="parameters"
+                data-testid="Parameters list div"
+            >
                 <div class="col text-center p-2">
                     <label
                         >{{ $t('drawGeometry') }}
@@ -101,12 +105,17 @@
                     <BFormInput
                         v-model="sourceGeometry"
                         :placeholder="$t('IndicateGeoJSONUrl')"
+                        data-testid="GeoJSON form"
                     />
                 </div>
                 <hr />
 
                 <div class="parameter-section">
-                    <BFormCheckbox switch v-model="showFilters">
+                    <BFormCheckbox
+                        switch
+                        v-model="showFilters"
+                        data-testid="Show/Hide results filters checkbox"
+                    >
                         <strong
                             >{{ $t('showFilters') }}
                             <i class="bi bi-sort-down"></i
@@ -118,7 +127,11 @@
                     class="parameter-section"
                     v-if="widgetType === WIDGET_TYPE.mapList"
                 >
-                    <BFormCheckbox switch v-model="mapEditable">
+                    <BFormCheckbox
+                        switch
+                        v-model="mapEditable"
+                        data-testid="Show/Hide drawing tools checkbox"
+                    >
                         <strong
                             >{{ $t('mapEditable') }}
                             <i class="fa-solid fa-map"></i
@@ -160,6 +173,7 @@
                     ></label>
                     <BFormInput
                         v-model="customDetailPage"
+                        data-testid="Custom detail page form"
                         :placeholder="
                             $t('IndicateDetailTemplateUrl') + '{taxonID}'
                         "
@@ -178,6 +192,7 @@
                         :options="modeOptions"
                         class="mt-1"
                         aria-label="ModeSelection"
+                        data-testid="Mode select form"
                     />
                 </div>
 
@@ -185,7 +200,7 @@
                     <BFormCheckbox
                         switch
                         v-model="switchModeAvailable"
-                        aria-label="activateTaxonListModeSwitch"
+                        data-testid="Show/Hide taxon list mode switch"
                     >
                         <strong>{{ $t('mode.isTaxonListHybrid') }} </strong>
                     </BFormCheckbox>
@@ -200,7 +215,7 @@
                         v-model="widgetType"
                         :options="widgetTypeOptions"
                         class="mt-1"
-                        aria-label="widgetType"
+                        data-testid="Widget type selection form"
                     />
                 </div>
                 <div class="parameter-section">
@@ -211,7 +226,7 @@
                     <BFormInput
                         type="number"
                         v-model="nbTaxonPerLine"
-                        aria-label="numberOfTaxonPerLine"
+                        data-testid="Number of taxon per line form"
                     />
                 </div>
                 <div class="parameter-section">
@@ -275,6 +290,7 @@
                 <div class="d-flex justify-content-center parameter-section">
                     <BButton
                         variant="danger"
+                        data-testid="Refresh parameters button"
                         @click="ParameterStore.clearParameters(route, router)"
                     >
                         <i class="bi bi-arrow-clockwise"></i>

@@ -19,5 +19,11 @@
         ><strong
             >{{ props.label }} <i class="fa-solid fa-calendar-days"></i></strong
     ></label>
-    <input :id="props.id" class="form-control" type="date" v-model="date" />
+    <input
+        :id="props.id"
+        class="form-control"
+        type="date"
+        v-model="date"
+        data-testid="Date input form"
+    />
 </template>

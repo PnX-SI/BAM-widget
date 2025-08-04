@@ -30,6 +30,7 @@
             @click="isOpen = !isOpen"
             :aria-expanded="isOpen"
             :title="$t('taxon.classFilter')"
+            data-testid="Filter results by class button"
         >
             <i class="fa fa-leaf"></i>
         </div>
@@ -53,6 +54,7 @@
                                 @click="updateClass(value)"
                                 class="taxon-item"
                                 :class="{ active: class_ === value }"
+                                data-testid="Animalia results filter"
                             >
                                 <i
                                     :class="taxonClassIcons.Animalia[value]"
@@ -81,6 +83,7 @@
                                 @click="updateClass(value)"
                                 class="taxon-item"
                                 :class="{ active: class_ === value }"
+                                data-testid="Plantae results filter"
                             >
                                 <i
                                     :class="taxonClassIcons.Plantae[value]"
@@ -168,9 +171,7 @@
     .taxon-item {
         border-radius: 8px;
         padding: 6px 10px;
-        transition:
-            background 0.25s ease,
-            transform 0.2s ease;
+        transition: background 0.25s ease, transform 0.2s ease;
         font-weight: 500;
         font-size: 0.85rem;
         color: #333;

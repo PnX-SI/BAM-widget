@@ -22,7 +22,11 @@
         <HeaderNav></HeaderNav>
         <div class="row">
             <!-- Intro & Parameters -->
-            <div class="col-12 col-lg-4 col-md-2" style="height: 80vh">
+            <div
+                class="col-12 col-lg-4 col-md-2"
+                style="height: 80vh"
+                data-testid="Parameter block"
+            >
                 <Parameters />
             </div>
             <div class="col">
@@ -30,7 +34,7 @@
                     <h3 class="card-header">
                         <i class="bi bi-easel"></i> {{ $t('widgetPreview') }}
                     </h3>
-                    <div class="card-body">
+                    <div class="card-body" data-testid="Preview area">
                         <ListWidget
                             height="70vh"
                             v-if="widgetType == WIDGET_TYPE.list"

@@ -54,6 +54,7 @@
                 @input="handleInput"
                 @blur="handleBlur"
                 v-prevent-zoom
+                data-testid="Search taxon input form"
             />
         </transition>
     </form>

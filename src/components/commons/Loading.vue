@@ -18,7 +18,11 @@
 </script>
 
 <template>
-    <div v-if="loadingStatus" class="loading-container">
+    <div
+        v-if="loadingStatus"
+        class="loading-container"
+        data-testid="Loading component"
+    >
         <div class="loading-card">
             <div class="spinner"></div>
             <h3 class="loading-text">{{ $t('loading') }}</h3>
