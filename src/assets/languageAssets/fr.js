@@ -39,7 +39,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     nextPage: "Suivant",
     loading: "Chargement en cours ...",
     noObservations: "Aucune observation trouvée",
-    noSpeciesObserved: "Aucune espèces observées dans cette zone !",
+    noSpeciesObserved: "Aucune espèce observée dans cette zone !",
     noGeometry: "Aucune géometrie trouvée",
     error404: {
       title: "Page introuvable",
