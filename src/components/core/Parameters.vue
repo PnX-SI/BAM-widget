@@ -75,7 +75,7 @@ const widgetTypeOptions = computed(() => {
           <Map
             :forceEditable="true"
             :editable="true"
-            height="40vh"
+            height="45vh"
             class="mt-2"
           ></Map>
         </div>
