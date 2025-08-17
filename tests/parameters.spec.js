@@ -38,7 +38,7 @@ async function checkForParameterChange(page, key, value) {
 
 test.describe("Form parameters testing", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/config");
+    await page.goto("/#/config?widgetType=mapList&lang=fr");
   });
 
   test("enable/disable filter", async ({ page }) => {
@@ -106,9 +106,9 @@ test.describe("Form parameters testing", () => {
     await drawGeometry(page);
     await page.waitForTimeout(10000);
     const modeSelect = await page.getByTestId("Widget type selection form");
-    await modeSelect.selectOption("gallery");
+    await modeSelect.selectOption("mapList");
     //
-    await modeSelect.selectOption("detailedList");
+    await modeSelect.selectOption("list");
   });
 
   test("Draw a geometry", async ({ page }) => {
