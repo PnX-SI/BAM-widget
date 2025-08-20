@@ -19,6 +19,7 @@ import messagesEN from "./assets/languageAssets/en";
 import "vue3-toastify/dist/index.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
+import Discover from "./components/Discover.vue";
 
 const i18n = createI18n({
   locale: "fr",
@@ -40,6 +41,10 @@ const routes = [
   {
     path: "/config",
     component: Configurator,
+  },
+  {
+    path: "/discover",
+    component: Discover,
   },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: Error404 },
 ];

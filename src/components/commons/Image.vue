@@ -56,7 +56,7 @@ checkImageExists();
   <img
     ref="image"
     @load="onImageLoaded"
-    :src="imageUrl"
+    :src="props.imageUrl"
     :alt="props?.alt"
     :aria-label="props?.ariaLabel"
     :class="props?.class"
