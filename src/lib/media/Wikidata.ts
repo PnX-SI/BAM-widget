@@ -84,16 +84,45 @@ function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
         return "No image found for this entity.";
       }
 
-      const imageFilename = imageClaims[0].mainsnak.datavalue.value;
-      const imageUrl = `https://commons.wikimedia.org/w/thumb.php?width=500&f=${imageFilename}`;
+      const imageFilename = imageClaims[0].mainsnak.datavalue.value; // e.g. "Panthera_leo_male.jpg"
 
-      return [
-        {
-          url: imageUrl,
-          source: "Wikidata",
-          typeMedia: "image",
-        },
-      ];
+      // Query Wikimedia Commons for image metadata (credit, license, author, etc.)
+      const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(
+        imageFilename
+      )}&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
+
+      return fetch(commonsUrl)
+        .then((res) => res.json())
+        .then((commonsData) => {
+          const pages = commonsData.query.pages;
+          const page = Object.values(pages)[0] as any;
+          if (!page?.imageinfo?.length) {
+            return "No image metadata found on Commons.";
+          }
+
+          const info = page.imageinfo[0];
+          const meta = info.extmetadata || {};
+          const credit = {
+            artist: meta.Artist?.value || null,
+            license: meta.LicenseShortName?.value || null,
+            creditLine: meta.Credit?.value || null,
+            licenseUrl: meta.LicenseUrl?.value || null,
+          };
+
+          return [
+            {
+              url: info.url, // full image URL
+              source: `${credit.artist.replace(/<[^>]*>?/gm, "")} - ${
+                credit.license
+              }`,
+              typeMedia: "image",
+              licenseUrl: credit.licenseUrl,
+              license: credit.license,
+              author: credit.artist.replace(/<[^>]*>?/gm, ""),
+              urlSource: `https://commons.wikimedia.org/wiki/File:${imageFilename}`,
+            },
+          ] as Media[];
+        });
     });
 }
 

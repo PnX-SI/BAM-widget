@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NO_IMAGE_URL } from "@/assets/constant";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 
 const props = defineProps({
   imageUrl: {
@@ -18,18 +18,25 @@ const imageLoaded = ref(false);
 
 const imageUrl = ref(props.imageUrl);
 
+watchEffect(() => {
+  imageUrl.value = props.imageUrl;
+});
+
 function checkImageExists() {
   // Use a simple GET request to check if the image exists
   fetch(imageUrl.value, {
     method: "HEAD",
   })
     .then((response) => {
+      console.log(response);
       if (response.ok) {
+        console.log("aaa");
         imageExists.value = true;
       } else {
         imageExists.value = false;
         imageUrl.value = NO_IMAGE_URL;
       }
+      console.log(imageUrl.value);
     })
     .catch((error) => {
       console.error("Error checking image:", error);
@@ -49,12 +56,10 @@ checkImageExists();
   <img
     ref="image"
     @load="onImageLoaded"
-    :src="props.imageUrl"
+    :src="imageUrl"
     :alt="props?.alt"
     :aria-label="props?.ariaLabel"
     :class="props?.class"
     :key="props.imageUrl"
   />
-  <!-- TODO : Fix the loading class -->
-  <!-- :class="!imageLoaded ? 'placeholder placeholder-wave' : '' + props?.class" -->
 </template>

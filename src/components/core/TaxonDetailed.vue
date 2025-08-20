@@ -20,9 +20,9 @@ const props = defineProps<{
           :alt="props.picture?.url"
           :title="'Source: ' + props.picture?.source"
         ></Image>
-        <span class="caption" v-if="props.picture.source">{{
-          props.picture.source
-        }}</span>
+        <div class="caption">
+          <Credits :media="props.picture"></Credits>
+        </div>
       </div>
 
       <div class="card-body">

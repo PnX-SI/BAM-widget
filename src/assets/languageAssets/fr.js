@@ -83,6 +83,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       image: "Source d'image",
       sound: "Source de son",
       select: "Sélectionner une source de média",
+      linkToOrigin: "Source",
+      licenseUnder: "Sous licence ",
     },
     taxon: {
       scientificName: "Nom scientifique",

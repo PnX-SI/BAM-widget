@@ -42,7 +42,7 @@ const props = defineProps<{
           <template #target>
             <i class="bi bi-c-square-fill copyright-icon"></i>
           </template>
-          {{ props.picture.source }}
+          <Credits :media="props.picture"></Credits>
         </BPopover>
       </div>
     </div>

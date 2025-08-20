@@ -85,6 +85,8 @@ You can also **share your results 📤** to collaborate with other users.
       image: "Image Source",
       sound: "Sound Source",
       select: "Select a media source",
+      linkToOrigin: "Source",
+      licenseUnder: "Under license ",
     },
     taxon: {
       scientificName: "Scientific Name",

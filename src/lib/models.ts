@@ -18,4 +18,6 @@ export interface Media {
   typeMedia: string;
   license?: string;
   author?: string;
+  licenseUrl?: string;
+  urlSource?: string;
 }

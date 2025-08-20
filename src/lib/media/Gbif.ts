@@ -3,6 +3,7 @@ import { MediaSource } from "./MediaSource";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { SOURCE_ } from "./media";
 import { Connector } from "../connectors/connector";
+import { validURL } from "../utils";
 
 export class GBIFMediaSource extends MediaSource {
   constructor(parameters?: any) {
@@ -86,6 +87,8 @@ export class GBIFMediaSource extends MediaSource {
           license: media.license, // corrected from licence to license
           source: `${media.rightsHolder} (${media.license})`,
           typeMedia: "image",
+          author: media.rightsHolder,
+          urlSource: validURL(media.source) ? media.source : media.identifier,
         };
       });
   }
