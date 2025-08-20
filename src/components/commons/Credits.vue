@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 const props = defineProps<{
   media: Media;
-  linkColor: String;
+  linkColor: { type: string; required: false };
 }>();
 </script>
 

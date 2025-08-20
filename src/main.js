@@ -20,13 +20,17 @@ import "vue3-toastify/dist/index.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
 import Discover from "./components/Discover.vue";
+import messagesES from "./assets/languageAssets/es";
+
+const browserLocale = window.navigator.language.split("-")[0];
 
 const i18n = createI18n({
-  locale: "fr",
+  locale: ["en", "fr", "es"].includes(browserLocale) ? browserLocale : "en",
   fallbackLocale: "en",
   messages: {
     ...messagesFR,
     ...messagesEN,
+    ...messagesES,
   },
 });
 const routes = [

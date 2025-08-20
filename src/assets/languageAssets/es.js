@@ -1,0 +1,132 @@
+const messagesES = {
+  es: {
+    title: "Biodiversidad a mi alrededor",
+    discover: {
+      title: "Explorar",
+    },
+    subtitle: "Buscar especies alrededor mío",
+    howto: "¿Cómo funciona?",
+    introTitle: "¿Qué es Biodiversidad a mi alrededor?",
+    intro: `*Biodiversidad A Mi Alrededor* es un widget dedicado a **explorar especies 🔍**!
+Esta interfaz te permite **buscar especies observadas en un área geográfica específica 🌍**.
+**Usa el mapa interactivo 🗺️** para seleccionar el área donde deseas realizar tu búsqueda.
+La **lista de especies 🥝🍃** encontradas en el área seleccionada se mostrará junto al mapa 📋.
+También puedes **compartir tus resultados 📤** para colaborar con otros usuarios.
+    `,
+    parameters: "Parámetros",
+    filters: "Filtros",
+    showFilters: "Mostrar filtros",
+    RefreshFilters: "Actualizar parámetros",
+    IndicateGeoJSONUrl: "Indicar una URL hacia un GeoJSON",
+    IndicateDetailTemplateUrl: "https://<urlTaxonSheet>/taxonID",
+    TaxonListModeSelection: "Modo de visualización de la lista de especies",
+    widgetTypeSelection: "Modo de visualización del Widget",
+    UseGeoJSONSource: "Usar un GeoJSON de la web",
+    UseCustomDetailPage: 'Cambiar la redirección del botón "Ver Más"',
+    filtersTitle: "Filtros",
+    mapEditable: "Zona de investigación editable",
+    radius: "Radio",
+    bufferSize: "Tamaño del buffer",
+    dateMin: "Fecha Mínima",
+    dateMax: "Fecha Máxima",
+    search: "Buscar",
+    reset: "Reiniciar",
+    limit: "Límite",
+    nbPages: "Número de páginas",
+    searchResults: "Resultados de la búsqueda",
+    noResults: "No hay resultados",
+    noSpeciesObserved: "¡No se han observado especies en esta área!",
+    previousPage: "Anterior",
+    nextPage: "Siguiente",
+    loading: "Cargando...",
+    noObservations: "No se encontraron observaciones",
+    noGeometry: "No se encontró geometría",
+    error404: {
+      title: "Página no encontrada",
+      subtitle: "La página que buscas no existe",
+    },
+    browserIntegration: "Integrar el widget en tu sitio",
+    drawGeometry: "Dibujar un área para mostrar especies",
+    size: {
+      width: "Ancho",
+      height: "Alto",
+    },
+    embed: "Integrar",
+    typeWidget: {
+      title: "Tipo de widget",
+      default: "Mapa y Lista",
+      list: "Lista de especies",
+      config: "Configuración",
+    },
+    copy: "Copiar",
+    copied: "Copiado",
+    share: "Compartir",
+    shareLink: "Compartir un enlace",
+    shareDiscover: "Compartir tu investigación",
+    source: {
+      title: "Fuente de datos",
+      select: "Seleccionar una fuente de datos",
+      modify: "Cambiar la fuente de datos",
+      gbifWarning:
+        "El número de observaciones y las fechas de los últimos avistamientos se basan en una agregación de las últimas 30,000 observaciones realizadas dentro del área seleccionada.",
+    },
+    gbif: {
+      apiEndpoint: "Punto final de la API de GBIF",
+    },
+    geonature: {
+      api_endpoint: "Punto final de la API de GeoNature",
+      id_export: "ID de exportación",
+    },
+    desc: "Descendente",
+    asc: "Ascendente",
+    media: {
+      source: "Fuente de medios",
+      image: "Fuente de imagen",
+      sound: "Fuente de sonido",
+      select: "Seleccionar una fuente de medios",
+      linkToOrigin: "Fuente",
+      licenseUnder: "Bajo licencia ",
+    },
+    taxon: {
+      scientificName: "Nombre Científico",
+      vernacularName: "Nombre Vernacular",
+      nbObservations: "Número de observaciones",
+      lastSeenDate: "Fecha de última observación",
+      taxonFilter: "Filtrar por especie",
+      seeMore: "Ver más",
+      class: "Clase de especie",
+    },
+    mode: {
+      galleryMode: "Galería",
+      detailedList: "Detallado",
+      hybrid: "Híbrido",
+      isTaxonListHybrid: "Modo de lista de especie modificable",
+    },
+    widgetType: {
+      list: "Lista",
+      default: "Predeterminado",
+    },
+    numberOfTaxonPerLine: "Número de especies por línea",
+    widgetPreview: "Vista previa",
+    taxonsClass: {
+      Animalia: {
+        Mammalia: "Mamíferos",
+        Aves: "Aves",
+        Reptilia: "Reptiles",
+        Amphibia: "Anfibios",
+        Insecta: "Insectos",
+        Arachnida: "Arácnidos",
+        Gastropoda: "Gasterópodos",
+        Bivalvia: "Bivalvos",
+      },
+      Plantae: {
+        Magnoliopsida: "Magnoliopsida",
+        Liliopsida: "Monocotiledóneas",
+        Pinopsida: "Coníferas",
+      },
+    },
+    or: "o",
+  },
+};
+
+export default messagesES;
