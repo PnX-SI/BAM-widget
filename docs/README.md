@@ -19,7 +19,7 @@ It supports multilingual interfaces 🌐 and a modern design.
 
 ## 🚀 Generate your widget !
 
-Generate your widget -> [https://pnx-si.github.io/widget-gtsi/#/config](https://pnx-si.github.io/widget-gtsi/#/config)
+Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
 
 ## 🔗 Data Sources
 
@@ -38,7 +38,7 @@ Generate your widget -> [https://pnx-si.github.io/widget-gtsi/#/config](https://
 
 ## 🎛️ Widget customization
 
-Each parameter can be set via URL query or through the widget’s configuration interface [/config](https://pnx-si.github.io/widget-gtsi/#/config).
+Each parameter can be set via URL query or through the widget’s configuration interface [/config](https://pnx-si.github.io/BAM-widget/#/config).
 
 | Parameter          | Type    | Purpose / Usage                                                                                                                                                                                                         | Example / Values                   |
 | ------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
@@ -53,7 +53,7 @@ Each parameter can be set via URL query or through the widget’s configuration 
 | `lang`             | string  | Language code for UI                                                                                                                                                                                                    | `"en"`, `"fr"`                     |
 | `mode`             | string  | Taxon list display mode (`gallery`, `detailedList`)                                                                                                                                                                     | `"detailedList"`                   |
 | `sourceGeometry`   | string  | a URL to a GeoJSON that will be used to define the selected area. The given geometry is simplified due to the character limit of a URL.                                                                                 | `"https://..."`                    |
-| `class`            | string  | Taxonomic class filter (e.g., Mammalia, Aves) Check [taxonclass2icon.js](https://github.com/PnX-SI/widget-gtsi/blob/main/src/assets/taxonclass2icon.js) for more detail.                                                | `"Mammalia"`                       |
+| `class`            | string  | Taxonomic class filter (e.g., Mammalia, Aves) Check [taxonclass2icon.js](https://github.com/PnX-SI/BAM-widget/blob/main/src/assets/taxonclass2icon.js) for more detail.                                                 | `"Mammalia"`                       |
 | `widgetType`       | string  | Widget display mode (`default`, others)                                                                                                                                                                                 | `"default"`                        |
 | `hybridTaxonList`  | boolean | Enable switching between list/gallery taxon display modes                                                                                                                                                               | `true` / `false`                   |
 | `x`                | number  | Longitude for point geometry                                                                                                                                                                                            | `2.35`                             |
@@ -101,4 +101,4 @@ See [CHANGELOG.md](CHANGELOG.md) for features and updates.
 
 ## ❓ Issues
 
-For questions or bug reports, please use [GitHub Issues](https://github.com/PnX-SI/widget-gtsi/issues).
+For questions or bug reports, please use [GitHub Issues](https://github.com/PnX-SI/BAM-widget/issues).

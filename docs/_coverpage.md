@@ -7,5 +7,5 @@
 - Easy to integrate in your website
 - Different data sources (GBIF, GeoNature instances)
 
-[GitHub](https://github.com/PnX-SI/widget-gtsi)
+[GitHub](https://github.com/PnX-SI/BAM-widget)
 [Get Started](GetStarted.md)
