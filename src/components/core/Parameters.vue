@@ -86,6 +86,16 @@ const widgetTypeOptions = computed(() => {
             class="mt-2"
           ></Map>
         </div>
+        <div class="col text-center mt-3">
+          <h5>{{ $t("or") }}</h5>
+        </div>
+        <div class="parameter-section text-center">
+          <BFormInput
+            v-model="sourceGeometry"
+            :placeholder="$t('IndicateGeoJSONUrl')"
+          />
+        </div>
+        <hr />
 
         <div class="parameter-section">
           <BFormCheckbox switch v-model="showFilters">
@@ -131,16 +141,6 @@ const widgetTypeOptions = computed(() => {
 
         <div class="parameter-section">
           <TaxonClassFilter />
-        </div>
-
-        <div class="parameter-section">
-          <label
-            >{{ $t("UseGeoJSONSource") }} <i class="fa-solid fa-link"></i
-          ></label>
-          <BFormInput
-            v-model="sourceGeometry"
-            :placeholder="$t('IndicateGeoJSONUrl')"
-          />
         </div>
 
         <div class="parameter-section">

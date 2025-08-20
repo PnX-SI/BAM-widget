@@ -131,6 +131,7 @@ You can also **share your results 📤** to collaborate with other users.
         Pinopsida: "Conifers",
       },
     },
+    or: "or",
   },
 };
 
