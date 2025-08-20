@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Refuges - Parc national des Écrins</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body class="h-screen flex">
+
+    <!-- Carte -->
+    <div id="map" class="flex-1"></div>
+
+    <!-- Panneau latéral toujours visible -->
+    <div id="sidebar" class="w-[500px] bg-gray-100 border-l border-gray-300 overflow-auto p-4">
+        <h2 class="text-xl font-bold mb-2">Refuges des Écrins et biodiversité</h2>
+        <div id="widget-container">
+            <p class="text-gray-600">Cliquez sur un des refuges sur la carte pour afficher les espèces observées.</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialisation de la carte
+        const map = L.map("map").setView([44.7, 6.2], 10);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors',
+        }).addTo(map);
+
+        // Exemple de GeoJSON des refuges (à remplacer par ton vrai fichier)
+        const refuges = {
+            "type": "FeatureCollection",
+            "name": "refuges-pne",
+            "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+            "features": [
+                { "type": "Feature", "properties": { "fid": 1, "nom": "Refuge du Clos (Xavier Blanc)" }, "geometry": { "type": "Point", "coordinates": [6.275383341915796, 44.829310213046014] } },
+                { "type": "Feature", "properties": { "fid": 2, "nom": "Refuge du Tourond" }, "geometry": { "type": "Point", "coordinates": [6.222358117198398, 44.716976591268157] } },
+                { "type": "Feature", "properties": { "fid": 3, "nom": "Refuge de Vallonpierrre" }, "geometry": { "type": "Point", "coordinates": [6.289720924393214, 44.79851798357425] } },
+                { "type": "Feature", "properties": { "fid": 4, "nom": "Refuge de Chabournéou" }, "geometry": { "type": "Point", "coordinates": [6.314983240125019, 44.81002112721248] } },
+                { "type": "Feature", "properties": { "fid": 5, "nom": "Refuge du Pré de la Chaumette" }, "geometry": { "type": "Point", "coordinates": [6.327594692710703, 44.765373815194927] } },
+                { "type": "Feature", "properties": { "fid": 6, "nom": "Refuge bivouac de Chalance" }, "geometry": { "type": "Point", "coordinates": [6.236473217879432, 44.841331767230109] } },
+                { "type": "Feature", "properties": { "fid": 7, "nom": "Chalet du Gioberney" }, "geometry": { "type": "Point", "coordinates": [6.281193094636818, 44.840918750562828] } },
+                { "type": "Feature", "properties": { "fid": 8, "nom": "Refuge du Pigeonnier" }, "geometry": { "type": "Point", "coordinates": [6.284968420945112, 44.854862288869207] } },
+                { "type": "Feature", "properties": { "fid": 9, "nom": "Refuge des Bans" }, "geometry": { "type": "Point", "coordinates": [6.361146864751195, 44.834341611495923] } },
+                { "type": "Feature", "properties": { "fid": 10, "nom": "Ancien du refuge du Sélé" }, "geometry": { "type": "Point", "coordinates": [6.390663807329938, 44.87321014956197] } },
+                { "type": "Feature", "properties": { "fid": 11, "nom": "Refuge du Sélé" }, "geometry": { "type": "Point", "coordinates": [6.38364259709158, 44.874444738894944] } },
+                { "type": "Feature", "properties": { "fid": 12, "nom": "Refuge du Pelvoux" }, "geometry": { "type": "Point", "coordinates": [6.405546383321273, 44.882593959145304] } },
+                { "type": "Feature", "properties": { "fid": 13, "nom": "Refuge d'hiver Cézanne" }, "geometry": { "type": "Point", "coordinates": [6.415821931175586, 44.91778450885846] } },
+                { "type": "Feature", "properties": { "fid": 14, "nom": "Refuge du Glacier Blanc" }, "geometry": { "type": "Point", "coordinates": [6.411586918168342, 44.937468625580024] } },
+                { "type": "Feature", "properties": { "fid": 15, "nom": "Refuge des Écrins" }, "geometry": { "type": "Point", "coordinates": [6.382827710775126, 44.94721129938015] } },
+                { "type": "Feature", "properties": { "fid": 16, "nom": "Refuge Adèle Planchard" }, "geometry": { "type": "Point", "coordinates": [6.344985942563931, 44.968806118197151] } },
+                { "type": "Feature", "properties": { "fid": 17, "nom": "Refuge du Pavé" }, "geometry": { "type": "Point", "coordinates": [6.328212803493575, 44.985848782403821] } },
+                { "type": "Feature", "properties": { "fid": 18, "nom": "Refuge de l'Alpe de Villar d'Arène" }, "geometry": { "type": "Point", "coordinates": [6.384561420589615, 44.996189865177904] } },
+                { "type": "Feature", "properties": { "fid": 19, "nom": "Refuge de l'Aigle" }, "geometry": { "type": "Point", "coordinates": [6.324412377017238, 45.011105175409895] } },
+                { "type": "Feature", "properties": { "fid": 20, "nom": "Refuge de la Pilatte (fermé à partir de 2021)" }, "geometry": { "type": "Point", "coordinates": [6.331684701735981, 44.869788277316864] } },
+                { "type": "Feature", "properties": { "fid": 21, "nom": "Refuge de Temple Écrins" }, "geometry": { "type": "Point", "coordinates": [6.332679810573667, 44.904219013452185] } },
+                { "type": "Feature", "properties": { "fid": 22, "nom": "Refuge du Carrelet" }, "geometry": { "type": "Point", "coordinates": [6.314669221441996, 44.905744669886801] } },
+                { "type": "Feature", "properties": { "fid": 23, "nom": "Refuge du Soreiller" }, "geometry": { "type": "Point", "coordinates": [6.243739421974428, 44.960540752659476] } },
+                { "type": "Feature", "properties": { "fid": 24, "nom": "Refuge de la Selle" }, "geometry": { "type": "Point", "coordinates": [6.248824689063933, 44.982359044986843] } },
+                { "type": "Feature", "properties": { "fid": 25, "nom": "Refuge du Châtelleret" }, "geometry": { "type": "Point", "coordinates": [6.299524872729457, 44.975689031334639] } },
+                { "type": "Feature", "properties": { "fid": 26, "nom": "Refuge du Promontoire" }, "geometry": { "type": "Point", "coordinates": [6.303123142536007, 44.998301825122198] } },
+                { "type": "Feature", "properties": { "fid": 27, "nom": "Centre Alpin de la Bérarde" }, "geometry": { "type": "Point", "coordinates": [6.293124017625671, 44.932257597000131] } },
+                { "type": "Feature", "properties": { "fid": 28, "nom": "Refuge Evariste Chancel" }, "geometry": { "type": "Point", "coordinates": [6.271231794002987, 45.026787522771578] } },
+                { "type": "Feature", "properties": { "fid": 29, "nom": "Refuge de la Lavey" }, "geometry": { "type": "Point", "coordinates": [6.20646963715588, 44.898391764156642] } },
+                { "type": "Feature", "properties": { "fid": 30, "nom": "Refuge de l'Alpe du Pin" }, "geometry": { "type": "Point", "coordinates": [6.174419275657184, 44.944766142238478] } },
+                { "type": "Feature", "properties": { "fid": 31, "nom": "Refuge de la Muzelle" }, "geometry": { "type": "Point", "coordinates": [6.097491817056572, 44.952958999974811] } },
+                { "type": "Feature", "properties": { "fid": 32, "nom": "Chalet de la Fée (devenu un restaurant d'altitude)" }, "geometry": { "type": "Point", "coordinates": [6.164911305003042, 45.015737728895857] } },
+                { "type": "Feature", "properties": { "fid": 33, "nom": "Refuge de l'Olan" }, "geometry": { "type": "Point", "coordinates": [6.204528572086679, 44.84156444776842] } },
+                { "type": "Feature", "properties": { "fid": 34, "nom": "Refuge des Souffles" }, "geometry": { "type": "Point", "coordinates": [6.146444445432028, 44.844769292504012] } },
+                { "type": "Feature", "properties": { "fid": 35, "nom": "Refuge de Fond Turbat" }, "geometry": { "type": "Point", "coordinates": [6.177740298712816, 44.864912604518821] } },
+                { "type": "Feature", "properties": { "fid": 36, "nom": "Refuge des Mouterres" }, "geometry": { "type": "Point", "coordinates": [6.213080166783652, 45.055007876446112] } },
+                { "type": "Feature", "properties": { "fid": 37, "nom": "Refuge des Chatons" }, "geometry": { "type": "Point", "coordinates": [6.165794082493826, 45.054187885912903] } },
+                { "type": "Feature", "properties": { "fid": 38, "nom": "Chalets du Fay" }, "geometry": { "type": "Point", "coordinates": [6.213453143810679, 45.057452355262129] } },
+                { "type": "Feature", "properties": { "fid": 39, "nom": "Refuge du Taillefer" }, "geometry": { "type": "Point", "coordinates": [5.954901899071126, 45.063352246181545] } },
+                { "type": "Feature", "properties": { "fid": 40, "nom": "Refuge des Clots" }, "geometry": { "type": "Point", "coordinates": [6.182850550091936, 45.043217541048186] } },
+                { "type": "Feature", "properties": { "fid": 41, "nom": "Refuge de Chamoissière" }, "geometry": { "type": "Point", "coordinates": [6.38543511781309, 44.995545993403525] } },
+                { "type": "Feature", "properties": { "fid": 42, "nom": "Refuge du Pic du mas de la Grave" }, "geometry": { "type": "Point", "coordinates": [6.260028492576515, 45.086651969685938] } },
+                { "type": "Feature", "properties": { "fid": 43, "nom": "Refuge du Goléon" }, "geometry": { "type": "Point", "coordinates": [6.356685485132531, 45.081290078904161] } },
+                { "type": "Feature", "properties": { "fid": 44, "nom": "Ancien refuge de Fond turbat" }, "geometry": { "type": "Point", "coordinates": [6.179183367806441, 44.864920841686036] } }
+            ]
+        }
+
+
+        // Ajout des refuges à la carte
+        L.geoJSON(refuges, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.nom);
+                layer.on("click", function () {
+                    const [lng, lat] = feature.geometry.coordinates;
+                    const nomRefuge = feature.properties.nom;
+
+                    const wkt = `POINT (${lng} ${lat})`;
+
+                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/list?radius=1&wkt=${encodeURIComponent(wkt)}&connector=GBIF&nbTaxonPerLine=1&showFilters=true&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+
+                    document.getElementById("widget-container").innerHTML = `
+            <h3 class="text-lg font-semibold mb-2">${nomRefuge}</h3>
+            <embed src="${widgetUrl}" style="width:100%; height:80vh;" />
+            <p class="text-sm text-gray-500 mt-2">Powered by 
+              <a href="https://github.com/PnX-SI/BAM-widget" target="_blank" class="text-blue-600 hover:underline">BAM</a>
+            </p>
+          `;
+                });
+            },
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng);
+            }
+        }).addTo(map);
+    </script>
+</body>
+
+</html>
