@@ -2,7 +2,7 @@
 
 There is two ways of customizing the widget:
 
-- use the `Parameters` block in the configuration interface (available at `https://pnx-si.github.io/widget-gtsi/#/config`)
+- use the `Parameters` block in the configuration interface (available at `https://pnx-si.github.io/BAM-widget/#/config`)
   ![alt](images/parameters.png)
 - directly in the url of the existing `<embed>` tag.
 
@@ -78,7 +78,7 @@ A URL to a GeoJSON file that defines the selected area. The geometry is simplifi
 
 ### `class` (**Type:** string)
 
-Taxonomic class filter, such as Mammalia or Aves. For more details, check [taxonclass2icon.js](https://github.com/PnX-SI/widget-gtsi/blob/main/src/assets/taxonclass2icon.js).
+Taxonomic class filter, such as Mammalia or Aves. For more details, check [taxonclass2icon.js](https://github.com/PnX-SI/BAM-widget/blob/main/src/assets/taxonclass2icon.js).
 
 **Example / Values:** `"Mammalia"`
 
