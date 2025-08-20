@@ -32,6 +32,8 @@ export class TaxHubMediaSource extends MediaSource {
                 license: media.licence,
                 source: media.auteur,
                 typeMedia: "image",
+                author: media.auteur,
+                urlSource: media.url,
               });
             }
           });
