@@ -9,7 +9,9 @@ It supports multilingual interfaces 🌐 and a modern design.
 
 ## ✨ Features
 
-- Display species found in a defined area using observations data from GBIF or a GeoNature instance.
+- Display species found in a defined area using observations data from GBIF API or a GeoNature instance.
+- Define specific point, line or polygon, or a GeoJSON, or dynamic geographic objects.
+- GPS geolocation, point and line automatic buffer.
 - Multiple display modes: map 🗺️, list 📋
 - Sort 🔃 and filter species lists.
 - Search 🔎 and filter species.
@@ -19,7 +21,14 @@ It supports multilingual interfaces 🌐 and a modern design.
 
 ## 🚀 Generate your widget !
 
-Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
+- Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
+- Documentation: [https://pnx-si.github.io/BAM-widget/docs/](https://pnx-si.github.io/BAM-widget/docs/)
+- Widget integration examples:
+  - [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
+  - [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
+  - [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
+  - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](https://github.com/PnX-SI/BAM-widget/blob/main/docs/examples/geotrek-detail-page.html)
+- Test and explore: [https://pnx-si.github.io/BAM-widget/](https://pnx-si.github.io/BAM-widget/)
 
 ## 🔗 Data Sources
 
@@ -63,6 +72,11 @@ Each parameter can be set via URL query or through the widget’s configuration 
 | `imageSource`      | string  | Name of the data source use to fetch species pictures.                                                                                                                                                                       | `[wikidata, gbif, inpn, taxhub]` |
 
 ## ⚙️ Project Setup
+
+BAM is a widget hosted on Github and directly usable without installation or server.  
+But you can choose to install it locally or on your server to develop or host it.
+
+Clone or download the source from this Github repository.
 
 ```sh
 npm install
