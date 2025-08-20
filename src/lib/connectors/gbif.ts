@@ -85,7 +85,11 @@ export class GbifConnector extends Connector {
   }
 
   fetchVernacularName(taxonID: string): Promise<string | undefined> {
-    const mapping_language: Record<string, string> = { en: "eng", fr: "fra" };
+    const mapping_language: Record<string, string> = {
+      en: "eng",
+      fr: "fra",
+      es: "spa",
+    };
     const currentLanguage = ParameterStore.getInstance().lang.value;
     return fetch(
       `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
