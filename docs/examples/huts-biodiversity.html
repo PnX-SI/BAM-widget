@@ -6,19 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Refuges - Parc national des Écrins</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 
-<body class="h-screen flex">
+<body class="h-screen flex flex-col md:flex-row">
 
     <!-- Carte -->
-    <div id="map" class="flex-1"></div>
+    <div id="map" class="flex-1 md:h-full h-1/2"></div>
 
-    <!-- Panneau latéral toujours visible -->
-    <div id="sidebar" class="w-[500px] bg-gray-100 border-l border-gray-300 overflow-auto p-4">
+    <!-- Panneau latéral -->
+    <div id="sidebar"
+        class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
         <h2 class="text-xl font-bold mb-2">Refuges des Écrins et biodiversité</h2>
         <div id="widget-container">
             <p class="text-gray-600">Cliquez sur un des refuges sur la carte pour afficher les espèces observées.</p>
@@ -33,7 +32,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors',
         }).addTo(map);
 
-        // Exemple de GeoJSON des refuges (à remplacer par ton vrai fichier)
+        // Exemple de GeoJSON des refuges
         const refuges = {
             "type": "FeatureCollection",
             "name": "refuges-pne",
@@ -86,8 +85,7 @@
             ]
         }
 
-
-        // Ajout des refuges à la carte
+        // Ajout des refuges
         L.geoJSON(refuges, {
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(feature.properties.nom);
@@ -97,11 +95,11 @@
 
                     const wkt = `POINT (${lng} ${lat})`;
 
-                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/list?radius=1&wkt=${encodeURIComponent(wkt)}&connector=GBIF&nbTaxonPerLine=1&showFilters=true&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=500&x=${lng}&y=${lat}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
 
                     document.getElementById("widget-container").innerHTML = `
             <h3 class="text-lg font-semibold mb-2">${nomRefuge}</h3>
-            <embed src="${widgetUrl}" style="width:100%; height:80vh;" />
+            <embed src="${widgetUrl}" style="width:100%; height:70vh;" />
             <p class="text-sm text-gray-500 mt-2">Powered by 
               <a href="https://github.com/PnX-SI/BAM-widget" target="_blank" class="text-blue-600 hover:underline">BAM</a>
             </p>
@@ -112,6 +110,11 @@
                 return L.marker(latlng);
             }
         }).addTo(map);
+
+        // ⚡ Important : redimensionne la carte quand on change l’orientation/viewport
+        window.addEventListener("resize", () => {
+            map.invalidateSize();
+        });
     </script>
 </body>
 
