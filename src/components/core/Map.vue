@@ -162,7 +162,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mapC" :id="`map-${mapID}`" :style="style"></div>
+  <div
+    class="mapC"
+    data-testid="Map container"
+    :id="`map-${mapID}`"
+    :style="style"
+  ></div>
 </template>
 
 <style scoped>

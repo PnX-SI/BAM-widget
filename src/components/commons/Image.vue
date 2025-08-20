@@ -8,7 +8,7 @@ const props = defineProps({
     required: true,
     // TODO add an url validator
   },
-  ariaLabel: String,
+  testID: String,
   alt: String,
   class: String,
 });
@@ -51,7 +51,7 @@ checkImageExists();
     @load="onImageLoaded"
     :src="props.imageUrl"
     :alt="props?.alt"
-    :aria-label="props?.ariaLabel"
+    :data-testid="props?.testID"
     :class="props?.class"
     :key="props.imageUrl"
   />

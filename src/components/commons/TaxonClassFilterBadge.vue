@@ -13,13 +13,18 @@ const emit = defineEmits(["select:class"]);
 </script>
 
 <template>
-  <BDropdown variant="secondary" strategy="fixed">
+  <BDropdown
+    variant="secondary"
+    strategy="fixed"
+    data-testid="Filter results by class button"
+  >
     <template #button-content>
       <i class="bi bi-funnel"></i>
     </template>
     <BDropdownItem
       v-for="value of Object.keys(taxonClassIcons.Animalia)"
       :key="value"
+      data-testid="Animalia results filter"
       @click="updateClass(value)"
       :active="class_ == value"
       >{{ $t(`taxonsClass.Animalia.${value}`) }}</BDropdownItem
@@ -30,6 +35,7 @@ const emit = defineEmits(["select:class"]);
       :key="value"
       @click="updateClass(value)"
       :active="class_ == value"
+      data-testid="Plantae results filter"
       >{{ $t(`taxonsClass.Plantae.${value}`) }}</BDropdownItem
     >
   </BDropdown>
