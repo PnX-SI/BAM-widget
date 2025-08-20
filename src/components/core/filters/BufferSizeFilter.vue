@@ -6,18 +6,17 @@ const { radius } = ParameterStore.getInstance();
 
 <template>
   <div class="row">
-    <label for="radius" class="form-label col-8"
+    <label for="radius" class="form-label col-4"
       ><strong>
         {{ $t("bufferSize") }}
         <i class="fa-solid fa-up-right-and-down-left-from-center"></i
       ></strong>
-      {{ radius }} km</label
-    >
+    </label>
     <input
-      type="range"
-      class="form-range"
+      type="number"
+      class="form-number"
       min="1"
-      max="100"
+      max="3000"
       v-model="radius"
       id="radius"
     />

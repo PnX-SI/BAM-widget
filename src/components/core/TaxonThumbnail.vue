@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-  <div class="col card thumbnail">
+  <div class="col card thumbnail" v-if="props.picture.author">
     <Image
       :image-url="props.picture?.url"
       :alt="props.picture?.url"
@@ -42,7 +42,7 @@ const props = defineProps<{
           <template #target>
             <i class="bi bi-c-square-fill copyright-icon"></i>
           </template>
-          <Credits :media="props.picture"></Credits>
+          <Credits link-color="link-dark" :media="props.picture"></Credits>
         </BPopover>
       </div>
     </div>

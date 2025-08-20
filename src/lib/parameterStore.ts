@@ -126,7 +126,7 @@ class ParameterStore {
     const router = useRouter();
     const paramsFromUrl = route?.query;
 
-    this.radius = ref(1);
+    this.radius = ref(500);
     this.wkt = ref("");
     this.dateMin = ref(null);
     this.dateMax = ref(null);
