@@ -7,6 +7,13 @@ import { GeoNatureConnector } from "@/lib/connectors/geonature";
 import { GbifConnector } from "@/lib/connectors/gbif";
 import { CONNECTORS } from "@/lib/connectors/connectors";
 
+const props = defineProps({
+  variant: {
+    type: String,
+    default: "primary",
+  },
+});
+
 const { connector } = ParameterStore.getInstance();
 
 const sourcesParams = {
@@ -41,7 +48,7 @@ function updateSource(a) {
   <div class="text-center col-12">
     <BButton
       v-b-modal.modal-center
-      variant="primary"
+      :variant="props.variant"
       size="lg"
       class="col-12 mb-3"
       ><i class="fa fa-leaf"></i> <br />

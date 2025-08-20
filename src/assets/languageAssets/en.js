@@ -1,8 +1,12 @@
 const messagesEN = {
   en: {
     title: "Biodiversity around me",
+    discover: {
+      title: "Explore",
+    },
     subtitle: "Search for species around me",
     howto: "How does it work?",
+    introTitle: "What is Biodiversity around me ?",
     intro: `*Biodiversity Around Me* is a widget dedicated to **exploring species 🔍**!
 
 This interface allows you to **search for species observed in a specific geographic area 🌍**.
@@ -20,7 +24,7 @@ You can also **share your results 📤** to collaborate with other users.
     RefreshFilters: "Refresh parameters",
     IndicateGeoJSONUrl: "Indicate a URL towards a GeoJSON",
     IndicateDetailTemplateUrl: "https://<urlTaxonSheet>/taxonID",
-    TaxonListModeSelection: "Taxon display mode",
+    TaxonListModeSelection: "Species list display mode",
     widgetTypeSelection: "Widget display mode",
     UseGeoJSONSource: "Use a GeoJSON from the web",
     UseCustomDetailPage: 'Change the redirection of the "See More" button',
@@ -64,6 +68,7 @@ You can also **share your results 📤** to collaborate with other users.
     copied: "Copied",
     share: "Share",
     shareLink: "Share a link",
+    shareDiscover: "Share your research",
     source: {
       title: "Data Source",
       select: "Select a data source",
@@ -93,21 +98,21 @@ You can also **share your results 📤** to collaborate with other users.
       vernacularName: "Vernacular name",
       nbObservations: "Number of observations",
       lastSeenDate: "Last observation date",
-      taxonFilter: "Filter by taxon",
+      taxonFilter: "Filter by species",
       seeMore: "See more",
-      class: "Taxon's class",
+      class: "Species' class",
     },
     mode: {
       galleryMode: "Gallery",
       detailedList: "Detailed",
       hybrid: "Hybrid",
-      isTaxonListHybrid: "Mode de la liste de taxon modifiable",
+      isTaxonListHybrid: "Mode de la liste d'espèce modifiable",
     },
     widgetType: {
       list: "Liste",
       default: "Défaut",
     },
-    numberOfTaxonPerLine: "Number of taxons per line",
+    numberOfTaxonPerLine: "Number of species per line",
     widgetPreview: "Preview",
     taxonsClass: {
       Animalia: {

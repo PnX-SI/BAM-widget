@@ -1,8 +1,13 @@
 const messagesFR = {
   fr: {
     title: "Biodiversité autour de moi",
+    discover: {
+      title: "Explore",
+    },
     subtitle: "Rechercher des espèces autour de moi",
     howto: "Comment ça marche ?",
+    introTitle: "Qu'est-ce que Biodiversité autour de moi ?",
+
     intro: `*Biodiversité autour de moi* est un widget dédié à **l'exploration des espèces 🔍** !
 
 Cette interface vous permet de **rechercher les espèces observées dans une zone géographique spécifique 🌍**.
@@ -62,6 +67,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     copied: "Copié",
     share: "Partager",
     shareLink: "Partager un lien",
+    shareDiscover: "Partager votre recherche",
     source: {
       title: "Source de données",
       select: "Sélectionner une source",
@@ -91,21 +97,21 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       vernacularName: "Nom vernaculaire",
       nbObservations: "Nombre d'observations",
       lastSeenDate: "Date de la dernière observation",
-      taxonFilter: "Filtre par taxon",
+      taxonFilter: "Filtre par espèce",
       seeMore: "En savoir plus",
-      class: "Classe du Taxon",
+      class: "Classe d'espèce",
     },
     mode: {
       galleryMode: "Galerie",
       detailedList: "Détaillé",
       hybrid: "Hybride",
-      isTaxonListHybrid: "Mode de la liste de taxon modifiable",
+      isTaxonListHybrid: "Mode de la liste d'espèce modifiable",
     },
     widgetType: {
       list: "Liste",
       default: "Défaut",
     },
-    numberOfTaxonPerLine: "Nombre de taxons par ligne",
+    numberOfTaxonPerLine: "Nombre d'espèces par ligne",
     widgetPreview: "Prévisualisation",
     taxonsClass: {
       Animalia: {
