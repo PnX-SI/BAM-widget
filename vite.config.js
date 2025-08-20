@@ -8,7 +8,7 @@ import { BootstrapVueNextResolver } from "bootstrap-vue-next";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/widget-gtsi/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/BAM-widget/" : "/",
   plugins: [
     vue(),
     vueDevTools(),
