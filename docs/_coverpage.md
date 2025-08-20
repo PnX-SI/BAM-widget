@@ -1,4 +1,4 @@
-# Biodiversity around me 🐛🐦🌱
+![log](images/BAM-logo-full.png)
 
 > A widget generator to explore and show biodiversity data
 
