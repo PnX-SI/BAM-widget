@@ -18,7 +18,7 @@
     <!-- Panneau latéral -->
     <div id="sidebar"
         class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
-        <h2 class="text-xl font-bold mb-2">Refuges des Écrins et biodiversité</h2>
+        <h2 class="text-xl font-bold mb-2">⛰️ Refuges des Écrins et biodiversité</h2>
         <div id="widget-container">
             <p class="text-gray-600">Cliquez sur un des refuges sur la carte pour afficher les espèces observées.</p>
         </div>
@@ -26,7 +26,7 @@
 
     <script>
         // Initialisation de la carte
-        const map = L.map("map").setView([44.7, 6.2], 10);
+        const map = L.map("map")
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors',
@@ -86,7 +86,7 @@
         }
 
         // Ajout des refuges
-        L.geoJSON(refuges, {
+        const refugesLayer = L.geoJSON(refuges, {
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(feature.properties.nom);
                 layer.on("click", function () {
@@ -95,7 +95,7 @@
 
                     const wkt = `POINT (${lng} ${lat})`;
 
-                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=500&x=${lng}&y=${lat}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/list?radius=500&x=${lng}&y=${lat}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
 
                     document.getElementById("widget-container").innerHTML = `
             <h3 class="text-lg font-semibold mb-2">${nomRefuge}</h3>
@@ -110,6 +110,7 @@
                 return L.marker(latlng);
             }
         }).addTo(map);
+        map.fitBounds(refugesLayer.getBounds());
 
         // ⚡ Important : redimensionne la carte quand on change l’orientation/viewport
         window.addEventListener("resize", () => {
