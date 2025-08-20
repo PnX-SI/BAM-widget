@@ -42,7 +42,7 @@ function toWKT(
     WKT = stringify(buffered);
   }
   if (typeLayer == "circle") {
-    const buffered = buffer(geojson, layerRadius);
+    const buffered = buffer(geojson, layerRadius / 1000);
     WKT = stringify(buffered);
   }
   return WKT;

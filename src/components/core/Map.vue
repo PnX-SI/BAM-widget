@@ -92,7 +92,7 @@ function updateGeometry() {
     geojson,
     drawEventData.layerType === "circle" ? layer.getRadius() : null,
     drawEventData.layerType,
-    radius.value
+    radius.value / 1000
   );
 
   if (
