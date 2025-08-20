@@ -4,9 +4,9 @@ import LanguageSwitch from "./LanguageSwitch.vue";
 <template>
   <header>
     <BNavbar
-      v-b-color-mode="'light'"
+      v-b-color-mode="'dark'"
       toggleable="lg"
-      variant="light"
+      variant="success"
       class="mb-3"
     >
       <BNavbarBrand href="#/config">🐛 🐦 🌱 {{ $t("title") }}</BNavbarBrand>
