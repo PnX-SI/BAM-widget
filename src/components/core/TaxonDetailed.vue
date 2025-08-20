@@ -20,7 +20,7 @@ const props = defineProps<{
           :alt="props.picture?.url"
           :title="'Source: ' + props.picture?.source"
         ></Image>
-        <div class="caption">
+        <div class="caption" v-if="props.picture.author">
           <Credits :media="props.picture"></Credits>
         </div>
       </div>

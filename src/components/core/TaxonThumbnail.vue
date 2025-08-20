@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-  <div class="col card thumbnail" v-if="props.picture.author">
+  <div class="col card thumbnail">
     <Image
       :image-url="props.picture?.url"
       :alt="props.picture?.url"
