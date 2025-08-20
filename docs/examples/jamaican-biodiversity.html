@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🇯🇲 Jamaican biodiversity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/wellknown@0.5.0/wellknown.min.js"></script>
+</head>
+
+<body class="h-screen flex flex-col md:flex-row">
+
+    <!-- Map -->
+    <div id="map" class="flex-1 md:h-full h-1/2"></div>
+
+    <!-- Lateral panel -->
+    <div id="sidebar"
+        class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
+        <h2 class="text-xl font-bold mb-2">🇯🇲 Jamaican biodiversity</h2>
+        <div id="widget-container">
+            <p class="text-gray-600">Click on an administrative boundary to display observed species in this one, based on <a href="https://www.gbif.org/fr/" target="_blank">GBIF</a> data.</p>
+        </div>
+    </div>
+
+    <script>
+        // Map initialisation
+        const map = L.map("map")
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors',
+        }).addTo(map);
+
+        // GeoJSON URL with map objects to display and main propertu to display
+        const urlGeojson="https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/JAM/ADM3/geoBoundaries-JAM-ADM3_simplified.geojson"
+		const nameProperty="shapeName"
+		
+		fetch(urlGeojson).then((response)=>response.json()).then((data)=>{
+		          const dataLayer = L.geoJSON(data, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties[nameProperty]);
+                layer.on("click", function () {
+                    const [lng, lat] = feature.geometry.coordinates;
+                    const getNameProperty = feature.properties[nameProperty];
+
+                    const wkt = wellknown.stringify(feature);
+
+                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/list?radius=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=en&mode=detailedList&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+
+                    document.getElementById("widget-container").innerHTML = `
+                    <h3 class="text-lg font-semibold mb-2">${getNameProperty}</h3>
+                    <embed src="${widgetUrl}" style="width:100%; height:80vh;" />
+                    <p class="text-sm text-gray-500 text-right italic mt-2">Powered by 
+                      <a href="https://github.com/PnX-SI/BAM-widget" target="_blank" class="text-blue-600 hover:underline">BAM</a> and <a href="https://www.gbif.org/fr/" target="_blank" class="text-blue-600 hover:underline">GBIF</a> data
+                    </p>
+                    `;
+                });
+            },
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng);
+            }
+        }).addTo(map);
+        map.fitBounds(dataLayer.getBounds());
+
+		})
+
+        // Add GeoJSON objects on map
+
+        // ⚡ Important: resize map when changing orientation/viewport
+        window.addEventListener("resize", () => {
+            map.invalidateSize();
+        });
+    </script>
+</body>
+
+</html>
