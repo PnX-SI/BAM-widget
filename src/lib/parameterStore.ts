@@ -7,7 +7,7 @@ import {
   Router,
 } from "vue-router";
 import { parse, stringify } from "wellknown";
-import { buffer, simplify } from "@turf/turf";
+import { booleanClockwise, buffer, rewind, simplify } from "@turf/turf";
 import { useI18n } from "vue-i18n";
 import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "./enums";
 import { Connector } from "./connectors/connector";
@@ -296,6 +296,12 @@ const validateWKT = (wkt: string | null, radius: number): string | null => {
     }
     return stringify(buffered);
   }
+  let geojson = parse(wkt);
+  if (!booleanClockwise(geojson)) {
+    geojson = rewind(geojson);
+    wkt = stringify(geojson);
+  }
+
   return wkt;
 };
 
