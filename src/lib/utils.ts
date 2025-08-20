@@ -59,7 +59,7 @@ function restoreMapState(map: L.Map): void {
     map.setView([state.center.lat, state.center.lng], state.zoom);
   } else {
     // Default view
-    map.setView([48.8566, 2.3522], 13);
+    map.setView([44.5, 6.05], 2);
   }
 }
 
