@@ -290,10 +290,10 @@ class ParameterStore {
 
 const validateWKT = (wkt: string | null, radius: number): string | null => {
   if (wkt && (wkt.includes("POINT") || wkt.includes("LINESTRING"))) {
-    const buffered = simplify(buffer(parse(wkt), radius), {
-      tolerance: 0.001,
-      highQuality: true,
-    });
+    let buffered = buffer(parse(wkt), radius);
+    if (wkt.includes("LINESTRING")) {
+      buffered = simplify(buffered, { tolerance: 0.001, highQuality: true });
+    }
     return stringify(buffered);
   }
   return wkt;
