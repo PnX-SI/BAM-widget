@@ -21,7 +21,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     parameters: "Paramètres",
     filters: "Filtres",
     showFilters: "Afficher les filtres",
-    RefreshFilters: "Rafraichir les paramétres",
+    RefreshFilters: "Rafraîchir les paramètres",
     IndicateGeoJSONUrl: "Indiquer une URL vers un GeoJSON",
     IndicateDetailTemplateUrl: "https://<urlFicheDeTaxon>/taxonID",
     TaxonListModeSelection: "Mode d'affichage des taxons",
@@ -126,7 +126,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       },
       Plantae: {
         Magnoliopsida: "Magnoliopsida",
-        Liliopsida: "Liliopsidées",
+        Liliopsida: "Monocotylédone",
         Pinopsida: "Conifères",
       },
     },

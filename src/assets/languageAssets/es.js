@@ -4,7 +4,7 @@ const messagesES = {
     discover: {
       title: "Explorar",
     },
-    subtitle: "Buscar especies alrededor mío",
+    subtitle: "Buscar especies a mi alrededor",
     howto: "¿Cómo funciona?",
     introTitle: "¿Qué es Biodiversidad a mi alrededor?",
     intro: `*Biodiversidad A Mi Alrededor* es un widget dedicado a **explorar especies 🔍**!
@@ -21,10 +21,10 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     IndicateDetailTemplateUrl: "https://<urlTaxonSheet>/taxonID",
     TaxonListModeSelection: "Modo de visualización de la lista de especies",
     widgetTypeSelection: "Modo de visualización del Widget",
-    UseGeoJSONSource: "Usar un GeoJSON de la web",
+    UseGeoJSONSource: "Usar un GeoJSON",
     UseCustomDetailPage: 'Cambiar la redirección del botón "Ver Más"',
     filtersTitle: "Filtros",
-    mapEditable: "Zona de investigación editable",
+    mapEditable: "Zona de búsqueda editable",
     radius: "Radio",
     bufferSize: "Tamaño del buffer",
     dateMin: "Fecha Mínima",
@@ -39,17 +39,17 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     previousPage: "Anterior",
     nextPage: "Siguiente",
     loading: "Cargando...",
-    noObservations: "No se encontraron observaciones",
+    noObservations: "Ninguna observación encontrada",
     noGeometry: "No se encontró geometría",
     error404: {
       title: "Página no encontrada",
       subtitle: "La página que buscas no existe",
     },
-    browserIntegration: "Integrar el widget en tu sitio",
+    browserIntegration: "Integrar el widget en tu página web",
     drawGeometry: "Dibujar un área para mostrar especies",
     size: {
-      width: "Ancho",
-      height: "Alto",
+      width: "Anchura",
+      height: "Altura",
     },
     embed: "Integrar",
     typeWidget: {
@@ -62,19 +62,19 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     copied: "Copiado",
     share: "Compartir",
     shareLink: "Compartir un enlace",
-    shareDiscover: "Compartir tu investigación",
+    shareDiscover: "Compartir tu búsqueda",
     source: {
       title: "Fuente de datos",
       select: "Seleccionar una fuente de datos",
       modify: "Cambiar la fuente de datos",
       gbifWarning:
-        "El número de observaciones y las fechas de los últimos avistamientos se basan en una agregación de las últimas 30,000 observaciones realizadas dentro del área seleccionada.",
+        "El número de observaciones y sus fechas se basan en una agregación de las últimas 30,000 observaciones realizadas dentro del área seleccionada.",
     },
     gbif: {
       apiEndpoint: "Punto final de la API de GBIF",
     },
     geonature: {
-      api_endpoint: "Punto final de la API de GeoNature",
+      api_endpoint: "Dirección de la API de GeoNature",
       id_export: "ID de exportación",
     },
     desc: "Descendente",
