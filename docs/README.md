@@ -1,27 +1,28 @@
 ![BAM logo](https://media.githubusercontent.com/media/PnX-SI/BAM-widget/main/images/BAM-logo-full.png)
 
-**BAM (Biodiversity around me)** is a web widget that retrieves and displays species observed within an area, based on the GBIF data API.  
+**BAM (Biodiversity around me)** is a web widget that retrieves and displays species observed within an area, based on the GBIF data API (or alternative other biodiversity data sources).  
 
-Easily integrate biodiversity species list in your website, around a point, a line, a polygon or your GPS location.
-Easily integrate dynamic biodiversity species list in your website, around a place, your location, a track or within an area.
+It allows to easily integrate biodiversity species list in your website, around a point, a line, a polygon or your GPS location.
 
 It supports various sources of biodiversity data API such as **[GBIF](https://www.gbif.org/)** 🦋 or a **[GeoNature](https://geonature.fr/)** instance 🌱, with plans for additional sources.  
 It retrieves species pictures and sounds from GBIF, Wikidata, INPN or TaxHub API.
 
-The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet🗺️, and Bootstrap 🅱.
+The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootstrap 🅱.
 
-<img style="width:100%" src="images/first_result.png"/>
+<img style="width:100%" src="/images/first_result.png"/>
 
 ## ✨ Features
 
-- Display species found in a defined area using observations data from GBIF API or a GeoNature instance.
-- Define specific point, line or polygon, or a GeoJSON, or dynamic geographic objects.
-- GPS geolocation, point and line automatic buffer.
-- Multiple display modes: map 🗺️, list 📋
-- Sort 🔃 and filter species lists.
-- Search 🔎 and filter species.
-- Share research via link 🔗 or embed in your website 🖥️.
-- Multilingual support 🌐.
+- Display species found in a defined area using observations data from GBIF API or from a GeoNature instance
+- Define area based on a specific point, line or polygon, or a GeoJSON, or dynamic geographic objects
+- GPS geolocation
+- Point and line automatic buffer
+- Multiple widget modes: list 📋, map 🗺️
+- Multiple species display mode: detailed or gallery
+- Sort 🔃 and filter species lists
+- Search 🔎 and filter species
+- Share research via link 🔗 or embed in your website 🖥️
+- Multilingual support (EN, FR, ES) 🌐
 - Based only on open API! No server required (except for self-hosting)!
 
 ## 🚀 Generate your widget!
@@ -34,7 +35,8 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet🗺️, and Bootstr
   - [Corcovado treks](https://pnx-si.github.io/BAM-widget/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
   - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](https://github.com/PnX-SI/BAM-widget/blob/main/examples/geotrek-detail-page.html)
   - [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
-- Test and explore: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
+  - [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
+- Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
 
 ## 🎛️ Widget parameters
 
@@ -69,6 +71,8 @@ But you can choose to install it locally or on your server to develop or host it
 
 Clone or download the source code from this Github repository.
 
+### 📦 Install packages
+
 ```sh
 npm install
 ```
@@ -87,7 +91,7 @@ npm run build
 
 ## 👥 Contributors
 
-**Developed and conceived by**
+**Conceived and developed by**
 
 - @jacquesfize (Parc national des Écrins)
 - @amandine-sahl (Parc national des Cévennes)
@@ -95,6 +99,7 @@ npm run build
 - @CynthiaBorotPNV (Parc national de la Vanoise)
 - @EcMerc (Parc national du Mercantour)
 - Simon Chevreau (Office Français de la Biodiversité)
+- @babastienne (Makina Corpus)
 
 ## 📄 License
 
