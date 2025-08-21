@@ -1,15 +1,17 @@
-# 🚀 Release 1.0.0 — August 21, 2025
+# CHANGELOG
 
-This version brings a **complete redesign of the widget**, now powered by **Vue.js** for a smoother and more modern experience.
+## 1.0.0 (2025-08-21)
+
+This version brings a **complete redesign of the widget**, now powered by **Vue.js**, **Leaflet**, **Turf.js** and **Bootstrap** for a smoother and more modern experience.
 
 ## ✨ New Features
 
 - 🎨 **Fresh, modern design**
 - 🌍 **Multilingual support**
-- 🌐 **Multiple observation data sources** supported
-- 🦋 Now **works with GeoNature**
-- 🖼️ Use **species images** from _Wikidata_, _GBIF_, _INPN_, and _TaxHub_ APIs
-- 🎶 Use **species sounds** from the _GBIF_
+- 🌐 **Multiple observations data sources** supported
+- 🦋 Now **works with GeoNature** data source
+- 🖼️ Retrieve **species images** from _Wikidata_, _GBIF_, _INPN_, and _TaxHub_ APIs
+- 🎶 Retrieve **species sounds** from _GBIF_ API
 - 🔎 **Search & filter** and **Sortable species list** forms
 - 🖥️ **Multiple display modes**
 - ⚙️ **New customizable parameters** (display mode, media sources, etc.)
@@ -20,6 +22,8 @@ This version brings a **complete redesign of the widget**, now powered by **Vue.
 
 - [Full documentation](https://pnx-si.github.io/BAM-widget/docs/)
 - Examples can be found in the [docs/examples](/docs/examples/) directory
+
+By @jacquesfize, @camillemonchicourt, @amandine-sahl and @babastienne.
 
 ## 0.1.0 (2025-01-03)
 
