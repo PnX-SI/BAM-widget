@@ -1,30 +1,28 @@
-# CHANGELOG
+# 🚀 Release 1.0.0 — August 21, 2025
 
-## 1.0.0 (2025-08-21)
+This version brings a **complete redesign of the widget**, now powered by **Vue.js** for a smoother and more modern experience.
 
-Complete redesign of the widget with Vue.js.
+## ✨ New Features
 
-### ✨ New Features
+- 🎨 **Fresh, modern design**
+- 🌍 **Multilingual support**
+- 🌐 **Multiple observation data sources** supported
+- 🦋 Now **works with GeoNature**
+- 🖼️ Use **species images** from _Wikidata_, _GBIF_, _INPN_, and _TaxHub_ APIs
+- 🎶 Use **species sounds** from the _GBIF_
+- 🔎 **Search & filter** and **Sortable species list** forms
+- 🖥️ **Multiple display modes**
+- ⚙️ **New customizable parameters** (display mode, media sources, etc.)
+- 📏 **Automatic buffer** around points and lines
+- 🔗 **Easier sharing**: use a link or embed the widget directly in an HTML page with an `<embed>` tag
 
-- Multilingual support.
-- Introduced a modernized design.
-- Added sorting capability to the taxon list.
-- Added a search form to filter taxons.
-- Different observations data sources can now be used in addition of GBIF. For now, only GeoNature is supported as alternative observation data source.
-- Wikidata, INPN, TaxHub API support to get species pictures
-- Include species sound API
-- 2 display modes
-- Add several parameters
-- Automatic buffer around point and line
-- A research can be shared using a link or integrated in a HTML page using an `<embed>` dedicated tag
+## 📚 Documentation
 
-### Documentation
-
-- Full external documentation (https://pnx-si.github.io/BAM-widget/docs/)
-- Add widget integration examples (in [docs/examples](/docs/examples/))
+- [Full documentation](https://pnx-si.github.io/BAM-widget/docs/)
+- Examples can be found in the [docs/examples](/docs/examples/) directory
 
 ## 0.1.0 (2025-01-03)
 
-- First functional version of the widget with GBIF, Wikidata and Taxref APIs.  
-- Developed with Turf.js, OpenLayers, Bootstrap librairies.  
+- First functional version of the widget with GBIF, Wikidata and Taxref APIs.
+- Developed with Turf.js, OpenLayers, Bootstrap librairies.
 - By @jacquesfize, @CynthiaBorotPNV, @EcMerc, @amandine-sahl and Simon Chevreau.
