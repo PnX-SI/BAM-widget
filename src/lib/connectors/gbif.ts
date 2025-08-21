@@ -220,6 +220,8 @@ export class GbifConnector extends Connector {
   }
 
   sourceDetailMessage(): string {
-    return useI18n().t("source.gbifWarning");
+    return useI18n().t("source.gbifWarning", {
+      nbObs: this.LIMIT * this.NB_PAGES,
+    });
   }
 }

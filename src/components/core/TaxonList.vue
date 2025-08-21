@@ -86,7 +86,7 @@ function toggleMode() {
 }
 
 const classNames = computed(() => {
-  const gallery_mode = mode.value === "gallery" ? 2 : 1;
+  const gallery_mode = 2;
   const row_cols_lg = nbTaxonPerLine.value * gallery_mode;
   const row_cols_md = nbTaxonPerLine.value === 1 ? 1 : row_cols_lg / 2;
   const row_cols_sm = gallery_mode;
@@ -200,7 +200,7 @@ if (wkt.value) {
           wkt.length &&
           !loadingObservations &&
           !loadingError &&
-          !speciesList.length
+          (!speciesList.length || speciesListShowed.length == 0)
         "
       >
         {{ $t("noSpeciesObserved") }}
@@ -228,16 +228,19 @@ if (wkt.value) {
       </div>
     </div>
 
-    <div id="data-source-credits">
-      {{ $t("source.title") }} {{ connector.name }}
-      <BTooltip v-if="connector.sourceDetailMessage()">
-        <template #target>
-          <a style="color: white; text-decoration: underline"
-            ><i class="bi bi-info-circle"></i
-          ></a>
-        </template>
-        {{ connector.sourceDetailMessage() }}
-      </BTooltip>
+    <div id="data-source-credits" class="text-center">
+      <div v-if="wkt.length && !loadingObservations">
+        <strong>{{ speciesList.length }} {{ $t("taxon.taxonFound") }}</strong>
+        {{ $t("in") }} {{ connector.name }}
+        <BTooltip v-if="connector.sourceDetailMessage()">
+          <template #target>
+            <a style="color: white; text-decoration: underline"
+              ><i class="bi bi-info-circle"></i
+            ></a>
+          </template>
+          {{ connector.sourceDetailMessage() }}
+        </BTooltip>
+      </div>
     </div>
   </div>
 </template>

@@ -74,7 +74,7 @@ You can also **share your results 📤** to collaborate with other users.
       select: "Select a data source",
       modify: "Change the data source",
       gbifWarning:
-        "The number of observations and the dates of the latest sightings are based on an aggregation of the latest 30,000 observations made within the selected area.",
+        "The number of observations and the dates of the latest sightings are based on an aggregation of the latest {nbObs} observations made within the selected area.",
     },
     gbif: {
       apiEndpoint: "API endpoint of the GBIF",
@@ -101,6 +101,7 @@ You can also **share your results 📤** to collaborate with other users.
       taxonFilter: "Filter by species",
       seeMore: "See more",
       class: "Species' class",
+      taxonFound: "species found",
     },
     mode: {
       galleryMode: "Gallery",
@@ -132,6 +133,7 @@ You can also **share your results 📤** to collaborate with other users.
       },
     },
     or: "or",
+    in: "in",
   },
 };
 

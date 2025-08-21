@@ -73,7 +73,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       select: "Sélectionner une source",
       modify: "Modifier la source de données",
       gbifWarning:
-        "Le nombre d'observations et leurs dates sont basés sur une agrégation des 30 000 dernières observations effectuées dans la zone sélectionnée.",
+        "Le nombre d'observations et leurs dates sont basés sur une agrégation des {nbObs} dernières observations effectuées dans la zone sélectionnée.",
     },
     gbif: {
       apiEndpoint: "Adresse de l'API du GBIF",
@@ -100,6 +100,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       taxonFilter: "Filtre par espèce",
       seeMore: "En savoir plus",
       class: "Classe d'espèce",
+      taxonFound: "espèces trouvées",
     },
     mode: {
       galleryMode: "Galerie",
@@ -131,6 +132,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
       },
     },
     or: "ou",
+    in: "dans",
   },
 };
 

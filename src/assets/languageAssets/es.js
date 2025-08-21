@@ -68,7 +68,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
       select: "Seleccionar una fuente de datos",
       modify: "Cambiar la fuente de datos",
       gbifWarning:
-        "El número de observaciones y sus fechas se basan en una agregación de las últimas 30,000 observaciones realizadas dentro del área seleccionada.",
+        "El número de observaciones y sus fechas se basan en una agregación de las últimas {nbObs} observaciones realizadas dentro del área seleccionada.",
     },
     gbif: {
       apiEndpoint: "Punto final de la API de GBIF",
@@ -95,6 +95,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
       taxonFilter: "Filtrar por especie",
       seeMore: "Ver más",
       class: "Clase de especie",
+      taxonFound: "especies encontradas",
     },
     mode: {
       galleryMode: "Galería",
@@ -126,6 +127,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
       },
     },
     or: "o",
+    in: "en",
   },
 };
 
