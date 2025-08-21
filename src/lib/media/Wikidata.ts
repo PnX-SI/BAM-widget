@@ -118,7 +118,9 @@ function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
               typeMedia: "image",
               licenseUrl: credit.licenseUrl,
               license: credit.license,
-              author: credit.artist.replace(/<[^>]*>?/gm, ""),
+              author: credit.artist
+                ? credit.artist.replace(/<[^>]*>?/gm, "")
+                : credit.artist,
               urlSource: `https://commons.wikimedia.org/wiki/File:${imageFilename}`,
             },
           ] as Media[];
