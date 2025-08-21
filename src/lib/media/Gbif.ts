@@ -7,7 +7,7 @@ import { validURL } from "../utils";
 
 export class GBIFMediaSource extends MediaSource {
   constructor(parameters?: any) {
-    super("GBIFMediaSource", SOURCE_.gbif);
+    super("GBIF", SOURCE_.gbif);
   }
 
   isCompatible(connector: Connector): boolean {

@@ -164,7 +164,7 @@ function fetchWikidataImage(
 
 class WikiDataImageSource extends MediaSource {
   constructor() {
-    super("WikidataMediaSource", SOURCE_.wikidata);
+    super("Wikidata", SOURCE_.wikidata);
   }
 
   fetchPicture(
