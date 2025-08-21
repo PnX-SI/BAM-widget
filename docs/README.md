@@ -9,7 +9,7 @@ It retrieves species pictures and sounds from GBIF, Wikidata, INPN or TaxHub API
 
 The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootstrap 🅱.
 
-<img style="width:100%" src="/images/first_result.png"/>
+<img style="width:100%" src="http://media.githubusercontent.com/media/PnX-SI/BAM-widget/refs/heads/main/images/first_result.png"/>
 
 ## ✨ Features
 
