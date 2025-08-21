@@ -34,7 +34,7 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet🗺️, and Bootstr
   - [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
   - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](https://github.com/PnX-SI/BAM-widget/blob/main/docs/examples/geotrek-detail-page.html)
   - [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
-- Test and explore: [https://pnx-si.github.io/BAM-widget/](https://pnx-si.github.io/BAM-widget/)
+- Test and explore: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
 
 ## 🎛️ Widget parameters
 
