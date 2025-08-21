@@ -21,7 +21,8 @@
         class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
         <h2 class="text-xl font-bold mb-2">🇨🇷 Senderismo y biodiversidad en Corcovado</h2>
         <div id="widget-container">
-            <p class="text-gray-600">Haga clic en una caminata para ver las especies observadas alrededor de esta, según los datos de <a href="https://www.gbif.org/fr/" target="_blank">GBIF</a> data.
+            <p class="text-gray-600">Haga clic en una caminata para ver las especies observadas alrededor de esta, según
+                los datos de <a href="https://www.gbif.org/fr/" target="_blank">GBIF</a> data.
         </div>
     </div>
 
@@ -34,35 +35,35 @@
         }).addTo(map);
 
         // GeoJSON URL with map objects to display and main property to display
-        const urlGeojson="https://si.ecrins-parcnational.com/data/corcovado-treks-komoot.geojson"
-        const nameProperty="name"
-		
-        fetch(urlGeojson).then((response)=>response.json()).then((data)=>{
-	          const dataLayer = L.geoJSON(data, {
-            onEachFeature: function (feature, layer) {
-                layer.bindPopup(feature.properties[nameProperty]);
-                layer.on("click", function () {
-                    const [lng, lat] = feature.geometry.coordinates;
-                    const getNameProperty = feature.properties[nameProperty];
+        const urlGeojson = "https://si.ecrins-parcnational.com/data/corcovado-treks-komoot.geojson"
+        const nameProperty = "name"
 
-                    const wkt = wellknown.stringify(feature);
+        fetch(urlGeojson).then((response) => response.json()).then((data) => {
+            const dataLayer = L.geoJSON(data, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(feature.properties[nameProperty]);
+                    layer.on("click", function () {
+                        const [lng, lat] = feature.geometry.coordinates;
+                        const getNameProperty = feature.properties[nameProperty];
 
-                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/list?radius=100&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=es&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+                        const wkt = wellknown.stringify(feature);
 
-                    document.getElementById("widget-container").innerHTML = `
+                        const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=100&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=es&mode=gallery&widgetType=list&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+
+                        document.getElementById("widget-container").innerHTML = `
                     <h3 class="text-lg font-semibold mb-2">${getNameProperty}</h3>
                     <embed src="${widgetUrl}" style="width:100%; height:80vh;" />
                     <p class="text-sm text-gray-500 text-right italic mt-2">Powered by 
                       <a href="https://github.com/PnX-SI/BAM-widget" target="_blank" class="text-blue-600 hover:underline">BAM</a> and <a href="https://www.gbif.org/fr/" target="_blank" class="text-blue-600 hover:underline">GBIF</a> data
                     </p>
                     `;
-                });
-            },
-            pointToLayer: function (feature, latlng) {
-                return L.marker(latlng);
-            }
-          }).addTo(map);
-          map.fitBounds(dataLayer.getBounds());
+                    });
+                },
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng);
+                }
+            }).addTo(map);
+            map.fitBounds(dataLayer.getBounds());
 
         })
 

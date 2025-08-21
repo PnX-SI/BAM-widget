@@ -21,7 +21,8 @@
         class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
         <h2 class="text-xl font-bold mb-2">⛰️ Refuges des Écrins et biodiversité</h2>
         <div id="widget-container">
-            <p class="text-gray-600">Cliquez sur un des refuges sur la carte pour afficher les espèces observées dans les 500 mètres autour de celui-ci.</p>
+            <p class="text-gray-600">Cliquez sur un des refuges sur la carte pour afficher les espèces observées dans
+                les 500 mètres autour de celui-ci.</p>
         </div>
     </div>
 
@@ -96,7 +97,7 @@
 
                     const wkt = wellknown.stringify(feature);
 
-                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/list?radius=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=fr&mode=gallery&widgetType=default&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+                    const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=fr&mode=gallery&widgetType=list&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
 
                     document.getElementById("widget-container").innerHTML = `
                     <h3 class="text-lg font-semibold mb-2">${titleRefuge}</h3>
