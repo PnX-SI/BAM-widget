@@ -18,7 +18,7 @@ const props = defineProps({
         <Map :height="props.height" />
       </div>
       <div class="col-12 col-lg-6 col-md-6">
-        <TaxonList :nbTaxonPerLine="1" :style="'height:' + props.height" />
+        <TaxonList :style="'height:' + props.height" />
       </div>
     </div>
   </div>

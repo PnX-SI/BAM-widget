@@ -131,7 +131,7 @@ class ParameterStore {
     this.dateMin = ref(null);
     this.dateMax = ref(null);
     this.connector = shallowRef(getConnector(null, paramsFromUrl));
-    this.nbTaxonPerLine = ref(null);
+    this.nbTaxonPerLine = ref(2);
     this.showFilters = ref(true);
     this.mapEditable = ref(true);
     this.lang = locale;

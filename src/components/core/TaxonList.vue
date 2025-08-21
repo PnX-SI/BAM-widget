@@ -27,7 +27,6 @@ const class_ = ParameterStore.getInstance().class;
 const props = defineProps({
   nbTaxonPerLine: {
     type: Number,
-    default: 1,
   },
   showFilters: {
     type: Boolean,
@@ -56,7 +55,7 @@ const props = defineProps({
 });
 
 const speciesList = ref([]);
-nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine;
+nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
 let loadingObservations = false;
 let loadingError = false;
 let noDataFound = false;
@@ -86,10 +85,9 @@ function toggleMode() {
 }
 
 const classNames = computed(() => {
-  const gallery_mode = 2;
-  const row_cols_lg = nbTaxonPerLine.value * gallery_mode;
-  const row_cols_md = nbTaxonPerLine.value === 1 ? 1 : row_cols_lg / 2;
-  const row_cols_sm = gallery_mode;
+  const row_cols_lg = nbTaxonPerLine.value;
+  const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
+  const row_cols_sm = Math.round(row_cols_md / 2);
   return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
 });
 

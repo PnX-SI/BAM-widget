@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
   <div>
     <div v-if="config.wkt.value.length > 0">
-      <TaxonList :nbTaxonPerLine="4" :style="'height:' + props.height" />
+      <TaxonList :style="'height:' + props.height" />
     </div>
     <div v-else>
       <h2 class="col-12 text-center m-3">Aucune géométrie fournie !</h2>
