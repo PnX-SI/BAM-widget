@@ -1,4 +1,4 @@
-![BAM logo](/images/BAM-logo-full.png)
+![BAM logo](https://media.githubusercontent.com/media/PnX-SI/BAM-widget/refs/heads/main/images/BAM-logo-full.png)
 
 **BAM (Biodiversity around me)** is a web widget that retrieves and displays species observed within an area, based on the GBIF data API (or alternative other biodiversity data sources).  
 
@@ -9,7 +9,7 @@ It retrieves species pictures and sounds from GBIF, Wikidata, INPN or TaxHub API
 
 The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootstrap 🅱.
 
-![Widget preview](/images/first_result.png)
+![Widget preview](https://media.githubusercontent.com/media/PnX-SI/BAM-widget/refs/heads/main/images/first_result.png)
 
 ## ✨ Features
 
