@@ -106,7 +106,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     },
     widgetType: {
       list: "Lista",
-      default: "Predeterminado",
+      default: "Carta Lista",
     },
     numberOfTaxonPerLine: "Número de especies por línea",
     widgetPreview: "Vista previa",

@@ -111,7 +111,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     },
     widgetType: {
       list: "Liste",
-      default: "Défaut",
+      default: "Carte Liste",
     },
     numberOfTaxonPerLine: "Nombre d'espèces par ligne",
     widgetPreview: "Prévisualisation",

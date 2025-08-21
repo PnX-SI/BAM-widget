@@ -14,11 +14,13 @@ const props = defineProps<{
 <template>
   <div class="col">
     <div class="card h-100 mb-2">
-      <div class="taxon-photo" :class="props.picture.url ? '' : 'placeholder'">
+      <div class="taxon-photo">
         <Image
           :image-url="props.picture?.url"
-          :alt="props.picture?.url"
-          :title="'Source: ' + props.picture?.source"
+          :alt="props.picture?.urlSource"
+          :title="
+            props.picture?.source ? 'Source: ' + props.picture?.source : ''
+          "
         ></Image>
         <div class="caption" v-if="props.picture.author">
           <Credits link-color="link-light" :media="props.picture"></Credits>

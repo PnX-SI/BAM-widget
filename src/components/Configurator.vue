@@ -11,10 +11,10 @@ const { widgetType } = ParameterStore.getInstance();
 
 <template>
   <!-- TOP MENU -->
-  <HeaderNav></HeaderNav>
 
   <!-- App -->
   <main class="container-fluid">
+    <HeaderNav></HeaderNav>
     <div class="row">
       <!-- Intro & Parameters -->
       <div class="col-12 col-lg-4 col-md-2" style="height: 80vh">
@@ -49,8 +49,6 @@ const { widgetType } = ParameterStore.getInstance();
   background-color: #efefef;
   border-radius: 10px;
   margin-right: 0.5em;
-  height: 82.5vh;
-
   h3 {
     /* color: #666; */
     width: max-content;

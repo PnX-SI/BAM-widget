@@ -62,7 +62,7 @@ const modeOptions = computed(() => {
 
 const widgetTypeOptions = computed(() => {
   return [
-    { value: WIDGET_TYPE.default, text: t("widgetType.default") },
+    { value: WIDGET_TYPE.mapList, text: t("widgetType.default") },
     { value: WIDGET_TYPE.list, text: t("widgetType.list") },
   ];
 });
@@ -107,7 +107,7 @@ const widgetTypeOptions = computed(() => {
 
         <div
           class="parameter-section"
-          v-if="widgetType === WIDGET_TYPE.default"
+          v-if="widgetType === WIDGET_TYPE.mapList"
         >
           <BFormCheckbox switch v-model="mapEditable">
             <strong
@@ -231,8 +231,5 @@ label {
 
 .parameter-section {
   margin-top: 1rem;
-}
-#left-panel {
-  height: 100vh;
 }
 </style>

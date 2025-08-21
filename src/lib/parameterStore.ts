@@ -138,7 +138,7 @@ class ParameterStore {
     this.mode = ref(TAXONLIST_DISPLAY_MODE.detailedList);
     this.sourceGeometry = ref(null);
     this.class = ref(null);
-    this.widgetType = ref(WIDGET_TYPE.default);
+    this.widgetType = ref(WIDGET_TYPE.list);
     this.hybridTaxonList = ref(true);
     this.x = ref(null);
     this.y = ref(null);
@@ -224,7 +224,7 @@ class ParameterStore {
           ? value
           : TAXONLIST_DISPLAY_MODE.detailedList,
       widgetType: (value: string) =>
-        Object.keys(WIDGET_TYPE).includes(value) ? value : WIDGET_TYPE.default,
+        Object.keys(WIDGET_TYPE).includes(value) ? value : WIDGET_TYPE.mapList,
       x: (value: string) => {
         const x = parseInt(value);
         return -180 < x && x < 180 ? x : null;

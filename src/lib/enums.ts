@@ -5,6 +5,6 @@ export enum TAXONLIST_DISPLAY_MODE {
 }
 
 export enum WIDGET_TYPE {
-  default = "default",
+  mapList = "mapList",
   list = "list",
 }
