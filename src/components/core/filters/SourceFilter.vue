@@ -49,10 +49,11 @@ function updateSource(a) {
     <BButton
       v-b-modal.modal-center
       :variant="props.variant"
-      size="lg"
+      size="md"
       class="col-12 mb-3"
-      ><i class="fa fa-leaf"></i> <br />
-      {{ $t("source.modify") }}</BButton
+      ><i class="fa fa-leaf"></i> {{ $t("source.modify") }} ({{
+        sourceName
+      }})</BButton
     >
   </div>
 

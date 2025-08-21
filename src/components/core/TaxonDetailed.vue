@@ -21,7 +21,7 @@ const props = defineProps<{
           :title="'Source: ' + props.picture?.source"
         ></Image>
         <div class="caption" v-if="props.picture.author">
-          <Credits :media="props.picture"></Credits>
+          <Credits link-color="link-light" :media="props.picture"></Credits>
         </div>
       </div>
 
@@ -47,7 +47,7 @@ const props = defineProps<{
               :href="props.urlDetailPage"
               target="_blank"
               class="badge bg-light text-primary border border-primary text-decoration-none"
-              ><strong>{{ $t("taxon.seeMore") }} <i class="bi bi-arrow-right"></i> </strong>
+              ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
           </small>
           <br />

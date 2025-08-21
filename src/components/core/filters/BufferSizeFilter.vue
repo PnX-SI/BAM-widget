@@ -6,7 +6,7 @@ const { radius } = ParameterStore.getInstance();
 
 <template>
   <div class="row">
-    <label for="radius" class="form-label col-4"
+    <label for="radius" class="form-label col-5"
       ><strong>
         {{ $t("bufferSize") }}
         <i class="fa-solid fa-up-right-and-down-left-from-center"></i

@@ -149,7 +149,7 @@ const widgetTypeOptions = computed(() => {
           ></label>
           <BFormInput
             v-model="customDetailPage"
-            :placeholder="$t('IndicateDetailTemplateUrl')"
+            :placeholder="$t('IndicateDetailTemplateUrl') + '{taxonID}'"
           />
         </div>
 

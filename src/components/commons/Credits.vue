@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 const props = defineProps<{
   media: Media;
-  linkColor: { type: string; required: false };
+  linkColor: string;
 }>();
 </script>
 
@@ -24,6 +24,7 @@ const props = defineProps<{
       :class="props.linkColor ? props.linkColor : 'link-light'"
       :href="props.media.licenseUrl"
       target="_blank"
+      style="margin-left: 0.3em"
       >{{ props.media.license }}</a
     ></span
   >
