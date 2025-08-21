@@ -5,7 +5,7 @@ import { WikiDataImageSource } from "./Wikidata";
 import { MediaSource } from "./MediaSource";
 export enum SOURCE_ {
   gbif = "gbif",
-  taxref_odata = "taxref_odata",
+  inpn = "inpn",
   wikidata = "wikidata",
   taxhub = "taxhub",
   // CUSTOM = "custom",
@@ -22,7 +22,7 @@ export function getMediaSource(
   switch (id) {
     case SOURCE_.gbif:
       return new GBIFMediaSource(params);
-    case SOURCE_.taxref_odata:
+    case SOURCE_.inpn:
       return new TaxrefODATA(params);
     case SOURCE_.wikidata:
       return new WikiDataImageSource();

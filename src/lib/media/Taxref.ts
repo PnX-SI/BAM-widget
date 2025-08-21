@@ -24,7 +24,7 @@ interface TaxrefODATAResponse {
 
 export class TaxrefODATA extends MediaSource {
   constructor(parameters) {
-    super("INPN", SOURCE_.taxref_odata);
+    super("INPN", SOURCE_.inpn);
   }
 
   fetchPicture(
