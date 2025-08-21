@@ -1,15 +1,22 @@
 ![BAM logo](https://media.githubusercontent.com/media/PnX-SI/BAM-widget/refs/heads/main/docs/images/BAM-logo-full.png)
 
-**BAM (Biodiversity around me)** is a web widget that retrieves and displays species observed within an area.  
-It supports multiple sources of biodiversity data API such as [GBIF](https://www.gbif.org/) 🦋 or a [GeoNature](https://geonature.fr/) instance 🌱, with plans for additional sources.  
-The widget provides several display modes, including map 🗺️, species list 📋.
+**BAM (Biodiversity around me)** is a web widget that retrieves and displays species observed within an area, based on the GBIF data API.  
 
-The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet🗺️, and Bootstrap 🅱.  
-It supports multilingual interfaces 🌐 and a modern design.
+Easily integrate biodiversity species list in your website, around a point, a line, a polygon or your GPS location.
+Easily integrate dynamic biodiversity species list in your website, around a place, your location, a track or within an area.
+
+It supports various sources of biodiversity data API such as **[GBIF](https://www.gbif.org/)** 🦋 or a **[GeoNature](https://geonature.fr/)** instance 🌱, with plans for additional sources.  
+It retrieves species pictures and sounds from GBIF, Wikidata, INPN or TaxHub API.
+
+The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet🗺️, and Bootstrap 🅱.
+
+<img style="width:100%" src="docs/images/first_result.png"/>
 
 ## ✨ Features
 
-- Display species found in a defined area using observations data from GBIF or a GeoNature instance.
+- Display species found in a defined area using observations data from GBIF API or a GeoNature instance.
+- Define specific point, line or polygon, or a GeoJSON, or dynamic geographic objects.
+- GPS geolocation, point and line automatic buffer.
 - Multiple display modes: map 🗺️, list 📋
 - Sort 🔃 and filter species lists.
 - Search 🔎 and filter species.
@@ -17,28 +24,21 @@ It supports multilingual interfaces 🌐 and a modern design.
 - Multilingual support 🌐.
 - Based only on open API! No server required (except for self-hosting)!
 
-## 🚀 Generate your widget !
+## 🚀 Generate your widget!
 
-Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
+- Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
+- Documentation: [https://pnx-si.github.io/BAM-widget/docs/](https://pnx-si.github.io/BAM-widget/docs/)
+- Widget integration examples:
+  - [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
+  - [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
+  - [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
+  - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](https://github.com/PnX-SI/BAM-widget/blob/main/docs/examples/geotrek-detail-page.html)
+  - [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
+- Test and explore: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
 
-## 🔗 Data Sources
+## 🎛️ Widget parameters
 
-- **GBIF**: Global Biodiversity Information Facility API.
-- **GeoNature**: A biodiversity data collect self-hosted platform
-
-## 🖼️ Display Options
-
-- Map view 🗺️
-  <br/>
-  <img style="width:400px" src="docs/images/maplist_mode.png"/>
-
-- List of species 📋
-  <br/>
-  <img style="width:400px" src="docs/images/first_result_gallery.png"/>
-
-## 🎛️ Widget customization
-
-Each parameter can be set via URL query or through the widget’s configuration interface [/config](https://pnx-si.github.io/BAM-widget/#/config).
+Each parameter can be set via URL query or through the widget configuration interface [/config](https://pnx-si.github.io/BAM-widget/#/config).
 
 | Parameter          | Type    | Purpose / Usage                                                                                                                                                                                                              | Example / Values                 |
 | ------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
@@ -52,7 +52,7 @@ Each parameter can be set via URL query or through the widget’s configuration 
 | `mapEditable`      | boolean | Allow editing geometry on the map                                                                                                                                                                                            | `true` / `false`                 |
 | `lang`             | string  | Language code for UI                                                                                                                                                                                                         | `"en"`, `"fr"`                   |
 | `mode`             | string  | Species list display mode (`gallery`, `detailedList`)                                                                                                                                                                        | `"detailedList"`                 |
-| `sourceGeometry`   | string  | An URL to a GeoJSON that will be used to define the selected area. The given geometry is simplified due to the character limit of an URL.                                                                                    | `"https://..."`                  |
+| `sourceGeometry`   | string  | A URL to a GeoJSON that will be used to define the selected area. The given geometry is simplified due to the character limit of an URL.                                                                                     | `"https://..."`                  |
 | `class`            | string  | Taxonomic class filter (e.g., Mammalia, Aves) Check [taxonclass2icon.js](https://github.com/PnX-SI/BAM-widget/blob/main/src/assets/taxonclass2icon.js) for more detail.                                                      | `"Mammalia"`                     |
 | `widgetType`       | string  | Widget display mode (`default`, others)                                                                                                                                                                                      | `"default"`                      |
 | `hybridTaxonList`  | boolean | Enable switching between list/gallery species display modes                                                                                                                                                                  | `true` / `false`                 |
@@ -62,7 +62,12 @@ Each parameter can be set via URL query or through the widget’s configuration 
 | `soundSource`      | string  | Name of the data source use to fetch animal sounds.                                                                                                                                                                          | `[gbif]`                         |
 | `imageSource`      | string  | Name of the data source use to fetch species pictures.                                                                                                                                                                       | `[wikidata, gbif, inpn, taxhub]` |
 
-## ⚙️ Project Setup
+## ⚙️ Self-hosting
+
+BAM is a widget hosted on Github and directly usable without installation or server.  
+But you can choose to install it locally or on your server to develop or host it.
+
+Clone or download the source code from this Github repository.
 
 ```sh
 npm install
@@ -84,11 +89,11 @@ npm run build
 
 **Developed and conceived by**
 
-- @jacquesfize (Parc National des Écrins)
-- @amandine-sahl (Parc National des Cévennes)
-- @camillemonchicourt (Parc National des Écrins)
-- @CynthiaBorotPNV (Parc National de la Vanoise)
-- @EcMerc (Parc National du Mercantour)
+- @jacquesfize (Parc national des Écrins)
+- @amandine-sahl (Parc national des Cévennes)
+- @camillemonchicourt (Parc national des Écrins)
+- @CynthiaBorotPNV (Parc national de la Vanoise)
+- @EcMerc (Parc national du Mercantour)
 - Simon Chevreau (Office Français de la Biodiversité)
 
 ## 📄 License
