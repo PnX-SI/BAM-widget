@@ -48,7 +48,7 @@ const props = defineProps<{
             <a
               :href="props.urlDetailPage"
               target="_blank"
-              class="badge bg-light text-primary border border-primary text-decoration-none"
+              class="badge bg-light text-secondary border border-secondary text-decoration-none"
               ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
           </small>

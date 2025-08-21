@@ -304,7 +304,7 @@ if (wkt.value) {
 
 #data-source-credits {
   text-align: center;
-  background: var(--bs-primary);
+  background: #aaa;
   color: white;
 }
 .toggleMode {

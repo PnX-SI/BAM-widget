@@ -33,13 +33,6 @@ const route = useRoute();
 const host = window.location.origin;
 const pathName = window.location.pathname;
 
-const route_ = computed(() => {
-  const routes = {
-    list: "/list",
-  };
-  return routes[widgetType.value] || "/";
-});
-
 const link = computed(() => {
   const paramsArray = Object.entries(
     ParameterStore.getInstance().getParams()
@@ -47,7 +40,7 @@ const link = computed(() => {
 
   const params = paramsArray.length ? `?${paramsArray.join("&")}` : "";
 
-  return `${host}${pathName}#${route_.value}${params}`;
+  return `${host}${pathName}#/${params}`;
 });
 
 const modeOptions = computed(() => {

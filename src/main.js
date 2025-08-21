@@ -21,6 +21,7 @@ import messagesES from "./assets/languageAssets/es";
 import "vue3-toastify/dist/index.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue-next/dist/bootstrap-vue-next.css";
+import Widget from "./components/Widget.vue";
 
 const browserLocale = window.navigator.language.split("-")[0];
 
@@ -36,11 +37,7 @@ const i18n = createI18n({
 const routes = [
   {
     path: "/",
-    component: MapListWidget,
-  },
-  {
-    path: "/list",
-    component: ListWidget,
+    component: Widget,
   },
   {
     path: "/config",
