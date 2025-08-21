@@ -14,19 +14,20 @@ const props = defineProps<{
       :class="props.linkColor ? props.linkColor : 'link-light'"
       v-if="props.media.urlSource"
       :href="props.media.urlSource"
+      target="_blank"
       >{{ props.media.author }}</a
     ></span
   >
-  -
-  <!-- <span>{{ $t("media.licenseUnder") }}</span> -->
+
   <span v-if="props.media.licenseUrl"
-    ><a
+    >-<a
       :class="props.linkColor ? props.linkColor : 'link-light'"
       :href="props.media.licenseUrl"
+      target="_blank"
       >{{ props.media.license }}</a
     ></span
   >
-  <span v-else> {{ props.media.license }}</span>
+  <span v-else>- {{ props.media.license }}</span>
 </template>
 <style scoped>
 span {
