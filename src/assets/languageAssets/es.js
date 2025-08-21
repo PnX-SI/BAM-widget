@@ -1,6 +1,6 @@
 const messagesES = {
   es: {
-    title: "Biodiversidad a mi alrededor",
+    title: "BAM - Biodiversidad a mi alrededor",
     discover: {
       title: "Explorar",
     },

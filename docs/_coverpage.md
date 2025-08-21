@@ -1,4 +1,4 @@
-![log](images/BAM-logo-full.png)
+<img src="images/BAM-logo-full.png" class="cover_image"/>
 
 > A widget generator to explore and show biodiversity data
 
