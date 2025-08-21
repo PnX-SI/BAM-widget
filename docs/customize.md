@@ -54,7 +54,7 @@ Allows or prevents editing of the geometry on the map.
 
 Language code for the user interface.
 
-**Language available:** `"en"`, `"fr"`
+**Language available:** `"en"`, `"fr", "es"`
 
 ### `mode` (**Type:** string)
 
@@ -84,9 +84,9 @@ Taxonomic class filter, such as Mammalia or Aves. For more details, check [taxon
 
 ### `widgetType` (**Type:** string)
 
-Display mode for the widget, with `default` being the standard option.
+Display mode for the widget, with `list` being the standard option.
 
-**Available Values:** `[default, list]`
+**Available Values:** `[mapList, list]`
 
 #### Default mode
 
@@ -125,7 +125,7 @@ Name of the data source use to fetch taxa pictures.
 
 - `wikidata` GBIF and GeoNature compatible
 - `gbif` GBIF compatible
-- `taxref` GeoNature compatible
+- `inpn` GeoNature compatible
 - `taxhub` GeoNature compatible
 
 ### `soundSource` (**Type:** string)
