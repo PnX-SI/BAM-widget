@@ -1,13 +1,13 @@
 const messagesES = {
   es: {
-    title: "BAM - Biodiversidad a mi alrededor",
+    title: "BAM - Biodiversidad alrededor mío",
     discover: {
       title: "Explorar",
     },
     subtitle: "Buscar especies a mi alrededor",
     howto: "¿Cómo funciona?",
-    introTitle: "¿Qué es Biodiversidad a mi alrededor?",
-    intro: `*Biodiversidad A Mi Alrededor* es un widget dedicado a **explorar especies 🔍**!
+    introTitle: "¿Qué es Biodiversidad alrededor mío?",
+    intro: `*Biodiversidad Alrededor Mío* es un widget dedicado a **explorar especies 🔍**!
 Esta interfaz te permite **buscar especies observadas en un área geográfica específica 🌍**.
 **Usa el mapa interactivo 🗺️** para seleccionar el área donde deseas realizar tu búsqueda.
 La **lista de especies 🥝🍃** encontradas en el área seleccionada se mostrará junto al mapa 📋.
