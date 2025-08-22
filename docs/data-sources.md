@@ -1,4 +1,4 @@
-# Different data sources
+# Different observations data sources
 
 ## GBIF
 
@@ -6,9 +6,11 @@ The [**Global Biodiversity Information Facility (GBIF)**](https://www.gbif.org/)
 
 Thankfully, the GBIF allows anyone to query data through its [API](https://techdocs.gbif.org/en/openapi/).
 
-### Use
+### Usage
 
-Since there is only one endpoint, **no configuration is required**.
+Since there is only one global endpoint in the API (`https://api.gbif.org/v1/occurrence/search/`), **no configuration is required**.  
+There is just a default limit of number of requests done to the GBIF API (10 requests of 300 occurrences results) to limit the load on the API but also the calculation and loading duration of the results in the widget. You can change this limit but it can be to loud for the API or for the web browser if there is too much results to download and process.  
+Indeed, based on occurrences (observations) resultats the widget will agregate them to provide a list of observed species.
 
 ## GeoNature
 
