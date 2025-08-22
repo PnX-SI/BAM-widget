@@ -2,7 +2,7 @@
 
 There is two ways of customizing the widget:
 
-- use the `Parameters` block in the configuration interface (available at `https://pnx-si.github.io/BAM-widget/#/config`)
+- use the `Parameters` block in the configuration interface (available at https://pnx-si.github.io/BAM-widget/#/config)
   ![alt](images/parameters.png)
 - directly in the url of the existing `<embed>` tag.
 
@@ -44,7 +44,7 @@ Number of taxa displayed per line in the list view.
 
 Determines whether to show or hide filters in the taxon list.
 
-![alt](images/customize/filter_switch.gif)
+![alt](images/customization/filter_switch.gif)
 
 ### `mapEditable` (**Type:** boolean)
 
@@ -100,7 +100,7 @@ Display mode for the widget, with `list` being the standard option.
 
 Enables switching between list and gallery display modes for taxa.
 
-![hybrid_switch](images/customize/hybrid_switch.gif)
+![hybrid_switch](images/customization/hybrid_switch.gif)
 
 ### `x` and `y` (**Type:** number)
 
