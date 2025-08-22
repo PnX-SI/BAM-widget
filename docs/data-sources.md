@@ -18,7 +18,7 @@ Indeed, based on occurrences (observations) resultats the widget will agregate t
 
 ### Compatibility
 
-BAM is compatible with GeoNature versions greater than or equal to 2.16.0. You must have the Export module installed (check the documentation [here](https://github.com/PnX-SI/gn_module_export?tab=readme-ov-file#installation-du-module))
+BAM widget is compatible with GeoNature versions greater than or equal to 2.16.0. You must have the Export module installed (check the documentation [here](https://github.com/PnX-SI/gn_module_export?tab=readme-ov-file#installation-du-module))
 
 ### Setup your GeoNature
 
@@ -45,7 +45,7 @@ To set up your GeoNature instance to use with the widget, follow these steps:
       You can use the following SQL code to create the view:
 
       ```sql
-      CREATE OR REPLACE VIEW gn_synthese.export_widget_gtsi AS
+      CREATE OR REPLACE VIEW gn_exports.bam_widget AS
       SELECT
          vsfwa.cd_ref AS cd_ref,
          vsfwa.nom_vern AS nom_vernaculaire,
@@ -56,11 +56,14 @@ To set up your GeoNature instance to use with the widget, follow these steps:
       FROM gn_synthese.v_synthese_for_web_app vsfwa;
       ```
 
-      **Notes** : Feel free to modify this view depending on your needs!
+      **Notes**: Feel free to modify this view depending on your needs!
 
    2. Once your view is created, type the information in the export creation form in GeoNature.
+
       ![alt text](images/geonature_source/geonature_export.png)
 
 3. **Set the export information in the widget generator:** Recover the newly export ID. Then, in the widget configuration interface, click on the `Change the data source` button. The following window should appear.
+
    ![alt text](images/geonature_source/geonature_source.png)
-   Select GeoNature in the `Select a data source` field. Give the API endpoint of your GeoNature (usually, your GeoNature web address followed by `/api`). Indicate the ID of your export and validate by clicking on the `OK` button.
+
+   Choose "GeoNature" in the `Select a data source` field. Enter the API endpoint of your GeoNature (usually, your GeoNature web address followed by `/api`). Indicate the ID of your export and validate by clicking on the `OK` button.
