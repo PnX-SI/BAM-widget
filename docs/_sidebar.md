@@ -1,4 +1,4 @@
-- [Home](README.md)
-- [Get Started](GetStarted.md)
-- [Widget Customization](customize.md)
-- [Different data sources](different-sources.md)
+- [Intro](README.md)
+- [Get Started](get-started.md)
+- [Customization](customization.md)
+- [Data sources](data-sources.md)
