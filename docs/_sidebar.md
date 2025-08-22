@@ -2,5 +2,4 @@
 - [Get Started](get-started.md)
 - [Customization](customization.md)
 - [Data sources](data-sources.md)
-- [Integration examples](./examples/README.md)
 - [Changelog](/CHANGELOG.md)
