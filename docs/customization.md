@@ -10,7 +10,7 @@ There is two ways of customizing the widget:
 
 ### `radius` (**Type:** number)
 
-Buffer radius for the search area in kilometers.
+Buffer radius for the search area in meters.
 
 **Example:** `1`
 
@@ -36,7 +36,7 @@ Specifies the data source connector, such as GBIF, GeoNature, etc.
 
 ### `nbTaxonPerLine` (**Type:** number)
 
-Number of taxa displayed per line in the list view.
+Number of species displayed per line in the list view.
 
 - **Example:** `4`
 
@@ -58,7 +58,7 @@ Language code for the user interface.
 
 ### `mode` (**Type:** string)
 
-Display mode for the taxon list, either `gallery` or `detailedList`.
+Display mode for the species list, either `gallery` or `detailedList`.
 
 #### `gallery`
 
@@ -68,7 +68,7 @@ A simpler view focusing on the vernacular name, a picture and potentially a soun
 
 #### `detailedList`
 
-A detailed view for each taxon.
+A detailed view for each species.
 
 ![alt](images/first_result.png)
 
@@ -84,21 +84,21 @@ Taxonomic class filter, such as Mammalia or Aves. For more details, check [taxon
 
 ### `widgetType` (**Type:** string)
 
-Display mode for the widget, with `list` being the standard option.
+Display type for the widget, with `list` being the standard option.
 
-**Available Values:** `[mapList, list]`
+**Available Values:** `[list, mapList]`
 
-#### Default mode
-
-![alt](images/maplist_mode.png)
-
-#### List
+#### List type
 
 ![alt](images/first_result_gallery.png)
 
+#### MapList type
+
+![alt](images/maplist_mode.png)
+
 ### `hybridTaxonList` (**Type:** boolean)
 
-Enables switching between list and gallery display modes for taxa.
+Enables switching between list and gallery display modes for species list.
 
 ![hybrid_switch](images/customization/hybrid_switch.gif)
 
@@ -110,7 +110,7 @@ Longitude and latitude for point geometry.
 
 ### `customDetailPage` (**Type:** string)
 
-Custom URL for redirecting to a taxon detail page. The taxon ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced by the actual taxon's ID.
+Custom URL for redirecting to a taxon (species) detail page. The taxon ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced dynamically by the actual taxon ID.
 
 **Examples:**
 
@@ -119,7 +119,7 @@ Custom URL for redirecting to a taxon detail page. The taxon ID part of the URL 
 
 ### `imageSource` (**Type:** string)
 
-Name of the data source use to fetch taxa pictures.
+Name of the data source used to fetch species pictures.
 
 **Available sources:**
 
@@ -130,6 +130,10 @@ Name of the data source use to fetch taxa pictures.
 
 ### `soundSource` (**Type:** string)
 
-Name of the data source use to fetch animal sounds.
+Name of the data source used to fetch animal sounds.
 
 - `gbif` (GBIF compatible)
+
+## Integration examples
+
+Find widget integration examples [here](README?id=🚀-generate-your-widget).
