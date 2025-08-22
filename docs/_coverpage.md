@@ -1,6 +1,6 @@
 <img src="images/BAM-logo-full.png" class="cover_image" alt="BAM - Biodiversity Around Me"/>
 
-> A web widget that retrieves and displays species observed within an area, based on the GBIF data API (or alternative other biodiversity data sources).
+> A widget to explore and show biodiversity data
 
 - No installation
 - Customizable
