@@ -99,7 +99,7 @@ npm run build
 - @camillemonchicourt (Parc national des Écrins)
 - @CynthiaBorotPNV (Parc national de la Vanoise)
 - @EcMerc (Parc national du Mercantour)
-- Simon Chevreau (Office Français de la Biodiversité)
+- @SimonChevereau (Office Français de la Biodiversité)
 - @babastienne (Makina Corpus)
 
 ## 📄 License
