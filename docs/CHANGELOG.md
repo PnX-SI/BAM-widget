@@ -29,4 +29,4 @@ By @jacquesfize, @camillemonchicourt, @amandine-sahl and @babastienne.
 
 - First functional version of the widget with GBIF, Wikidata and Taxref APIs.
 - Developed with Turf.js, OpenLayers, Bootstrap librairies.
-- By @jacquesfize, @CynthiaBorotPNV, @EcMerc, @amandine-sahl and Simon Chevreau.
+- By @jacquesfize, @CynthiaBorotPNV, @EcMerc, @amandine-sahl and @SimonChevereau.
