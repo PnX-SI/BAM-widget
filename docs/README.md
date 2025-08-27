@@ -32,6 +32,7 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 - Widget integration examples:
   - [Basic examples](https://pnx-si.github.io/BAM-widget/examples/basic-examples.html) / [Source code](/docs/examples/basic-examples.html)
   - [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
+  - [Falkensee schools and biodiversity](https://pnx-si.github.io/BAM-widget/examples/falkensee-schools-biodiversity.html) / [Source code](/docs/examples/falkensee-schools-biodiversity.html)
   - [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
   - [Corcovado treks](https://pnx-si.github.io/BAM-widget/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
   - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](https://github.com/PnX-SI/BAM-widget/blob/main/examples/geotrek-detail-page.html)
