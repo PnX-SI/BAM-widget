@@ -4,7 +4,7 @@
 
 Its main goal is to make open biodiversity data easily and simply accessible to everyone, everwhere.
 
-![BAM architecture](https://geonature.fr/docs/img/BAM-biodiversity-data-accessible.png)
+![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-biodiversity-data-accessible.png)
 
 BAM allows to easily integrate biodiversity species list in your website, around a point, a line, a polygon or your GPS location.
 
@@ -44,7 +44,7 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
   - [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
 - Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
 
-![BAM architecture](https://geonature.fr/docs/img/BAM-schema-v2.png)
+![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-schema-v2.png)
 
 ## 🎛️ Widget parameters
 
