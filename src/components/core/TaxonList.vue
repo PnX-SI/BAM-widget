@@ -238,7 +238,7 @@ if (wkt.value) {
     <div id="data-source-credits" class="text-center">
       <div v-if="wkt.length && !loadingObservations">
         <strong>{{ speciesList.length }} {{ $t("taxon.taxonFound") }}</strong>
-        {{ $t("in") }} <a href="https://www.gbif.org" target="_blank" style="color: white; text-decoration: underline">{{ connector.name }}</a> 
+        {{ $t("in") }} <a href="https://www.gbif.org" target="_blank" style="color: white; text-decoration: underline">{{ connector.name }}</a>&nbsp;
         <BTooltip v-if="connector.sourceDetailMessage()">
           <template #target>
             <a style="color: white; text-decoration: underline"
