@@ -1,4 +1,4 @@
-- [Intro](introduction.md)
+- [Intro](README.md)
 - [Get Started](get-started.md)
 - [Customization](customization.md)
 - [Data sources](data-sources.md)
