@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🇨🇷 Senderismo y biodiversidad en Corcovado</title>
+    <title>🇯🇲 Jamaican biodiversity</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -19,10 +19,10 @@
     <!-- Lateral panel -->
     <div id="sidebar"
         class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
-        <h2 class="text-xl font-bold mb-2">🇨🇷 Senderismo y biodiversidad en Corcovado</h2>
+        <h2 class="text-xl font-bold mb-2">🇯🇲 Jamaican biodiversity</h2>
         <div id="widget-container">
-            <p class="text-gray-600">Haga clic en una caminata para ver las especies observadas alrededor de esta, según
-                los datos de <a href="https://www.gbif.org/fr/" target="_blank">GBIF</a> data.
+            <p class="text-gray-600">Click on an administrative boundary to display observed species in this one, based
+                on <a href="https://www.gbif.org/fr/" target="_blank">GBIF</a> data.</p>
         </div>
     </div>
 
@@ -34,9 +34,9 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors',
         }).addTo(map);
 
-        // GeoJSON URL with map objects to display and main property to display
-        const urlGeojson = "https://si.ecrins-parcnational.com/data/corcovado-treks-komoot.geojson"
-        const nameProperty = "name"
+        // GeoJSON URL with map objects to display and main propertu to display
+        const urlGeojson = "https://si.ecrins-parcnational.com/data/geoBoundaries-JAM-ADM3_simplified.geojson"
+        const nameProperty = "shapeName"
 
         fetch(urlGeojson).then((response) => response.json()).then((data) => {
             const dataLayer = L.geoJSON(data, {
@@ -48,7 +48,7 @@
 
                         const wkt = wellknown.stringify(feature);
 
-                        const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=100&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=es&mode=gallery&widgetType=list&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+                        const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=en&mode=detailedList&widgetType=list&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
 
                         document.getElementById("widget-container").innerHTML = `
                     <h3 class="text-lg font-semibold mb-2">${getNameProperty}</h3>
@@ -66,6 +66,8 @@
             map.fitBounds(dataLayer.getBounds());
 
         })
+
+        // Add GeoJSON objects on map
 
         // ⚡ Important: resize map when changing orientation/viewport
         window.addEventListener("resize", () => {
