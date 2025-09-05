@@ -21,7 +21,7 @@ This version brings a **complete redesign of the widget**, now powered by **Vue.
 ## 📚 Documentation
 
 - [Full documentation](https://pnx-si.github.io/BAM-widget/docs/)
-- Examples can be found in the [docs/examples](/docs/examples/) directory
+- Examples can be found in the [/examples](/examples/) directory
 
 By @jacquesfize, @camillemonchicourt, @amandine-sahl and @babastienne.
 
