@@ -22,9 +22,8 @@ jobs:
       - name: 🏗️ Build
         run: npm run build
 
-      - name: Copy README
+      - name: Copy docs files
         run: |
-          cat README.md | sed "s/docs\///" > ./docs/README.md
           cp CHANGELOG.md ./docs/CHANGELOG.md
           cp -r docs ./dist
 
