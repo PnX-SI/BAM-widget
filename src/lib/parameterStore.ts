@@ -13,6 +13,8 @@ import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "./enums";
 import { Connector } from "./connectors/connector";
 import { CONNECTORS } from "./connectors/connectors";
 
+import config from "@/assets/config";
+
 class ParameterStore {
   /**
    * @type {ParameterStore | null}
@@ -126,23 +128,23 @@ class ParameterStore {
     const router = useRouter();
     const paramsFromUrl = route?.query;
 
-    this.radius = ref(500);
-    this.wkt = ref("");
-    this.dateMin = ref(null);
-    this.dateMax = ref(null);
+    this.radius = ref(config.RADIUS);
+    this.wkt = ref(config.WKT);
+    this.dateMin = ref(config.dateMin);
+    this.dateMax = ref(config.dateMax);
     this.connector = shallowRef(getConnector(null, paramsFromUrl));
-    this.nbTaxonPerLine = ref(2);
-    this.showFilters = ref(true);
-    this.mapEditable = ref(true);
+    this.nbTaxonPerLine = ref(config.nbTaxonPerLine);
+    this.showFilters = ref(config.showFilters);
+    this.mapEditable = ref(config.mapEditable);
     this.lang = locale;
-    this.mode = ref(TAXONLIST_DISPLAY_MODE.detailedList);
-    this.sourceGeometry = ref(null);
-    this.class = ref(null);
-    this.widgetType = ref(WIDGET_TYPE.list);
-    this.hybridTaxonList = ref(true);
-    this.x = ref(null);
-    this.y = ref(null);
-    this.customDetailPage = ref(null);
+    this.mode = ref(config.mode);
+    this.sourceGeometry = ref(config.sourceGeometry);
+    this.class = ref(config.class);
+    this.widgetType = ref(config.widgetType);
+    this.hybridTaxonList = ref(config.hybridTaxonList);
+    this.x = ref(config.x);
+    this.y = ref(config.y);
+    this.customDetailPage = ref(config.customDetailPage);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
