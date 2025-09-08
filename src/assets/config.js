@@ -5,7 +5,7 @@ const config = {
   WKT: "",
   dateMin: null,
   dateMax: null,
-  showFilters: true,
+  showFilters: false,
   mapEditable: true,
   lang: "fr",
   mode: TAXONLIST_DISPLAY_MODE.detailedList,
