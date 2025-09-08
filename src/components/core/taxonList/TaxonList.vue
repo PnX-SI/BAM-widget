@@ -87,7 +87,9 @@ const classNames = computed(() => {
 
 const speciesListShowed = computed(() => {
   let filteredSpecies = speciesList.value;
-
+  if (!filteredSpecies) {
+    return [];
+  }
   if (searchString.value) {
     filteredSpecies = filteredSpecies.filter((taxon) => {
       const data = taxon?.vernacularName
