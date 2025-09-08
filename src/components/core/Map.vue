@@ -124,7 +124,9 @@ function setupMap() {
 
   if (mapEditable.value) {
     map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
-    locate = new LocateControl({}).addTo(map.value);
+    locate = new LocateControl({
+      icon: "fa-solid fa-location-crosshairs fa-xl",
+    }).addTo(map.value);
   }
 
   map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
