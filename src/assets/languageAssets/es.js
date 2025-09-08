@@ -129,7 +129,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     },
     or: "o",
     in: "en",
-    datasetList: "Lista de conjuntos de datos",
+    datasetList: "Conjuntos de datos relacionados",
     observation: "observación",
     observations: "observaciones",
   },
