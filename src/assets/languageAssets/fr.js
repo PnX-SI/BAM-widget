@@ -132,6 +132,9 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         Pinopsida: "Conifères",
       },
     },
+    map: {
+      searchPlace: "Rechercher un lieu",
+    },
     or: "ou",
     in: "dans",
   },
