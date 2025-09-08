@@ -12,6 +12,7 @@ import { useI18n } from "vue-i18n";
 import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "./enums";
 import { Connector } from "./connectors/connector";
 import { CONNECTORS } from "./connectors/connectors";
+import { NominatimGeocoder } from "./geocoding";
 
 class ParameterStore {
   /**
@@ -115,6 +116,11 @@ class ParameterStore {
   y: Ref<number | null>;
 
   /**
+   * Place name
+   * @type {Ref<string | null>}
+   */
+  placeName: Ref<string | null>;
+  /**
    * URL template to redirect the user to a page different from the default one indicated by the connector to a data source.
    * @type {Ref<string | null>}
    */
@@ -142,6 +148,7 @@ class ParameterStore {
     this.hybridTaxonList = ref(true);
     this.x = ref(null);
     this.y = ref(null);
+    this.placeName = ref(null);
     this.customDetailPage = ref(null);
 
     this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
@@ -205,6 +212,7 @@ class ParameterStore {
           console.error(err);
         }
       },
+      placeName: (value: string) => value,
       dateMin: (value: string) => new Date(value),
       dateMax: (value: string) => new Date(value),
       connector: (value: string) =>
@@ -256,6 +264,20 @@ class ParameterStore {
         }),
         this.radius.value
       );
+    }
+    if (this.placeName.value) {
+      const geocoder = new NominatimGeocoder();
+
+      geocoder.geocode(this.placeName.value).then((result) => {
+        this.wkt.value = validateWKT(
+          stringify({
+            type: "Point",
+            coordinates: [parseFloat(result.lon), parseFloat(result.lat)],
+          }),
+          this.radius.value
+        );
+        this.placeName = null; // no need to keep it in the URL
+      });
     }
   }
 

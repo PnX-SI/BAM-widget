@@ -108,6 +108,12 @@ Longitude and latitude for point geometry.
 
 **Example:** `2.35`
 
+### `placeName` (**Type:** string)
+
+A place name used to fetch coordinates. Coordinates are fetched using the Nominatim API (https://nominatim.openstreetmap.org)
+
+**Example:** `cherbourg-en-cotentin` will produce a circle centered around the (-1.61,49.64) coordinates
+
 ### `customDetailPage` (**Type:** string)
 
 Custom URL for redirecting to a taxon (species) detail page. The taxon ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced dynamically by the actual taxon ID.
