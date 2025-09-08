@@ -226,11 +226,11 @@ class ParameterStore {
       widgetType: (value: string) =>
         Object.keys(WIDGET_TYPE).includes(value) ? value : WIDGET_TYPE.mapList,
       x: (value: string) => {
-        const x = parseInt(value);
+        const x = parseFloat(value);
         return -180 < x && x < 180 ? x : null;
       },
       y: (value: string) => {
-        const y = parseInt(value);
+        const y = parseFloat(value);
         return -90 < y && y < 90 ? y : null;
       },
       customDetailPage: (value: string) => value,
