@@ -224,4 +224,7 @@ export class GbifConnector extends Connector {
       nbObs: this.LIMIT * this.NB_PAGES,
     });
   }
+  getSourceUrl(): string | null {
+    return "https://www.gbif.org";
+  }
 }

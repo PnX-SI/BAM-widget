@@ -188,4 +188,8 @@ export class Connector {
     });
     return availableSource;
   }
+
+  getSourceUrl(): string | null {
+    return null;
+  }
 }
