@@ -25,7 +25,7 @@ watch([width, height], () => {
 });
 
 const embed = computed(() => {
-  return `<embed src="${props.link}" type="" style="width: ${width.value}; height: ${height.value}" />`;
+  return `<iframe src="${props.link}" type="" style="width: ${width.value}; height: ${height.value}" allow="geolocation"></iframe>`;
 });
 </script>
 

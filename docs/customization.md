@@ -4,7 +4,7 @@ There is two ways of customizing the widget:
 
 - use the `Parameters` block in the configuration interface (available at https://pnx-si.github.io/BAM-widget/#/config)
   ![alt](images/parameters.png)
-- directly in the url of the existing `<embed>` tag.
+- directly in the url of the existing `<iframe>` tag.
 
 ## Parameters reference
 
