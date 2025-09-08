@@ -172,10 +172,6 @@ onMounted(() => {
   border-radius: 10px;
 }
 
-.leaflet-bar-part > span {
-  font-size: 2rem;
-}
-
 @media screen and (max-width: 770px) {
   .mapC {
     height: 50vh !important;
