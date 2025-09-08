@@ -1,10 +1,17 @@
 <script setup>
 import ParameterStore from "@/lib/parameterStore";
+import { computed } from "vue";
 
 const { connector } = ParameterStore.getInstance();
-
 const props = defineProps({
   datasets: Array,
+});
+
+const sortedDatasets = computed(() => {
+  if (!props.datasets) return [];
+  return [...props.datasets].sort(
+    (a, b) => b.nbObservations - a.nbObservations
+  );
 });
 </script>
 
@@ -22,7 +29,7 @@ const props = defineProps({
     </template>
     <h4>{{ $t("datasetList") }}</h4>
     <ul class="list-group datasetsList">
-      <li v-for="dataset in props.datasets" class="list-group-item">
+      <li v-for="dataset in sortedDatasets" class="list-group-item">
         <a
           class="link-primary text-decoration-none"
           :href="connector.getDatasetUrl(dataset.uuid)"
@@ -37,6 +44,7 @@ const props = defineProps({
     </ul>
   </BPopover>
 </template>
+
 <style>
 .datasetsList {
   height: 200px;
