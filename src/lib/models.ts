@@ -22,7 +22,13 @@ export interface Media {
   urlSource?: string;
 }
 
+export interface Dataset {
+  uuid: string;
+  name?: string;
+  nbObservations: number;
+}
+
 export interface SearchResult {
-  taxonList: Taxon[];
-  datasetUUIDList: string[];
+  taxons: Taxon[];
+  datasets: Dataset[];
 }

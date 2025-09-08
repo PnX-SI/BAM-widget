@@ -21,14 +21,25 @@ const props = defineProps({
       ></a>
     </template>
     <h4>{{ $t("datasetList") }}</h4>
-    <div class="datasetsList">
-      <span v-for="uuid in props.datasets">
+    <ul class="list-group datasetsList">
+      <li v-for="dataset in props.datasets" class="list-group-item">
         <a
-          class="badge text-bg-warning link-light text-decoration-none"
-          :href="connector.getDatasetUrl(uuid)"
-          >{{ uuid }}</a
+          class="link-primary text-decoration-none"
+          :href="connector.getDatasetUrl(dataset.uuid)"
         >
-      </span>
-    </div>
+          {{ dataset.name }}
+        </a>
+        <span class="badge bg-warning rounded-pill ms-1">
+          {{ dataset.nbObservations }}
+          {{ $t(dataset.nbObservations > 1 ? "observations" : "observation") }}
+        </span>
+      </li>
+    </ul>
   </BPopover>
 </template>
+<style>
+.datasetsList {
+  height: 200px;
+  overflow-y: scroll;
+}
+</style>

@@ -54,8 +54,8 @@ nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
 mode.value = props.mode ?? mode.value;
 
 const searchResult = ref({ taxonList: [], datasetUUIDList: [] });
-const speciesList = computed(() => searchResult.value.taxonList);
-const datasetUUIDs = computed(() => searchResult.value.datasetUUIDList);
+const speciesList = computed(() => searchResult.value.taxons);
+const datasets = computed(() => searchResult.value.datasets);
 const loadingObservations = ref(false);
 const loadingError = ref(false);
 const pageIndex = ref(0);
@@ -258,8 +258,8 @@ if (wkt.value) {
           {{ connector.sourceDetailMessage() }}
         </BTooltip>
         <DatasetList
-          v-if="datasetUUIDs.length > 0"
-          :datasets="datasetUUIDs"
+          v-if="datasets.length > 0"
+          :datasets="datasets"
         ></DatasetList>
       </div>
     </div>
@@ -338,9 +338,5 @@ if (wkt.value) {
 .toggleMode button {
   padding: 5px 10px;
   width: 40px !important;
-}
-.datasetsList {
-  height: 200px;
-  overflow-y: scroll;
 }
 </style>

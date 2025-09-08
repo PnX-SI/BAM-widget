@@ -1,5 +1,5 @@
 import { Connector, ConnectorOptions } from "./connector";
-import { Media, SearchResult, Taxon } from "../models";
+import { Dataset, Media, SearchResult, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
 import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
@@ -130,7 +130,7 @@ export class GbifConnector extends Connector {
         defaultParams.maxPage
       );
       const taxonsData: Record<string, Taxon> = {};
-      const datasetData: Set<string> = new Set();
+      const datasetData: Record<string, Dataset> = {};
 
       const fetchPage = (pageIndex: number): Promise<void> => {
         if (pageIndex >= nbOfPages) {
@@ -140,9 +140,15 @@ export class GbifConnector extends Connector {
         return callOccurrenceApi({ ...defaultParams, offset }).then(
           (apiResult) => {
             apiResult.results.forEach((observation: any) => {
-              if (!datasetData.has(observation.datasetKey)) {
-                datasetData.add(observation.datasetKey);
+              if (!(observation.datasetKey in datasetData)) {
+                datasetData[observation.datasetKey] = {
+                  uuid: observation.datasetKey,
+                  name: observation.datasetKey,
+                  nbObservations: 0,
+                };
               }
+
+              datasetData[observation.datasetKey].nbObservations += 1;
               if (!taxonsData[observation.taxonKey]) {
                 taxonsData[observation.taxonKey] = {
                   acceptedScientificName: observation.acceptedScientificName,
@@ -157,6 +163,7 @@ export class GbifConnector extends Connector {
                   lastSeenDate: new Date(observation.eventDate),
                 };
               }
+
               taxonsData[observation.taxonKey].nbObservations += 1;
               taxonsData[observation.taxonKey].lastSeenDate = new Date(
                 Math.max(
@@ -172,8 +179,8 @@ export class GbifConnector extends Connector {
 
       return fetchPage(0).then(() => {
         return {
-          taxonList: Object.values(taxonsData),
-          datasetUUIDList: Array.from(datasetData),
+          taxons: Object.values(taxonsData),
+          datasets: Object.values(datasetData),
         };
       });
     });

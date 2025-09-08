@@ -87,7 +87,7 @@ export class GeoNatureConnector extends Connector {
             )
           );
         });
-        return { taxonList: Object.values(taxonsData), datasetUUIDList: [] };
+        return { taxons: Object.values(taxonsData), datasets: [] };
       });
   }
 
