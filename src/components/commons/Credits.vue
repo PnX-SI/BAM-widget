@@ -1,11 +1,27 @@
 <script setup lang="ts">
 import { Media } from "@/lib/models";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
   media: Media;
   linkColor: string;
 }>();
+
+const STRING_LIMIT = 200;
+
+const creditsLicense = computed(() => {
+  if (props.media.license.length > STRING_LIMIT) {
+    return props.media.license.slice(0, STRING_LIMIT);
+  }
+  return props.media.license;
+});
+
+const creditsAuthor = computed(() => {
+  if (props.media.author.length > STRING_LIMIT) {
+    return props.media.author.slice(0, STRING_LIMIT);
+  }
+  return props.media.author;
+});
 </script>
 
 <template>
@@ -15,7 +31,7 @@ const props = defineProps<{
       v-if="props.media.urlSource"
       :href="props.media.urlSource"
       target="_blank"
-      >{{ props.media.author }}</a
+      >{{ creditsAuthor }}</a
     ></span
   >
 
@@ -25,10 +41,10 @@ const props = defineProps<{
       :href="props.media.licenseUrl"
       target="_blank"
       style="margin-left: 0.3em"
-      >{{ props.media.license }}</a
+      >{{ creditsLicense }}</a
     ></span
   >
-  <span v-else>- {{ props.media.license }}</span>
+  <span v-else>- {{ creditsLicense }}</span>
 </template>
 <style scoped>
 span {
