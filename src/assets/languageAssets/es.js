@@ -127,6 +127,9 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         Pinopsida: "Coníferas",
       },
     },
+    map: {
+      searchPlace: "Buscar un nombre de lugar",
+    },
     or: "o",
     in: "en",
     datasetList: "conjuntos de datos relacionados",

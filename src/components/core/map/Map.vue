@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet-geosearch/dist/geosearch.css";
 import { restoreMapState, toWKT } from "@/lib/utils";
 import { parse } from "wellknown";
 import { LocateControl } from "leaflet.locatecontrol";
@@ -11,7 +12,11 @@ import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 import drawConfig from "./MapConfig";
 import { booleanClockwise, rewind } from "@turf/turf";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import { useI18n } from "vue-i18n";
 import ParameterStore from "@/lib/parameterStore";
+
+const { t } = useI18n();
 
 // Constants
 const DEFAULT_HEIGHT = "100vh";
@@ -123,10 +128,40 @@ function setupMap() {
   }
 
   if (mapEditable.value) {
+    /**
+     * ADD DRAW GEOMETRY TOOLS
+     */
     map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
+
+    /**
+     * ADD GEOLOCATION TOOL
+     */
     locate = new LocateControl({
       icon: "fa-solid fa-location-crosshairs fa-xl",
     }).addTo(map.value);
+
+    /**
+     * ADD SEARCH FORM
+     */
+    const provider = new OpenStreetMapProvider();
+    const searchControl = new GeoSearchControl({
+      provider: provider,
+      style: "bar",
+      resetButton: "🔍",
+      searchLabel: t("map.searchPlace"),
+    });
+    map.value.addControl(searchControl);
+    map.value.on("geosearch/showlocation", (e) => {
+      geometry.value.clearLayers();
+      const marker = L.marker([e.location.y, e.location.x]);
+      drawEventData = { layer: marker, layerType: "marker" };
+      geometry.value.addLayer(marker);
+      updateGeometry();
+      focusOnGeometry();
+      // map.value.setView([e.location.y, e.location.x], 2);
+      // map.value.fitBounds(e.location.bounds);
+      // console.log(e);
+    });
   }
 
   map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
