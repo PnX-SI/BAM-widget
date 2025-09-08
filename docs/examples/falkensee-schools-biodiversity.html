@@ -21,7 +21,8 @@
         class="md:w-[500px] w-full bg-gray-100 border-t md:border-t-0 md:border-l border-gray-300 overflow-auto p-4 h-1/2 md:h-full">
         <h2 class="text-xl font-bold mb-2">🏫 Falkensee schools and biodiversity</h2>
         <div id="widget-container">
-            <p class="text-gray-600">Click on one of the schools from Falkensee (Germany) to display observed species 400 meters around this one, based
+            <p class="text-gray-600">Click on one of the schools from Falkensee (Germany) to display observed species
+                400 meters around this one, based
                 on <a href="https://www.gbif.org/fr/" target="_blank">GBIF</a> data.</p>
         </div>
     </div>
@@ -52,7 +53,7 @@
 
                         document.getElementById("widget-container").innerHTML = `
                     <h3 class="text-lg font-semibold mb-2">${getNameProperty}</h3>
-                    <embed src="${widgetUrl}" style="width:100%; height:80vh;" />
+                    <iframe src="${widgetUrl}" style="width:100%; height:80vh;" allow="geolocation"></iframe>
                     <p class="text-sm text-gray-500 text-right italic mt-2">Powered by 
                       <a href="https://github.com/PnX-SI/BAM-widget" target="_blank" class="text-blue-600 hover:underline">BAM</a> and <a href="https://www.gbif.org/fr/" target="_blank" class="text-blue-600 hover:underline">GBIF</a> data
                     </p>
