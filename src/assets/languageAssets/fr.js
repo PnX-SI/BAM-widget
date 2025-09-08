@@ -134,6 +134,9 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     },
     or: "ou",
     in: "dans",
+    datasetList: "Jeux de données associés",
+    observation: "observation",
+    observations: "observations",
   },
 };
 

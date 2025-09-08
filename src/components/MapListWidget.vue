@@ -1,7 +1,7 @@
 <script setup>
 // Components
-import TaxonList from "@/components/core/TaxonList.vue";
-import Map from "./core/Map.vue";
+import TaxonList from "@/components/core/taxonList/TaxonList.vue";
+import Map from "./core/map/Map.vue";
 
 const props = defineProps({
   height: {

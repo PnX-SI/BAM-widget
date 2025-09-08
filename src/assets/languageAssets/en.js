@@ -135,6 +135,9 @@ You can also **share your results 📤** to collaborate with other users.
     },
     or: "or",
     in: "in",
+    datasetList: "Dataset associated",
+    observation: "observation",
+    observations: "observations",
   },
 };
 

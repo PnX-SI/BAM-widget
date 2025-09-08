@@ -1,5 +1,5 @@
 import { Connector, ConnectorOptions } from "./connector";
-import { Media, Taxon } from "../models";
+import { Dataset, Media, SearchResult, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
 import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
@@ -107,7 +107,7 @@ export class GbifConnector extends Connector {
       });
   }
 
-  fetchOccurrence(params: any = {}): Promise<Record<string, Taxon>> {
+  fetchOccurrence(params: any = {}): Promise<SearchResult> {
     let defaultParams = {
       limit: this.LIMIT,
       maxPage: this.NB_PAGES,
@@ -130,6 +130,7 @@ export class GbifConnector extends Connector {
         defaultParams.maxPage
       );
       const taxonsData: Record<string, Taxon> = {};
+      const datasetData: Record<string, Dataset> = {};
 
       const fetchPage = (pageIndex: number): Promise<void> => {
         if (pageIndex >= nbOfPages) {
@@ -139,6 +140,15 @@ export class GbifConnector extends Connector {
         return callOccurrenceApi({ ...defaultParams, offset }).then(
           (apiResult) => {
             apiResult.results.forEach((observation: any) => {
+              if (!(observation.datasetKey in datasetData)) {
+                datasetData[observation.datasetKey] = {
+                  uuid: observation.datasetKey,
+                  name: observation.datasetKey,
+                  nbObservations: 0,
+                };
+              }
+
+              datasetData[observation.datasetKey].nbObservations += 1;
               if (!taxonsData[observation.taxonKey]) {
                 taxonsData[observation.taxonKey] = {
                   acceptedScientificName: observation.acceptedScientificName,
@@ -153,6 +163,7 @@ export class GbifConnector extends Connector {
                   lastSeenDate: new Date(observation.eventDate),
                 };
               }
+
               taxonsData[observation.taxonKey].nbObservations += 1;
               taxonsData[observation.taxonKey].lastSeenDate = new Date(
                 Math.max(
@@ -166,7 +177,12 @@ export class GbifConnector extends Connector {
         );
       };
 
-      return fetchPage(0).then(() => taxonsData);
+      return fetchPage(0).then(() => {
+        return {
+          taxons: Object.values(taxonsData),
+          datasets: Object.values(datasetData),
+        };
+      });
     });
   }
 
@@ -226,5 +242,9 @@ export class GbifConnector extends Connector {
   }
   getSourceUrl(): string | null {
     return "https://www.gbif.org";
+  }
+
+  getDatasetUrl(datasetID: any): string | null {
+    return `${this.getSourceUrl()}/dataset/${datasetID}`;
   }
 }

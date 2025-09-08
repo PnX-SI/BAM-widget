@@ -21,3 +21,14 @@ export interface Media {
   licenseUrl?: string;
   urlSource?: string;
 }
+
+export interface Dataset {
+  uuid: string;
+  name?: string;
+  nbObservations: number;
+}
+
+export interface SearchResult {
+  taxons: Taxon[];
+  datasets: Dataset[];
+}

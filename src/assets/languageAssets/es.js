@@ -129,6 +129,9 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     },
     or: "o",
     in: "en",
+    datasetList: "Conjuntos de datos relacionados",
+    observation: "observación",
+    observations: "observaciones",
   },
 };
 

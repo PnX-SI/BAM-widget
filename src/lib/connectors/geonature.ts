@@ -1,5 +1,5 @@
 import { Connector, ConnectorOptions } from "./connector";
-import { Taxon } from "../models";
+import { SearchResult, Taxon } from "../models";
 import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { getMediaSource, SOURCE_ } from "../media/media";
@@ -51,9 +51,7 @@ export class GeoNatureConnector extends Connector {
     ];
   }
 
-  fetchOccurrence(
-    params: OccurrenceParams = {}
-  ): Promise<Record<string, Taxon>> {
+  fetchOccurrence(params: OccurrenceParams = {}): Promise<SearchResult> {
     let urlWithParams = new URL(
       `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`
     );
@@ -89,7 +87,7 @@ export class GeoNatureConnector extends Connector {
             )
           );
         });
-        return taxonsData;
+        return { taxons: Object.values(taxonsData), datasets: [] };
       });
   }
 
