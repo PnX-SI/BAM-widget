@@ -6,7 +6,6 @@ const { connector } = ParameterStore.getInstance();
 const props = defineProps({
   datasets: Array,
 });
-
 const sortedDatasets = computed(() => {
   if (!props.datasets) return [];
   return [...props.datasets].sort(
@@ -27,7 +26,7 @@ const sortedDatasets = computed(() => {
         ><i class="bi bi-database-fill"></i
       ></a>
     </template>
-    <h4>{{ $t("datasetList") }}</h4>
+    <h4>{{ sortedDatasets.length }} {{ $t("datasetList") }}</h4>
     <ul class="list-group datasetsList">
       <li v-for="dataset in sortedDatasets" class="list-group-item">
         <a
