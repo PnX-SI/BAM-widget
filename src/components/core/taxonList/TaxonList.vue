@@ -53,7 +53,7 @@ const props = defineProps({
 nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
 mode.value = props.mode ?? mode.value;
 
-const searchResult = ref({ taxonList: [], datasetUUIDList: [] });
+const searchResult = ref({ taxonList: [], datasets: [] });
 const speciesList = computed(() => searchResult.value.taxons);
 const datasets = computed(() => searchResult.value.datasets);
 const loadingObservations = ref(false);
@@ -156,12 +156,12 @@ function onScroll(event) {
 }
 
 watch([wkt, class_, dateMin, dateMax, connector], () => {
-  searchResult.value = { taxonList: [], datasetUUIDList: [] };
+  searchResult.value = { taxons: [], datasets: [] };
   if (wkt.value) fetchSpeciesList(wkt.value);
 });
 
 if (wkt.value) {
-  searchResult.value = { taxonList: [], datasetUUIDList: [] };
+  searchResult.value = { taxons: [], datasets: [] };
   fetchSpeciesList(wkt.value);
 }
 </script>
