@@ -236,12 +236,25 @@ if (wkt.value) {
     </div>
 
     <div id="data-source-credits" class="text-center">
-      <a href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html" target="_blank">
-        <img src="https://geonature.fr/documents/autres/BAM/BAM-logo.png" height="30px" class="me-1">
-      </a>
       <div v-if="wkt.length && !loadingObservations">
+        <a
+          href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
+          target="_blank"
+        >
+          <img
+            src="https://geonature.fr/documents/autres/BAM/BAM-logo.png"
+            height="30px"
+            class="me-1"
+          />
+        </a>
         <strong>{{ speciesList.length }} {{ $t("taxon.taxonFound") }}</strong>
-        {{ $t("in") }} <a href="https://www.gbif.org" target="_blank" style="color: white; text-decoration: underline">{{ connector.name }}</a>
+        {{ $t("in") }}
+        <a
+          :href="connector.getSourceUrl()"
+          target="_blank"
+          style="color: white; text-decoration: underline"
+          >{{ connector.name }}</a
+        >
         <BTooltip v-if="connector.sourceDetailMessage()">
           <template #target>
             <a style="color: white; text-decoration: underline" class="ms-1"
