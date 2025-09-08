@@ -1,5 +1,5 @@
 import { Connector, ConnectorOptions } from "./connector";
-import { Media, Taxon } from "../models";
+import { Media, SearchResult, Taxon } from "../models";
 import ParameterStore from "../parameterStore";
 import { NO_IMAGE_URL } from "@/assets/constant";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
@@ -107,7 +107,7 @@ export class GbifConnector extends Connector {
       });
   }
 
-  fetchOccurrence(params: any = {}): Promise<Record<string, Taxon>> {
+  fetchOccurrence(params: any = {}): Promise<SearchResult> {
     let defaultParams = {
       limit: this.LIMIT,
       maxPage: this.NB_PAGES,
@@ -130,6 +130,7 @@ export class GbifConnector extends Connector {
         defaultParams.maxPage
       );
       const taxonsData: Record<string, Taxon> = {};
+      const datasetData: Set<string> = new Set();
 
       const fetchPage = (pageIndex: number): Promise<void> => {
         if (pageIndex >= nbOfPages) {
@@ -139,6 +140,9 @@ export class GbifConnector extends Connector {
         return callOccurrenceApi({ ...defaultParams, offset }).then(
           (apiResult) => {
             apiResult.results.forEach((observation: any) => {
+              if (!datasetData.has(observation.datasetKey)) {
+                datasetData.add(observation.datasetKey);
+              }
               if (!taxonsData[observation.taxonKey]) {
                 taxonsData[observation.taxonKey] = {
                   acceptedScientificName: observation.acceptedScientificName,
@@ -166,7 +170,12 @@ export class GbifConnector extends Connector {
         );
       };
 
-      return fetchPage(0).then(() => taxonsData);
+      return fetchPage(0).then(() => {
+        return {
+          taxonList: Object.values(taxonsData),
+          datasetUUIDList: Array.from(datasetData),
+        };
+      });
     });
   }
 
@@ -226,5 +235,9 @@ export class GbifConnector extends Connector {
   }
   getSourceUrl(): string | null {
     return "https://www.gbif.org";
+  }
+
+  getDatasetUrl(datasetID: any): string | null {
+    return `${this.getSourceUrl()}/dataset/${datasetID}`;
   }
 }

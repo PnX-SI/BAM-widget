@@ -134,6 +134,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     },
     or: "ou",
     in: "dans",
+    datasetList: "Liste des jeux de données utilisés",
   },
 };
 

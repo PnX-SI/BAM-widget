@@ -21,3 +21,8 @@ export interface Media {
   licenseUrl?: string;
   urlSource?: string;
 }
+
+export interface SearchResult {
+  taxonList: Taxon[];
+  datasetUUIDList: string[];
+}

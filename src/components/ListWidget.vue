@@ -1,5 +1,5 @@
 <script setup>
-import TaxonList from "@/components/core/TaxonList.vue";
+import TaxonList from "@/components/core/taxonList/TaxonList.vue";
 import ParameterStore from "@/lib/parameterStore";
 const config = ParameterStore.getInstance();
 

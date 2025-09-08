@@ -2,15 +2,17 @@
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Loading from "@/components/commons/Loading.vue";
-import SortBy from "../commons/SortBy.vue";
+import SortBy from "@/components/commons/SortBy.vue";
 import SearchForm from "@/components/commons/SearchForm.vue";
 import sortArray from "sort-array";
 import ParameterStore from "@/lib/parameterStore";
 import TaxonView from "./TaxonView.vue";
+import DatasetList from "./DatasetList.vue";
 import { TAXONLIST_DISPLAY_MODE } from "@/lib/enums";
-import TaxonClassFilterBadge from "../commons/TaxonClassFilterBadge.vue";
+import TaxonClassFilterBadge from "@/components/commons/TaxonClassFilterBadge.vue";
 
 const { t } = useI18n();
+const parameterStore = ParameterStore.getInstance();
 const {
   hybridTaxonList,
   wkt,
@@ -20,18 +22,12 @@ const {
   showFilters,
   connector,
   mode,
-} = ParameterStore.getInstance();
-
-const class_ = ParameterStore.getInstance().class;
+  class: class_,
+} = parameterStore;
 
 const props = defineProps({
-  nbTaxonPerLine: {
-    type: Number,
-  },
-  showFilters: {
-    type: Boolean,
-    default: true,
-  },
+  nbTaxonPerLine: { type: Number },
+  showFilters: { type: Boolean, default: true },
   sortBy: {
     type: String,
     default: "nbObservations",
@@ -54,19 +50,18 @@ const props = defineProps({
   },
 });
 
-const speciesList = ref([]);
 nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
-let loadingObservations = false;
-let loadingError = false;
-let noDataFound = false;
+mode.value = props.mode ?? mode.value;
 
+const searchResult = ref({ taxonList: [], datasetUUIDList: [] });
+const speciesList = computed(() => searchResult.value.taxonList);
+const datasetUUIDs = computed(() => searchResult.value.datasetUUIDList);
+const loadingObservations = ref(false);
+const loadingError = ref(false);
 const pageIndex = ref(0);
-
 const sortBy = ref(props.sortBy || "lastSeenDate");
 const orderBy = ref(props.order || "desc");
-
 const filterClass = ref(null);
-
 const searchString = ref("");
 
 const sortByAvailable = [
@@ -76,10 +71,9 @@ const sortByAvailable = [
   { field_name: "lastSeenDate", label: t("taxon.lastSeenDate") },
 ];
 
-mode.value = props.mode ?? mode.value;
 function toggleMode() {
   mode.value =
-    mode.value == TAXONLIST_DISPLAY_MODE.gallery
+    mode.value === TAXONLIST_DISPLAY_MODE.gallery
       ? TAXONLIST_DISPLAY_MODE.detailedList
       : TAXONLIST_DISPLAY_MODE.gallery;
 }
@@ -93,45 +87,58 @@ const classNames = computed(() => {
 
 const speciesListShowed = computed(() => {
   let filteredSpecies = speciesList.value;
+
   if (searchString.value) {
-    filteredSpecies = speciesList.value.filter((taxon) => {
+    filteredSpecies = filteredSpecies.filter((taxon) => {
       const data = taxon?.vernacularName
         ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
         : taxon.acceptedScientificName || "incertae sedis";
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
-  filteredSpecies = filteredSpecies.filter((taxon) => {
-    return filterClass.value ? taxon.class == filterClass.value : true;
-  });
+
+  if (filterClass.value) {
+    filteredSpecies = filteredSpecies.filter(
+      (taxon) => taxon.class === filterClass.value
+    );
+  }
+
   return sortArray(filteredSpecies, {
     by: sortBy.value,
     order: orderBy.value,
   }).slice(0, (pageIndex.value + 1) * 20);
 });
 
-const fetchSpeciesList = (wkt) => {
-  if (!wkt.length) return;
-  noDataFound = false;
-  loadingObservations = true;
-  loadingError = false;
+const noDataFound = computed(
+  () =>
+    wkt.value.length &&
+    !loadingObservations.value &&
+    !loadingError.value &&
+    (!speciesList.value.length || speciesListShowed.value.length === 0)
+);
+
+const fetchSpeciesList = (wktParam) => {
+  if (!wktParam.length) return;
+
+  loadingObservations.value = true;
+  loadingError.value = false;
   speciesList.value = [];
+
   connector.value
     .fetchOccurrence({
-      geometry: wkt,
+      geometry: wktParam,
       dateMin: dateMin.value,
       dateMax: dateMax.value,
       class: class_.value,
     })
     .then((response) => {
-      speciesList.value = Object.values(response);
-      noDataFound = !speciesList.value.length;
-      loadingObservations = false;
+      searchResult.value = response;
+      loadingObservations.value = false;
       pageIndex.value = 0;
     })
     .catch(() => {
-      loadingObservations = false;
-      loadingError = true;
+      loadingObservations.value = false;
+      loadingError.value = true;
     });
 };
 
@@ -140,25 +147,21 @@ watch(searchString, () => {
 });
 
 function onScroll(event) {
-  const container = event.target;
-  const threshold = 50; // Seuil en pixels pour déclencher le chargement
+  const { scrollTop, clientHeight, scrollHeight } = event.target;
+  const threshold = 50;
 
-  if (
-    container.scrollTop + container.clientHeight >=
-    container.scrollHeight - threshold
-  ) {
+  if (scrollTop + clientHeight >= scrollHeight - threshold) {
     pageIndex.value++;
   }
 }
 
 watch([wkt, class_, dateMin, dateMax, connector], () => {
-  speciesList.value = [];
-  if (wkt.value) {
-    fetchSpeciesList(wkt.value);
-  }
+  searchResult.value = { taxonList: [], datasetUUIDList: [] };
+  if (wkt.value) fetchSpeciesList(wkt.value);
 });
 
 if (wkt.value) {
+  searchResult.value = { taxonList: [], datasetUUIDList: [] };
   fetchSpeciesList(wkt.value);
 }
 </script>
@@ -173,8 +176,8 @@ if (wkt.value) {
       />
       <SortBy
         :sort-by-available="sortByAvailable"
-        @update:sortBy="(newsort) => (sortBy = newsort)"
-        @update:orderBy="(neworder) => (orderBy = neworder)"
+        @update:sortBy="(newSort) => (sortBy = newSort)"
+        @update:orderBy="(newOrder) => (orderBy = newOrder)"
         :sortBy="sortBy"
         :orderBy="orderBy"
       />
@@ -192,15 +195,7 @@ if (wkt.value) {
           <i class="bi bi-circle-fill"></i> <i class="bi bi-geo-fill"></i>
         </h5>
       </div>
-      <div
-        id="no-observations-message"
-        v-if="
-          wkt.length &&
-          !loadingObservations &&
-          !loadingError &&
-          (!speciesList.length || speciesListShowed.length == 0)
-        "
-      >
+      <div id="no-observations-message" v-if="noDataFound">
         {{ $t("noSpeciesObserved") }}
       </div>
       <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
@@ -221,7 +216,6 @@ if (wkt.value) {
           </template>
           {{ $t("TaxonListModeSelection") }}
         </BTooltip>
-
         <div class="justify-content-center filterDropdown">
           <TaxonClassFilterBadge
             @select:class="(newClass) => (filterClass = newClass)"
@@ -234,7 +228,6 @@ if (wkt.value) {
         />
       </div>
     </div>
-
     <div id="data-source-credits" class="text-center">
       <div v-if="wkt.length && !loadingObservations">
         <a
@@ -253,16 +246,21 @@ if (wkt.value) {
           :href="connector.getSourceUrl()"
           target="_blank"
           style="color: white; text-decoration: underline"
-          >{{ connector.name }}</a
         >
+          {{ connector.name }}
+        </a>
         <BTooltip v-if="connector.sourceDetailMessage()">
           <template #target>
-            <a style="color: white; text-decoration: underline" class="ms-1"
-              ><i class="bi bi-info-circle"></i
-            ></a>
+            <a style="color: white; text-decoration: underline" class="ms-1">
+              <i class="bi bi-info-circle"></i>
+            </a>
           </template>
           {{ connector.sourceDetailMessage() }}
         </BTooltip>
+        <DatasetList
+          v-if="datasetUUIDs.length > 0"
+          :datasets="datasetUUIDs"
+        ></DatasetList>
       </div>
     </div>
   </div>
@@ -275,13 +273,11 @@ if (wkt.value) {
   display: flex;
   flex-direction: column;
 }
-
 #taxon-list-content {
   overflow-y: scroll;
   overflow-x: hidden;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
 }
-
 .card-body {
   overflow: hidden;
   display: flex;
@@ -289,7 +285,6 @@ if (wkt.value) {
   flex-grow: 1;
   padding: 0 !important;
 }
-
 #loading-error,
 #no-geometry-message,
 #no-observations-message,
@@ -302,22 +297,18 @@ if (wkt.value) {
   top: 50%;
   transform: translateY(-50%);
 }
-
 #no-geometry-message,
 #loadingObs {
   background-color: var(--bs-secondary-bg);
   color: var(--bs-secondary-color);
 }
-
 #no-observations-message {
   background-color: var(--bs-warning);
   color: white;
 }
-
 #loading-error {
   color: white;
 }
-
 #data-source-credits {
   text-align: center;
   background: #aaa;
@@ -325,35 +316,31 @@ if (wkt.value) {
 }
 .toggleMode {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
   width: max-content;
 }
-
 .filterDropdown {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  right: 10px;
   z-index: 10;
   width: max-content;
 }
 .card-body {
-  position: relative; /* Assurez-vous que le conteneur parent est positionné de manière relative */
+  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
-
-.toggleMode {
-  position: absolute;
-  top: 10px; /* Ajustez selon vos besoins */
-  left: 10px; /* Ajustez selon vos besoins */
-  z-index: 10; /* Assurez-vous que le bouton est au-dessus des autres éléments */
-}
-
 .toggleMode button {
-  padding: 5px 10px; /* Ajustez le padding selon vos besoins */
+  padding: 5px 10px;
   width: 40px !important;
+}
+.datasetsList {
+  height: 200px;
+  overflow-y: scroll;
 }
 </style>

@@ -192,4 +192,8 @@ export class Connector {
   getSourceUrl(): string | null {
     return null;
   }
+
+  getDatasetUrl(datasetID): string | null {
+    return null;
+  }
 }
