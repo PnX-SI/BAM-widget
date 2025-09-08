@@ -16,7 +16,7 @@ This version brings a **complete redesign of the widget**, now powered by **Vue.
 - 🖥️ **Multiple display modes**
 - ⚙️ **New customizable parameters** (display mode, media sources, etc.)
 - 📏 **Automatic buffer** around points and lines
-- 🔗 **Easier sharing**: use a link or embed the widget directly in an HTML page with an `<embed>` tag
+- 🔗 **Easier sharing**: use a link or an iframe the widget directly in an HTML page with an `<iframe>` tag
 
 ## 📚 Documentation
 
