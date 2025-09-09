@@ -31,6 +31,7 @@ const sortedDatasets = computed(() => {
       <li v-for="dataset in sortedDatasets" class="list-group-item">
         <a
           class="link-primary text-decoration-none"
+          target="_blank"
           :href="connector.getDatasetUrl(dataset.uuid)"
         >
           {{ dataset.name }}
