@@ -56,7 +56,7 @@ To set up your GeoNature instance to use with the widget, follow these steps:
       FROM gn_synthese.v_synthese_for_web_app vsfwa;
       ```
 
-      **Notes**: Feel free to modify this view depending on your needs!
+      **Notes**: Feel free to modify this view depending on your needs! You can filter data with a `where` clause in the view, but keep the view data structure.
 
    2. Once your view is created, type the information in the export creation form in GeoNature.
 
