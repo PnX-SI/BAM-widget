@@ -7,7 +7,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  ariaLabel: String,
+  testID: String,
   alt: String,
   class: String,
 });
@@ -51,7 +51,7 @@ watch(
     <img
       :src="currentImageUrl"
       :alt="alt"
-      :aria-label="ariaLabel"
+      :data-testid="props?.testID"
       :class="imageLoaded ? 'loaded' : ''"
     />
   </div>
