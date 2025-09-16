@@ -124,7 +124,6 @@ const fetchSpeciesList = (wktParam) => {
 
   loadingObservations.value = true;
   loadingError.value = false;
-  speciesList.value = [];
 
   connector.value
     .fetchOccurrence({
