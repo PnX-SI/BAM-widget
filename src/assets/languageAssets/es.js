@@ -68,7 +68,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
       select: "Seleccionar una fuente de datos",
       modify: "Cambiar la fuente de datos de las observaciones",
       gbifWarning:
-        "El número de observaciones y sus fechas se basan en una agregación de las últimas {nbObs} observaciones realizadas dentro del área seleccionada.",
+        "El número de observaciones y sus fechas se basan en una agregación de las últimas observaciones realizadas en el área seleccionada y están limitadas a un máximo de {nbObs}.",
     },
     gbif: {
       apiEndpoint: "Punto final de la API de GBIF",
