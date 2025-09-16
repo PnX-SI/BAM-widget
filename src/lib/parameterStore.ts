@@ -278,6 +278,9 @@ class ParameterStore {
     if (params.sourceGeometry != null && params.wkt) {
       delete params.wkt;
     }
+    if (params.x && params.y) {
+      delete params.wkt;
+    }
     return params;
   }
 

@@ -42,7 +42,7 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt, sourceGeometry, mapEditable, lang } =
+const { radius, wkt, sourceGeometry, mapEditable, lang, x, y } =
   ParameterStore.getInstance();
 
 // Component Attributes
@@ -97,6 +97,11 @@ function updateGeometry() {
   }
 
   wkt.value = WKT;
+  if (x.value && y.value) {
+    x.value = null;
+    y.value = null;
+  }
+
   sourceGeometry.value = null;
 }
 
