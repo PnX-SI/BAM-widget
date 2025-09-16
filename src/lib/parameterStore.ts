@@ -275,11 +275,11 @@ class ParameterStore {
     params["connector"] = this.connector.value.name;
     const connectorParams = this.connector.value.getParams();
     Object.assign(params, connectorParams);
-    if (params.sourceGeometry != null && params.wkt) {
-      delete params.wkt;
-    }
-    if (params.x && params.y) {
-      delete params.wkt;
+    if (params?.wkt) {
+      // if another way to indicate the geolocation was given in parameter, drop the WKT generated
+      if (params.sourceGeometry != null || (params.x && params.y)) {
+        delete params.wkt;
+      }
     }
     return params;
   }
