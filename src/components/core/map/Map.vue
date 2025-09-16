@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet-draw";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet-geosearch/dist/geosearch.css";
 import { restoreMapState, toWKT } from "@/lib/utils";
 import { parse } from "wellknown";
 import { LocateControl } from "leaflet.locatecontrol";
@@ -11,7 +12,11 @@ import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 import drawConfig from "./MapConfig";
 import { booleanClockwise, rewind } from "@turf/turf";
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import { useI18n } from "vue-i18n";
 import ParameterStore from "@/lib/parameterStore";
+
+const { t } = useI18n();
 
 // Constants
 const DEFAULT_HEIGHT = "100vh";
@@ -37,7 +42,7 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt, sourceGeometry, mapEditable } =
+const { radius, wkt, sourceGeometry, mapEditable, lang } =
   ParameterStore.getInstance();
 
 // Component Attributes
@@ -50,17 +55,6 @@ const mapID = (Math.random() + 1).toString(36).substring(7);
 const wktFromOutside = computed(() => !!wkt.value);
 const style = computed(() => `height: ${props.height};`);
 let locate = null;
-
-// Watchers
-watch(wkt, updateGeometryFromWKT);
-watch([radius, geometry], updateGeometry);
-if (!props.forceEditable) {
-  watch(mapEditable, () => {
-    map.value.off();
-    map.value.remove();
-    setupMap();
-  });
-}
 
 // Functions
 function updateGeometryFromWKT() {
@@ -76,7 +70,6 @@ function focusOnGeometry() {
   if (map.value) map.value.fitBounds(geometry.value.getBounds());
 }
 
-updateGeometryFromWKT();
 function updateGeometry() {
   if (!drawEventData) return;
 
@@ -107,37 +100,34 @@ function updateGeometry() {
   sourceGeometry.value = null;
 }
 
-function setupMap() {
-  map.value = L.map(`map-${mapID}`);
-  restoreMapState(map.value);
-
-  L.tileLayer(OPEN_STREET_MAP_URL, {
-    maxZoom: 19,
-    attribution: OPEN_STREET_MAP_ATTRIBUTION,
-  }).addTo(map.value);
-
-  map.value.addLayer(geometry.value);
-
-  if (wktFromOutside.value) {
-    focusOnGeometry();
-  }
-
-  if (mapEditable.value) {
-    map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
-    locate = new LocateControl({
-      icon: "fa-solid fa-location-crosshairs fa-xl",
-    }).addTo(map.value);
-  }
-
-  map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
-  map.value.on("locationfound", (e) => {
+function addSearchControl() {
+  const provider = new OpenStreetMapProvider({
+    params: { "accept-language": lang.value },
+  });
+  const searchControl = new GeoSearchControl({
+    provider: provider,
+    style: "bar",
+    resetButton: "x",
+    searchLabel: t("map.searchPlace"),
+  });
+  map.value.addControl(searchControl);
+  map.value.on("geosearch/showlocation", (e) => {
     geometry.value.clearLayers();
-    const marker = L.marker(e.latlng);
+    const marker = L.marker([e.location.y, e.location.x]);
     drawEventData = { layer: marker, layerType: "marker" };
     geometry.value.addLayer(marker);
     updateGeometry();
-    locate.stop();
+    focusOnGeometry();
   });
+}
+
+function handleGeolocation(event) {
+  geometry.value.clearLayers();
+  const marker = L.marker(event.latlng);
+  drawEventData = { layer: marker, layerType: "marker" };
+  geometry.value.addLayer(marker);
+  updateGeometry();
+  locate.stop();
 }
 
 function handleGeometryCreation(event) {
@@ -156,11 +146,62 @@ function saveMapState() {
   localStorage.setItem("mapState", JSON.stringify(state));
 }
 
+function setupMap() {
+  map.value = L.map(`map-${mapID}`);
+  restoreMapState(map.value);
+
+  L.tileLayer(OPEN_STREET_MAP_URL, {
+    maxZoom: 19,
+    attribution: OPEN_STREET_MAP_ATTRIBUTION,
+  }).addTo(map.value);
+
+  map.value.addLayer(geometry.value);
+
+  if (wktFromOutside.value) {
+    focusOnGeometry();
+  }
+
+  if (mapEditable.value) {
+    /**
+     * ADD DRAW GEOMETRY TOOLS
+     */
+    map.value.addControl(new L.Control.Draw(drawConfig(geometry.value)));
+
+    /**
+     * ADD GEOLOCATION TOOL
+     */
+    locate = new LocateControl({
+      icon: "fa-solid fa-location-crosshairs fa-xl",
+    }).addTo(map.value);
+
+    /**
+     * ADD SEARCH FORM
+     */
+    addSearchControl();
+  }
+
+  map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
+  map.value.on("locationfound", handleGeolocation);
+}
+
 // Lifecycle Hooks
 onMounted(() => {
   setupMap();
   window.addEventListener("beforeunload", saveMapState);
 });
+
+updateGeometryFromWKT();
+
+// Watchers
+watch(wkt, updateGeometryFromWKT);
+watch([radius, geometry], updateGeometry);
+if (!props.forceEditable) {
+  watch(mapEditable, () => {
+    map.value.off();
+    map.value.remove();
+    setupMap();
+  });
+}
 </script>
 
 <template>

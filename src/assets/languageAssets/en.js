@@ -133,6 +133,9 @@ You can also **share your results 📤** to collaborate with other users.
         Pinopsida: "Conifers",
       },
     },
+    map: {
+      searchPlace: "Search a place name",
+    },
     or: "or",
     in: "in",
     datasetList: "associated datasets",
