@@ -5,8 +5,8 @@ const props = defineProps({
   link: String,
   required: true,
 });
-const width = ref("500px");
-const height = ref("400px");
+const width = ref("100%");
+const height = ref("600px");
 
 const copied = ref(false);
 function copy() {
