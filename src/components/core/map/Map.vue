@@ -97,8 +97,15 @@ function updateGeometry() {
   }
 
   wkt.value = WKT;
-  x.value = null;
-  y.value = null;
+  if (drawEventData.layerType == "marker") {
+    const lat_long = layer._latlng;
+    x.value = lat_long.lon;
+    y.value = lat_long.lat;
+  } else {
+    x.value = null;
+    y.value = null;
+  }
+
   sourceGeometry.value = null;
 }
 
