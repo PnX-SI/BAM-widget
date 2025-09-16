@@ -203,6 +203,7 @@ class ParameterStore {
             stringify(geojson.geometry),
             this.radius.value
           );
+          this.sourceGeometry.value = value;
         } catch (err) {
           console.error(err);
         }
