@@ -112,9 +112,9 @@ function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
           return [
             {
               url: `https://commons.wikimedia.org/w/thumb.php?width=700&f=${imageFilename}`, // full image URL
-              source: `${credit.artist.replace(/<[^>]*>?/gm, "")} - ${
-                credit.license
-              }`,
+              source: `${
+                credit.artist ? credit.artist.replace(/<[^>]*>?/gm, "") : ""
+              } - ${credit.license}`,
               typeMedia: "image",
               licenseUrl: credit.licenseUrl,
               license: credit.license,

@@ -30,7 +30,6 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     UseCustomDetailPage: 'Modifier la redirection du bouton "En Savoir Plus" ',
     filtersTitle: "Filtres",
     mapEditable: " Zone de recherche éditable",
-    radius: "Rayon",
     bufferSize: "Taille du buffer (en mètre)",
     dateMin: "Date min",
     dateMax: "Date max",

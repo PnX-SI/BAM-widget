@@ -42,8 +42,15 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt, sourceGeometry, mapEditable, lang, x, y } =
-  ParameterStore.getInstance();
+const {
+  buffer: radius,
+  wkt,
+  sourceGeometry,
+  mapEditable,
+  lang,
+  x,
+  y,
+} = ParameterStore.getInstance();
 
 // Component Attributes
 const map = shallowRef();

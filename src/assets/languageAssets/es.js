@@ -25,7 +25,6 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     UseCustomDetailPage: 'Cambiar la redirección del botón "Más información"',
     filtersTitle: "Filtros",
     mapEditable: "Zona de búsqueda editable",
-    radius: "Radio",
     bufferSize: "Tamaño del buffer (en metro)",
     dateMin: "Fecha Mínima",
     dateMax: "Fecha Máxima",

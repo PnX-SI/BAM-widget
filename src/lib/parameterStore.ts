@@ -22,10 +22,10 @@ class ParameterStore {
   private static instance: ParameterStore | null = null;
 
   /**
-   * If a marker or line is given, a buffer is applied with a given radius.
+   * If a marker or line is given, a buffer is applied.
    * @type {Ref<number>}
    */
-  radius: Ref<number>;
+  buffer: Ref<number>;
 
   /**
    * WKT (Well-Known Text Representation of the search zone).
@@ -128,7 +128,7 @@ class ParameterStore {
     const router = useRouter();
     const paramsFromUrl = route?.query;
 
-    this.radius = ref(config.RADIUS);
+    this.buffer = ref(config.RADIUS);
     this.wkt = ref(config.WKT);
     this.dateMin = ref(config.dateMin);
     this.dateMax = ref(config.dateMax);
@@ -160,7 +160,7 @@ class ParameterStore {
 
   private setupWatchers(router: Router, route: RouteLocationNormalizedLoaded) {
     const paramsToWatch = [
-      "radius",
+      "buffer",
       "wkt",
       "dateMin",
       "dateMax",
@@ -192,8 +192,11 @@ class ParameterStore {
     if (!paramsFromUrl) return;
 
     const paramHandlers: Record<string, (value: string) => any> = {
-      radius: (value: string) => parseInt(value),
-      wkt: (value: string) => validateWKT(value, this.radius.value),
+      buffer: (value: string) => parseInt(value),
+      radius: (value: string) => {
+        this.buffer.value = parseInt(value);
+      },
+      wkt: (value: string) => validateWKT(value, this.buffer.value),
       sourceGeometry: async (value: string) => {
         this.sourceGeometry.value = value;
         try {
@@ -201,7 +204,7 @@ class ParameterStore {
           const geojson = await response.json();
           this.wkt.value = validateWKT(
             stringify(geojson.geometry),
-            this.radius.value
+            this.buffer.value
           );
           this.sourceGeometry.value = value;
         } catch (err) {
@@ -245,7 +248,7 @@ class ParameterStore {
         const paramRef = this[paramName as keyof ParameterStore];
         if (paramRef && typeof paramRef === "object" && "value" in paramRef) {
           paramRef.value = transformFn(value);
-        } else if (paramName === "sourceGeometry") {
+        } else if (["sourceGeometry", "radius"].includes(paramName)) {
           transformFn(value);
         }
       }
@@ -257,7 +260,7 @@ class ParameterStore {
           type: "Point",
           coordinates: [this.x.value, this.y.value],
         }),
-        this.radius.value
+        this.buffer.value
       );
     }
   }
@@ -298,9 +301,9 @@ class ParameterStore {
   }
 }
 
-const validateWKT = (wkt: string | null, radius: number): string | null => {
+const validateWKT = (wkt: string | null, bufferSize: number): string | null => {
   if (wkt && (wkt.includes("POINT") || wkt.includes("LINESTRING"))) {
-    let buffered = buffer(parse(wkt), radius / 1000);
+    let buffered = buffer(parse(wkt), bufferSize / 1000);
     if (wkt.includes("LINESTRING")) {
       buffered = simplify(buffered, { tolerance: 0.001, highQuality: true });
     }
