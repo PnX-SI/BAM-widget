@@ -42,15 +42,8 @@ const props = defineProps({
 });
 
 // Store
-const {
-  buffer: radius,
-  wkt,
-  sourceGeometry,
-  mapEditable,
-  lang,
-  x,
-  y,
-} = ParameterStore.getInstance();
+const { buffer, wkt, sourceGeometry, mapEditable, lang, x, y } =
+  ParameterStore.getInstance();
 
 // Component Attributes
 const map = shallowRef();
@@ -92,7 +85,7 @@ function updateGeometry() {
     geojson,
     drawEventData.layerType === "circle" ? layer.getRadius() : null,
     drawEventData.layerType,
-    radius.value / 1000
+    buffer.value / 1000
   );
 
   if (
@@ -207,7 +200,7 @@ updateGeometryFromWKT();
 
 // Watchers
 watch(wkt, updateGeometryFromWKT);
-watch([radius, geometry], updateGeometry);
+watch([buffer, geometry], updateGeometry);
 if (!props.forceEditable) {
   watch(mapEditable, () => {
     map.value.off();
