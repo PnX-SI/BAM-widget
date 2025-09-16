@@ -278,10 +278,14 @@ class ParameterStore {
     Object.assign(params, connectorParams);
     if (params?.wkt) {
       // if another way to indicate the geolocation was given in parameter, drop the WKT generated
-      if (params.sourceGeometry != null || (params.x && params.y)) {
+      if (
+        params.sourceGeometry != null ||
+        (params.x != null && params.y != null)
+      ) {
         delete params.wkt;
       }
     }
+
     return params;
   }
 
