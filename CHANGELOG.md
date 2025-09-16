@@ -1,9 +1,10 @@
 # CHANGELOG
 
-## 1.1.0 (unreleased)
+## 1.1.0 (2025-09-16)
 
 ### ✨ New Features
 
+- Add place search form on the map, based on OSM Nominatim (#28)
 - Add datasets list in widget footer (#33)
 - Add configuration file when self-hosting (#41)
 - Trim media credits text length if superior to 200 characters (#49)
@@ -11,12 +12,15 @@
 - Add source URL in footer (#51)
 - Change map button for geolocation (#52)
 - Move `embed` to `iframe` with `allow="geolocation"` setting (#53)
+- Rename `radius` widget parameter to `buffer` (#61)
+- X and Y parameters are now used and kept in URL when placing a point (#56)
 - Improve documentation
 - Improve widget integration examples
 
 ### 🐛 Fixes
 
 - Fix X and Y decimals settings (#30)
+- Fix Leaflet marker display (#60)
 
 By @jacquesfize and @camillemonchicourt.
 
