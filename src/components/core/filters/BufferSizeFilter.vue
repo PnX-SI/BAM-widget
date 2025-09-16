@@ -1,12 +1,12 @@
 <script setup>
 import ParameterStore from "@/lib/parameterStore";
 
-const { radius } = ParameterStore.getInstance();
+const { buffer } = ParameterStore.getInstance();
 </script>
 
 <template>
   <div class="row">
-    <label for="radius" class="form-label col-6"
+    <label for="buffer" class="form-label col-6"
       ><strong>
         {{ $t("bufferSize") }}
         <i class="fa-solid fa-up-right-and-down-left-from-center"></i
@@ -17,13 +17,13 @@ const { radius } = ParameterStore.getInstance();
       class="form-number"
       min="1"
       max="3000"
-      v-model="radius"
-      id="radius"
+      v-model="buffer"
+      id="buffer"
     />
   </div>
 </template>
 <style scoped>
-#radius {
+#buffer {
   width: 30%;
 }
 </style>

@@ -31,7 +31,6 @@ You can also **share your results 📤** to collaborate with other users.
 
     filtersTitle: "Filters",
     mapEditable: "Editable research zone",
-    radius: "Radius",
     bufferSize: "Buffer Size (in meter):",
     dateMin: "Date Min",
     dateMax: "Date Max",

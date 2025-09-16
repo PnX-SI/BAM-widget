@@ -26,19 +26,19 @@ function getBaseUrl(): string {
  * @param geojson - The GeoJSON object
  * @param layerRadius - The radius for circle layers
  * @param typeLayer - The type of the layer
- * @param radius - The buffer radius
+ * @param bufferSize - The buffer size
  * @returns The WKT string
  */
 function toWKT(
   geojson: any,
   layerRadius: number,
   typeLayer: string,
-  radius: number
+  bufferSize: number
 ): string {
   let WKT = stringify(geojson);
   // If point or line, we buffer the geometry since API does not support them
   if (typeLayer == "marker" || typeLayer == "polyline") {
-    const buffered = buffer(geojson, radius);
+    const buffered = buffer(geojson, bufferSize);
     WKT = stringify(buffered);
   }
   if (typeLayer == "circle") {
