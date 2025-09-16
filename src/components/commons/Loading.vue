@@ -14,9 +14,9 @@ const loadingStatus = ref(
 </script>
 
 <template>
-  <div v-if="loadingStatus">
+  <div v-if="loadingStatus" data-testid="Loading component">
     <div class="d-flex justify-content-center">
-      <h3>{{ $t("loading") }}</h3>
+      <h3 data-testid="Loading message">{{ $t("loading") }}</h3>
     </div>
     <div class="d-flex justify-content-center">
       <div class="spinner-border" role="status">

@@ -6,7 +6,7 @@ const { radius } = ParameterStore.getInstance();
 
 <template>
   <div class="row">
-    <label for="radius" class="form-label col-6"
+    <label for="radius" class="form-label col-6" data-testid="Buffer label"
       ><strong>
         {{ $t("bufferSize") }}
         <i class="fa-solid fa-up-right-and-down-left-from-center"></i
@@ -19,6 +19,7 @@ const { radius } = ParameterStore.getInstance();
       max="3000"
       v-model="radius"
       id="radius"
+      data-testid="Buffer selection form"
     />
   </div>
 </template>

@@ -30,7 +30,7 @@ const embed = computed(() => {
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" data-testid="Embed html section">
     <div class="card-header d-flex align-items-center justify-content-between">
       <h3>
         <i class="bi bi-code-slash" style="margin-right: 0.5em"></i>
@@ -42,11 +42,15 @@ const embed = computed(() => {
         <textarea
           class="form-control"
           placeholder="Embed URL"
-          aria-label=".form-control-lg example"
+          data-testid="Embed URL value"
           :value="embed"
           style="height: 80px"
         />
-        <button class="btn btn-outline-secondary" @click="copy">
+        <button
+          class="btn btn-outline-secondary"
+          @click="copy"
+          data-testid="embed tag copy button"
+        >
           <div v-if="copied">
             <i class="bi bi-check2-circle"></i> {{ $t("copied") }}!
           </div>
@@ -59,7 +63,7 @@ const embed = computed(() => {
           class="form-control"
           type="text"
           placeholder="Width"
-          aria-label=".form-control-lg example"
+          data-testid="Width widget input form"
           v-model="width"
         />
         <span class="input-group-text">{{ $t("size.height") }}</span>
@@ -67,7 +71,7 @@ const embed = computed(() => {
           class="form-control"
           type="text"
           placeholder="Height"
-          aria-label=".form-control-lg example"
+          data-testid="Height widget input form"
           v-model="height"
         />
       </div>
