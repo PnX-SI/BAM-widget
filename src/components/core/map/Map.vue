@@ -42,7 +42,7 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt, sourceGeometry, mapEditable, lang } =
+const { radius, wkt, sourceGeometry, mapEditable, lang, x, y } =
   ParameterStore.getInstance();
 
 // Component Attributes
@@ -97,6 +97,12 @@ function updateGeometry() {
   }
 
   wkt.value = WKT;
+
+  // if marker store in x and y
+  const lat_long = drawEventData.layerType === "marker" ? layer._latlng : null;
+  x.value = lat_long?.lng ?? null;
+  y.value = lat_long?.lat ?? null;
+
   sourceGeometry.value = null;
 }
 
