@@ -42,7 +42,7 @@ const props = defineProps({
 });
 
 // Store
-const { radius, wkt, sourceGeometry, mapEditable } =
+const { radius, wkt, sourceGeometry, mapEditable, lang } =
   ParameterStore.getInstance();
 
 // Component Attributes
@@ -143,7 +143,9 @@ function setupMap() {
     /**
      * ADD SEARCH FORM
      */
-    const provider = new OpenStreetMapProvider();
+    const provider = new OpenStreetMapProvider({
+      params: { "accept-language": lang.value },
+    });
     const searchControl = new GeoSearchControl({
       provider: provider,
       style: "bar",
