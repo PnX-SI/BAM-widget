@@ -1,3 +1,12 @@
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+const DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconAnchor: [12, 41],
+});
+
 function drawConfig(featureGroup) {
   return {
     _onZoomEnd: function () {
@@ -14,7 +23,7 @@ function drawConfig(featureGroup) {
         },
         shapeOptions: {},
       },
-      marker: true,
+      marker: { icon: DefaultIcon },
       circlemarker: false,
       circle: true, // Turns off this drawing tool
       rectangle: true,
