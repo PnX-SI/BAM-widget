@@ -56,17 +56,6 @@ const wktFromOutside = computed(() => !!wkt.value);
 const style = computed(() => `height: ${props.height};`);
 let locate = null;
 
-// Watchers
-watch(wkt, updateGeometryFromWKT);
-watch([radius, geometry], updateGeometry);
-if (!props.forceEditable) {
-  watch(mapEditable, () => {
-    map.value.off();
-    map.value.remove();
-    setupMap();
-  });
-}
-
 // Functions
 function updateGeometryFromWKT() {
   if (wkt.value) {
@@ -81,7 +70,6 @@ function focusOnGeometry() {
   if (map.value) map.value.fitBounds(geometry.value.getBounds());
 }
 
-updateGeometryFromWKT();
 function updateGeometry() {
   if (!drawEventData) return;
 
@@ -110,6 +98,52 @@ function updateGeometry() {
 
   wkt.value = WKT;
   sourceGeometry.value = null;
+}
+
+function addSearchControl() {
+  const provider = new OpenStreetMapProvider({
+    params: { "accept-language": lang.value },
+  });
+  const searchControl = new GeoSearchControl({
+    provider: provider,
+    style: "bar",
+    resetButton: "x",
+    searchLabel: t("map.searchPlace"),
+  });
+  map.value.addControl(searchControl);
+  map.value.on("geosearch/showlocation", (e) => {
+    geometry.value.clearLayers();
+    const marker = L.marker([e.location.y, e.location.x]);
+    drawEventData = { layer: marker, layerType: "marker" };
+    geometry.value.addLayer(marker);
+    updateGeometry();
+    focusOnGeometry();
+  });
+}
+
+function handleGeolocation(event) {
+  geometry.value.clearLayers();
+  const marker = L.marker(event.latlng);
+  drawEventData = { layer: marker, layerType: "marker" };
+  geometry.value.addLayer(marker);
+  updateGeometry();
+  locate.stop();
+}
+
+function handleGeometryCreation(event) {
+  let layer = event.layer;
+  drawEventData = event;
+  geometry.value.clearLayers();
+  geometry.value.addLayer(layer);
+  updateGeometry();
+}
+
+function saveMapState() {
+  const state = {
+    center: map.value.getCenter(),
+    zoom: map.value.getZoom(),
+  };
+  localStorage.setItem("mapState", JSON.stringify(state));
 }
 
 function setupMap() {
@@ -143,54 +177,11 @@ function setupMap() {
     /**
      * ADD SEARCH FORM
      */
-    const provider = new OpenStreetMapProvider({
-      params: { "accept-language": lang.value },
-    });
-    const searchControl = new GeoSearchControl({
-      provider: provider,
-      style: "bar",
-      resetButton: "🔍",
-      searchLabel: t("map.searchPlace"),
-    });
-    map.value.addControl(searchControl);
-    map.value.on("geosearch/showlocation", (e) => {
-      geometry.value.clearLayers();
-      const marker = L.marker([e.location.y, e.location.x]);
-      drawEventData = { layer: marker, layerType: "marker" };
-      geometry.value.addLayer(marker);
-      updateGeometry();
-      focusOnGeometry();
-      // map.value.setView([e.location.y, e.location.x], 2);
-      // map.value.fitBounds(e.location.bounds);
-      // console.log(e);
-    });
+    addSearchControl();
   }
 
   map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
-  map.value.on("locationfound", (e) => {
-    geometry.value.clearLayers();
-    const marker = L.marker(e.latlng);
-    drawEventData = { layer: marker, layerType: "marker" };
-    geometry.value.addLayer(marker);
-    updateGeometry();
-    locate.stop();
-  });
-}
-
-function handleGeometryCreation(event) {
-  let layer = event.layer;
-  drawEventData = event;
-  geometry.value.clearLayers();
-  geometry.value.addLayer(layer);
-  updateGeometry();
-}
-
-function saveMapState() {
-  const state = {
-    center: map.value.getCenter(),
-    zoom: map.value.getZoom(),
-  };
-  localStorage.setItem("mapState", JSON.stringify(state));
+  map.value.on("locationfound", handleGeolocation);
 }
 
 // Lifecycle Hooks
@@ -198,6 +189,19 @@ onMounted(() => {
   setupMap();
   window.addEventListener("beforeunload", saveMapState);
 });
+
+updateGeometryFromWKT();
+
+// Watchers
+watch(wkt, updateGeometryFromWKT);
+watch([radius, geometry], updateGeometry);
+if (!props.forceEditable) {
+  watch(mapEditable, () => {
+    map.value.off();
+    map.value.remove();
+    setupMap();
+  });
+}
 </script>
 
 <template>
