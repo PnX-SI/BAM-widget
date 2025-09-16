@@ -97,11 +97,8 @@ function updateGeometry() {
   }
 
   wkt.value = WKT;
-  if (x.value && y.value) {
-    x.value = null;
-    y.value = null;
-  }
-
+  x.value = null;
+  y.value = null;
   sourceGeometry.value = null;
 }
 
