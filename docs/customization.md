@@ -8,9 +8,9 @@ There is two ways of customizing the widget:
 
 ## Parameters reference
 
-### `radius` (**Type:** number)
+### `buffer` (**Type:** number)
 
-Buffer radius for the search area in meters.
+Buffer size for the search area in meters.
 
 **Example:** `1`
 

@@ -48,7 +48,7 @@
 
                         const wkt = wellknown.stringify(feature);
 
-                        const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?radius=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=en&mode=detailedList&widgetType=list&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
+                        const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?buffer=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=en&mode=detailedList&widgetType=list&hybridTaxonList=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
 
                         document.getElementById("widget-container").innerHTML = `
                     <h3 class="text-lg font-semibold mb-2">${getNameProperty}</h3>
