@@ -17,7 +17,6 @@ const sortedDatasets = computed(() => {
 <template>
   <BPopover
     v-if="props.datasets && props.datasets.length > 0"
-    :click="true"
     :close-on-hide="true"
     :delay="{ show: 0, hide: 0 }"
   >
