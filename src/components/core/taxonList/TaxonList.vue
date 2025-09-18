@@ -23,6 +23,7 @@ const {
   connector,
   mode,
   class: class_,
+  topN,
 } = parameterStore;
 
 const props = defineProps({
@@ -104,7 +105,12 @@ const speciesListShowed = computed(() => {
       (taxon) => taxon.class === filterClass.value
     );
   }
-
+  if (topN.value && topN.value > 0) {
+    return sortArray(filteredSpecies, {
+      by: "nbObservations",
+      order: "desc",
+    }).slice(0, topN.value);
+  }
   return sortArray(filteredSpecies, {
     by: sortBy.value,
     order: orderBy.value,

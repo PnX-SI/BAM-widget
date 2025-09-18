@@ -25,6 +25,7 @@ const {
   connector,
   customDetailPage,
   getParams,
+  topN,
 } = ParameterStore.getInstance();
 
 const router = useRouter();
@@ -178,6 +179,10 @@ const widgetTypeOptions = computed(() => {
             >{{ $t("numberOfTaxonPerLine") }} <i class="bi bi-123"></i>
           </label>
           <BFormInput type="number" v-model="nbTaxonPerLine" />
+        </div>
+        <div class="parameter-section">
+          <label>{{ $t("topN") }} <i class="bi bi-123"></i> </label>
+          <BFormInput type="number" v-model="topN" />
         </div>
 
         <div class="parameter-section">
