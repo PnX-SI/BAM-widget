@@ -28,12 +28,12 @@ You can also **share your results 📤** to collaborate with other users.
     widgetTypeSelection: "Widget display mode",
     UseGeoJSONSource: "Use a GeoJSON from the web",
     UseCustomDetailPage: 'Change the redirection of the "Learn More" button',
-
     filtersTitle: "Filters",
     mapEditable: "Editable research zone",
     bufferSize: "Buffer Size (in meter):",
     dateMin: "Date Min",
     dateMax: "Date Max",
+    topN: "Number of species displayed",
     search: "Search",
     reset: "Reset",
     limit: "Limite",

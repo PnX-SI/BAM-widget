@@ -33,6 +33,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
     bufferSize: "Taille du buffer (en mètre)",
     dateMin: "Date min",
     dateMax: "Date max",
+    topN: "Nombre d'espèces affichées",
     search: "Rechercher",
     reset: "Réinitialiser",
     limit: "Limite",

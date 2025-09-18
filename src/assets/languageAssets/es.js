@@ -28,6 +28,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
     bufferSize: "Tamaño del buffer (en metro)",
     dateMin: "Fecha Mínima",
     dateMax: "Fecha Máxima",
+    topN: "Número de especies mostradas",
     search: "Buscar",
     reset: "Reiniciar",
     limit: "Límite",
