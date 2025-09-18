@@ -14,180 +14,171 @@
     const { t } = useI18n();
     const parameterStore = ParameterStore.getInstance();
     const {
-      hybridTaxonList,
-      wkt,
-      dateMin,
-      dateMax,
-      nbTaxonPerLine,
-      showFilters,
-      connector,
-      mode,
-      class: class_,
-      topN,
+        hybridTaxonList,
+        wkt,
+        dateMin,
+        dateMax,
+        nbTaxonPerLine,
+        showFilters,
+        connector,
+        mode,
+        class: class_,
+        topN,
     } = parameterStore;
 
-        const props = defineProps({
-            nbTaxonPerLine: { type: Number },
-            showFilters: { type: Boolean, default: true },
-            sortBy: {
-                type: String,
-                default: 'nbObservations',
-                validator: (value) =>
-                    [
-                        'vernacularName',
-                        'acceptedScientificName',
-                        'nbObservations',
-                        'lastSeenDate',
-                    ].includes(value),
-            },
-            order: {
-                type: String,
-                default: 'desc',
-                validator: (value) => ['asc', 'desc'].includes(value),
-            },
-            mode: {
-                type: String,
-                validator: (value) =>
-                    Object.keys(TAXONLIST_DISPLAY_MODE).includes(value),
-            },
-        });
-
-        nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
-        mode.value = props.mode ?? mode.value;
-
-        const searchResult = ref({ taxonList: [], datasets: [] });
-        const speciesList = computed(() => searchResult.value.taxons);
-        const datasets = computed(() => searchResult.value.datasets);
-        const loadingObservations = ref(false);
-        const loadingError = ref(false);
-        const pageIndex = ref(0);
-        const sortBy = ref(props.sortBy || 'lastSeenDate');
-        const orderBy = ref(props.order || 'desc');
-        const filterClass = ref(null);
-        const searchString = ref('');
-
-        const sortByAvailable = [
-            { field_name: 'vernacularName', label: t('taxon.vernacularName') },
-            {
-                field_name: 'acceptedScientificName',
-                label: t('taxon.scientificName'),
-            },
-            { field_name: 'nbObservations', label: t('taxon.nbObservations') },
-            { field_name: 'lastSeenDate', label: t('taxon.lastSeenDate') },
-        ];
-
-        function toggleMode() {
-            mode.value =
-                mode.value === TAXONLIST_DISPLAY_MODE.gallery
-                    ? TAXONLIST_DISPLAY_MODE.detailedList
-                    : TAXONLIST_DISPLAY_MODE.gallery;
-        }
-
-        const classNames = computed(() => {
-            const row_cols_lg = nbTaxonPerLine.value;
-            const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
-            const row_cols_sm = Math.round(row_cols_md / 2);
-            return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
-        });
-
-        const speciesListShowed = computed(() => {
-            let filteredSpecies = searchResult.value.taxons;
-
-            if (!filteredSpecies) {
-                return [];
-            }
-            if (searchString.value) {
-                filteredSpecies = filteredSpecies.filter((taxon) => {
-                    const data = taxon?.vernacularName
-                        ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
-                        : taxon.acceptedScientificName || 'incertae sedis';
-                    return data
-                        .toLowerCase()
-                        .includes(searchString.value.toLowerCase());
-                });
-            }
-
-            if (filterClass.value) {
-                filteredSpecies = filteredSpecies.filter(
-                    (taxon) => taxon.class === filterClass.value
-                );
-            }
-
-            return sortArray(filteredSpecies, {
-                by: sortBy.value,
-                order: orderBy.value,
-            }).slice(0, (pageIndex.value + 1) * 20);
-        });
-
-        const noDataFound = computed(
-            () =>
-                wkt.value.length &&
-                !loadingObservations.value &&
-                !loadingError.value &&
-                (!speciesList.value.length || speciesListShowed.value.length === 0)
-        );
-    <<<<<<< HEAD
-
-        const fetchSpeciesList = (wktParam) => {
-            if (!wktParam.length) return;
-    =======
-      }
-      if (topN.value && topN.value > 0) {
-        return sortArray(filteredSpecies, {
-          by: "nbObservations",
-          order: "desc",
-        }).slice(0, topN.value);
-      }
-      return sortArray(filteredSpecies, {
-        by: sortBy.value,
-        order: orderBy.value,
-      }).slice(0, (pageIndex.value + 1) * 20);
+    const props = defineProps({
+        nbTaxonPerLine: { type: Number },
+        showFilters: { type: Boolean, default: true },
+        sortBy: {
+            type: String,
+            default: 'nbObservations',
+            validator: (value) =>
+                [
+                    'vernacularName',
+                    'acceptedScientificName',
+                    'nbObservations',
+                    'lastSeenDate',
+                ].includes(value),
+        },
+        order: {
+            type: String,
+            default: 'desc',
+            validator: (value) => ['asc', 'desc'].includes(value),
+        },
+        mode: {
+            type: String,
+            validator: (value) =>
+                Object.keys(TAXONLIST_DISPLAY_MODE).includes(value),
+        },
     });
-    >>>>>>> 71e35b2 (add TopN parameter)
 
-            loadingObservations.value = true;
-            loadingError.value = false;
+    nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
+    mode.value = props.mode ?? mode.value;
 
-            connector.value
-                .fetchOccurrence({
-                    geometry: wktParam,
-                    dateMin: dateMin.value,
-                    dateMax: dateMax.value,
-                    class: class_.value,
-                })
-                .then((response) => {
-                    searchResult.value = response;
-                    loadingObservations.value = false;
-                    pageIndex.value = 0;
-                })
-                .catch(() => {
-                    loadingObservations.value = false;
-                    loadingError.value = true;
-                });
-        };
+    const searchResult = ref({ taxonList: [], datasets: [] });
+    const speciesList = computed(() => searchResult.value.taxons);
+    const datasets = computed(() => searchResult.value.datasets);
+    const loadingObservations = ref(false);
+    const loadingError = ref(false);
+    const pageIndex = ref(0);
+    const sortBy = ref(props.sortBy || 'lastSeenDate');
+    const orderBy = ref(props.order || 'desc');
+    const filterClass = ref(null);
+    const searchString = ref('');
 
-        watch(searchString, () => {
-            pageIndex.value = 0;
-        });
+    const sortByAvailable = [
+        { field_name: 'vernacularName', label: t('taxon.vernacularName') },
+        {
+            field_name: 'acceptedScientificName',
+            label: t('taxon.scientificName'),
+        },
+        { field_name: 'nbObservations', label: t('taxon.nbObservations') },
+        { field_name: 'lastSeenDate', label: t('taxon.lastSeenDate') },
+    ];
 
-        function onScroll(event) {
-            const { scrollTop, clientHeight, scrollHeight } = event.target;
-            const threshold = 50;
+    function toggleMode() {
+        mode.value =
+            mode.value === TAXONLIST_DISPLAY_MODE.gallery
+                ? TAXONLIST_DISPLAY_MODE.detailedList
+                : TAXONLIST_DISPLAY_MODE.gallery;
+    }
 
-            if (scrollTop + clientHeight >= scrollHeight - threshold) {
-                pageIndex.value++;
-            }
+    const classNames = computed(() => {
+        const row_cols_lg = nbTaxonPerLine.value;
+        const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
+        const row_cols_sm = Math.round(row_cols_md / 2);
+        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
+    });
+
+    const speciesListShowed = computed(() => {
+        let filteredSpecies = searchResult.value.taxons;
+
+        if (!filteredSpecies) {
+            return [];
+        }
+        if (searchString.value) {
+            filteredSpecies = filteredSpecies.filter((taxon) => {
+                const data = taxon?.vernacularName
+                    ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
+                    : taxon.acceptedScientificName || 'incertae sedis';
+                return data
+                    .toLowerCase()
+                    .includes(searchString.value.toLowerCase());
+            });
         }
 
-        watch([wkt, class_, dateMin, dateMax, connector], () => {
-            searchResult.value = { taxons: [], datasets: [] };
-            if (wkt.value) fetchSpeciesList(wkt.value);
-        });
-
-        if (wkt.value) {
-            searchResult.value = { taxons: [], datasets: [] };
-            fetchSpeciesList(wkt.value);
+        if (filterClass.value) {
+            filteredSpecies = filteredSpecies.filter(
+                (taxon) => taxon.class === filterClass.value
+            );
         }
+
+        if (topN.value && topN.value > 0) {
+            return sortArray(filteredSpecies, {
+                by: 'nbObservations',
+                order: 'desc',
+            }).slice(0, topN.value);
+        }
+        return sortArray(filteredSpecies, {
+            by: sortBy.value,
+            order: orderBy.value,
+        }).slice(0, (pageIndex.value + 1) * 20);
+    });
+
+    const noDataFound = computed(
+        () =>
+            wkt.value.length &&
+            !loadingObservations.value &&
+            !loadingError.value &&
+            (!speciesList.value.length || speciesListShowed.value.length === 0)
+    );
+
+    const fetchSpeciesList = (wktParam) => {
+        if (!wktParam.length) return;
+
+        loadingObservations.value = true;
+        loadingError.value = false;
+
+        connector.value
+            .fetchOccurrence({
+                geometry: wktParam,
+                dateMin: dateMin.value,
+                dateMax: dateMax.value,
+                class: class_.value,
+            })
+            .then((response) => {
+                searchResult.value = response;
+                loadingObservations.value = false;
+                pageIndex.value = 0;
+            })
+            .catch(() => {
+                loadingObservations.value = false;
+                loadingError.value = true;
+            });
+    };
+
+    watch(searchString, () => {
+        pageIndex.value = 0;
+    });
+
+    function onScroll(event) {
+        const { scrollTop, clientHeight, scrollHeight } = event.target;
+        const threshold = 50;
+
+        if (scrollTop + clientHeight >= scrollHeight - threshold) {
+            pageIndex.value++;
+        }
+    }
+
+    watch([wkt, class_, dateMin, dateMax, connector], () => {
+        searchResult.value = { taxons: [], datasets: [] };
+        if (wkt.value) fetchSpeciesList(wkt.value);
+    });
+
+    if (wkt.value) {
+        searchResult.value = { taxons: [], datasets: [] };
+        fetchSpeciesList(wkt.value);
+    }
 </script>
 
 <template>

@@ -40,6 +40,13 @@ Number of species displayed per line in the list view.
 
 - **Example:** `4`
 
+### `topN` (**Type:** number)
+
+The number of species displayed. The `n` species are selected among the most frequently observed species. If `topN` is null or inferior to 0, all species found will be displayed.
+
+- **Example:** `4`
+
+
 ### `showFilters` (**Type:** boolean)
 
 Determines whether to show or hide filters in the taxon list.
