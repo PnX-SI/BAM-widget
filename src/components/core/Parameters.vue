@@ -26,6 +26,7 @@
         connector,
         customDetailPage,
         getParams,
+        topN,
     } = ParameterStore.getInstance();
 
     const router = useRouter();
@@ -188,6 +189,7 @@
                     />
                 </div>
 
+                <<<<<<< HEAD
                 <div class="parameter-section">
                     <label
                         >{{ $t('numberOfTaxonPerLine') }}
@@ -195,6 +197,19 @@
                     </label>
                     <BFormInput type="number" v-model="nbTaxonPerLine" />
                 </div>
+                =======
+                <div class="parameter-section">
+                    <label
+                        >{{ $t('numberOfTaxonPerLine') }}
+                        <i class="bi bi-123"></i>
+                    </label>
+                    <BFormInput type="number" v-model="nbTaxonPerLine" />
+                </div>
+                <div class="parameter-section">
+                    <label>{{ $t('topN') }} <i class="bi bi-123"></i> </label>
+                    <BFormInput type="number" v-model="topN" />
+                </div>
+                >>>>>>> 71e35b2 (add TopN parameter)
 
                 <div class="parameter-section">
                     <MediaSourceSelector
