@@ -47,13 +47,15 @@ To set up your GeoNature instance to use with the widget, follow these steps:
       ```sql
       CREATE OR REPLACE VIEW gn_exports.bam_widget AS
       SELECT
-         vsfwa.cd_ref AS cd_ref,
-         vsfwa.nom_vern AS nom_vernaculaire,
-         vsfwa.lb_nom AS nom_scientifique,
-         vsfwa.date_min AS date_min,
-         vsfwa.date_max AS date_max,
-         vsfwa.the_geom_4326 AS the_geom_4326
-      FROM gn_synthese.v_synthese_for_web_app vsfwa;
+         t.cd_ref AS cd_ref,
+         t.nom_vern AS nom_vernaculaire,
+         t.lb_nom AS nom_scientifique,
+         s.date_min AS date_min,
+         s.date_max AS date_max,
+         bl.geom AS the_geom_4326,
+         t.classe AS classe
+      FROM gn_synthese.synthese s
+      join taxonomie.taxref t using(cd_nom)
       ```
 
       **Notes**: Feel free to modify this view depending on your needs! You can filter data with a `where` clause in the view, but keep the view data structure.
