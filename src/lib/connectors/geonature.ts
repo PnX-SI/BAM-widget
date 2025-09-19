@@ -25,6 +25,20 @@ export class GeoNatureConnector extends Connector {
 
     this.imageSource = this.imageSource ?? getMediaSource(SOURCE_.inpn);
     this.soundSource = this.soundSource ?? getMediaSource(SOURCE_.inpn);
+
+    this.taxonClass2SourceID = {
+      Aves: null,
+      Mammalia: null,
+      Reptilia: null,
+      Amphibia: null,
+      Insecta: null,
+      Arachnida: null,
+      Gastropoda: null,
+      Bivalvia: null,
+      Magnoliopsida: null,
+      Liliopsida: null,
+      Pinopsida: null,
+    };
   }
 
   getParamsSchema(): Array<Record<string, any>> {
@@ -55,9 +69,12 @@ export class GeoNatureConnector extends Connector {
     let urlWithParams = new URL(
       `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`
     );
-    params = { ...params, limit: this.LIMIT };
+    params = { ...params, limit: this.LIMIT};
     for (const [key, value] of Object.entries(params)) {
       urlWithParams.searchParams.append(key, value as string);
+    }
+    if (params.class){
+      urlWithParams.searchParams.append("classe",params.class)
     }
     const url = urlWithParams.toString();
     return fetch(url)
@@ -77,6 +94,7 @@ export class GeoNatureConnector extends Connector {
               nbObservations: 0,
               description: "",
               lastSeenDate: new Date(item.date_max),
+              class: item.classe,
             };
           }
           taxonsData[item.cd_ref].nbObservations += 1;

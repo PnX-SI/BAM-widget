@@ -86,7 +86,8 @@ const classNames = computed(() => {
 });
 
 const speciesListShowed = computed(() => {
-  let filteredSpecies = speciesList.value;
+  let filteredSpecies = searchResult.value.taxons
+
   if (!filteredSpecies) {
     return [];
   }

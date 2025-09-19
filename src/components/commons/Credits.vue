@@ -10,14 +10,14 @@ const props = defineProps<{
 const STRING_LIMIT = 200;
 
 const creditsLicense = computed(() => {
-  if (props.media.license.length > STRING_LIMIT) {
+  if (props.media.license && props.media.license.length > STRING_LIMIT) {
     return props.media.license.slice(0, STRING_LIMIT);
   }
   return props.media.license;
 });
 
 const creditsAuthor = computed(() => {
-  if (props.media.author.length > STRING_LIMIT) {
+  if (props.media.author && props.media.author.length > STRING_LIMIT) {
     return props.media.author.slice(0, STRING_LIMIT);
   }
   return props.media.author;
@@ -34,9 +34,9 @@ const creditsAuthor = computed(() => {
       >{{ creditsAuthor }}</a
     ></span
   >
-
+  <span v-if="creditsLicense && creditsAuthor"> - </span>
   <span v-if="props.media.licenseUrl"
-    >-<a
+    ><a
       :class="props.linkColor ? props.linkColor : 'link-light'"
       :href="props.media.licenseUrl"
       target="_blank"
@@ -44,7 +44,7 @@ const creditsAuthor = computed(() => {
       >{{ creditsLicense }}</a
     ></span
   >
-  <span v-else>- {{ creditsLicense }}</span>
+  <span v-else>{{ creditsLicense }}</span>
 </template>
 <style scoped>
 span {
