@@ -29,7 +29,7 @@ export class TaxHubMediaSource extends MediaSource {
             if (media.is_public && isUrlImage(media.media_url)) {
               mediaList.push({
                 url: media.media_url,
-                license: media.licence,
+                license: media.licence ?? media.auteur,
                 source: media.auteur,
                 typeMedia: "image",
                 author: media.auteur,

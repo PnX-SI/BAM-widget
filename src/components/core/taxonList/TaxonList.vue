@@ -99,7 +99,6 @@ const speciesListShowed = computed(() => {
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
-  console.log(filteredSpecies)
 
   if (filterClass.value) {
     filteredSpecies = filteredSpecies.filter(
