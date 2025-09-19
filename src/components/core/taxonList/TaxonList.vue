@@ -86,7 +86,8 @@ const classNames = computed(() => {
 });
 
 const speciesListShowed = computed(() => {
-  let filteredSpecies = speciesList.value;
+  let filteredSpecies = searchResult.value.taxons
+
   if (!filteredSpecies) {
     return [];
   }
@@ -98,6 +99,7 @@ const speciesListShowed = computed(() => {
       return data.toLowerCase().includes(searchString.value.toLowerCase());
     });
   }
+  console.log(filteredSpecies)
 
   if (filterClass.value) {
     filteredSpecies = filteredSpecies.filter(

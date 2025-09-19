@@ -17,7 +17,7 @@ const creditsLicense = computed(() => {
 });
 
 const creditsAuthor = computed(() => {
-  if (props.media.author.length > STRING_LIMIT) {
+  if (props.media.author && props.media.author.length > STRING_LIMIT) {
     return props.media.author.slice(0, STRING_LIMIT);
   }
   return props.media.author;
