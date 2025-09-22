@@ -40,6 +40,7 @@
             @click="toggleSearch"
             @mousedown.prevent
             :title="$t('search')"
+            data-testid="Search taxon button"
         >
             <i class="bi bi-search"></i>
         </button>

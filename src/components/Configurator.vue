@@ -34,7 +34,11 @@
                     <h3 class="card-header">
                         <i class="bi bi-easel"></i> {{ $t('widgetPreview') }}
                     </h3>
-                    <div class="card-body" data-testid="Preview area">
+                    <div
+                        class="card-body"
+                        data-testid="Preview area"
+                        id="preview"
+                    >
                         <ListWidget
                             height="70vh"
                             v-if="widgetType == WIDGET_TYPE.list"
