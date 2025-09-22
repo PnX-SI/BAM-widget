@@ -1,12 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
 async function drawGeometry(page) {
-  const map = await page
-    .getByTestId("Parameters list div")
-    .getByTestId("Map container");
+  const map = await page.getByTestId('Parameters list div').getByTestId('Map container');
   await map.scrollIntoViewIfNeeded();
   const box = await map.boundingBox();
-  await map.getByRole("link", { name: "Draw a polygon" }).click();
+  await map.getByRole('link', { name: 'Draw a polygon' }).click();
   await expect(box).toBeDefined();
   // Calculate positions for polygon points
   const centerX = box.x + box.width / 2;
@@ -28,7 +26,7 @@ async function drawGeometry(page) {
 }
 
 async function waitForLoading(page) {
-  await page.getByText("Chargement en cours");
+  await page.getByText('Chargement en cours');
 }
 
 async function checkForParameterChange(page, key, value) {
@@ -36,82 +34,80 @@ async function checkForParameterChange(page, key, value) {
   await expect(currentUrl).toContain(`${key}=${value}`);
 }
 
-test.describe("Form parameters testing", () => {
+test.describe('Form parameters testing', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/#/config?widgetType=mapList&lang=fr");
+    await page.goto('/#/config?widgetType=mapList&lang=fr');
   });
 
-  test("enable/disable filter", async ({ page }) => {
-    const checkBox = await page.getByTestId(
-      "Show/Hide results filters checkbox"
-    );
-    const filterBlock = await page.getByTestId("Search taxon input form");
+  test('enable/disable filter', async ({ page }) => {
+    const checkBox = await page.getByTestId('Show/Hide results filters checkbox');
+    const filterBlock = await page.getByTestId('Search taxon input form');
     await checkBox.uncheck();
     await expect(filterBlock).toBeHidden();
     await checkBox.check();
     await expect(filterBlock).toBeVisible();
   });
 
-  test("Search zone editable", async ({ page }) => {
-    const checkBox = await page.getByTestId("Show/Hide drawing tools checkbox");
+  test('Search zone editable', async ({ page }) => {
+    const checkBox = await page.getByTestId('Show/Hide drawing tools checkbox');
 
     await checkBox.uncheck();
     const drawPolygonLink = page
-      .getByTestId("Preview area")
-      .getByRole("link", { name: "Draw a rectangle" });
+      .getByTestId('Preview area')
+      .getByRole('link', { name: 'Draw a rectangle' });
     await expect(drawPolygonLink).toBeHidden();
     await checkBox.check();
     await expect(drawPolygonLink).toBeVisible();
   });
 
-  test("BufferSize parameter", async ({ page }) => {
-    await page.getByTestId("Buffer selection form").fill("10");
+  test('BufferSize parameter', async ({ page }) => {
+    await page.getByTestId('Buffer selection form').fill('10');
     await page.waitForTimeout(500);
-    checkForParameterChange(page, "radius", 10);
+    checkForParameterChange(page, 'buffer', 10);
   });
-  test("Change date parameter", async ({ page }) => {
-    await page.getByRole("textbox", { name: /Date min/ }).fill("2025-07-17");
-    await page.getByRole("textbox", { name: /Date max/ }).fill("2025-07-19");
+  test('Change date parameter', async ({ page }) => {
+    await page.getByRole('textbox', { name: /Date min/ }).fill('2025-07-17');
+    await page.getByRole('textbox', { name: /Date max/ }).fill('2025-07-19');
     waitForLoading(page);
     await page.waitForTimeout(500);
-    checkForParameterChange(page, "dateMin", "2025-07-17");
-    checkForParameterChange(page, "dateMax", "2025-07-19");
+    checkForParameterChange(page, 'dateMin', '2025-07-17');
+    checkForParameterChange(page, 'dateMax', '2025-07-19');
   });
 
-  test("Select taxon class", async ({ page }) => {
+  test('Select taxon class', async ({ page }) => {
     const buttons = [
-      { name: "Mammifères", param: "Mammalia" },
-      { name: "Insectes", param: "Insecta" },
+      { name: 'Mammifères', param: 'Mammalia' },
+      { name: 'Insectes', param: 'Insecta' },
     ];
 
     for (const button of buttons) {
-      await page.getByRole("button", { name: button.name }).click();
-      await checkForParameterChange(page, "class", button.param);
+      await page.getByRole('button', { name: button.name }).click();
+      await checkForParameterChange(page, 'class', button.param);
     }
   });
-  test("Set GeoJSON", async ({ page }) => {
-    const urlGeoJSON = "http://test.com/fichier.geojson";
-    await page.getByTestId("GeoJSON form").fill(urlGeoJSON);
+  test('Set GeoJSON', async ({ page }) => {
+    const urlGeoJSON = 'http://test.com/fichier.geojson';
+    await page.getByTestId('GeoJSON form').fill(urlGeoJSON);
     await page.waitForTimeout(200);
-    await checkForParameterChange(page, "sourceGeometry", urlGeoJSON);
+    await checkForParameterChange(page, 'sourceGeometry', urlGeoJSON);
   });
-  test("Change url to taxon detail", async ({ page }) => {
-    const urlTaxonDetail = "http://test.com/species/{taxonID}";
-    await page.getByTestId("Custom detail page form").fill(urlTaxonDetail);
+  test('Change url to taxon detail', async ({ page }) => {
+    const urlTaxonDetail = 'http://test.com/species/{taxonID}';
+    await page.getByTestId('Custom detail page form').fill(urlTaxonDetail);
     await page.waitForTimeout(200);
-    await checkForParameterChange(page, "customDetailPage", urlTaxonDetail);
+    await checkForParameterChange(page, 'customDetailPage', urlTaxonDetail);
   });
 
-  test("Change display mode for the taxon list", async ({ page }) => {
+  test('Change display mode for the taxon list', async ({ page }) => {
     await drawGeometry(page);
     await page.waitForTimeout(10000);
-    const modeSelect = await page.getByTestId("Widget type selection form");
-    await modeSelect.selectOption("mapList");
+    const modeSelect = await page.getByTestId('Widget type selection form');
+    await modeSelect.selectOption('mapList');
     //
-    await modeSelect.selectOption("list");
+    await modeSelect.selectOption('list');
   });
 
-  test("Draw a geometry", async ({ page }) => {
+  test('Draw a geometry', async ({ page }) => {
     await drawGeometry(page);
     waitForLoading(page);
   });
