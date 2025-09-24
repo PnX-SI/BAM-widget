@@ -67,14 +67,14 @@ export class GeoNatureConnector extends Connector {
 
   fetchOccurrence(params: OccurrenceParams = {}): Promise<SearchResult> {
     let urlWithParams = new URL(
-      `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`
+      `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`,
     );
-    params = { ...params, limit: this.LIMIT};
+    params = { ...params, limit: this.LIMIT };
     for (const [key, value] of Object.entries(params)) {
       urlWithParams.searchParams.append(key, value as string);
     }
-    if (params.class){
-      urlWithParams.searchParams.append("classe",params.class)
+    if (params.class) {
+      urlWithParams.searchParams.append("classe", params.class);
     }
     const url = urlWithParams.toString();
     return fetch(url)
@@ -101,8 +101,8 @@ export class GeoNatureConnector extends Connector {
           taxonsData[item.cd_ref].lastSeenDate = new Date(
             Math.max(
               new Date(item.date_max).getTime(),
-              taxonsData[item.cd_ref].lastSeenDate.getTime()
-            )
+              taxonsData[item.cd_ref].lastSeenDate.getTime(),
+            ),
           );
         });
         return { taxons: Object.values(taxonsData), datasets: [] };

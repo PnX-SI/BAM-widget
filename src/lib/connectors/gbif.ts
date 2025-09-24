@@ -16,8 +16,15 @@ type OccurrenceParams = Record<string, any>;
 function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
   const urlWithParams = new URL(`${GBIF_ENDPOINT_DEFAULT}/occurrence/search`);
   Object.entries(params).forEach(([key, value]) => {
-    urlWithParams.searchParams.append(key, value);
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        urlWithParams.searchParams.append(key, item);
+      }
+    } else {
+      urlWithParams.searchParams.append(key, value);
+    }
   });
+
   return fetch(urlWithParams.toString()).then((response) => response.json());
 }
 
@@ -92,13 +99,13 @@ export class GbifConnector extends Connector {
     };
     const currentLanguage = ParameterStore.getInstance().lang.value;
     return fetch(
-      `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
+      `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`,
     )
       .then((response) => response.json())
       .then((data) => {
         const nameData = data.results.find(
           (nameData: any) =>
-            nameData.language === mapping_language[currentLanguage]
+            nameData.language === mapping_language[currentLanguage],
         );
         return nameData
           ? nameData.vernacularName.charAt(0).toUpperCase() +
@@ -111,6 +118,15 @@ export class GbifConnector extends Connector {
     let defaultParams = {
       limit: this.LIMIT,
       maxPage: this.NB_PAGES,
+      occurrenceStatus: "PRESENT",
+      basisOfRecord: [
+        "OBSERVATION",
+        "HUMAN_OBSERVATION",
+        "MACHINE_OBSERVATION",
+        "OCCURRENCE",
+      ],
+      hasGeospatialIssue: false,
+      hasCoordinate: true,
       ...params,
     };
     if (defaultParams.dateMin && defaultParams.dateMax) {
@@ -127,7 +143,7 @@ export class GbifConnector extends Connector {
     return this.countOccurrence(defaultParams).then((countOccurrence) => {
       const nbOfPages = Math.min(
         Math.ceil(countOccurrence / defaultParams.limit),
-        defaultParams.maxPage
+        defaultParams.maxPage,
       );
       const taxonsData: Record<string, Taxon> = {};
       const datasetData: Record<string, Dataset> = {};
@@ -168,12 +184,12 @@ export class GbifConnector extends Connector {
               taxonsData[observation.taxonKey].lastSeenDate = new Date(
                 Math.max(
                   new Date(observation.eventDate).getTime(),
-                  taxonsData[observation.taxonKey].lastSeenDate.getTime()
-                )
+                  taxonsData[observation.taxonKey].lastSeenDate.getTime(),
+                ),
               );
             });
             return fetchPage(pageIndex + 1);
-          }
+          },
         );
       };
 
@@ -218,7 +234,7 @@ export class GbifConnector extends Connector {
 
   searchTaxon(
     searchString: string = "",
-    params: OccurrenceParams = {}
+    params: OccurrenceParams = {},
   ): Promise<Array<{ scientificName: string; taxonKey: number }>> {
     const url = `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&limit=20`;
     return fetch(url)
@@ -227,7 +243,7 @@ export class GbifConnector extends Connector {
         json.results.map((element: any) => ({
           scientificName: element.scientificName,
           taxonKey: element.key,
-        }))
+        })),
       );
   }
 
