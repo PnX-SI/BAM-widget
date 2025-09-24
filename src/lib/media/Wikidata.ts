@@ -9,9 +9,7 @@ const { GBIF, TAXREF } = TAXON_REFERENTIAL;
 interface WikidataResponse {
   results: {
     bindings: Array<{
-      item: {
-        value: string;
-      };
+      item: { value: string };
     }>;
   };
 }
@@ -19,57 +17,86 @@ interface WikidataResponse {
 interface WikidataEntity {
   entities: {
     [key: string]: {
-      claims?: {
-        P18?: Array<{
-          mainsnak: {
-            datavalue: {
-              value: string;
-            };
-          };
-        }>;
-      };
+      claims?: Record<string, Array<{ mainsnak: { datavalue: { value: string } } }>>;
     };
   };
 }
 
-function fetchWikidataEntityByTaxrefId(cdNom: string): Promise<string | null> {
+/**
+ * SPARQL query to fetch Wikidata entity ID by external property (GBIF, TAXREF…)
+ */
+function fetchWikidataEntityByProperty(
+  property: string,
+  value: string
+): Promise<string | null> {
   const url = "https://query.wikidata.org/sparql";
-  const query = `
-    SELECT ?item WHERE {
-      ?item wdt:P3186 "${cdNom}" .
-    }`;
+  const query = `SELECT ?item WHERE { ?item wdt:${property} "${value}" . }`;
 
   return fetch(url + "?format=json&query=" + encodeURIComponent(query))
     .then((response) => response.json() as Promise<WikidataResponse>)
     .then((data) => {
-      if (!data.results.bindings.length) {
-        return null;
-      }
-      const entityId = data.results.bindings[0].item.value.split("/").pop();
-      return entityId || null;
+      if (!data.results.bindings.length) return null;
+      return data.results.bindings[0].item.value.split("/").pop() || null;
     });
 }
 
-function fetchWikidataEntityByGbifId(gbifId: string): Promise<string | null> {
-  const url = "https://query.wikidata.org/sparql";
-  const query = `
-    SELECT ?item WHERE {
-      ?item wdt:P846 "${gbifId}" .
-    }`;
+/**
+ * Fetch metadata for a Commons file (image or audio)
+ */
+function fetchCommonsMedia(fileName: string, typeMedia: "image" | "sound"): Promise<Media[] | string> {
+  const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(
+    fileName
+  )}&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
 
-  return fetch(url + "?format=json&query=" + encodeURIComponent(query))
-    .then((response) => response.json() as Promise<WikidataResponse>)
-    .then((data) => {
-      if (!data.results.bindings.length) {
-        return null;
+  return fetch(commonsUrl)
+    .then((res) => res.json())
+    .then((commonsData) => {
+      const pages = commonsData.query.pages;
+      const page = Object.values(pages)[0] as any;
+
+      if (!page?.imageinfo?.length) {
+        return `No ${typeMedia} metadata found on Commons.`;
       }
-      const entityId = data.results.bindings[0].item.value.split("/").pop();
-      return entityId || null;
+
+      const info = page.imageinfo[0];
+      const meta = info.extmetadata || {};
+      const credit = {
+        artist: meta.Artist?.value || null,
+        license: meta.LicenseShortName?.value || null,
+        creditLine: meta.Credit?.value || null,
+        licenseUrl: meta.LicenseUrl?.value || null,
+      };
+
+      return [
+        {
+          url:
+            typeMedia === "image"
+              ? `https://commons.wikimedia.org/w/thumb.php?width=700&f=${fileName}`
+              : info.url,
+          source: `${
+            credit.artist ? credit.artist.replace(/<[^>]*>?/gm, "") : ""
+          } - ${credit.license}`,
+          typeMedia,
+          licenseUrl: credit.licenseUrl,
+          license: credit.license,
+          author: credit.artist
+            ? credit.artist.replace(/<[^>]*>?/gm, "")
+            : credit.artist,
+          urlSource: `https://commons.wikimedia.org/wiki/File:${fileName}`,
+        },
+      ] as Media[];
     });
 }
 
-function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
-  if (!entityId) return Promise.resolve("No image found for this entity.");
+/**
+ * Generic fetcher for Wikidata media (image/audio)
+ */
+function fetchMediaFromWikidata(
+  entityId: string,
+  property: "P18" | "P51",
+  typeMedia: "image" | "sound"
+): Promise<Media[] | string> {
+  if (!entityId) return Promise.resolve(`No ${typeMedia} found for this entity.`);
 
   const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
 
@@ -78,105 +105,74 @@ function fetchImageFromWikidata(entityId: string): Promise<Media[] | string> {
     .then((data) => {
       const entity = data.entities[entityId];
       const claims = entity.claims || {};
-      const imageClaims = claims.P18 || [];
+      const mediaClaims = claims[property] || [];
 
-      if (!imageClaims.length) {
-        return "No image found for this entity.";
+      if (!mediaClaims.length) {
+        return `No ${typeMedia} found for this entity.`;
       }
 
-      const imageFilename = imageClaims[0].mainsnak.datavalue.value; // e.g. "Panthera_leo_male.jpg"
-
-      // Query Wikimedia Commons for image metadata (credit, license, author, etc.)
-      const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(
-        imageFilename
-      )}&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
-
-      return fetch(commonsUrl)
-        .then((res) => res.json())
-        .then((commonsData) => {
-          const pages = commonsData.query.pages;
-          const page = Object.values(pages)[0] as any;
-          if (!page?.imageinfo?.length) {
-            return "No image metadata found on Commons.";
-          }
-
-          const info = page.imageinfo[0];
-          const meta = info.extmetadata || {};
-          const credit = {
-            artist: meta.Artist?.value || null,
-            license: meta.LicenseShortName?.value || null,
-            creditLine: meta.Credit?.value || null,
-            licenseUrl: meta.LicenseUrl?.value || null,
-          };
-
-          return [
-            {
-              url: `https://commons.wikimedia.org/w/thumb.php?width=700&f=${imageFilename}`, // full image URL
-              source: `${
-                credit.artist ? credit.artist.replace(/<[^>]*>?/gm, "") : ""
-              } - ${credit.license}`,
-              typeMedia: "image",
-              licenseUrl: credit.licenseUrl,
-              license: credit.license,
-              author: credit.artist
-                ? credit.artist.replace(/<[^>]*>?/gm, "")
-                : credit.artist,
-              urlSource: `https://commons.wikimedia.org/wiki/File:${imageFilename}`,
-            },
-          ] as Media[];
-        });
+      const fileName = mediaClaims[0].mainsnak.datavalue.value;
+      return fetchCommonsMedia(fileName, typeMedia);
     });
 }
 
-function fetchWikidataImage(
+/**
+ * Resolve Wikidata ID from connector + fetch media
+ */
+function fetchWikidataMedia(
   idTaxon: string,
   connector: Connector,
+  property: string,
+  typeMedia: "image" | "sound",
   wikidataEntryID: string | null = null
-): Promise<Media[] | undefined> {
+): Promise<Media[] | string | undefined> {
   if (!idTaxon) throw new Error("No taxonId given!");
 
   if (wikidataEntryID) {
-    return fetchImageFromWikidata(wikidataEntryID) as Promise<
-      Media[] | undefined
-    >;
-  } else {
-    let fetchIDPromise: Promise<string | null> | null = null;
-
-    switch (connector.referential) {
-      case TAXON_REFERENTIAL.GBIF:
-        fetchIDPromise = fetchWikidataEntityByGbifId(idTaxon);
-        break;
-      case TAXON_REFERENTIAL.TAXREF:
-        fetchIDPromise = fetchWikidataEntityByTaxrefId(idTaxon);
-        break;
-      default:
-        break;
-    }
-
-    if (!fetchIDPromise) return Promise.resolve(undefined);
-
-    return fetchIDPromise.then((idWikidata) => {
-      if (idWikidata) return fetchImageFromWikidata(idWikidata);
-      return "No image found for this entity.";
-    });
+    return fetchMediaFromWikidata(wikidataEntryID, property, typeMedia);
   }
+
+  let fetchIDPromise: Promise<string | null> | null = null;
+
+  switch (connector.referential) {
+    case GBIF:
+      fetchIDPromise = fetchWikidataEntityByProperty("P846", idTaxon);
+      break;
+    case TAXREF:
+      fetchIDPromise = fetchWikidataEntityByProperty("P3186", idTaxon);
+      break;
+    default:
+      break;
+  }
+
+  if (!fetchIDPromise) return Promise.resolve(undefined);
+
+  return fetchIDPromise.then((idWikidata) => {
+    if (idWikidata) {
+      return fetchMediaFromWikidata(idWikidata, property, typeMedia);
+    }
+    return undefined;
+  });
 }
+
 
 class WikiDataImageSource extends MediaSource {
   constructor() {
     super("Wikidata", SOURCE_.wikidata);
   }
 
-  fetchPicture(
-    taxonID: string,
-    connector: Connector
-  ): Promise<Media[] | undefined> {
+  fetchPicture(taxonID: string, connector: Connector): Promise<Media[] | undefined> {
     if (!this.isCompatible(connector)) {
-      throw new Error(
-        `Wikidata Image source is only compatible with the GBIF and a TAXREF referential based connector`
-      );
+      throw new Error("Wikidata Image source is only compatible with GBIF and TAXREF connectors");
     }
-    return fetchWikidataImage(taxonID, connector);
+    return fetchWikidataMedia(taxonID, connector, "P18", "image") as Promise<Media[] | undefined>;
+  }
+
+  fetchSound(taxonID: string, connector: Connector): Promise<Media[] | undefined> {
+    if (!this.isCompatible(connector)) {
+      throw new Error("Wikidata Sound source is only compatible with GBIF and TAXREF connectors");
+    }
+    return fetchWikidataMedia(taxonID, connector, "P51", "sound") as Promise<Media[] | undefined>;
   }
 
   isCompatible(connector: any): boolean {
