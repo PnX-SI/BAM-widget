@@ -39,7 +39,7 @@ export class GbifConnector extends Connector {
     this.referential = TAXON_REFERENTIAL.GBIF;
 
     this.imageSource = this.imageSource || getMediaSource(SOURCE_.wikidata);
-    this.soundSource = this.soundSource || getMediaSource(SOURCE_.gbif);
+    this.soundSource = this.soundSource || getMediaSource(SOURCE_.wikidata);
 
     this.taxonClass2SourceID = {
       Aves: 212,
