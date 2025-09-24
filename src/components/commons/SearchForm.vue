@@ -17,6 +17,7 @@ watch(searchString, () => {
       class="form-control"
       id="search"
       v-model="searchString"
+      data-testid="Search taxon input form"
     />
     <label for="search" class="input-group-text"
       ><i class="bi bi-search"></i
