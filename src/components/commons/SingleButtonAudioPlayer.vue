@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { Media } from "@/lib/models";
-import { ref } from "vue";
+    import { Media } from '@/lib/models';
+    import { ref } from 'vue';
 
-const props = defineProps<{
-  audio: Media;
-}>();
+    const props = defineProps<{
+        audio: Media;
+    }>();
 
-const audio = new Audio(props.audio.url);
-const play = ref(false);
+    const audio = new Audio(props.audio.url);
+    const play = ref(false);
 
-audio.addEventListener("ended", (e) => {
-  audio.currentTime = 0;
-  play.value = false;
-});
+    audio.addEventListener('ended', (e) => {
+        audio.currentTime = 0;
+        play.value = false;
+    });
 
-function toggleAudio() {
-  if (play.value) {
-    audio.pause();
-    audio.currentTime = 0;
-    play.value = false;
-  } else {
-    audio.play();
-    play.value = true;
-  }
-}
+    function toggleAudio() {
+        if (play.value) {
+            audio.pause();
+            audio.currentTime = 0;
+            play.value = false;
+        } else {
+            audio.play();
+            play.value = true;
+        }
+    }
 </script>
 <template>
-  <i
-    @click="toggleAudio()"
-    :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
-  ></i>
+    <i
+        @click="toggleAudio()"
+        :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
+    ></i>
 </template>
