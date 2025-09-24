@@ -10,6 +10,7 @@ import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from "@/lib/enums";
 import HTMLBuilder from "./HTMLBuilder.vue";
+import { MediaType } from "@/lib/models";
 const { t } = useI18n();
 
 const {
@@ -183,14 +184,14 @@ const widgetTypeOptions = computed(() => {
         <div class="parameter-section">
           <MediaSourceSelector
             :mediaSourceID="connector.imageSource.id"
-            typeMedia="image"
+            :typeMedia="MediaType.image"
           />
         </div>
 
         <div class="parameter-section">
           <MediaSourceSelector
             :mediaSourceID="connector.soundSource.id"
-            typeMedia="sound"
+            :typeMedia="MediaType.sound"
           />
         </div>
         <div class="parameter-section">

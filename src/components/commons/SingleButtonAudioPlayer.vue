@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Media } from "@/lib/models";
 import { ref } from "vue";
+import Credits from "./Credits.vue";
 
 const props = defineProps<{
   audio: Media;
@@ -26,8 +27,13 @@ function toggleAudio() {
 }
 </script>
 <template>
-  <i
-    @click="toggleAudio()"
-    :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
-  ></i>
+  <BTooltip>
+    <template #target>
+      <i
+        @click="toggleAudio()"
+        :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
+      ></i>
+    </template>
+    <Credits :media="props.audio" link-color="link-light"></Credits>
+  </BTooltip>
 </template>

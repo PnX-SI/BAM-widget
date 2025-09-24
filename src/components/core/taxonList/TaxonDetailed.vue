@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Credits from "@/components/commons/Credits.vue";
 import { Media } from "@/lib/models";
 
 const props = defineProps<{
@@ -61,6 +62,7 @@ const props = defineProps<{
             :src="props.audio.url"
             ref="audio"
           ></audio>
+          <Credits v-if="props.audio" link-color="link-dark" :media="props.audio"></Credits>
         </div>
       </div>
       <div class="card-footer">

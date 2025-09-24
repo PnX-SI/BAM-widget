@@ -1,7 +1,8 @@
 <script setup>
 import ParameterStore from "@/lib/parameterStore";
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import { getMediaSource } from "@/lib/media/media";
+import { MediaType } from "@/lib/models";
 const { connector } = ParameterStore.getInstance();
 
 const props = defineProps({
@@ -10,11 +11,8 @@ const props = defineProps({
     required: true,
   },
   typeMedia: {
-    type: String,
+    type: MediaType,
     required: true,
-    validator(value, props) {
-      return ["image", "sound"].includes(value);
-    },
   },
 });
 
@@ -31,7 +29,7 @@ watch(
 
 watch(mediaSourceID, () => {
   const otherMediaKey = `${
-    props.typeMedia == "image" ? "sound" : "image"
+    props.typeMedia === MediaType.image? MediaType.sound : MediaType.image
   }Source`;
   const newMediaParams = {
     [props.typeMedia + "Source"]: getMediaSource(mediaSourceID.value),

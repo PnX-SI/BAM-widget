@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Media } from "@/lib/models";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
   media: Media;

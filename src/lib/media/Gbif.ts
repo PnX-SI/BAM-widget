@@ -1,4 +1,4 @@
-import { Media } from "../models";
+import { Media, MediaType } from "../models";
 import { MediaSource } from "./MediaSource";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { SOURCE_ } from "./media";
@@ -56,7 +56,7 @@ export class GBIFMediaSource extends MediaSource {
                 return [
                   {
                     url: media.identifier,
-                    typeMedia: "sound",
+                    typeMedia: MediaType.sound,
                     license: media.license,
                     source: `${media.rightsHolder} (${media.license})`,
                   },
@@ -65,7 +65,7 @@ export class GBIFMediaSource extends MediaSource {
             }
           }
         }
-        return undefined;
+        return [];
       });
   }
 
