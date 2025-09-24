@@ -1,5 +1,5 @@
 import { Connector } from "../connectors/connector";
-import { Media } from "../models";
+import { Media, MediaType } from "../models";
 import { TAXON_REFERENTIAL } from "../taxonReferential";
 import { SOURCE_ } from "./media";
 import { MediaSource } from "./MediaSource";
@@ -43,7 +43,7 @@ function fetchWikidataEntityByProperty(
 /**
  * Fetch metadata for a Commons file (image or audio)
  */
-function fetchCommonsMedia(fileName: string, typeMedia: "image" | "sound"): Promise<Media[] | string> {
+function fetchCommonsMedia(fileName: string, typeMedia: MediaType): Promise<Media[]> {
   const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(
     fileName
   )}&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
@@ -55,7 +55,7 @@ function fetchCommonsMedia(fileName: string, typeMedia: "image" | "sound"): Prom
       const page = Object.values(pages)[0] as any;
 
       if (!page?.imageinfo?.length) {
-        return `No ${typeMedia} metadata found on Commons.`;
+        return []
       }
 
       const info = page.imageinfo[0];
@@ -70,7 +70,7 @@ function fetchCommonsMedia(fileName: string, typeMedia: "image" | "sound"): Prom
       return [
         {
           url:
-            typeMedia === "image"
+            typeMedia === MediaType.image
               ? `https://commons.wikimedia.org/w/thumb.php?width=700&f=${fileName}`
               : info.url,
           source: `${
@@ -93,10 +93,12 @@ function fetchCommonsMedia(fileName: string, typeMedia: "image" | "sound"): Prom
  */
 function fetchMediaFromWikidata(
   entityId: string,
-  property: "P18" | "P51",
-  typeMedia: "image" | "sound"
-): Promise<Media[] | string> {
-  if (!entityId) return Promise.resolve(`No ${typeMedia} found for this entity.`);
+  property: string,
+  typeMedia: MediaType
+): Promise<Media[]> {
+  if (!entityId) {
+    return Promise.resolve([])
+  };
 
   const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
 
@@ -108,7 +110,7 @@ function fetchMediaFromWikidata(
       const mediaClaims = claims[property] || [];
 
       if (!mediaClaims.length) {
-        return `No ${typeMedia} found for this entity.`;
+        return []
       }
 
       const fileName = mediaClaims[0].mainsnak.datavalue.value;
@@ -123,9 +125,9 @@ function fetchWikidataMedia(
   idTaxon: string,
   connector: Connector,
   property: string,
-  typeMedia: "image" | "sound",
+  typeMedia: MediaType,
   wikidataEntryID: string | null = null
-): Promise<Media[] | string | undefined> {
+): Promise<Media[]> {
   if (!idTaxon) throw new Error("No taxonId given!");
 
   if (wikidataEntryID) {
@@ -145,13 +147,13 @@ function fetchWikidataMedia(
       break;
   }
 
-  if (!fetchIDPromise) return Promise.resolve(undefined);
+  if (!fetchIDPromise) return Promise.resolve([]);
 
   return fetchIDPromise.then((idWikidata) => {
     if (idWikidata) {
       return fetchMediaFromWikidata(idWikidata, property, typeMedia);
     }
-    return undefined;
+    return [];
   });
 }
 
@@ -165,14 +167,14 @@ class WikiDataImageSource extends MediaSource {
     if (!this.isCompatible(connector)) {
       throw new Error("Wikidata Image source is only compatible with GBIF and TAXREF connectors");
     }
-    return fetchWikidataMedia(taxonID, connector, "P18", "image") as Promise<Media[] | undefined>;
+    return fetchWikidataMedia(taxonID, connector, "P18", MediaType.image) as Promise<Media[] | undefined>;
   }
 
   fetchSound(taxonID: string, connector: Connector): Promise<Media[] | undefined> {
     if (!this.isCompatible(connector)) {
       throw new Error("Wikidata Sound source is only compatible with GBIF and TAXREF connectors");
     }
-    return fetchWikidataMedia(taxonID, connector, "P51", "sound") as Promise<Media[] | undefined>;
+    return fetchWikidataMedia(taxonID, connector, "P51", MediaType.sound) as Promise<Media[] | undefined>;
   }
 
   isCompatible(connector: any): boolean {

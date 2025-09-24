@@ -11,11 +11,14 @@ export interface Taxon {
   kingdom?: string;
   class?: string;
 }
-
+export enum MediaType{
+  sound="sound",
+  image="image"
+}
 export interface Media {
   url: string;
   source: string;
-  typeMedia: string;
+  typeMedia: MediaType;
   license?: string;
   author?: string;
   licenseUrl?: string;

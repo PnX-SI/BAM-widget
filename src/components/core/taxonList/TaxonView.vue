@@ -2,9 +2,8 @@
 import { ref, computed, watch } from "vue";
 
 import { NO_IMAGE_URL } from "@/assets/constant";
-import { Taxon } from "@/lib/models";
+import { MediaType, Taxon } from "@/lib/models";
 import ParameterStore from "@/lib/parameterStore";
-import { randomChoice } from "@/lib/utils";
 
 // Components
 import TaxonThumbnail from "./TaxonThumbnail.vue";
@@ -52,11 +51,11 @@ function fetchTaxonAudio() {
 }
 const mediaDisplayed = computed(() => {
   if (!speciesPhoto.value) {
-    return { url: NO_IMAGE_URL, typeMedia: "image" };
+    return { url: NO_IMAGE_URL, typeMedia: MediaType.image };
   }
   return speciesPhoto.value.length == 0
-    ? { url: NO_IMAGE_URL, typeMedia: "image" }
-    : randomChoice(speciesPhoto.value);
+    ? { url: NO_IMAGE_URL, typeMedia: MediaType.image }
+    : speciesPhoto.value[0];
 });
 
 function refreshVernacularName() {

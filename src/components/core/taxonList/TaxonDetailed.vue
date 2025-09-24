@@ -56,7 +56,7 @@ const props = defineProps<{
           <br />
 
           <audio
-            v-if="props.audio?.url"
+            v-if="props.audio"
             class="audio"
             controls
             :src="props.audio.url"
