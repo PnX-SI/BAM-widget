@@ -7,4 +7,5 @@ export enum TAXONLIST_DISPLAY_MODE {
 export enum WIDGET_TYPE {
   mapList = "mapList",
   list = "list",
+  swipe = "swipe"
 }
