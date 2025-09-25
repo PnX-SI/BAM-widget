@@ -62,7 +62,7 @@ const props = defineProps<{
             :src="props.audio.url"
             ref="audio"
           ></audio>
-          <Credits v-if="props.audio" link-color="link-dark" :media="props.audio"></Credits>
+          <Credits v-if="props.audio" class="text-muted small" link-color="link-dark" :media="props.audio"></Credits>
         </div>
       </div>
       <div class="card-footer">

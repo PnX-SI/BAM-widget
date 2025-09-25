@@ -4,7 +4,8 @@ import { computed } from "vue";
 
 const props = defineProps<{
   media: Media;
-  linkColor: string;
+  linkColor: {type:string,required:false};
+  class:string;
 }>();
 
 const STRING_LIMIT = 200;
@@ -25,26 +26,29 @@ const creditsAuthor = computed(() => {
 </script>
 
 <template>
-  <span
-    ><a
-      :class="props.linkColor ? props.linkColor : 'link-light'"
-      v-if="props.media.urlSource"
-      :href="props.media.urlSource"
-      target="_blank"
-      >{{ creditsAuthor }}</a
-    ></span
-  >
-  <span v-if="creditsLicense && creditsAuthor"> - </span>
-  <span v-if="props.media.licenseUrl"
-    ><a
-      :class="props.linkColor ? props.linkColor : 'link-light'"
-      :href="props.media.licenseUrl"
-      target="_blank"
-      style="margin-left: 0.3em"
-      >{{ creditsLicense }}</a
-    ></span
-  >
-  <span v-else>{{ creditsLicense }}</span>
+  <div :class="props.class">
+    <span
+        ><a
+          :class="props.linkColor ? props.linkColor : 'link-light'"
+          v-if="props.media.urlSource"
+          :href="props.media.urlSource"
+          target="_blank"
+          >{{ creditsAuthor }}</a
+        ></span
+      >
+      <span v-if="creditsLicense && creditsAuthor"> - </span>
+      <span v-if="props.media.licenseUrl"
+        ><a
+          :class="props.linkColor ? props.linkColor : 'link-light'"
+          :href="props.media.licenseUrl"
+          target="_blank"
+          style="margin-left: 0.3em"
+          >{{ creditsLicense }}</a
+        ></span
+      >
+      <span v-else>{{ creditsLicense }}</span>
+  </div>
+ 
 </template>
 <style scoped>
 span {
