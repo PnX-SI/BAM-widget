@@ -53,12 +53,16 @@ export class GBIFMediaSource extends MediaSource {
             for (let media of occ["media"]) {
               const ext = media.identifier.split(".").pop();
               if (!["png", "jpg", "jpeg", "bmp", "gif"].includes(ext)) {
+                const author = media?.rightsHolder || media?.creator;
                 return [
                   {
                     url: media.identifier,
                     typeMedia: MediaType.sound,
                     license: media.license,
-                    source: `${media.rightsHolder} (${media.license})`,
+                    licenseUrl:media.license,
+                    urlSource:media?.references,
+                    source: `${author} (${media.license})`,
+                    author:author
                   },
                 ];
               }
