@@ -1,7 +1,6 @@
 name: Prettier
 
 on:
-    push:
     pull_request:
 
 jobs:
@@ -12,7 +11,7 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v5
               with:
-                  node-version: '20'
+                  node-version: "20"
             - name: Install Prettier
               run: npm install -g prettier
             - name: Run Prettier
