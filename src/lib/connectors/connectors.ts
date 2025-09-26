@@ -1,4 +1,4 @@
 export enum CONNECTORS {
-  GBIF= "GBIF",
-  GeoNature= "GeoNature",
-};
+    GBIF = 'GBIF',
+    GeoNature = 'GeoNature',
+}

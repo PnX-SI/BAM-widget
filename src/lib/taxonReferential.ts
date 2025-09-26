@@ -1,6 +1,6 @@
 enum TAXON_REFERENTIAL {
-  GBIF = "GBIF",
-  TAXREF = "TAXREF",
+    GBIF = 'GBIF',
+    TAXREF = 'TAXREF',
 }
 
 export { TAXON_REFERENTIAL };

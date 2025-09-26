@@ -1,6 +1,6 @@
-import { stringify } from "wellknown";
-import { buffer } from "@turf/turf";
-import L from "leaflet";
+import { stringify } from 'wellknown';
+import { buffer } from '@turf/turf';
+import L from 'leaflet';
 
 /**
  * Return a random element from a given array
@@ -8,8 +8,8 @@ import L from "leaflet";
  * @returns The randomly selected item
  */
 function randomChoice(choices) {
-  const index = Math.floor(Math.random() * choices.length);
-  return choices[index];
+    const index = Math.floor(Math.random() * choices.length);
+    return choices[index];
 }
 
 /**
@@ -17,8 +17,8 @@ function randomChoice(choices) {
  * @returns The base URL as a string
  */
 function getBaseUrl(): string {
-  // Utilisation de window.location pour obtenir l'URL de base
-  return `${window.location.protocol}//${window.location.host}`;
+    // Utilisation de window.location pour obtenir l'URL de base
+    return `${window.location.protocol}//${window.location.host}`;
 }
 
 /**
@@ -30,22 +30,22 @@ function getBaseUrl(): string {
  * @returns The WKT string
  */
 function toWKT(
-  geojson: any,
-  layerRadius: number,
-  typeLayer: string,
-  bufferSize: number
+    geojson: any,
+    layerRadius: number,
+    typeLayer: string,
+    bufferSize: number
 ): string {
-  let WKT = stringify(geojson);
-  // If point or line, we buffer the geometry since API does not support them
-  if (typeLayer == "marker" || typeLayer == "polyline") {
-    const buffered = buffer(geojson, bufferSize);
-    WKT = stringify(buffered);
-  }
-  if (typeLayer == "circle") {
-    const buffered = buffer(geojson, layerRadius / 1000);
-    WKT = stringify(buffered);
-  }
-  return WKT;
+    let WKT = stringify(geojson);
+    // If point or line, we buffer the geometry since API does not support them
+    if (typeLayer == 'marker' || typeLayer == 'polyline') {
+        const buffered = buffer(geojson, bufferSize);
+        WKT = stringify(buffered);
+    }
+    if (typeLayer == 'circle') {
+        const buffered = buffer(geojson, layerRadius / 1000);
+        WKT = stringify(buffered);
+    }
+    return WKT;
 }
 
 /**
@@ -53,30 +53,30 @@ function toWKT(
  * @param map - The Leaflet map instance
  */
 function restoreMapState(map: L.Map): void {
-  const savedState: string = localStorage.getItem("mapState");
-  if (savedState) {
-    const state = JSON.parse(savedState);
-    map.setView([state.center.lat, state.center.lng], state.zoom);
-  } else {
-    // Default view
-    map.setView([44.5, 6.05], 2);
-  }
+    const savedState: string = localStorage.getItem('mapState');
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        map.setView([state.center.lat, state.center.lng], state.zoom);
+    } else {
+        // Default view
+        map.setView([44.5, 6.05], 2);
+    }
 }
 
 function validURL(str): boolean {
-  /**
-   * Source https://stackoverflow.com/a/5717133/5807438
-   */
-  var pattern = new RegExp(
-    "^(https?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
-    "i"
-  ); // fragment locator
-  return !!pattern.test(str);
+    /**
+     * Source https://stackoverflow.com/a/5717133/5807438
+     */
+    var pattern = new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$',
+        'i'
+    ); // fragment locator
+    return !!pattern.test(str);
 }
 
 export { toWKT, restoreMapState, randomChoice, getBaseUrl, validURL };

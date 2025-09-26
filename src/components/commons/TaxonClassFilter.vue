@@ -1,81 +1,81 @@
 <script setup>
-import { taxonClassIcons } from "@/assets/taxonclass2icon";
-import ParameterStore from "@/lib/parameterStore";
+    import { taxonClassIcons } from '@/assets/taxonclass2icon';
+    import ParameterStore from '@/lib/parameterStore';
 
-const class_ = ParameterStore.getInstance().class;
+    const class_ = ParameterStore.getInstance().class;
 
-function updateClass(className) {
-  class_.value = class_.value == className ? null : className;
-}
+    function updateClass(className) {
+        class_.value = class_.value == className ? null : className;
+    }
 </script>
 
 <template>
-  <label
-    ><strong
-      >{{ $t("taxon.class") }} <i class="fa-solid fa-leaf"></i>
-      <i class="fa-solid fa-paw"></i></strong
-  ></label>
-  <div>
-    <div class="row g-1 mt-1" id="classTaxonFilters">
-      <div
-        v-for="value of Object.keys(taxonClassIcons.Animalia)"
-        :key="value"
-        class="col"
-      >
-        <BButton
-          pill
-          variant="outline-primary"
-          :pressed="class_ == value"
-          @click="updateClass(value)"
-          >{{ $t(`taxonsClass.Animalia.${value}`) }}</BButton
-        >
-      </div>
-      <div
-        v-for="value of Object.keys(taxonClassIcons.Plantae)"
-        :key="value"
-        class="col"
-      >
-        <BButton
-          pill
-          variant="outline-success"
-          :pressed="class_ == value"
-          @click="updateClass(value)"
-          >{{ $t(`taxonsClass.Plantae.${value}`) }}</BButton
-        >
-      </div>
+    <label
+        ><strong
+            >{{ $t('taxon.class') }} <i class="fa-solid fa-leaf"></i>
+            <i class="fa-solid fa-paw"></i></strong
+    ></label>
+    <div>
+        <div class="row g-1 mt-1" id="classTaxonFilters">
+            <div
+                v-for="value of Object.keys(taxonClassIcons.Animalia)"
+                :key="value"
+                class="col"
+            >
+                <BButton
+                    pill
+                    variant="outline-primary"
+                    :pressed="class_ == value"
+                    @click="updateClass(value)"
+                    >{{ $t(`taxonsClass.Animalia.${value}`) }}</BButton
+                >
+            </div>
+            <div
+                v-for="value of Object.keys(taxonClassIcons.Plantae)"
+                :key="value"
+                class="col"
+            >
+                <BButton
+                    pill
+                    variant="outline-success"
+                    :pressed="class_ == value"
+                    @click="updateClass(value)"
+                    >{{ $t(`taxonsClass.Plantae.${value}`) }}</BButton
+                >
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
-.scroll-container-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+    .scroll-container-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
 
-.row {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-}
+    .row {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+    }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-#classTaxonFilters::-webkit-scrollbar {
-  display: none;
-}
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    #classTaxonFilters::-webkit-scrollbar {
+        display: none;
+    }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-@media screen and (max-width: 800px) {
-  #classTaxonFilters {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    flex-wrap: nowrap;
-  }
-}
-@media screen and (min-width: 800px) {
-  #classTaxonFilters {
-    overflow-x: scroll;
-  }
-}
+    /* Hide scrollbar for IE, Edge and Firefox */
+    @media screen and (max-width: 800px) {
+        #classTaxonFilters {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+            flex-wrap: nowrap;
+        }
+    }
+    @media screen and (min-width: 800px) {
+        #classTaxonFilters {
+            overflow-x: scroll;
+        }
+    }
 </style>
