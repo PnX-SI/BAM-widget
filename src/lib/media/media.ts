@@ -1,36 +1,36 @@
-import { GBIFMediaSource } from "./Gbif";
-import { TaxHubMediaSource } from "./TaxHub";
-import { TaxrefODATA } from "./Taxref";
-import { WikiDataImageSource } from "./Wikidata";
-import { MediaSource } from "./MediaSource";
+import { GBIFMediaSource } from './Gbif';
+import { TaxHubMediaSource } from './TaxHub';
+import { TaxrefODATA } from './Taxref';
+import { WikiDataImageSource } from './Wikidata';
+import { MediaSource } from './MediaSource';
 export enum SOURCE_ {
-  gbif = "gbif",
-  inpn = "inpn",
-  wikidata = "wikidata",
-  taxhub = "taxhub",
-  // CUSTOM = "custom",
+    gbif = 'gbif',
+    inpn = 'inpn',
+    wikidata = 'wikidata',
+    taxhub = 'taxhub',
+    // CUSTOM = "custom",
 }
 
 interface MediaSourceParams {
-  [key: string]: any; // You can replace 'any' with more specific types if needed
+    [key: string]: any; // You can replace 'any' with more specific types if needed
 }
 
 export function getMediaSource(
-  id: SOURCE_,
-  params: MediaSourceParams = {}
+    id: SOURCE_,
+    params: MediaSourceParams = {}
 ): MediaSource {
-  switch (id) {
-    case SOURCE_.gbif:
-      return new GBIFMediaSource(params);
-    case SOURCE_.inpn:
-      return new TaxrefODATA(params);
-    case SOURCE_.wikidata:
-      return new WikiDataImageSource();
-    case SOURCE_.taxhub:
-      return new TaxHubMediaSource(params);
-    // case SOURCE_.CUSTOM:
-    //   return new UrlMediaSource(params);
-    default:
-      throw new Error("Unknown media source ID");
-  }
+    switch (id) {
+        case SOURCE_.gbif:
+            return new GBIFMediaSource(params);
+        case SOURCE_.inpn:
+            return new TaxrefODATA(params);
+        case SOURCE_.wikidata:
+            return new WikiDataImageSource();
+        case SOURCE_.taxhub:
+            return new TaxHubMediaSource(params);
+        // case SOURCE_.CUSTOM:
+        //   return new UrlMediaSource(params);
+        default:
+            throw new Error('Unknown media source ID');
+    }
 }

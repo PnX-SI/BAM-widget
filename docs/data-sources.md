@@ -26,46 +26,44 @@ To set up your GeoNature instance to use with the widget, follow these steps:
 
 1. **Go to Admin:**
 
-   Log into your GeoNature admin panel.
+    Log into your GeoNature admin panel.
 
 2. **Create an Export (Public):**
 
-   You need to create a **public** export in your GeoNature instance.
+    You need to create a **public** export in your GeoNature instance.
+    1. First, you need to create a view in your database that will be used to export data for the widget.
 
-   1. First, you need to create a view in your database that will be used to export data for the widget.
+        The data returned by your view must have the following fields:
+        - `cd_ref`: Taxon id in the Taxref referential
+        - `nom_vernaculaire`: Vernacular name
+        - `nom_scientifique`: Scientific name
+        - `date_min` `date_max`: Minimum and maximum date of an observation
+        - `the_geom_4326`: the geometry of the observation (required to compare the selected area)
 
-      The data returned by your view must have the following fields:
+        You can use the following SQL code to create the view:
 
-      - `cd_ref`: Taxon id in the Taxref referential
-      - `nom_vernaculaire`: Vernacular name
-      - `nom_scientifique`: Scientific name
-      - `date_min` `date_max`: Minimum and maximum date of an observation
-      - `the_geom_4326`: the geometry of the observation (required to compare the selected area)
+        ```sql
+        CREATE OR REPLACE VIEW gn_exports.bam_widget AS
+        SELECT
+           t.cd_ref AS cd_ref,
+           t.nom_vern AS nom_vernaculaire,
+           t.lb_nom AS nom_scientifique,
+           s.date_min AS date_min,
+           s.date_max AS date_max,
+           bl.geom AS the_geom_4326,
+           t.classe AS classe
+        FROM gn_synthese.synthese s
+        join taxonomie.taxref t using(cd_nom)
+        ```
 
-      You can use the following SQL code to create the view:
+        **Notes**: Feel free to modify this view depending on your needs! You can filter data with a `where` clause in the view, but keep the view data structure.
 
-      ```sql
-      CREATE OR REPLACE VIEW gn_exports.bam_widget AS
-      SELECT
-         t.cd_ref AS cd_ref,
-         t.nom_vern AS nom_vernaculaire,
-         t.lb_nom AS nom_scientifique,
-         s.date_min AS date_min,
-         s.date_max AS date_max,
-         bl.geom AS the_geom_4326,
-         t.classe AS classe
-      FROM gn_synthese.synthese s
-      join taxonomie.taxref t using(cd_nom)
-      ```
+    2. Once your view is created, type the information in the export creation form in GeoNature.
 
-      **Notes**: Feel free to modify this view depending on your needs! You can filter data with a `where` clause in the view, but keep the view data structure.
-
-   2. Once your view is created, type the information in the export creation form in GeoNature.
-
-      ![alt text](images/geonature_source/geonature_export.png)
+        ![alt text](images/geonature_source/geonature_export.png)
 
 3. **Set the export information in the widget generator:** Recover the newly export ID. Then, in the widget configuration interface, click on the `Change the data source` button. The following window should appear.
 
-   ![alt text](images/geonature_source/geonature_source.png)
+    ![alt text](images/geonature_source/geonature_source.png)
 
-   Choose "GeoNature" in the `Select a data source` field. Enter the API endpoint of your GeoNature (usually, your GeoNature web address followed by `/api`). Indicate the ID of your export and validate by clicking on the `OK` button.
+    Choose "GeoNature" in the `Select a data source` field. Enter the API endpoint of your GeoNature (usually, your GeoNature web address followed by `/api`). Indicate the ID of your export and validate by clicking on the `OK` button.
