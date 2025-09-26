@@ -12,7 +12,7 @@
   [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
 - Example of dynamic integration of the widget in a Geotrek trekking detail page:  
   [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
-- Example of integration in an article in a national park website managed with a CMS:   
+- Example of integration in an article in a national park website managed with a CMS:  
   [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
 - Example of integration with a GeoNature instance source, instead of GBIF API:  
   [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
