@@ -125,7 +125,7 @@ class ParameterStore {
     /**
      * The number of the most frequently observed species that will be displayed.
      */
-    topN: Ref<number | null>;
+    nbDisplayedSpecies: Ref<number | null>;
 
     private constructor() {
         const { locale, availableLocales } = useI18n();
@@ -150,7 +150,7 @@ class ParameterStore {
         this.x = ref(config.x);
         this.y = ref(config.y);
         this.customDetailPage = ref(config.customDetailPage);
-        this.topN = ref(config.topN);
+        this.nbDisplayedSpecies = ref(config.nbDisplayedSpecies);
 
         this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
@@ -253,7 +253,7 @@ class ParameterStore {
                 return -90 < y && y < 90 ? y : null;
             },
             customDetailPage: (value: string) => value,
-            topN: (value: string) => parseInt(value),
+            nbDisplayedSpecies: (value: string) => parseInt(value),
         };
 
         Object.entries(paramHandlers).forEach(([paramName, transformFn]) => {

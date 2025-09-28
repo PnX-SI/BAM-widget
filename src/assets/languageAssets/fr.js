@@ -19,7 +19,7 @@ La **liste des espèces 🥝🍃** trouvées dans la zone sélectionnée s'affic
 Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'autres utilisateurs.
 `,
         parameters: 'Paramètres',
-        topN: "Nombre d'espèces affichées",
+        nbDisplayedSpecies: "Nombre d'espèces affichées",
         filters: 'Filtres',
         showFilters: 'Afficher les filtres',
         RefreshFilters: 'Rafraîchir les paramètres',

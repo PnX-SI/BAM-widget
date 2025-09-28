@@ -17,32 +17,32 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 
 ## ✨ Features
 
-- Display species found in a defined area using observations data from GBIF API or from a GeoNature instance
-- Define area based on a specific point, line or polygon, or a GeoJSON, or dynamic geographic objects
-- GPS geolocation
-- Point and line automatic buffer
-- Multiple widget modes: list 📋, map 🗺️
-- Multiple species display mode: detailed or gallery
-- Sort 🔃 and filter species lists
-- Search 🔎 and filter species
-- Share research via link 🔗 or embed in your website 🖥️
-- Multilingual support (EN, FR, ES) 🌐
-- Based only on open API! No server required (except for self-hosting)!
+-   Display species found in a defined area using observations data from GBIF API or from a GeoNature instance
+-   Define area based on a specific point, line or polygon, or a GeoJSON, or dynamic geographic objects
+-   GPS geolocation
+-   Point and line automatic buffer
+-   Multiple widget modes: list 📋, map 🗺️
+-   Multiple species display mode: detailed or gallery
+-   Sort 🔃 and filter species lists
+-   Search 🔎 and filter species
+-   Share research via link 🔗 or embed in your website 🖥️
+-   Multilingual support (EN, FR, ES) 🌐
+-   Based only on open API! No server required (except for self-hosting)!
 
 ## 🚀 Generate your widget!
 
-- Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
-- Documentation: [https://pnx-si.github.io/BAM-widget/docs/](https://pnx-si.github.io/BAM-widget/docs/)
-- Widget integration examples:
-    - [Basic examples](https://pnx-si.github.io/BAM-widget/docs/examples/basic-examples.html) / [Source code](/docs/examples/basic-examples.html)
-    - [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
-    - [Falkensee schools and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/falkensee-schools-biodiversity.html) / [Source code](/docs/examples/falkensee-schools-biodiversity.html)
-    - [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
-    - [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](docs/examples/corcovado-treks.html)
-    - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
-    - [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
-    - [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
-- Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
+-   Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
+-   Documentation: [https://pnx-si.github.io/BAM-widget/docs/](https://pnx-si.github.io/BAM-widget/docs/)
+-   Widget integration examples:
+    -   [Basic examples](https://pnx-si.github.io/BAM-widget/docs/examples/basic-examples.html) / [Source code](/docs/examples/basic-examples.html)
+    -   [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
+    -   [Falkensee schools and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/falkensee-schools-biodiversity.html) / [Source code](/docs/examples/falkensee-schools-biodiversity.html)
+    -   [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
+    -   [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](docs/examples/corcovado-treks.html)
+    -   [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
+    -   [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
+    -   [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
+-   Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
 
 ![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-schema-v2.png)
 
@@ -50,29 +50,29 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 
 Each parameter can be set via URL query or through the widget configuration interface [/config](https://pnx-si.github.io/BAM-widget/#/config).
 
-| Parameter          | Type    | Purpose / Usage                                                                                                                                                                                                              | Example / Values                 |
-| ------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `buffer`           | number  | Buffer size of the search area (m)                                                                                                                                                                                           | `500`                            |
-| `wkt`              | string  | [Well-Know Text](https://fr.wikipedia.org/wiki/Well-known_text) geometry (search area)                                                                                                                                       | `"POINT(2.35 48.85)"`            |
-| `dateMin`          | string  | Minimum observation date                                                                                                                                                                                                     | `"2024-01-01"`                   |
-| `dateMax`          | string  | Maximum observation date                                                                                                                                                                                                     | `"2024-12-31"`                   |
-| `connector`        | string  | Data source connector (GBIF, GeoNature, ...)                                                                                                                                                                                 | `"GBIF"`                         |
-| `nbTaxonPerLine`   | number  | Number of species per line in the list view                                                                                                                                                                                  | `4`                              |
-| `topN`   | number  | The number of species displayed. The `n` species are selected among the most frequently observed species.                                                                                                                                                                                   | `4`                              |
+| Parameter            | Type   | Purpose / Usage                                                                                           | Example / Values      |
+| -------------------- | ------ | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `buffer`             | number | Buffer size of the search area (m)                                                                        | `500`                 |
+| `wkt`                | string | [Well-Know Text](https://fr.wikipedia.org/wiki/Well-known_text) geometry (search area)                    | `"POINT(2.35 48.85)"` |
+| `dateMin`            | string | Minimum observation date                                                                                  | `"2024-01-01"`        |
+| `dateMax`            | string | Maximum observation date                                                                                  | `"2024-12-31"`        |
+| `connector`          | string | Data source connector (GBIF, GeoNature, ...)                                                              | `"GBIF"`              |
+| `nbTaxonPerLine`     | number | Number of species per line in the list view                                                               | `4`                   |
+| `nbDisplayedSpecies` | number | The number of species displayed. The `n` species are selected among the most frequently observed species. | `4`                   |
 
-| `showFilters`      | boolean | Show/hide filters in the species list                                                                                                                                                                                        | `true` / `false`                 |
-| `mapEditable`      | boolean | Allow editing geometry on the map                                                                                                                                                                                            | `true` / `false`                 |
-| `lang`             | string  | Language code for UI                                                                                                                                                                                                         | `"en"`, `"fr", "es"`             |
-| `mode`             | string  | Species list display mode (`gallery`, `detailedList`)                                                                                                                                                                        | `"detailedList"`                 |
-| `sourceGeometry`   | string  | A URL to a GeoJSON that will be used to define the selected area. The given geometry is simplified due to the character limit of an URL.                                                                                     | `"https://..."`                  |
-| `class`            | string  | Taxonomic class filter (e.g., Mammalia, Aves) Check [taxonclass2icon.js](https://github.com/PnX-SI/BAM-widget/blob/main/src/assets/taxonclass2icon.js) for more detail.                                                      | `"Mammalia"`                     |
-| `widgetType`       | string  | Widget display mode (`list`, others)                                                                                                                                                                                         | `"list"`                         |
-| `hybridTaxonList`  | boolean | Enable switching between list/gallery species display modes                                                                                                                                                                  | `true` / `false`                 |
-| `x`                | number  | Longitude for point geometry                                                                                                                                                                                                 | `2.35`                           |
-| `y`                | number  | Latitude for point geometry                                                                                                                                                                                                  | `48.85`                          |
-| `customDetailPage` | string  | Custom URL for species detail redirection. The species ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced by the actual species' ID. For example, `https://www.gbif.org/species/{taxonID}` | `"https://.../{taxonID}"`        |
-| `soundSource`      | string  | Name of the data source use to fetch animal sounds.                                                                                                                                                                          | `[gbif]`                         |
-| `imageSource`      | string  | Name of the data source use to fetch species pictures.                                                                                                                                                                       | `[wikidata, gbif, inpn, taxhub]` |
+| `showFilters` | boolean | Show/hide filters in the species list | `true` / `false` |
+| `mapEditable` | boolean | Allow editing geometry on the map | `true` / `false` |
+| `lang` | string | Language code for UI | `"en"`, `"fr", "es"` |
+| `mode` | string | Species list display mode (`gallery`, `detailedList`) | `"detailedList"` |
+| `sourceGeometry` | string | A URL to a GeoJSON that will be used to define the selected area. The given geometry is simplified due to the character limit of an URL. | `"https://..."` |
+| `class` | string | Taxonomic class filter (e.g., Mammalia, Aves) Check [taxonclass2icon.js](https://github.com/PnX-SI/BAM-widget/blob/main/src/assets/taxonclass2icon.js) for more detail. | `"Mammalia"` |
+| `widgetType` | string | Widget display mode (`list`, others) | `"list"` |
+| `hybridTaxonList` | boolean | Enable switching between list/gallery species display modes | `true` / `false` |
+| `x` | number | Longitude for point geometry | `2.35` |
+| `y` | number | Latitude for point geometry | `48.85` |
+| `customDetailPage` | string | Custom URL for species detail redirection. The species ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced by the actual species' ID. For example, `https://www.gbif.org/species/{taxonID}` | `"https://.../{taxonID}"` |
+| `soundSource` | string | Name of the data source use to fetch animal sounds. | `[gbif]` |
+| `imageSource` | string | Name of the data source use to fetch species pictures. | `[wikidata, gbif, inpn, taxhub]` |
 
 ## ⚙️ Self-hosting
 
@@ -103,13 +103,13 @@ npm run build
 
 **Conceived and developed by**
 
-- @jacquesfize (Parc national des Écrins)
-- @amandine-sahl (Parc national des Cévennes)
-- @camillemonchicourt (Parc national des Écrins)
-- @CynthiaBorotPNV (Parc national de la Vanoise)
-- @EcMerc (Parc national du Mercantour)
-- @SimonChevereau (Office Français de la Biodiversité)
-- @babastienne (Makina Corpus)
+-   @jacquesfize (Parc national des Écrins)
+-   @amandine-sahl (Parc national des Cévennes)
+-   @camillemonchicourt (Parc national des Écrins)
+-   @CynthiaBorotPNV (Parc national de la Vanoise)
+-   @EcMerc (Parc national du Mercantour)
+-   @SimonChevereau (Office Français de la Biodiversité)
+-   @babastienne (Makina Corpus)
 
 ## 📄 License
 

@@ -17,7 +17,7 @@ const config = {
     y: null,
     customDetailPage: null,
     nbTaxonPerLine: 2,
-    topN: null,
+    nbDisplayedSpecies: null,
 };
 
 export default config;

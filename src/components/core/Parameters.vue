@@ -26,7 +26,7 @@
         connector,
         customDetailPage,
         getParams,
-        topN,
+        nbDisplayedSpecies,
     } = ParameterStore.getInstance();
 
     const router = useRouter();
@@ -81,7 +81,7 @@
                     <Map
                         :forceEditable="true"
                         :editable="true"
-                        height="40vh"
+                        height="350px"
                         class="mt-2"
                     ></Map>
                 </div>
@@ -188,16 +188,6 @@
                         class="mt-1"
                     />
                 </div>
-
-                <<<<<<< HEAD
-                <div class="parameter-section">
-                    <label
-                        >{{ $t('numberOfTaxonPerLine') }}
-                        <i class="bi bi-123"></i>
-                    </label>
-                    <BFormInput type="number" v-model="nbTaxonPerLine" />
-                </div>
-                =======
                 <div class="parameter-section">
                     <label
                         >{{ $t('numberOfTaxonPerLine') }}
@@ -206,10 +196,16 @@
                     <BFormInput type="number" v-model="nbTaxonPerLine" />
                 </div>
                 <div class="parameter-section">
-                    <label>{{ $t('topN') }} <i class="bi bi-123"></i> </label>
-                    <BFormInput type="number" v-model="topN" />
+                    <label
+                        >{{ $t('nbDisplayedSpecies') }}
+                        <i class="bi bi-123"></i>
+                    </label>
+                    <BFormInput
+                        type="number"
+                        v-model="nbDisplayedSpecies"
+                        min="0"
+                    />
                 </div>
-                >>>>>>> 71e35b2 (add TopN parameter)
 
                 <div class="parameter-section">
                     <MediaSourceSelector
