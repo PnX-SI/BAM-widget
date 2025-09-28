@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.2.0 (unrelease)
+
+### ✨ New Features
+
+- Improve GeoNature connector (#64)
+- Improve TaxHub media and credits retrieving (#64)
+- Improve GBIF data quality with excluding specimens and geospatial issues (#64)
+- Add wikidata sound API source (#66)
+- Add sound credits (#70, #71)
+- [Dev] Add prettier (#75)
+
 ## 1.1.0 (2025-09-16)
 
 ### ✨ New Features
