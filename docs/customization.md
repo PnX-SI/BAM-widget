@@ -2,9 +2,9 @@
 
 There is two ways of customizing the widget:
 
-- use the `Parameters` block in the configuration interface (available at https://pnx-si.github.io/BAM-widget/#/config)
-  ![alt](images/parameters.png)
-- directly in the url of the existing `<iframe>` tag.
+-   use the `Parameters` block in the configuration interface (available at https://pnx-si.github.io/BAM-widget/#/config)
+    ![alt](images/parameters.png)
+-   directly in the url of the existing `<iframe>` tag.
 
 ## Parameters reference
 
@@ -20,13 +20,13 @@ Buffer size for the search area in meters.
 
 You can easily generate WKT [here](https://wktmap.com/).
 
-- **Example :** `"POINT(2.35 48.85)"`
+-   **Example :** `"POINT(2.35 48.85)"`
 
 ### `dateMin` and `dateMax` (**Type:** string)
 
 Minimum observation date for filtering results.
 
-- **Example:** `"2024-01-01"`
+-   **Example:** `"2024-01-01"`
 
 ### `connector` (**Type:** string)
 
@@ -38,7 +38,13 @@ Specifies the data source connector, such as GBIF, GeoNature, etc.
 
 Number of species displayed per line in the list view.
 
-- **Example:** `4`
+-   **Example:** `4`
+
+### `nbDisplayedSpecies` (**Type:** number)
+
+The number of species displayed. The `n` species are selected among the most frequently observed species. If `nbDisplayedSpecies` is null or inferior to 0, all species found will be displayed.
+
+-   **Example:** `4`
 
 ### `showFilters` (**Type:** boolean)
 
@@ -114,8 +120,8 @@ Custom URL for redirecting to a taxon (species) detail page. The taxon ID part o
 
 **Examples:**
 
-- `https://https://www.gbif.org/species/{taxonID}`
-- `https://inpn.mnhn.fr/espece/cd_nom/{taxonID}`
+-   `https://https://www.gbif.org/species/{taxonID}`
+-   `https://inpn.mnhn.fr/espece/cd_nom/{taxonID}`
 
 ### `imageSource` (**Type:** string)
 
@@ -123,16 +129,16 @@ Name of the data source used to fetch species pictures.
 
 **Available sources:**
 
-- `wikidata` GBIF and GeoNature compatible
-- `gbif` GBIF compatible
-- `inpn` GeoNature compatible
-- `taxhub` GeoNature compatible
+-   `wikidata` GBIF and GeoNature compatible
+-   `gbif` GBIF compatible
+-   `inpn` GeoNature compatible
+-   `taxhub` GeoNature compatible
 
 ### `soundSource` (**Type:** string)
 
 Name of the data source used to fetch animal sounds.
 
-- `gbif` (GBIF compatible)
+-   `gbif` (GBIF compatible)
 
 ## Integration examples
 
