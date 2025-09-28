@@ -14,6 +14,7 @@ La **lista de especies 🥝🍃** encontradas en el área seleccionada se mostra
 También puedes **compartir tus resultados 📤** para colaborar con otros usuarios.
     `,
         parameters: 'Parámetros',
+        nbDisplayedSpecies: 'Número de especies mostradas',
         filters: 'Filtros',
         showFilters: 'Mostrar filtros',
         RefreshFilters: 'Actualizar parámetros',

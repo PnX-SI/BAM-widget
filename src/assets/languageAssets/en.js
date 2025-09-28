@@ -19,6 +19,7 @@ You can also **share your results 📤** to collaborate with other users.
 
     `,
         parameters: 'Parameters',
+        nbDisplayedSpecies: 'Number of species displayed',
         filters: 'Filters',
         showFilters: 'Show Filters',
         RefreshFilters: 'Refresh parameters',

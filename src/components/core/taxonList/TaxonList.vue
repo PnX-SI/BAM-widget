@@ -23,6 +23,7 @@
         connector,
         mode,
         class: class_,
+        nbDisplayedSpecies,
     } = parameterStore;
 
     const props = defineProps({
@@ -112,6 +113,12 @@
             );
         }
 
+        if (nbDisplayedSpecies.value && nbDisplayedSpecies.value > 0) {
+            return sortArray(filteredSpecies, {
+                by: 'nbObservations',
+                order: 'desc',
+            }).slice(0, nbDisplayedSpecies.value);
+        }
         return sortArray(filteredSpecies, {
             by: sortBy.value,
             order: orderBy.value,
