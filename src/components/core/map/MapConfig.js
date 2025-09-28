@@ -108,4 +108,4 @@ L.GeometryUtil = L.extend(L.GeometryUtil || {}, {
         return areaStr;
     },
 });
-export default drawConfig;
+export { drawConfig, DefaultIcon };

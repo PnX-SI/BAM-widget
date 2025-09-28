@@ -1,6 +1,6 @@
 <script setup>
     // Imports
-    import L from 'leaflet';
+    import L, { icon } from 'leaflet';
     import 'leaflet-draw';
     import 'leaflet/dist/leaflet.css';
     import 'leaflet-draw/dist/leaflet.draw.css';
@@ -10,7 +10,7 @@
     import { LocateControl } from 'leaflet.locatecontrol';
     import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
     import { computed, onMounted, ref, shallowRef, watch } from 'vue';
-    import drawConfig from './MapConfig';
+    import { drawConfig, DefaultIcon } from './MapConfig';
     import { booleanClockwise, rewind } from '@turf/turf';
     import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
     import { useI18n } from 'vue-i18n';
@@ -117,6 +117,7 @@
             style: 'bar',
             resetButton: 'x',
             searchLabel: t('map.searchPlace'),
+            marker: { icon: DefaultIcon },
         });
         map.value.addControl(searchControl);
         map.value.on('geosearch/showlocation', (e) => {
