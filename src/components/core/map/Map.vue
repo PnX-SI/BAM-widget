@@ -48,6 +48,7 @@
 
     // Component Attributes
     const map = shallowRef();
+    const locateControl = ref(null);
     const geometry = shallowRef(new L.FeatureGroup());
     let drawEventData = null;
     const mapID = (Math.random() + 1).toString(36).substring(7);
@@ -136,7 +137,7 @@
         drawEventData = { layer: marker, layerType: 'marker' };
         geometry.value.addLayer(marker);
         updateGeometry();
-        locate.stop();
+        locateControl.value.stop();
     }
 
     function handleGeometryCreation(event) {
@@ -181,7 +182,7 @@
             /**
              * ADD GEOLOCATION TOOL
              */
-            locate = new LocateControl({
+            locateControl.value = new LocateControl({
                 icon: 'fa-solid fa-location-crosshairs fa-xl',
             }).addTo(map.value);
 
@@ -199,6 +200,9 @@
     onMounted(() => {
         setupMap();
         window.addEventListener('beforeunload', saveMapState);
+        if (!wkt.value) {
+            locateControl.value.start();
+        }
     });
 
     updateGeometryFromWKT();
