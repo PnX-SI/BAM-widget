@@ -110,6 +110,12 @@ npm run build
 -   @SimonChevereau (Office Français de la Biodiversité)
 -   @babastienne (Makina Corpus)
 
+[![image](https://geonature.fr/img/logo-pne.jpg)](https://www.ecrins-parcnational.fr)
+
+[![image](https://geonature.fr/img/logo-pnc.jpg)](https://www.cevennes-parcnational.fr)
+
+[![image](https://geonature.fr/img/logo-pnx.png)](https://www.parcsnationaux.fr)
+
 ## 📄 License
 
 This project is licensed under the [MIT](https://opensource.org/license/mit) License.
