@@ -29,6 +29,8 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 -   Multilingual support (EN, FR, ES) 🌐
 -   Based only on open API! No server required (except for self-hosting)!
 
+![BAM - How it works](https://geonature.fr/documents/autres/BAM/BAM-schema-01.png)
+
 ## 🚀 Generate your widget!
 
 -   Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
