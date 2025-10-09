@@ -1,3 +1,29 @@
+<!--
+To include BAM in Geotrek treks detail pages such as https://gtr3demo.ecrins-parcnational.fr/trek/2-DEMO---Col-de-Font-Froide#details_description
+
+When a trek detail page will be displayed, BAM widget will get the trek geometry as a GeoJSON, create a buffer around this one with the size in meters defined in the widget parameters (100m in this example), and query the data source (GBIF by default that can be changed with a GeoNature instance), to get biodiversity observations in this area and generate an observed sepecies list.
+
+See Geotrek-rando widget integration in details pages documentation: https://geotrek-rando-v3.readthedocs.io/stable/customization/customization-htmlscripts/#templates-on-details-page-trek-touristic-content-touristic-event-outdoor-site-and-outdoor-course
+
+- Copy this page in a dedicated file in your Geotrek-rando customization folder (customization/html/details/BAMwidget.html).
+- Replace "https://geotrekdemo.ecrins-parcnational.fr" by your Geotrek-admin URL.
+- You can also change other parameters (buffer size, showing filters, display mode, number of species by line, ... but also connect BAM to your GeoNature instance, instead of GBIF). See BAM documentation and configurator for parameters details.
+- In "customization/config/details.json" file, declare the widget to include and its position in the page. Example: 
+    "trek": [
+      {
+        "name": "BAMwidget",
+        "display": true,
+        "anchor": false,
+        "order": 60
+      }
+    ]
+- In your customized translation, add the name of the title of the block that you want for the widget. Example in "customization/translations/fr.json": 
+  "details": {
+    "BAMwidget": "Observé autour de cette rando"
+  }
+- Reload your Geotrek-rando customization to apply it with "docker-compose restart" command
+-->
+
 <iframe
     src="https://pnx-si.github.io/BAM-widget/#/?showFilters=false&sourceGeometry=https://geotrekdemo.ecrins-parcnational.fr/api/v2/trek/{{ id }}/?fields=geometry%26format=geojson&buffer=100&API_ENPOINT=https://api.gbif.org/v1&connector=gbif&nbTaxonPerLine=4&widgetType=list"
     type=""
