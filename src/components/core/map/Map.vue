@@ -15,6 +15,7 @@
     import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
     import { useI18n } from 'vue-i18n';
     import ParameterStore from '@/lib/parameterStore';
+    import { onUnmounted } from 'vue';
 
     const { t } = useI18n();
 
@@ -58,6 +59,8 @@
     const style = computed(() => `height: ${props.height};`);
     let locate = null;
 
+    const emit = defineEmits(['updateGeom']);
+
     // Functions
     function updateGeometryFromWKT() {
         if (wkt.value) {
@@ -65,6 +68,9 @@
             let tmp = L.geoJSON().addTo(geometry.value);
             tmp.addData(parse(wkt.value));
             focusOnGeometry();
+            setTimeout(() => {
+                emit('updateGeom');
+            }, 1000);
         }
     }
 
@@ -194,6 +200,27 @@
 
         map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
         map.value.on('locationfound', handleGeolocation);
+        // Force le redimensionnement initial
+        setTimeout(() => {
+            map.value.invalidateSize();
+        }, 100);
+
+        // Écouteur pour le redimensionnement
+        const handleResize = () => {
+            if (map.value) {
+                map.value.invalidateSize();
+            }
+        };
+        window.addEventListener('resize', handleResize);
+
+        // Nettoyage à la destruction
+        onUnmounted(() => {
+            window.removeEventListener('resize', handleResize);
+            if (map.value) {
+                map.value.off();
+                map.value.remove();
+            }
+        });
     }
 
     // Lifecycle Hooks
