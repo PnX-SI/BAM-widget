@@ -43,10 +43,10 @@
         <div v-else class="mobile-container">
             <Map
                 :height="'100vh !important'"
-                v-show="!showMap"
+                v-show="showMap"
                 v-on:update:wkt="(wkt) => (showMap = false)"
             />
-            <TaxonList :height="'100vh !important'" v-show="showMap" />
+            <TaxonList :height="'100vh !important'" v-show="!showMap" />
 
             <!-- Bouton flottant -->
             <button class="toggle-btn" @click="showMap = !showMap">

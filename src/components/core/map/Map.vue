@@ -10,7 +10,11 @@
     import { LocateControl } from 'leaflet.locatecontrol';
     import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
     import { computed, onMounted, ref, shallowRef, watch } from 'vue';
-    import { drawConfig, DefaultIcon } from './MapConfig';
+    import {
+        drawConfig,
+        DefaultIcon,
+        hackForMapContainerResize,
+    } from './MapConfig';
     import { booleanClockwise, rewind } from '@turf/turf';
     import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
     import { useI18n } from 'vue-i18n';
@@ -166,6 +170,8 @@
             maxZoom: 19,
             attribution: OPEN_STREET_MAP_ATTRIBUTION,
         }).addTo(map.value);
+
+        hackForMapContainerResize(map.value, `map-${mapID}`);
 
         map.value.addLayer(geometry.value);
 
