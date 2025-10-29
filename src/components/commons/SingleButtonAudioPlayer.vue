@@ -34,6 +34,10 @@
                 :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
             ></i>
         </template>
-        <Credits :media="props.audio" link-color="link-light"></Credits>
+        <Credits
+            :media="props.audio"
+            link-color="link-light"
+            class=""
+        ></Credits>
     </BTooltip>
 </template>

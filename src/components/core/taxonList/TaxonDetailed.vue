@@ -29,6 +29,7 @@
                     <Credits
                         link-color="link-light"
                         :media="props.picture"
+                        class=""
                     ></Credits>
                 </div>
             </div>
