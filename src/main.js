@@ -22,16 +22,20 @@ import 'vue3-toastify/dist/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 import Widget from './components/Widget.vue';
+import messagesCS from './assets/languageAssets/cs';
 
 const browserLocale = window.navigator.language.split('-')[0];
 
 const i18n = createI18n({
-    locale: ['en', 'fr', 'es'].includes(browserLocale) ? browserLocale : 'en',
+    locale: ['en', 'fr', 'es', 'cs'].includes(browserLocale)
+        ? browserLocale
+        : 'en',
     fallbackLocale: 'en',
     messages: {
         ...messagesFR,
         ...messagesEN,
         ...messagesES,
+        ...messagesCS,
     },
 });
 const routes = [
