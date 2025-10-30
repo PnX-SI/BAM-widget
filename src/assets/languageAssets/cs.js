@@ -28,8 +28,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         TaxonListModeSelection: 'Režim zobrazení seznamu druhů',
         widgetTypeSelection: 'Režim zobrazení widgetu',
         UseGeoJSONSource: 'Použít GeoJSON z webu',
-        UseCustomDetailPage:
-            'Změnit přesměrování tlačítka "Více informací"',
+        UseCustomDetailPage: 'Změnit přesměrování tlačítka "Více informací"',
 
         filtersTitle: 'Filtry',
         mapEditable: 'Editovatelná oblast vyhledávání',
@@ -82,7 +81,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         },
         geonature: {
             api_endpoint: 'API endpoint GeoNature',
-            id_export: "ID exportu",
+            id_export: 'ID exportu',
         },
         desc: 'Sestupně',
         asc: 'Vzestupně',
@@ -102,7 +101,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             taxonFilter: 'Filtrovat podle druhu',
             classFilter: 'Filtrovat podle třídy',
             learnMore: 'Více informací',
-            class: "Třída druhu",
+            class: 'Třída druhu',
             taxonFound: 'nalezené druhy',
         },
         mode: {
