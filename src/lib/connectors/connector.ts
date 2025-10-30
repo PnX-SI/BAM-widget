@@ -45,6 +45,8 @@ export class Connector {
      */
     soundSource?: MediaSource;
 
+    isSearchOnAPI: boolean = false;
+
     constructor(options: ConnectorOptions) {
         this.options = options;
 
@@ -194,5 +196,9 @@ export class Connector {
 
     getDatasetUrl(datasetID): string | null {
         return null;
+    }
+
+    searchOnAPI(searchString: string): Promise<any> {
+        throw new Error('Not implemented');
     }
 }

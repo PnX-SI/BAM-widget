@@ -62,6 +62,7 @@ export class GbifConnector extends Connector {
             Liliopsida: 196,
             Pinopsida: 194,
         };
+        this.isSearchOnAPI = true;
     }
 
     getParamsSchema(): Array<Record<string, any>> {
@@ -275,5 +276,15 @@ export class GbifConnector extends Connector {
 
     getDatasetUrl(datasetID: any): string | null {
         return `${this.getSourceUrl()}/dataset/${datasetID}`;
+    }
+
+    searchOnAPI(searchString: string): Promise<any> {
+        return fetch(`${this.GBIF_ENDPOINT}/species/search?q=${searchString}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.count > 0) {
+                    return data.results.map((entry) => entry.nubKey);
+                }
+            });
     }
 }

@@ -65,6 +65,7 @@
     const orderBy = ref(props.order || 'desc');
     const filterClass = ref(null);
     const searchString = ref('');
+    const filteredSpecies = ref([]);
 
     const sortByAvailable = [
         { field_name: 'vernacularName', label: t('taxon.vernacularName') },
@@ -90,36 +91,60 @@
         return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
     });
 
-    const speciesListShowed = computed(() => {
-        let filteredSpecies = searchResult.value.taxons;
-
-        if (!filteredSpecies) {
-            return [];
+    async function updateFilteredSpecies() {
+        let result = searchResult.value.taxons;
+        if (!result) {
+            filteredSpecies.value = [];
+            return;
         }
         if (searchString.value) {
-            filteredSpecies = filteredSpecies.filter((taxon) => {
-                const data = taxon?.vernacularName
-                    ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
-                    : taxon.acceptedScientificName || 'incertae sedis';
-                return data
-                    .toLowerCase()
-                    .includes(searchString.value.toLowerCase());
-            });
+            if (connector.value.isSearchOnAPI) {
+                const data = await connector.value.searchOnAPI(
+                    searchString.value
+                );
+                if (data) {
+                    result = result.filter((taxon) =>
+                        data.includes(taxon.taxonId)
+                    );
+                }
+            } else {
+                result = result.filter((taxon) => {
+                    const data = taxon?.vernacularName
+                        ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
+                        : taxon.acceptedScientificName || 'incertae sedis';
+                    return data
+                        .toLowerCase()
+                        .includes(searchString.value.toLowerCase());
+                });
+            }
         }
-
         if (filterClass.value) {
-            filteredSpecies = filteredSpecies.filter(
+            result = result.filter(
                 (taxon) => taxon.class === filterClass.value
             );
         }
+        filteredSpecies.value = result;
+    }
 
+    watch(
+        [searchString, filterClass, searchResult],
+        () => {
+            updateFilteredSpecies();
+        },
+        { immediate: true }
+    );
+
+    const speciesListShowed = computed(() => {
+        if (!filteredSpecies.value.length) {
+            return [];
+        }
         if (nbDisplayedSpecies.value && nbDisplayedSpecies.value > 0) {
-            return sortArray(filteredSpecies, {
+            return sortArray([...filteredSpecies.value], {
                 by: 'nbObservations',
                 order: 'desc',
             }).slice(0, nbDisplayedSpecies.value);
         }
-        return sortArray(filteredSpecies, {
+        return sortArray([...filteredSpecies.value], {
             by: sortBy.value,
             order: orderBy.value,
         }).slice(0, (pageIndex.value + 1) * 20);
@@ -135,10 +160,8 @@
 
     const fetchSpeciesList = (wktParam) => {
         if (!wktParam.length) return;
-
         loadingObservations.value = true;
         loadingError.value = false;
-
         connector.value
             .fetchOccurrence({
                 geometry: wktParam,
@@ -164,7 +187,6 @@
     function onScroll(event) {
         const { scrollTop, clientHeight, scrollHeight } = event.target;
         const threshold = 50;
-
         if (scrollTop + clientHeight >= scrollHeight - threshold) {
             pageIndex.value++;
         }
