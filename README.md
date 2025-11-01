@@ -48,7 +48,7 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 
 ![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-schema-v2.png)
 
-## GBIF Else Nielsen challenge 2025
+## GBIF Ebbe Nielsen challenge 2025
 
 <p>
 🏆 BAM wins second prize of international <a href="https://www.gbif.org/news/2LugQxJfG2kCzjiJocXzVZ/winners-from-norway-and-australia-share-first-place-in-the-2025-ebbe-nielsen-challenge" target="_blank">GBIF Ebbe Nielsen challenge 2025. ➡️</a>
