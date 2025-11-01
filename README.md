@@ -48,6 +48,15 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 
 ![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-schema-v2.png)
 
+## GBIF Else Nielsen challenge 2025
+
+<p>
+🏆 BAM wins second prize of international <a href="https://www.gbif.org/news/2LugQxJfG2kCzjiJocXzVZ/winners-from-norway-and-australia-share-first-place-in-the-2025-ebbe-nielsen-challenge" target="_blank">GBIF Ebbe Nielsen challenge 2025. ➡️</a>
+</p>
+<a href="https://www.gbif.org/news/2LugQxJfG2kCzjiJocXzVZ/winners-from-norway-and-australia-share-first-place-in-the-2025-ebbe-nielsen-challenge" target="_blank">
+  <img src="https://api.gbif.org/v1/image/unsafe/1170x422/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F2DWVLIEs6PBtimIeHB7cxe%2F67402da74acef29a2e25e9cc3c2d4177%2FENC_2025__1_.png">      
+</a>
+
 ## 🎛️ Widget parameters
 
 Each parameter can be set via URL query or through the widget configuration interface [/config](https://pnx-si.github.io/BAM-widget/#/config).
