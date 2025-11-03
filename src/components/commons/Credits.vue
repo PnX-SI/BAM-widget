@@ -4,7 +4,7 @@
 
     const props = defineProps<{
         media: Media;
-        linkColor: { type: string; required: false };
+        linkColor: string;
         class: string;
     }>();
 

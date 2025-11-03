@@ -45,6 +45,7 @@
                     <Credits
                         link-color="link-dark"
                         :media="props.picture"
+                        class=""
                     ></Credits>
                 </BPopover>
             </div>
