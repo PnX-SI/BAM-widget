@@ -19,6 +19,7 @@
         "leaflet-draw": "^1.0.4",
         "leaflet-geosearch": "^4.2.0",
         "leaflet.locatecontrol": "^0.83.1",
+        "lodash-es": "^4.17.21",
         "sort-array": "^5.0.0",
         "typescript": "^5.9.2",
         "vue": "^3.5.13",

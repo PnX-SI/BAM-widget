@@ -98,25 +98,16 @@
             return;
         }
         if (searchString.value) {
-            if (connector.value.isSearchOnAPI) {
-                const data = await connector.value.searchOnAPI(
-                    searchString.value
-                );
-                if (data) {
-                    result = result.filter((taxon) =>
-                        data.includes(taxon.taxonId)
-                    );
-                }
-            } else {
-                result = result.filter((taxon) => {
-                    const data = taxon?.vernacularName
-                        ? `${taxon.vernacularName} ${taxon.acceptedScientificName}`
-                        : taxon.acceptedScientificName || 'incertae sedis';
-                    return data
-                        .toLowerCase()
-                        .includes(searchString.value.toLowerCase());
-                });
+            let data = [];
+            if (connector.value.isSearchOnAPIAvailable) {
+                data = await connector.value.searchOnAPI(searchString.value);
             }
+            result.sort(
+                connector.value.scoringSearchClass.scoring(
+                    searchString.value,
+                    data
+                )
+            );
         }
         if (filterClass.value) {
             result = result.filter(
@@ -138,16 +129,18 @@
         if (!filteredSpecies.value.length) {
             return [];
         }
-        if (nbDisplayedSpecies.value && nbDisplayedSpecies.value > 0) {
-            return sortArray([...filteredSpecies.value], {
-                by: 'nbObservations',
-                order: 'desc',
-            }).slice(0, nbDisplayedSpecies.value);
+
+        let arrayToSort = [...filteredSpecies.value];
+        if (searchString.value == '') {
+            arrayToSort = sortArray(arrayToSort, {
+                by: sortBy.value,
+                order: orderBy.value,
+            });
         }
-        return sortArray([...filteredSpecies.value], {
-            by: sortBy.value,
-            order: orderBy.value,
-        }).slice(0, (pageIndex.value + 1) * 20);
+        if (nbDisplayedSpecies.value && nbDisplayedSpecies.value > 0) {
+            arrayToSort.slice(0, nbDisplayedSpecies.value);
+        }
+        return arrayToSort.slice(0, (pageIndex.value + 1) * 20);
     });
 
     const noDataFound = computed(

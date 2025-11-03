@@ -1,6 +1,7 @@
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { MediaSource } from '../media/MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
+import { SearchScoring } from './search/scoring';
 
 export interface ConnectorOptions {
     imageSource?: string | MediaSource;
@@ -45,7 +46,16 @@ export class Connector {
      */
     soundSource?: MediaSource;
 
-    isSearchOnAPI: boolean = false;
+    /**
+     * Indicates if the taxon search on API is available
+     * @type {boolean}
+     */
+    isSearchOnAPIAvailable: boolean = false;
+
+    /**
+     * Class that describe how to sort the taxon list based on a search string
+     */
+    scoringSearchClass: SearchScoring = new SearchScoring();
 
     constructor(options: ConnectorOptions) {
         this.options = options;
