@@ -1,4 +1,3 @@
-import { Media } from '../models';
 import { MediaSource } from './MediaSource';
 import { SOURCE_ } from './media';
 import { CONNECTORS } from '../connectors/connectors';

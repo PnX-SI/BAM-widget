@@ -1,4 +1,3 @@
-import { toast } from 'vue3-toastify';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { MediaSource } from '../media/MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';

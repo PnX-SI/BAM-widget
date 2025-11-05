@@ -1,6 +1,5 @@
 <script setup>
     import { computed, ref } from 'vue';
-    import ParameterStore from '@/lib/parameterStore';
 
     const link = computed(() => {
         return window.location.href;

@@ -1,7 +1,3 @@
-<script setup>
-    import { ref } from 'vue';
-</script>
-
 <template>
     <div id="intro">
         <h2>{{ $t('introTitle') }}</h2>

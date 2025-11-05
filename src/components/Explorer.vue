@@ -1,9 +1,7 @@
 <script setup>
     import 'leaflet/dist/leaflet.css';
-    import Parameters from '@/components/core/Parameters.vue';
     import Intro from './core/Intro.vue';
     import ParameterStore from '@/lib/parameterStore';
-    import HeaderNav from './commons/HeaderNav.vue';
     import { WIDGET_TYPE } from '@/lib/enums';
 
     const { widgetType } = ParameterStore.getInstance();

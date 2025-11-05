@@ -1,5 +1,5 @@
 import { Connector, ConnectorOptions } from './connector';
-import { Dataset, Media, SearchResult, Taxon } from '../models';
+import { Dataset, SearchResult, Taxon } from '../models';
 import ParameterStore from '../parameterStore';
 import { NO_IMAGE_URL } from '@/assets/constant';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
@@ -187,8 +187,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
