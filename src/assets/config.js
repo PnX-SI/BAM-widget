@@ -11,7 +11,7 @@ const config = {
     mode: TAXONLIST_DISPLAY_MODE.detailedList,
     sourceGeometry: null,
     class: null,
-    widgetType: WIDGET_TYPE.list,
+    widgetType: WIDGET_TYPE.mapList,
     hybridTaxonList: true,
     x: null,
     y: null,

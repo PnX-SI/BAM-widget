@@ -1,17 +1,22 @@
 <script setup>
     import 'leaflet/dist/leaflet.css';
     import Parameters from '@/components/core/Parameters.vue';
-    import Intro from './core/Intro.vue';
     import ParameterStore from '@/lib/parameterStore';
     import HeaderNav from './commons/HeaderNav.vue';
     import { WIDGET_TYPE } from '@/lib/enums';
+    import { useRoute } from 'vue-router';
 
     const { widgetType } = ParameterStore.getInstance();
+    const route = useRoute();
+
+    // SPECIFIC TO CONFIGURATOR
+    // If not indicated in the URL, default to list
+    if (!route.query?.widgetType) {
+        widgetType.value = WIDGET_TYPE.list;
+    }
 </script>
 
 <template>
-    <!-- TOP MENU -->
-
     <!-- App -->
     <main class="container-fluid">
         <HeaderNav></HeaderNav>

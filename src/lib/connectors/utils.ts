@@ -1,4 +1,3 @@
-import { getMediaSource } from '../media/media';
 import { CONNECTORS } from './connectors';
 import { GbifConnector } from './gbif';
 import { GeoNatureConnector } from './geonature';

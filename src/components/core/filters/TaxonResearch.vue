@@ -1,6 +1,6 @@
 <script setup>
     import { GbifConnector } from '@/lib/connectors/gbif';
-    import { computed, ref, watch } from 'vue';
+    import { ref, watch } from 'vue';
 
     const typedSearch = ref('');
     const searchResults = ref([]);

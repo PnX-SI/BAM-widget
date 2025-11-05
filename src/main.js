@@ -5,8 +5,6 @@ import { createBootstrap } from 'bootstrap-vue-next';
 
 import App from './App.vue';
 
-import MapListWidget from './components/MapListWidget.vue';
-import ListWidget from './components/ListWidget.vue';
 import Configurator from './components/Configurator.vue';
 import Explorer from './components/Explorer.vue';
 import Error404 from './components/commons/Error404.vue';
@@ -18,7 +16,6 @@ import messagesFR from './assets/languageAssets/fr';
 import messagesEN from './assets/languageAssets/en';
 import messagesES from './assets/languageAssets/es';
 
-import 'vue3-toastify/dist/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 import Widget from './components/Widget.vue';
