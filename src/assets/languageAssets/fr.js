@@ -46,6 +46,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         loading: 'Chargement en cours ...',
         noObservations: 'Aucune observation trouvée',
         noSpeciesObserved: 'Aucune espèce observée dans cette zone !',
+        emptySearch: 'Aucune espèce ne correspond à votre recherche',
         noGeometry: 'Aucune géometrie trouvée',
         error404: {
             title: 'Page introuvable',

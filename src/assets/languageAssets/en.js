@@ -47,6 +47,7 @@ You can also **share your results 📤** to collaborate with other users.
         nextPage: 'Next',
         loading: 'Loading...',
         noObservations: 'No observation found',
+        emptySearch: 'No species match your search',
         noGeometry: 'No geometry found',
         error404: {
             title: 'Page not found',

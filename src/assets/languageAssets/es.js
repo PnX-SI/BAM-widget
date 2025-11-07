@@ -41,6 +41,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         nextPage: 'Siguiente',
         loading: 'Cargando...',
         noObservations: 'Ninguna observación encontrada',
+        emptySearch: 'No se encontraron especies que coincidan con tu búsqueda',
         noGeometry: 'No se encontró geometría',
         error404: {
             title: 'Página no encontrada',

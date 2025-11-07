@@ -46,6 +46,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         nextPage: 'Další',
         loading: 'Načítání...',
         noObservations: 'Nebyla nalezena žádná pozorování',
+        emptySearch: 'Žádné druhy neodpovídají výsledkам vyhledávání',
         noGeometry: 'Nebyla nalezena žádná geometrie',
         error404: {
             title: 'Stránka nenalezena',

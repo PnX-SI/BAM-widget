@@ -91,47 +91,53 @@
         return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
     });
 
-    async function updateFilteredSpecies() {
-        let result = searchResult.value.taxons;
+    function updateFilteredSpecies() {
+        const result = searchResult.value.taxons;
         if (!result) {
             filteredSpecies.value = [];
             return;
         }
-        if (searchString.value) {
-            let data = [];
-            if (connector.value.isSearchOnAPIAvailable) {
-                data = await connector.value.searchOnAPI(searchString.value);
+
+        const applyFilters = (list, data = []) => {
+            let filtered = list;
+
+            // Filtrage par texte
+            if (searchString.value) {
+                filtered = filtered.filter(
+                    (taxon) =>
+                        connector.value.scoringSearchClass.getScore(
+                            taxon,
+                            searchString.value,
+                            data
+                        ) > 0
+                );
             }
-            result.sort(
-                connector.value.scoringSearchClass.scoring(
-                    searchString.value,
-                    data
-                )
-            );
+
+            // Filtrage par classe
+            if (filterClass.value) {
+                filtered = filtered.filter(
+                    (taxon) => taxon.class === filterClass.value
+                );
+            }
+
+            filteredSpecies.value = filtered;
+        };
+
+        if (searchString.value && connector.value.isSearchOnAPIAvailable) {
+            connector.value
+                .searchOnAPI(searchString.value)
+                .then((data) => applyFilters(result, data))
+                .catch(() => applyFilters(result));
+        } else {
+            applyFilters(result);
         }
-        if (filterClass.value) {
-            result = result.filter(
-                (taxon) => taxon.class === filterClass.value
-            );
-        }
-        filteredSpecies.value = result;
     }
 
-    watch(
-        [searchString, filterClass, searchResult],
-        () => {
-            updateFilteredSpecies();
-        },
-        { immediate: true }
-    );
-
     const speciesListShowed = computed(() => {
-        if (!filteredSpecies.value.length) {
-            return [];
-        }
+        if (!filteredSpecies.value.length) return [];
 
         let arrayToSort = [...filteredSpecies.value];
-        if (searchString.value == '') {
+        if (searchString.value === '') {
             arrayToSort = sortArray(arrayToSort, {
                 by: sortBy.value,
                 order: orderBy.value,
@@ -148,8 +154,10 @@
             wkt.value.length &&
             !loadingObservations.value &&
             !loadingError.value &&
-            (!speciesList.value.length || speciesListShowed.value.length === 0)
+            !speciesList.value.length
     );
+
+    const emptySearch = computed(() => filteredSpecies.value.length === 0);
 
     const fetchSpeciesList = (wktParam) => {
         if (!wktParam.length) return;
@@ -173,10 +181,6 @@
             });
     };
 
-    watch(searchString, () => {
-        pageIndex.value = 0;
-    });
-
     function onScroll(event) {
         const { scrollTop, clientHeight, scrollHeight } = event.target;
         const threshold = 50;
@@ -184,6 +188,10 @@
             pageIndex.value++;
         }
     }
+    watch([searchString, filterClass, searchResult], () => {
+        updateFilteredSpecies();
+        pageIndex.value = 0;
+    });
 
     watch([wkt, class_, dateMin, dateMax, connector], () => {
         searchResult.value = { taxons: [], datasets: [] };
@@ -229,6 +237,9 @@
             </div>
             <div id="no-observations-message" v-if="noDataFound">
                 {{ $t('noSpeciesObserved') }}
+            </div>
+            <div id="no-observations-message" v-if="emptySearch">
+                {{ $t('emptySearch') }}
             </div>
             <div id="loading-error" class="col-6 bg-danger" v-if="loadingError">
                 <h5>

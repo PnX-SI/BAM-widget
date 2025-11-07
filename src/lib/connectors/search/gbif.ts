@@ -2,10 +2,10 @@ import { Taxon } from '@/lib/models';
 import { SearchScoring } from './scoring';
 
 enum WeightScore {
-    vernacularNameSimilarity = 1,
-    scientificNameSimilarity = 1,
+    vernacularNameSimilarity = 2,
+    scientificNameSimilarity = 2,
     presentInSearchApi = 2,
-    partialMatch = 0.5,
+    partialMatch = 1,
     nbObservations = 0.5,
 }
 
@@ -73,7 +73,6 @@ export class GBIFSearchScoring extends SearchScoring {
             } else if (vernacularName.includes(searchLower)) {
                 score += WeightScore.partialMatch;
             }
-
             if (scientificName == searchLower) {
                 score += WeightScore.scientificNameSimilarity;
             } else if (scientificName.includes(searchLower)) {
@@ -82,21 +81,15 @@ export class GBIFSearchScoring extends SearchScoring {
         }
         if (searchApiResult.length > 0) {
             searchApiResult.forEach((result, index) => {
+                const resultScientificName =
+                    result.scientificName.toLowerCase();
                 if (result.nubKey == taxon.taxonId) {
                     score += WeightScore.presentInSearchApi;
                 }
-                if (
-                    taxon.acceptedScientificName.includes(result.scientificName)
-                ) {
-                    score += WeightScore.presentInSearchApi * (1 / (index + 1));
-                }
-                if (taxon.class == result.class) {
+                if (scientificName.includes(resultScientificName)) {
                     score += WeightScore.presentInSearchApi * (1 / (index + 1));
                 }
             });
-        }
-        if (taxon.nbObservations) {
-            score += WeightScore.nbObservations;
         }
         return score;
     }
