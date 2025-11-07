@@ -63,9 +63,27 @@ Object.defineProperty(String.prototype, 'capitalize', {
     enumerable: false,
 });
 
-createApp(App)
-    .use(router)
-    .use(i18n)
-    .use(createBootstrap())
-    .component('VueShowdown', VueShowdown)
-    .mount('#app');
+const app = createApp(App);
+
+app.use(router);
+app.use(i18n);
+app.use(createBootstrap());
+app.component('VueShowdown', VueShowdown);
+
+app.config.errorHandler = (err, instance, info) => {
+    console.group(
+        '%c🔥 Vue Global Error Handler',
+        'color:red; font-weight:bold;'
+    );
+    console.error('Erreur attrapée :', err);
+    if (instance) {
+        console.warn(
+            'Instance du composant :',
+            instance.$options.name || instance
+        );
+    }
+    console.info('Contexte :', info);
+    console.groupEnd();
+};
+
+-app.mount('#app');
