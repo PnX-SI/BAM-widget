@@ -130,7 +130,7 @@ function fetchMediaFromWikidata(
  * Resolve Wikidata ID from connector + fetch media
  */
 function fetchWikidataMedia(
-    idTaxon: string,
+    idTaxon: string | number,
     connector: Connector,
     property: string,
     typeMedia: MediaType,
@@ -171,7 +171,7 @@ class WikiDataImageSource extends MediaSource {
     }
 
     fetchPicture(
-        taxonID: string,
+        taxonID: string | number,
         connector: Connector
     ): Promise<Media[] | undefined> {
         if (!this.isCompatible(connector)) {

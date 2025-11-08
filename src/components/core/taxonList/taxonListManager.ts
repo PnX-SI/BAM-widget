@@ -16,15 +16,55 @@ interface TaxonListManagerProps {
 }
 
 export class TaxonListManager {
+    /**
+     * Contains the taxons and datasets that match the search criteria
+     * @type {Ref<SearchResult>}
+     */
     public searchResult: Ref<SearchResult> = ref({ taxons: [], datasets: [] });
+    /**
+     * The list of species that match the search criteria and the class if selected
+     * @type {Ref<Taxon[]>}
+     */
     public filteredSpecies: Ref<Taxon[]> = ref([]);
+    /**
+     * The search string used to filter the species list
+     * @type {Ref<string>}
+     */
     public searchString: Ref<string> = ref('');
+    /**
+     * The class on which the species are filtered
+     * @type {Ref<string>}
+     */
     public filterClass: Ref<string | null> = ref(null);
+    /**
+     * The column on which the species are sorted
+     * @type {Ref<string>}
+     */
     public sortBy: Ref<string> = ref('');
+    /**
+     * The order in which the species are sorted
+     * @type {Ref<'asc' | 'desc'>}
+     */
     public orderBy: Ref<'asc' | 'desc'> = ref('desc');
+    /**
+     * The current page index
+     * @type {Ref<number>}
+     */
     public pageIndex: Ref<number> = ref(0);
+    /**
+     * A boolean that indicates if the observations are being loaded
+     * @type {Ref<boolean>}
+     */
     public loadingObservations: Ref<boolean> = ref(false);
+    /**
+     * A boolean that indicates if there was an error loading the observations
+     * @type {Ref<boolean>}
+     */
     public loadingError: Ref<boolean> = ref(false);
+    /**
+     * A computed property that returns the species list to be displayed
+     * @type {any}
+     */
     public speciesListShowed: any;
 
     constructor(
@@ -45,7 +85,7 @@ export class TaxonListManager {
 
             let arrayToSort = [...this.filteredSpecies.value];
 
-            // Tri si pas de recherche texte en cours
+            // If no search string, sort by selected column
             if (this.searchString.value === '') {
                 arrayToSort = sortArray(arrayToSort, {
                     by: this.sortBy.value,
@@ -53,7 +93,7 @@ export class TaxonListManager {
                 });
             }
 
-            // Limitation du nombre d'espèces affichées
+            // if a a specific number of species is specified
             if (nbDisplayedSpecies.value > 0) {
                 arrayToSort = arrayToSort.slice(0, nbDisplayedSpecies.value);
             }
@@ -94,7 +134,9 @@ export class TaxonListManager {
             });
     }
 
-    // Met à jour la liste des taxons filtrés (version callback)
+    /**
+     * Updates the filteredSpecies property based on the search string and filterClass values.
+     */
     public updateFilteredSpecies(): void {
         const result = this.searchResult.value.taxons;
         if (!result) {
@@ -130,13 +172,13 @@ export class TaxonListManager {
                 );
             }
 
-            // Filtrage par classe
+            // if a taxon class is selected
             if (this.filterClass.value) {
                 filtered = filtered.filter(
                     (taxon) => taxon.class === this.filterClass.value
                 );
             }
-
+            // finally, assign filtered taxon list
             this.filteredSpecies.value = filtered;
         };
 
@@ -150,7 +192,10 @@ export class TaxonListManager {
         }
     }
 
-    // Gestion du scroll pour la pagination
+    /**
+     * Handles the scroll event and updates the pageIndex property accordingly.
+     * @param {Event} event - The scroll event object.
+     */
     public onScroll(event: { target: HTMLElement }): void {
         const { scrollTop, clientHeight, scrollHeight } = event.target;
         const threshold = 50;

@@ -190,8 +190,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
@@ -282,8 +283,7 @@ export class GbifConnector extends Connector {
 
     searchOnAPI(searchString: string): Promise<any> {
         return fetch(
-            `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&status=ACCEPTED&qField=VERNACULAR&limit=100`,
-            { headers: { ['Accept-Language']: 'fra' } }
+            `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&status=ACCEPTED&qField=VERNACULAR&limit=100`
         )
             .then((response) => response.json())
             .then((json) => json.results);

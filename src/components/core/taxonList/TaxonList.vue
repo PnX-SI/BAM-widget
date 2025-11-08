@@ -54,7 +54,6 @@
     nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
     mode.value = props.mode ?? mode.value;
 
-    // ✅ Instanciation du manager
     const taxonManager = new TaxonListManager(
         connector,
         {
@@ -200,7 +199,6 @@
         width: max-content;
     }
 
-    /* Style des boutons de mode */
     .filter-dropdown button {
         padding: 5px 10px;
         width: 40px !important;

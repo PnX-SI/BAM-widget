@@ -19,7 +19,7 @@ export abstract class MediaSource {
     abstract isCompatible(connector: Connector): boolean;
 
     fetchPicture(
-        taxonID: string,
+        taxonID: string | number,
         connector: Connector
     ): Promise<Media[] | undefined> {
         if (!this.isCompatible(connector)) {
@@ -29,7 +29,7 @@ export abstract class MediaSource {
     }
 
     fetchSound(
-        taxonID: string,
+        taxonID: string | number,
         connector: Connector
     ): Promise<Media[] | undefined> {
         if (!this.isCompatible(connector)) {

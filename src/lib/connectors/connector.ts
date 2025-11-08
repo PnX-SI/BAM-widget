@@ -47,7 +47,7 @@ export class Connector {
     soundSource?: MediaSource;
 
     /**
-     * Indicates if the taxon search on API is available
+     * Indicates if a taxon search endpoint on the current connector is available
      * @type {boolean}
      */
     isSearchOnAPIAvailable: boolean = false;

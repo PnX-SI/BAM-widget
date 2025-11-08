@@ -28,7 +28,7 @@ export class TaxrefODATA extends MediaSource {
     }
 
     fetchPicture(
-        taxonID: string,
+        taxonID: string | number,
         connector: Connector
     ): Promise<Media[] | undefined> {
         const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${taxonID}&visibility=PUBLIC`;

@@ -53,11 +53,7 @@
     />
 
     <!-- Message : Aucune géométrie dessinée -->
-    <div
-        id="no-geometry-message"
-        class="message-box bg-secondary text-secondary"
-        v-if="noGeometry"
-    >
+    <div class="message-box bg-secondary text-secondary" v-if="noGeometry">
         <h5>{{ $t('drawGeometry') }}</h5>
         <h5>
             <i class="bi bi-square-fill"></i>
@@ -68,19 +64,14 @@
     </div>
 
     <!-- Message : Aucune observation trouvée -->
-    <div
-        id="no-observations-message"
-        class="message-box bg-warning text-white"
-        v-if="noDataFound"
-    >
+    <div class="message-box bg-warning text-white" v-if="noDataFound">
         {{ $t('noSpeciesObserved') }}
     </div>
 
     <!-- Message : Recherche vide -->
     <div
-        id="no-observations-message"
         class="message-box bg-warning text-white"
-        v-if="emptySearch"
+        v-if="emptySearch && !noDataFound &&!loadingError"
     >
         {{ $t('emptySearch') }}
     </div>

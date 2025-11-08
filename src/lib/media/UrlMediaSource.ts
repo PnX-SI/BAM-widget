@@ -14,7 +14,7 @@ class UrlMediaSource extends MediaSource {
     }
 
     fetchPicture(
-        taxonID: string,
+        taxonID: string | number,
         connector: any
     ): Promise<Media[] | undefined> {
         const apiUrl = this.url.replace('{taxonID}', taxonID);
