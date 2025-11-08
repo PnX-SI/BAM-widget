@@ -73,7 +73,7 @@
                 <i class="bi bi-gear-fill"></i> {{ $t('parameters') }}
             </h3>
             <div class="card-body" id="parameters">
-                <div class="col text-center">
+                <div class="col text-center p-2">
                     <label
                         >{{ $t('drawGeometry') }}
                         <i class="fa-solid fa-location-dot"></i

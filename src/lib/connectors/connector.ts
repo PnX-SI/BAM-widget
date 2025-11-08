@@ -1,6 +1,7 @@
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { MediaSource } from '../media/MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
+import { SearchScoring } from './search/scoring';
 
 export interface ConnectorOptions {
     imageSource?: string | MediaSource;
@@ -44,6 +45,17 @@ export class Connector {
      * @type {MediaSource}
      */
     soundSource?: MediaSource;
+
+    /**
+     * Indicates if a taxon search endpoint on the current connector is available
+     * @type {boolean}
+     */
+    isSearchOnAPIAvailable: boolean = false;
+
+    /**
+     * Class that describe how to sort the taxon list based on a search string
+     */
+    scoringSearchClass: SearchScoring = new SearchScoring();
 
     constructor(options: ConnectorOptions) {
         this.options = options;
@@ -162,7 +174,7 @@ export class Connector {
      * @param {string} taxonID - The ID of the taxon.
      * @returns {Promise<string|undefined>} A promise that resolves to the vernacular name if found.
      */
-    fetchVernacularName(taxonID: string): Promise<string | undefined> {
+    fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
         throw new Error('Not implemented');
     }
 
@@ -194,5 +206,9 @@ export class Connector {
 
     getDatasetUrl(datasetID): string | null {
         return null;
+    }
+
+    searchOnAPI(searchString: string): Promise<any> {
+        throw new Error('Not implemented');
     }
 }

@@ -4,6 +4,7 @@ import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { SOURCE_ } from './media';
 import { Connector } from '../connectors/connector';
 import { validURL } from '../utils';
+import { GbifConnector } from '../connectors/gbif';
 
 export class GBIFMediaSource extends MediaSource {
     constructor(parameters?: any) {
@@ -15,8 +16,8 @@ export class GBIFMediaSource extends MediaSource {
     }
 
     fetchPicture(
-        taxonID: string,
-        connector: Connector
+        taxonID: string | number,
+        connector: GbifConnector
     ): Promise<Media[] | undefined> {
         if (!this.isCompatible(connector)) {
             throw new Error(
@@ -39,8 +40,8 @@ export class GBIFMediaSource extends MediaSource {
     }
 
     fetchSound(
-        taxonID: string,
-        connector: Connector
+        taxonID: string | number,
+        connector: GbifConnector
     ): Promise<Media[] | undefined> {
         if (!this.isCompatible(connector)) {
             throw new Error(
@@ -98,7 +99,7 @@ export class GBIFMediaSource extends MediaSource {
                     url: media.identifier,
                     license: media.license, // corrected from licence to license
                     source: `${media.rightsHolder} (${media.license})`,
-                    typeMedia: 'image',
+                    typeMedia: MediaType.image,
                     author: media.rightsHolder,
                     urlSource: validURL(media.source)
                         ? media.source
@@ -112,7 +113,10 @@ export class GBIFMediaSource extends MediaSource {
      * @param idTaxon - The ID of the taxon.
      * @returns A promise that resolves to the list of media.
      */
-    fetchMediaOccurence(idTaxon: string, ENDPOINT: string): Promise<Media[]> {
+    fetchMediaOccurence(
+        idTaxon: string | number,
+        ENDPOINT: string
+    ): Promise<Media[]> {
         const url = `${ENDPOINT}/occurrence/search?limit=10&mediaType=StillImage&speciesKey=${idTaxon}`;
         return fetch(url)
             .then((response) => response.json())

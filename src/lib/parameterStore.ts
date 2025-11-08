@@ -124,6 +124,7 @@ class ParameterStore {
 
     /**
      * The number of the most frequently observed species that will be displayed.
+     * @type {Ref<number | null>}
      */
     nbDisplayedSpecies: Ref<number | null>;
 

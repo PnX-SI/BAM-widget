@@ -1,5 +1,5 @@
 export interface Taxon {
-    taxonId: string;
+    taxonId: string | number;
     acceptedScientificName: string;
     vernacularName?: string;
     nbObservations?: number;

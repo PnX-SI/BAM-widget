@@ -62,6 +62,7 @@
         connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
             if (name) {
                 vernacularName.value = name.split(',')[0];
+                taxon.vernacularName = vernacularName.value;
             }
         });
     }

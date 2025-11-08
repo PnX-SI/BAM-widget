@@ -40,7 +40,9 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         previousPage: 'Anterior',
         nextPage: 'Siguiente',
         loading: 'Cargando...',
+        loadingError: 'Error al cargar los datos',
         noObservations: 'Ninguna observación encontrada',
+        emptySearch: 'No se encontraron especies que coincidan con tu búsqueda',
         noGeometry: 'No se encontró geometría',
         error404: {
             title: 'Página no encontrada',

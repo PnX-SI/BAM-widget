@@ -6,6 +6,7 @@ import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { useI18n } from 'vue-i18n';
 import { CONNECTORS } from './connectors';
+import { GBIFSearchScoring } from './search/gbif';
 
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 const GBIF_DEFAULT_LIMIT = 300;
@@ -62,6 +63,8 @@ export class GbifConnector extends Connector {
             Liliopsida: 196,
             Pinopsida: 194,
         };
+        this.isSearchOnAPIAvailable = true;
+        this.scoringSearchClass = new GBIFSearchScoring();
     }
 
     getParamsSchema(): Array<Record<string, any>> {
@@ -92,7 +95,7 @@ export class GbifConnector extends Connector {
         return callOccurrenceApi(params).then((data) => data.count);
     }
 
-    fetchVernacularName(taxonID: string): Promise<string | undefined> {
+    fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
         const mapping_language: Record<string, string> = {
             en: 'eng',
             fr: 'fra',
@@ -275,5 +278,13 @@ export class GbifConnector extends Connector {
 
     getDatasetUrl(datasetID: any): string | null {
         return `${this.getSourceUrl()}/dataset/${datasetID}`;
+    }
+
+    searchOnAPI(searchString: string): Promise<any> {
+        return fetch(
+            `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&status=ACCEPTED&qField=VERNACULAR&limit=100`
+        )
+            .then((response) => response.json())
+            .then((json) => json.results);
     }
 }

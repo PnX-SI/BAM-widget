@@ -57,7 +57,7 @@ export class TaxHubMediaSource extends MediaSource {
             });
     }
 
-    fetchPicture(taxonID: string, connector: any): Promise<any[]> {
+    fetchPicture(taxonID: string | number, connector: any): Promise<any[]> {
         return this.fetchTypeMedia(connector).then((type) => {
             const url = `${connector.API_ENDPOINT}/taxhub/api/taxref/${taxonID}?fields=medias`;
             return fetch(url)

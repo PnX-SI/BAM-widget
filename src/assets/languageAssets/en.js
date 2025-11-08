@@ -46,7 +46,9 @@ You can also **share your results 📤** to collaborate with other users.
         previousPage: 'Previous',
         nextPage: 'Next',
         loading: 'Loading...',
+        loadingError: 'An error occurred while loading',
         noObservations: 'No observation found',
+        emptySearch: 'No species match your search',
         noGeometry: 'No geometry found',
         error404: {
             title: 'Page not found',
