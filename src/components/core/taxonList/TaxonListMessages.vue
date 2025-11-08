@@ -53,7 +53,7 @@
     />
 
     <!-- Message : Aucune géométrie dessinée -->
-    <div class="message-box bg-secondary text-secondary" v-if="noGeometry">
+    <div class="message-box bg-secondary text-white" v-if="noGeometry">
         <h5>{{ $t('drawGeometry') }}</h5>
         <h5>
             <i class="bi bi-square-fill"></i>
