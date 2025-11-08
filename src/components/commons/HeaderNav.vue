@@ -15,8 +15,10 @@
                 ><img style="width: 35px" :src="imgUrl" />
                 {{ $t('title') }}</BNavbarBrand
             >
-            <ShareButton></ShareButton>
+
             <BCollapse id="nav-collapse" is-nav>
+                <ShareButton></ShareButton>
+
                 <BNavbarNav class="ms-auto mb-2 mb-lg-0">
                     <BNavForm class="d-flex" right>
                         <LanguageSwitch></LanguageSwitch>
