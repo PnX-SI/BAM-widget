@@ -174,7 +174,7 @@ export class Connector {
      * @param {string} taxonID - The ID of the taxon.
      * @returns {Promise<string|undefined>} A promise that resolves to the vernacular name if found.
      */
-    fetchVernacularName(taxonID: string): Promise<string | undefined> {
+    fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
         throw new Error('Not implemented');
     }
 

@@ -137,7 +137,7 @@ export class GeoNatureConnector extends Connector {
         return `https://inpn.mnhn.fr/espece/cd_nom/${taxonId}`;
     }
 
-    fetchVernacularName(taxonId: string): Promise<null> {
+    fetchVernacularName(taxonId: string | number): Promise<null> {
         return Promise.resolve(null);
     }
 }

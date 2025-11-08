@@ -66,11 +66,11 @@ export class GBIFSearchScoring extends SearchScoring {
         let score = 0;
         const searchLower = searchString.toLowerCase();
         const scientificName = taxon.acceptedScientificName.toLowerCase();
-        const vernacularName = taxon?.vernacularName?.toLowerCase() || '';
+        const vernacularName = taxon?.vernacularName?.toLowerCase() || null;
         if (searchLower) {
-            if (vernacularName == searchLower) {
+            if (vernacularName && vernacularName === searchLower) {
                 score += WeightScore.vernacularNameSimilarity;
-            } else if (vernacularName.includes(searchLower)) {
+            } else if (vernacularName && vernacularName.includes(searchLower)) {
                 score += WeightScore.partialMatch;
             }
             if (scientificName == searchLower) {

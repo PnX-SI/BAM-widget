@@ -95,7 +95,7 @@ export class GbifConnector extends Connector {
         return callOccurrenceApi(params).then((data) => data.count);
     }
 
-    fetchVernacularName(taxonID: string): Promise<string | undefined> {
+    fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
         const mapping_language: Record<string, string> = {
             en: 'eng',
             fr: 'fra',
