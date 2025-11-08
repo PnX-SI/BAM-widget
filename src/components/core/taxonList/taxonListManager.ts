@@ -170,6 +170,12 @@ export class TaxonListManager {
                             searchApiResponseData
                         ) > 0
                 );
+                filtered.sort(
+                    this.connector.value.scoringSearchClass.scoring(
+                        this.searchString.value,
+                        searchApiResponseData
+                    )
+                );
             }
 
             // if a taxon class is selected

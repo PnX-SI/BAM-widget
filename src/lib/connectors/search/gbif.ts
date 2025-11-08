@@ -6,7 +6,6 @@ enum WeightScore {
     scientificNameSimilarity = 2,
     presentInSearchApi = 2,
     partialMatch = 1,
-    nbObservations = 0.5,
 }
 
 interface GBIFSearchSpecieResult {
@@ -57,7 +56,6 @@ export class GBIFSearchScoring extends SearchScoring {
             return bScore - aScore;
         };
     }
-
     getScore(
         taxon: Taxon,
         searchString: string,
