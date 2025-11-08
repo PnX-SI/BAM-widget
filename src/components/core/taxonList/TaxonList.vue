@@ -8,7 +8,7 @@
     import { TAXONLIST_DISPLAY_MODE } from '@/lib/enums';
     import TaxonClassFilterBadge from '@/components/commons/TaxonClassFilterBadge.vue';
     import ParameterStore from '@/lib/parameterStore';
-    import { TaxonListManager } from './taxonListManager'; // ✅ ta classe importée
+    import { TaxonListManager } from './taxonListManager';
 
     const { t } = useI18n();
     const parameterStore = ParameterStore.getInstance();
