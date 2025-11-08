@@ -71,7 +71,7 @@
     <!-- Message : Recherche vide -->
     <div
         class="message-box bg-warning text-white"
-        v-if="emptySearch && !noDataFound &&!loadingError"
+        v-if="emptySearch && !noDataFound && !loadingError"
     >
         {{ $t('emptySearch') }}
     </div>
