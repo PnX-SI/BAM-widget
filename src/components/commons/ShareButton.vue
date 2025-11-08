@@ -16,27 +16,12 @@
 </script>
 
 <template>
-    <div class="row justify-content-center p-3">
-        <div
-            class="col-12 col-lg-12 col-md-6 d-flex justify-content-center align-items-center"
-        >
-            <label for="shareButton" class="mb-0 me-2 fw-bold">{{
-                $t('shareDiscover')
-            }}</label>
-            <button
-                class="btn btn-outline-secondary"
-                id="shareButton"
-                @click="copy"
-            >
-                <div v-if="copied">
-                    <i class="bi bi-check2-circle"></i> {{ $t('copied') }}!
-                </div>
-                <div v-else>
-                    <i class="bi bi-link-45deg"></i> {{ $t('copy') }}
-                </div>
-            </button>
+    <button class="btn btn-outline-secondary" id="shareButton" @click="copy">
+        <div v-if="copied">
+            <i class="bi bi-check2-circle"></i> {{ $t('copied') }}!
         </div>
-    </div>
+        <div v-else><i class="bi bi-link-45deg"></i> {{ $t('share') }}</div>
+    </button>
 </template>
 
 <style>
