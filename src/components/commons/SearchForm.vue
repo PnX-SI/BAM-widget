@@ -65,16 +65,18 @@
         border-radius: 50px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         padding: 2px;
-        transition: width 0.5s ease;
         width: 42px;
         height: 42px;
         overflow: hidden;
+        transition: width 0.4s ease;
     }
 
+    /* When input is active, allow it to expand naturally up to max-width */
     .search-container:has(input) {
-        width: 280px;
+        width: min(90%, 250px);
     }
 
+    /* Button */
     .search-btn {
         background: #fff;
         border: none;
@@ -101,9 +103,10 @@
         margin-left: 10px;
         font-size: 16px;
         background: transparent;
+        min-width: 0; /* Important for flexbox on small screens */
     }
 
-    /* Transition de l’apparition du champ */
+    /* Slide transition */
     .slide-enter-from {
         opacity: 0;
         transform: translateX(-20px);
@@ -130,5 +133,15 @@
     .search-btn svg {
         width: 18px;
         height: 18px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 500px) {
+        .search-container:has(input) {
+            width: 80%;
+        }
+        .search-input {
+            font-size: 14px;
+        }
     }
 </style>
