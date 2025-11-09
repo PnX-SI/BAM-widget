@@ -187,6 +187,7 @@
         padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
         padding-top: 0px;
         flex-grow: 1;
+        margin-top: 0;
     }
 
     .card-body {
@@ -200,10 +201,10 @@
 
     #taxon-list-filter {
         margin-top: 1em;
-        margin-bottom: 2em;
         display: flex;
         flex-direction: row;
         justify-content: center;
         gap: 10px;
+        margin-bottom: 5px;
     }
 </style>

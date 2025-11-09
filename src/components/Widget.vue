@@ -12,5 +12,5 @@
         height="100vh"
         v-if="widgetType == WIDGET_TYPE.list"
     ></ListWidget>
-    <MapListWidget height="100vh" v-else></MapListWidget>
+    <MapListWidget height="98vh" v-else></MapListWidget>
 </template>

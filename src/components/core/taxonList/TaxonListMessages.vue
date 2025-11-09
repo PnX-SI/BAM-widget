@@ -101,4 +101,7 @@
         text-align: center;
         padding: 1em;
     }
+    .message:not(:has(.message-box)) {
+        display: none;
+    }
 </style>
