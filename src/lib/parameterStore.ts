@@ -128,6 +128,12 @@ class ParameterStore {
      */
     nbDisplayedSpecies: Ref<number | null>;
 
+    /**
+     * Color of the footer.
+     * @type {Ref<string | null>}
+     */
+    footerColor: Ref<string | null>;
+
     private constructor() {
         const { locale, availableLocales } = useI18n();
         const route = useRoute();
@@ -152,6 +158,7 @@ class ParameterStore {
         this.y = ref(config.y);
         this.customDetailPage = ref(config.customDetailPage);
         this.nbDisplayedSpecies = ref(config.nbDisplayedSpecies);
+        this.footerColor = ref(config.footerColor);
 
         this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
@@ -185,6 +192,7 @@ class ParameterStore {
             'widgetType',
             'hybridTaxonList',
             'customDetailPage',
+            'footerColor',
         ];
 
         paramsToWatch.forEach((param) => {
@@ -255,6 +263,7 @@ class ParameterStore {
             },
             customDetailPage: (value: string) => value,
             nbDisplayedSpecies: (value: string) => parseInt(value),
+            footerColor: (value: string) => '#' + value,
         };
 
         Object.entries(paramHandlers).forEach(([paramName, transformFn]) => {
@@ -272,6 +281,7 @@ class ParameterStore {
                 }
             }
         });
+        console.log(this.footerColor.value);
 
         if (this.x.value && this.y.value) {
             this.wkt.value = validateWKT(

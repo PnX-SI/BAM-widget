@@ -83,6 +83,7 @@ Each parameter can be set via URL query or through the widget configuration inte
 | `customDetailPage`   | string  | Custom URL for species detail redirection. The species ID part of the URL must be indicated by the string `{taxonID}` so it can be replaced by the actual species' ID. For example, `https://www.gbif.org/species/{taxonID}` | `"https://.../{taxonID}"`        |
 | `soundSource`        | string  | Name of the data source use to fetch animal sounds.                                                                                                                                                                          | `[gbif]`                         |
 | `imageSource`        | string  | Name of the data source use to fetch species pictures.                                                                                                                                                                       | `[wikidata, gbif, inpn, taxhub]` |
+| `footerColor`        | string  | Hexadecimal color for footer background. Color must be in format `RRGGBB`.                                                                                                                                                   | 'aaa'                            |
 
 ## ⚙️ Self-hosting
 

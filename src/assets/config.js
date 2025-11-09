@@ -18,6 +18,7 @@ const config = {
     customDetailPage: null,
     nbTaxonPerLine: 2,
     nbDisplayedSpecies: null,
+    footerColor: '#aaa',
 };
 
 export default config;

@@ -140,6 +140,12 @@ Name of the data source used to fetch animal sounds.
 
 -   `gbif` (GBIF compatible)
 
+### `footerColor` (**Type:** string)
+
+Hexadecimal color for footer background. Color must be in format `RRGGBB`.
+
+**Example:** `"aaa"`
+
 ## Integration examples
 
 Find widget integration examples [here](README?id=🚀-generate-your-widget).

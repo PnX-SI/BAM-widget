@@ -103,6 +103,7 @@ export class Connector {
                         'referential',
                         'soundSource',
                         'imageSource',
+                        'isSearchOnAPIAvailable',
                     ].includes(key)
             )
             .filter(([_, value]) => typeof value !== 'object')
