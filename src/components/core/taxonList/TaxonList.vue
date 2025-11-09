@@ -132,12 +132,7 @@
                 <TaxonClassFilterBadge
                     @select:class="(newClass) => (filterClass = newClass)"
                 ></TaxonClassFilterBadge>
-                <SearchForm
-                    v-if="showFilters"
-                    @update:searchString="
-                        (newSearchString) => (searchString = newSearchString)
-                    "
-                />
+
                 <SortBy
                     v-if="showFilters"
                     :sort-by-available="sortByAvailable"
@@ -145,6 +140,12 @@
                     @update:orderBy="(newOrder) => (orderBy = newOrder)"
                     :sortBy="sortBy"
                     :orderBy="orderBy"
+                />
+                <SearchForm
+                    v-if="showFilters"
+                    @update:searchString="
+                        (newSearchString) => (searchString = newSearchString)
+                    "
                 />
             </div>
             <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
