@@ -21,7 +21,7 @@
     <div
         id="data-source-credits"
         class="text-center"
-        :style="{ background: footerColor }"
+        :style="{ background: '#' + footerColor }"
     >
         <div v-if="props.loadingDone">
             <a

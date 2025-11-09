@@ -263,7 +263,7 @@ class ParameterStore {
             },
             customDetailPage: (value: string) => value,
             nbDisplayedSpecies: (value: string) => parseInt(value),
-            footerColor: (value: string) => '#' + value,
+            footerColor: (value: string) => value,
         };
 
         Object.entries(paramHandlers).forEach(([paramName, transformFn]) => {
@@ -281,7 +281,6 @@ class ParameterStore {
                 }
             }
         });
-        console.log(this.footerColor.value);
 
         if (this.x.value && this.y.value) {
             this.wkt.value = validateWKT(

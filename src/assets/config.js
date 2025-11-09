@@ -12,7 +12,7 @@ const config = {
     sourceGeometry: null,
     class: null,
     widgetType: WIDGET_TYPE.mapList,
-    hybridTaxonList: true,
+    hybridTaxonList: false,
     x: null,
     y: null,
     customDetailPage: null,
