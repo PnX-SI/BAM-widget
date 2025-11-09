@@ -9,6 +9,7 @@
     import TaxonClassFilterBadge from '@/components/commons/TaxonClassFilterBadge.vue';
     import ParameterStore from '@/lib/parameterStore';
     import { TaxonListManager } from './taxonListManager';
+    import SearchForm2 from '@/components/commons/SearchForm.vue';
 
     const { t } = useI18n();
     const parameterStore = ParameterStore.getInstance();
@@ -125,20 +126,6 @@
 
 <template>
     <div id="taxon-list" class="card">
-        <div class="card-header" v-if="showFilters">
-            <SearchForm
-                @update:searchString="
-                    (newSearchString) => (searchString = newSearchString)
-                "
-            />
-            <SortBy
-                :sort-by-available="sortByAvailable"
-                @update:sortBy="(newSort) => (sortBy = newSort)"
-                @update:orderBy="(newOrder) => (orderBy = newOrder)"
-                :sortBy="sortBy"
-                :orderBy="orderBy"
-            />
-        </div>
         <div class="card-body">
             <TaxonListMessages
                 :loading-error="loadingError"
@@ -146,14 +133,27 @@
                 :species-list="speciesList"
                 :filter-species-list="filteredSpecies"
             ></TaxonListMessages>
-
-            <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
+            <div id="taxon-list-filter">
                 <TaxonListModeSelection> </TaxonListModeSelection>
-                <div class="filter-dropdown">
-                    <TaxonClassFilterBadge
-                        @select:class="(newClass) => (filterClass = newClass)"
-                    ></TaxonClassFilterBadge>
-                </div>
+                <TaxonClassFilterBadge
+                    @select:class="(newClass) => (filterClass = newClass)"
+                ></TaxonClassFilterBadge>
+                <SearchForm
+                    v-if="showFilters"
+                    @update:searchString="
+                        (newSearchString) => (searchString = newSearchString)
+                    "
+                />
+                <SortBy
+                    v-if="showFilters"
+                    :sort-by-available="sortByAvailable"
+                    @update:sortBy="(newSort) => (sortBy = newSort)"
+                    @update:orderBy="(newOrder) => (orderBy = newOrder)"
+                    :sortBy="sortBy"
+                    :orderBy="orderBy"
+                />
+            </div>
+            <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
                 <TaxonView
                     v-for="observation in taxonManager.speciesListShowed.value"
                     :key="observation.taxonId"
@@ -175,6 +175,7 @@
         height: 80vh;
         display: flex;
         flex-direction: column;
+        column-gap: 8px;
     }
 
     #taxon-list-content {
@@ -192,16 +193,16 @@
         position: relative;
     }
 
-    .filter-dropdown {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 9999;
-        width: max-content;
+    #taxon-list-filter {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        justify-items: flex-start;
     }
-
-    .filter-dropdown button {
-        padding: 5px 10px;
-        width: 40px !important;
+    #taxon-list-filter div {
+        display: flex;
     }
 </style>

@@ -135,6 +135,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
                 Pinopsida: 'Conifères',
             },
         },
+        Animalia: 'Animal',
+        Plantae: 'Plante',
         map: {
             searchPlace: 'Rechercher un lieu',
         },
