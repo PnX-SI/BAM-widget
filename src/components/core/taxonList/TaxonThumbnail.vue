@@ -19,7 +19,7 @@
         ></Image>
 
         <div class="card-img-overlay">
-            <div class="card-title h6">
+            <div class="card-title">
                 <a
                     style="color: inherit; text-decoration: inherit"
                     :href="props.urlDetailPage"
@@ -66,6 +66,11 @@
     .card-title {
         color: white;
         text-shadow: 2px 2px 2px #333;
+    }
+    @media screen and (max-width: 768px) {
+        .card-title span {
+            font-size: 2rem;
+        }
     }
 
     .copyright-icon {

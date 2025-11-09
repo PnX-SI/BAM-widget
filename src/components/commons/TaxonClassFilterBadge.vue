@@ -121,14 +121,13 @@
     .taxon-menu {
         position: absolute;
         top: 50px;
-        right: 0;
         background: #fff;
         border-radius: 14px;
         box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
         border: none;
         padding: 10px 0;
         min-width: 230px;
-        z-index: 100;
+        z-index: 2000;
         overflow: hidden;
     }
 
