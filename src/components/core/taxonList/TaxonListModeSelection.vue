@@ -1,5 +1,6 @@
 <script setup>
     import ParameterStore from '@/lib/parameterStore';
+    import { TAXONLIST_DISPLAY_MODE } from '@/lib/enums';
     const parameterStore = ParameterStore.getInstance();
     const { hybridTaxonList, mode } = parameterStore;
 

@@ -148,6 +148,7 @@
             ></TaxonListMessages>
 
             <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
+                <TaxonListModeSelection> </TaxonListModeSelection>
                 <div class="filter-dropdown">
                     <TaxonClassFilterBadge
                         @select:class="(newClass) => (filterClass = newClass)"
