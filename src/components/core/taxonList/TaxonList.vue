@@ -127,12 +127,6 @@
 <template>
     <div id="taxon-list" class="card">
         <div class="card-body">
-            <TaxonListMessages
-                :loading-error="loadingError"
-                :loading-observations="loadingObservations"
-                :species-list="speciesList"
-                :filter-species-list="filteredSpecies"
-            ></TaxonListMessages>
             <div id="taxon-list-filter">
                 <TaxonListModeSelection> </TaxonListModeSelection>
                 <TaxonClassFilterBadge
@@ -154,6 +148,12 @@
                 />
             </div>
             <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
+                <TaxonListMessages
+                    :loading-error="loadingError"
+                    :loading-observations="loadingObservations"
+                    :species-list="speciesList"
+                    :filter-species-list="filteredSpecies"
+                ></TaxonListMessages>
                 <TaxonView
                     v-for="observation in taxonManager.speciesListShowed.value"
                     :key="observation.taxonId"
@@ -176,12 +176,17 @@
         display: flex;
         flex-direction: column;
         column-gap: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 8px;
     }
 
     #taxon-list-content {
         overflow-y: scroll;
         overflow-x: hidden;
         padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+        padding-top: 0px;
+        flex-grow: 1;
     }
 
     .card-body {
@@ -195,14 +200,10 @@
 
     #taxon-list-filter {
         margin-top: 1em;
-        margin-bottom: 1em;
+        margin-bottom: 2em;
         display: flex;
         flex-direction: row;
         justify-content: center;
         gap: 10px;
-        justify-items: flex-start;
-    }
-    #taxon-list-filter div {
-        display: flex;
     }
 </style>
