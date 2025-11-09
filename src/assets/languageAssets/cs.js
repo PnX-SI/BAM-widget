@@ -66,6 +66,8 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             list: 'Seznam druhů',
             config: 'Konfigurace',
         },
+        sortBy: 'Seradit podle',
+        sortOrder: 'Poradie',
         copy: 'Kopírovat',
         copied: 'Zkopírováno',
         share: 'Sdílet',

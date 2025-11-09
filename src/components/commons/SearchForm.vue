@@ -65,8 +65,8 @@
         border-radius: 50px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         padding: 2px;
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         overflow: hidden;
         transition: width 0.4s ease;
     }

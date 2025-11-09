@@ -19,7 +19,9 @@
         class="mode-btn"
         @click="toggleMode"
         :title="
-            mode === 'gallery' ? $t('taxon.listMode') : $t('taxon.galleryMode')
+            mode === 'gallery'
+                ? $t('mode.detailedList')
+                : $t('mode.galleryMode')
         "
     >
         <transition name="icon-fade" mode="out-in">

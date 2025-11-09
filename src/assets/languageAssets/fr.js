@@ -66,6 +66,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             list: "Liste d'espèces",
             config: 'Configurateur',
         },
+        sortBy: 'Trier par',
+        sortOrder: 'Ordre',
         copy: 'Copier',
         copied: 'Copié',
         share: 'Partager',

@@ -12,7 +12,7 @@
 </script>
 
 <template>
-    <div class="container-fluid p-2">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-lg-6 col-md-6">
                 <Map :height="props.height" />

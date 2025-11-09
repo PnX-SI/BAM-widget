@@ -132,7 +132,6 @@
                 <TaxonClassFilterBadge
                     @select:class="(newClass) => (filterClass = newClass)"
                 ></TaxonClassFilterBadge>
-
                 <SortBy
                     v-if="showFilters"
                     :sort-by-available="sortByAvailable"
@@ -204,9 +203,10 @@
         margin-top: 1em;
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 10px;
         margin-bottom: 5px;
+        margin-left: 1em;
         flex-wrap: wrap;
     }
 </style>

@@ -67,6 +67,8 @@ You can also **share your results 📤** to collaborate with other users.
             list: 'List of species',
             config: 'Configuration',
         },
+        sortBy: 'Sort by',
+        sortOrder: 'Order',
         copy: 'Copy',
         copied: 'Copied',
         share: 'Share',
