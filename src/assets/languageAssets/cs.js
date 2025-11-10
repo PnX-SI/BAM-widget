@@ -137,6 +137,8 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
                 Pinopsida: 'Jehličnany',
             },
         },
+        Animalia: 'Zvierata',
+        Plantae: 'Rostlina',
         map: {
             searchPlace: 'Vyhledat název místa',
         },

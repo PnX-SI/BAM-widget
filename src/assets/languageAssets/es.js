@@ -132,6 +132,8 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
                 Pinopsida: 'Coníferas',
             },
         },
+        Animalia: 'Animal',
+        Plantae: 'Planta',
         map: {
             searchPlace: 'Buscar un nombre de lugar',
         },
