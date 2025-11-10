@@ -91,7 +91,6 @@
         return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
     });
 
-    // --- Reactive gradient visibility ---
     const showTopFade = ref(false);
     const showBottomFade = ref(true);
 
@@ -133,8 +132,8 @@
 </script>
 
 <template>
-    <div id="taxon-list" class="card">
-        <div class="card-body">
+    <div id="taxon-list">
+        <div class="list-container">
             <!-- Filters -->
             <div id="taxon-list-filter">
                 <TaxonListModeSelection />
@@ -158,7 +157,6 @@
                 />
             </div>
 
-            <!-- Scrollable content with fade overlay -->
             <div
                 class="taxon-list-scroll-wrapper"
                 :class="{
@@ -197,31 +195,28 @@
 
 <style scoped>
     #taxon-list {
-        padding: 0;
-        height: 80vh;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: none;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         border-radius: 8px;
+        height: 100%;
     }
 
-    .card-body {
+    .list-container {
         overflow: hidden;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding: 0 !important;
-        position: relative;
+        padding: 0px 1em 0px 1em;
     }
 
     #taxon-list-filter {
         margin-top: 1em;
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
-        gap: 10px;
-        margin-bottom: 20px;
+        justify-content: center;
+        gap: 1em;
+        margin-bottom: 1em;
         margin-left: 1em;
         flex-wrap: wrap;
     }

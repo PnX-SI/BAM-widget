@@ -95,9 +95,8 @@
         position: relative;
         display: inline-block;
     }
-
-    /* Bouton principal */
     .taxon-toggle {
+        padding: 2px;
         background: #fff;
         border: none;
         border-radius: 50%;
@@ -106,15 +105,24 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #afafaf;
         cursor: pointer;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         transition: all 0.3s ease;
     }
+    /* Bouton principal */
+    .taxon-toggle i {
+        color: #afafaf;
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-    .taxon-toggle:hover {
-        background: #f0f4ff;
-        transform: scale(1.05);
+    .taxon-toggle i:hover {
+        background: #efefef;
+        transition: all 0.3s ease;
     }
 
     /* Menu stylisé */

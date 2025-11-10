@@ -100,7 +100,7 @@
         position: absolute;
         bottom: 100%;
         left: 50%;
-        transform: translateX(-50%);
+
         background: rgba(0, 0, 0, 0.8);
         color: white;
         padding: 0.4rem 0.6rem;
@@ -111,6 +111,7 @@
         pointer-events: none;
         transition: opacity 0.2s;
         z-index: 10;
+        transform: translateY(-3px) translateX(-5px);
     }
 
     .audio-button-wrapper:hover .tooltip {

@@ -17,7 +17,7 @@
             <TaxonList :style="'height:' + props.height" />
         </div>
         <div v-else>
-            <h2 class="col-12 text-center m-3">Aucune géométrie fournie !</h2>
+            <h2 class="col-12 text-center m-3">{{ $t('noGeometry') }}</h2>
         </div>
     </div>
 </template>

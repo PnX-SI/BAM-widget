@@ -42,7 +42,7 @@
         align-items: center;
         background: #ffffff;
         border-radius: 18px;
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         padding: 30px 50px;
         transition: all 0.3s ease;
         min-width: 220px;
@@ -52,8 +52,8 @@
     .spinner {
         width: 46px;
         height: 46px;
-        border: 4px solid #e3e3e3;
-        border-top-color: #4a90e2;
+        border: 4px solid #efefef;
+        border-top-color: #afafaf;
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin-bottom: 16px;

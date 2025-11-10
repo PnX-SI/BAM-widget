@@ -52,7 +52,7 @@
             class="message-box"
         />
 
-        <!-- Message : Aucune géométrie dessinée -->
+        <!-- Message : No geometry -->
         <div class="message-box bg-secondary text-white" v-if="noGeometry">
             <h5>{{ $t('drawGeometry') }}</h5>
             <h5>
@@ -63,12 +63,12 @@
             </h5>
         </div>
 
-        <!-- Message : Aucune observation trouvée -->
+        <!-- Message : No taxa found -->
         <div class="message-box bg-warning text-white" v-if="noDataFound">
             {{ $t('noSpeciesObserved') }}
         </div>
 
-        <!-- Message : Recherche vide -->
+        <!-- Message : Empty search -->
         <div
             class="message-box bg-warning text-white"
             v-if="emptySearch && !noDataFound && !loadingError"
@@ -76,7 +76,7 @@
             {{ $t('emptySearch') }}
         </div>
 
-        <!-- Message : Erreur de chargement -->
+        <!-- Message : Loading error -->
         <div
             id="loading-error"
             class="message-box bg-danger text-white"
@@ -85,7 +85,6 @@
             <h5><i class="bi bi-bug"></i> {{ $t('loadingError') }}</h5>
         </div>
     </div>
-    <!-- Message de chargement -->
 </template>
 
 <style scoped>

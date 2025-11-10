@@ -63,7 +63,7 @@
         align-items: center;
         background: white;
         border-radius: 50px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         padding: 2px;
         width: 44px;
         height: 44px;

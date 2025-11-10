@@ -24,14 +24,10 @@
                 : $t('mode.galleryMode')
         "
     >
-        <transition name="icon-fade" mode="out-in">
-            <i
-                :key="mode"
-                :class="
-                    mode === 'gallery' ? 'fa-solid fa-list' : 'bi bi-grid-fill'
-                "
-            ></i>
-        </transition>
+        <i
+            :key="mode"
+            :class="mode === 'gallery' ? 'fa-solid fa-list' : 'bi bi-grid-fill'"
+        ></i>
     </button>
 </template>
 
@@ -41,31 +37,30 @@
         background: #fff;
         border: none;
         border-radius: 50%;
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         color: #afafaf;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         transition: all 0.3s ease;
         font-size: 1.2rem;
+        padding: 2px;
     }
 
-    .mode-btn:hover {
-        background: #f0f4ff;
-        transform: scale(1.05);
+    .mode-btn i {
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* Transition fluide entre les icônes */
-    .icon-fade-enter-from,
-    .icon-fade-leave-to {
-        opacity: 0;
-        transform: scale(0.8) rotate(-10deg);
-    }
-    .icon-fade-enter-active,
-    .icon-fade-leave-active {
-        transition: all 0.25s ease;
+    .mode-btn i:hover {
+        background: #efefef;
+        transition: all 0.3s ease;
     }
 </style>

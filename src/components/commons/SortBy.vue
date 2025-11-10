@@ -82,7 +82,7 @@
         align-items: center;
         background: #fff;
         border-radius: 50px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         padding: 2px 2px;
         gap: 8px;
         transition: all 0.3s ease;
@@ -109,8 +109,8 @@
     }
 
     .sort-menu-btn:hover {
-        background: #f3f6ff;
-        color: #4a90e2;
+        background: #efefef;
+        /* color: #4a90e2; */
     }
 
     /* Menu déroulant */
