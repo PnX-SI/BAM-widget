@@ -41,8 +41,12 @@
 
         <!-- Mobile : affichage switchable -->
         <div v-else class="mobile-container">
-            <Map v-if="showMap" :height="'100vh !important'" />
-            <TaxonList v-else :height="'100vh !important'" />
+            <Map
+                :height="'100vh !important'"
+                v-show="!showMap"
+                v-on:update:wkt="(wkt) => (showMap = false)"
+            />
+            <TaxonList :height="'100vh !important'" v-show="showMap" />
 
             <!-- Bouton flottant -->
             <button class="toggle-btn" @click="showMap = !showMap">

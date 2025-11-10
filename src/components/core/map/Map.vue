@@ -42,6 +42,7 @@
         },
     });
 
+    const emit = defineEmits(['update:wkt']);
     // Store
     const { buffer, wkt, sourceGeometry, mapEditable, lang, x, y } =
         ParameterStore.getInstance();
@@ -65,6 +66,7 @@
             let tmp = L.geoJSON().addTo(geometry.value);
             tmp.addData(parse(wkt.value));
             focusOnGeometry();
+            setTimeout(() => emit('update:wkt', wkt.value), 1000);
         }
     }
 
