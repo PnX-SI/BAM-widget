@@ -4,8 +4,8 @@
 
     const props = defineProps<{
         media: Media;
-        linkColor: string;
-        class: string;
+        linkColor?: string;
+        class?: string;
     }>();
 
     const STRING_LIMIT = 200;
