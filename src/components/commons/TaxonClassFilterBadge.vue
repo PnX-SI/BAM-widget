@@ -1,12 +1,15 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     import { taxonClassIcons } from '@/assets/taxonclass2icon';
     import { onClickOutside } from '@vueuse/core';
+    import ParameterStore from '@/lib/parameterStore';
 
+    const { wkt } = ParameterStore.getInstance();
     // État local
     const class_ = ref(null);
     const isOpen = ref(false);
     const emit = defineEmits(['select:class']);
+    watch(wkt, () => (class_.value = null));
 
     function updateClass(className) {
         class_.value = class_.value === className ? null : className;

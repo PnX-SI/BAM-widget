@@ -97,7 +97,7 @@
         inset: 0;
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* title on top, controls on bottom */
+        justify-content: space-between;
         padding: 16px 20px;
     }
 
@@ -143,10 +143,6 @@
 
         .bottom-controls {
             padding: 0 5px;
-        }
-
-        .copyright-icon i {
-            font-size: 2.4rem;
         }
     }
 </style>

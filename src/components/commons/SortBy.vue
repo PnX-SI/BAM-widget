@@ -1,11 +1,22 @@
 <script setup>
     import { ref, watch } from 'vue';
     import { onClickOutside } from '@vueuse/core';
+    import ParameterStore from '@/lib/parameterStore';
+    const { wkt } = ParameterStore.getInstance();
 
     const props = defineProps({
         sortByAvailable: { type: Array, required: true },
         sortBy: { type: String, required: true },
         orderBy: { type: String, default: 'asc' },
+    });
+
+    const initialParams = {
+        sortBy: props.sortBy,
+        orderBy: props.orderBy,
+    };
+    watch(wkt, () => {
+        sortBy.value = initialParams.sortBy;
+        orderBy.value = initialParams.orderBy;
     });
 
     const sortBy = ref(props.sortBy);
