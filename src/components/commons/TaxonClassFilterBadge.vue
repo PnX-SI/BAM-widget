@@ -202,7 +202,9 @@
     .taxon-item {
         border-radius: 8px;
         padding: 6px 10px;
-        transition: background 0.25s ease, transform 0.2s ease;
+        transition:
+            background 0.25s ease,
+            transform 0.2s ease;
         font-weight: 500;
         color: #333;
         display: flex;
