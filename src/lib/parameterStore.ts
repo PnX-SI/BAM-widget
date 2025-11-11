@@ -14,6 +14,7 @@ import { Connector } from './connectors/connector';
 import { CONNECTORS } from './connectors/connectors';
 
 import config from '@/assets/config';
+import { isRunningOnMobile } from './utils';
 
 class ParameterStore {
     /**
@@ -134,6 +135,12 @@ class ParameterStore {
      */
     footerColor: Ref<string | null>;
 
+    /**
+     * Is the widget displayed on a mobile device.
+     * @type {Ref<boolean>}
+     */
+    isMobile: Ref<boolean>;
+
     private constructor() {
         const { locale, availableLocales } = useI18n();
         const route = useRoute();
@@ -163,6 +170,12 @@ class ParameterStore {
         this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
         this.setupWatchers(router, route);
+
+        this.isMobile = ref(isRunningOnMobile());
+
+        window.addEventListener('resize', () => {
+            this.isMobile.value = isRunningOnMobile();
+        });
     }
 
     public static getInstance(): ParameterStore {

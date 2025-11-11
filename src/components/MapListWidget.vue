@@ -4,6 +4,9 @@
     // Components
     import TaxonList from '@/components/core/taxonList/TaxonList.vue';
     import Map from './core/map/Map.vue';
+    import ParameterStore from '@/lib/parameterStore';
+
+    const { isMobile } = ParameterStore.getInstance();
 
     const props = defineProps({
         height: {
@@ -11,20 +14,7 @@
             default: '100vh',
         },
     });
-
-    // État : mode affichage mobile
     const showMap = ref(true);
-
-    // Déterminer si on est sur mobile
-    const isMobile = ref(false);
-
-    onMounted(() => {
-        const checkMobile = () => {
-            isMobile.value = window.innerWidth < 768;
-        };
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-    });
 </script>
 
 <template>

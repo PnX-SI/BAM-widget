@@ -1,6 +1,9 @@
 <script setup lang="ts">
     import { Media } from '@/lib/models';
-    import { onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
+    import ParameterStore from '@/lib/parameterStore';
+
+    const { isMobile } = ParameterStore.getInstance();
 
     const props = defineProps<{
         picture: Media;
@@ -10,14 +13,8 @@
         urlDetailPage: string;
     }>();
 
-    const isMobile = ref(false);
-
-    onMounted(() => {
-        const checkMobile = () => {
-            isMobile.value = window.innerWidth < 768;
-        };
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
+    const sizeIcon = computed(() => {
+        return isMobile.value ? 50 : 30;
     });
 </script>
 
@@ -50,7 +47,7 @@
                     <SingleButtonAudioPlayer
                         v-if="props.audio"
                         :audio="props.audio"
-                        :size="isMobile ? 50 : 30"
+                        :size="sizeIcon"
                     />
                 </div>
 
@@ -65,7 +62,7 @@
                             <i
                                 class="bi bi-c-square-fill"
                                 :style="{
-                                    fontSize: isMobile ? '50px' : '30px',
+                                    fontSize: sizeIcon + 'px',
                                 }"
                             ></i>
                         </div>
@@ -91,6 +88,13 @@
         display: block;
     }
 
+    .card-title {
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        z-index: 2;
+    }
+
     /* Overlay covers the image */
     .card-img-overlay {
         position: absolute;
@@ -101,21 +105,12 @@
         padding: 16px 20px;
     }
 
-    /* --- Title --- */
-    .card-title {
-        color: #fff;
-        font-size: 1rem;
-        font-weight: 600;
-        z-index: 2;
-    }
-
     .vernacularName {
         text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
         font-size: 1.4rem;
         font-weight: 600;
     }
 
-    /* --- Bottom Controls --- */
     .bottom-controls {
         display: flex;
         justify-content: space-between;
