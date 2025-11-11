@@ -27,7 +27,6 @@
 </template>
 
 <style scoped>
-    /* Background overlay (optional, subtle) */
     .loading-container {
         display: flex;
         align-items: center;
@@ -35,7 +34,6 @@
         padding: 60px 0;
     }
 
-    /* Main loading box */
     .loading-card {
         display: flex;
         flex-direction: column;
@@ -48,7 +46,6 @@
         min-width: 220px;
     }
 
-    /* Spinner animation */
     .spinner {
         width: 46px;
         height: 46px;
@@ -65,7 +62,6 @@
         }
     }
 
-    /* Loading text */
     .loading-text {
         font-size: 1.2rem;
         font-weight: 600;

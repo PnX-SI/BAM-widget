@@ -53,7 +53,6 @@
         height: 100vh;
     }
 
-    /* Bouton flottant pour le switch */
     .toggle-btn {
         position: fixed;
         bottom: 20px;

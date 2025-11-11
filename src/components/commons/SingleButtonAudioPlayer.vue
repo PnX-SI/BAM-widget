@@ -5,10 +5,10 @@
 
     const props = defineProps<{
         audio: Media;
-        size?: number; // taille du bouton en pixels
+        size?: number;
     }>();
 
-    const SIZE = props.size ?? 20; // valeur par défaut
+    const SIZE = props.size ?? 20;
     const play = ref(false);
     const progress = ref(0);
 
@@ -95,7 +95,6 @@
         z-index: 1;
     }
 
-    /* Tooltip personnalisée */
     .tooltip {
         position: absolute;
         bottom: 100%;

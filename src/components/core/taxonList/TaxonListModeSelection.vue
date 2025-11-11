@@ -16,7 +16,7 @@
 <template>
     <button
         v-if="hybridTaxonList"
-        class="mode-btn"
+        class="round-btn"
         @click="toggleMode"
         :title="
             mode === 'gallery'
@@ -30,37 +30,3 @@
         ></i>
     </button>
 </template>
-
-<style scoped>
-    /* Bouton arrondi avec ombre et effet hover */
-    .mode-btn {
-        background: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: #afafaf;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        transition: all 0.3s ease;
-        font-size: 1.2rem;
-        padding: 2px;
-    }
-
-    .mode-btn i {
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .mode-btn i:hover {
-        background: #efefef;
-        transition: all 0.3s ease;
-    }
-</style>

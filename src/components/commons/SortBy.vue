@@ -23,7 +23,6 @@
     const orderBy = ref(props.orderBy);
     const emit = defineEmits(['update:sortBy', 'update:orderBy']);
 
-    // état du dropdown
     const isOpen = ref(false);
     const dropdownRef = ref(null);
     onClickOutside(dropdownRef, () => (isOpen.value = false));
@@ -51,7 +50,7 @@
 
 <template>
     <div class="sort-container" ref="dropdownRef">
-        <!-- Bouton pour ouvrir le menu -->
+        <!-- Dropdown button -->
         <button
             class="sort-menu-btn"
             @click="isOpen = !isOpen"
@@ -61,7 +60,7 @@
             <i class="bi bi-funnel"></i>
         </button>
 
-        <!-- Menu déroulant -->
+        <!-- Dropdown -->
         <transition name="fade-slide">
             <div v-if="isOpen" class="sort-menu">
                 <div
@@ -76,7 +75,7 @@
             </div>
         </transition>
 
-        <!-- Bouton d’ordre -->
+        <!-- Order button -->
         <button class="sort-btn" @click="changeOrder" :title="$t('sortOrder')">
             <i
                 :key="orderBy"
@@ -87,7 +86,6 @@
 </template>
 
 <style scoped>
-    /* Conteneur principal */
     .sort-container {
         display: flex;
         align-items: center;
@@ -102,7 +100,6 @@
         position: relative;
     }
 
-    /* Bouton pour ouvrir le menu */
     .sort-menu-btn {
         background: #fff;
         border: none;
@@ -121,10 +118,8 @@
 
     .sort-menu-btn:hover {
         background: #efefef;
-        /* color: #4a90e2; */
     }
 
-    /* Menu déroulant */
     .sort-menu {
         position: absolute;
         top: 48px;
@@ -154,7 +149,6 @@
         color: #4a90e2;
     }
 
-    /* Bouton d’ordre */
     .sort-btn {
         background: #fff;
         border: none;

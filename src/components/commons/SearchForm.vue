@@ -76,7 +76,6 @@
         width: min(90%, 250px);
     }
 
-    /* Button */
     .search-btn {
         background: #fff;
         border: none;

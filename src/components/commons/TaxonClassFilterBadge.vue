@@ -26,7 +26,7 @@
     <div class="taxon-dropdown" ref="dropdownRef">
         <!-- Bouton principal -->
         <div
-            class="taxon-toggle"
+            class="round-btn"
             @click="isOpen = !isOpen"
             :aria-expanded="isOpen"
             :title="$t('taxon.classFilter')"
@@ -64,7 +64,10 @@
                     </div>
 
                     <!-- Plantae -->
-                    <div class="dropdown-section border-top mt-2 pt-2">
+                    <div
+                        class="dropdown-section mt-2 pt-2"
+                        style="border-top: 1px solid #e6e6e6"
+                    >
                         <h6 class="dropdown-header text-success">
                             <i class="fa-solid fa-leaf me-2"></i
                             >{{ $t('Plantae') }}
@@ -98,37 +101,7 @@
         position: relative;
         display: inline-block;
     }
-    .taxon-toggle {
-        padding: 2px;
-        background: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        transition: all 0.3s ease;
-    }
-    /* Bouton principal */
-    .taxon-toggle i {
-        color: #afafaf;
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
-    .taxon-toggle i:hover {
-        background: #efefef;
-        transition: all 0.3s ease;
-    }
-
-    /* Menu stylisé */
     .taxon-menu {
         position: absolute;
         top: 50px;
@@ -142,11 +115,10 @@
         overflow: hidden;
     }
 
-    /* Zone scrollable interne */
     .taxon-scroll {
-        max-height: 250px; /* limite de hauteur */
+        max-height: 250px;
         overflow-y: auto;
-        padding-right: 4px; /* pour éviter que la barre touche le texte */
+        padding-right: 4px;
         scroll-behavior: smooth;
     }
 
@@ -171,7 +143,7 @@
         scrollbar-color: rgba(150, 150, 150, 0.4) transparent;
     }
 
-    /* Animation d’apparition */
+    /* Animation */
     .fade-slide-enter-from,
     .fade-slide-leave-to {
         opacity: 0;
@@ -182,7 +154,6 @@
         transition: all 0.25s ease;
     }
 
-    /* Sections du menu */
     .dropdown-section {
         padding: 0 12px;
     }
@@ -194,17 +165,10 @@
         opacity: 0.8;
     }
 
-    .border-top {
-        border-top: 1px solid #e6e6e6;
-    }
-
-    /* Items */
     .taxon-item {
         border-radius: 8px;
         padding: 6px 10px;
-        transition:
-            background 0.25s ease,
-            transform 0.2s ease;
+        transition: background 0.25s ease, transform 0.2s ease;
         font-weight: 500;
         color: #333;
         display: flex;
