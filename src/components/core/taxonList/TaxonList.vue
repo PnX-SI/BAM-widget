@@ -138,7 +138,7 @@
             <div id="taxon-list-filter">
                 <TaxonListModeSelection />
                 <TaxonClassFilterBadge
-                    v-if="showFilters"
+                    v-if="!class_"
                     @select:class="(newClass) => (filterClass = newClass)"
                 />
                 <SortBy
@@ -233,38 +233,5 @@
         height: 100%;
         padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
         padding-top: 0;
-    }
-
-    .taxon-list-scroll-wrapper::before,
-    .taxon-list-scroll-wrapper::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        height: 30px;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 10;
-    }
-
-    .taxon-list-scroll-wrapper.fade-top::before {
-        top: 0;
-        background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 1),
-            rgba(255, 255, 255, 0)
-        );
-        opacity: 1;
-    }
-
-    .taxon-list-scroll-wrapper.fade-bottom::after {
-        bottom: 0;
-        background: linear-gradient(
-            to top,
-            rgba(255, 255, 255, 1),
-            rgba(255, 255, 255, 0)
-        );
-        opacity: 1;
     }
 </style>
