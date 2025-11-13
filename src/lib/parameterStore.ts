@@ -103,7 +103,7 @@ class ParameterStore {
      * If the user can switch between different modes of display in the taxon list.
      * @type {Ref<boolean>}
      */
-    hybridTaxonList: Ref<boolean>;
+    modeSwitchAvailable: Ref<boolean>;
 
     /**
      * Longitude.
@@ -160,7 +160,8 @@ class ParameterStore {
         this.sourceGeometry = ref(config.sourceGeometry);
         this.class = ref(config.class);
         this.widgetType = ref(config.widgetType);
-        this.hybridTaxonList = ref(config.hybridTaxonList);
+        this.modeSwitchAvailable = ref(config.modeSwitchAvailable);
+
         this.x = ref(config.x);
         this.y = ref(config.y);
         this.customDetailPage = ref(config.customDetailPage);
@@ -203,7 +204,7 @@ class ParameterStore {
             'mapEditable',
             'sourceGeometry',
             'widgetType',
-            'hybridTaxonList',
+            'modeSwitchAvailable',
             'customDetailPage',
             'footerColor',
         ];
@@ -255,7 +256,10 @@ class ParameterStore {
             nbTaxonPerLine: (value: string) => parseInt(value),
             showFilters: (value: string) => value === 'true',
             mapEditable: (value: string) => value === 'true',
-            hybridTaxonList: (value: string) => value === 'true',
+            modeSwitchAvailable: (value: string) => value === 'true',
+            hybridTaxonList: (value: string) => {
+                this.modeSwitchAvailable.value = value === 'true';
+            },
             lang: (value: string) =>
                 availableLocales.includes(value) ? value : locale,
             mode: (value: string) =>
@@ -289,7 +293,11 @@ class ParameterStore {
                     'value' in paramRef
                 ) {
                     paramRef.value = transformFn(value);
-                } else if (['sourceGeometry', 'radius'].includes(paramName)) {
+                } else if (
+                    ['sourceGeometry', 'radius', 'hybridTaxonList'].includes(
+                        paramName
+                    )
+                ) {
                     transformFn(value);
                 }
             }

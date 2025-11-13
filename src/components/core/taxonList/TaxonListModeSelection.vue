@@ -3,7 +3,7 @@
     import { TAXONLIST_DISPLAY_MODE } from '@/lib/enums';
 
     const parameterStore = ParameterStore.getInstance();
-    const { hybridTaxonList, mode } = parameterStore;
+    const { modeSwitchAvailable, mode } = parameterStore;
 
     function toggleMode() {
         mode.value =
@@ -15,7 +15,7 @@
 
 <template>
     <button
-        v-if="hybridTaxonList"
+        v-if="modeSwitchAvailable"
         class="round-btn"
         @click="toggleMode"
         :title="
