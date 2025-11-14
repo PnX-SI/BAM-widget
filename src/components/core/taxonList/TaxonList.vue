@@ -22,6 +22,7 @@
         mode,
         class: class_,
         nbDisplayedSpecies,
+        filterOnList,
     } = parameterStore;
 
     const props = defineProps({
@@ -91,17 +92,7 @@
         return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
     });
 
-    const showTopFade = ref(false);
-    const showBottomFade = ref(true);
-
     function onScroll(event) {
-        const el = event.target;
-        const atTop = el.scrollTop === 0;
-        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
-
-        showTopFade.value = !atTop;
-        showBottomFade.value = !atBottom;
-
         taxonManager.onScroll(event);
     }
 
@@ -130,12 +121,13 @@
         { field_name: 'lastSeenDate', label: t('taxon.lastSeenDate') },
     ];
 </script>
-
 <template>
     <div id="taxon-list">
         <div class="list-container">
-            <!-- Filters -->
-            <div id="taxon-list-filter">
+            <div
+                id="taxon-list-filter"
+                :class="{ 'overlap-filter': filterOnList }"
+            >
                 <TaxonListModeSelection />
                 <TaxonClassFilterBadge
                     v-if="!class_"
@@ -159,10 +151,7 @@
 
             <div
                 class="taxon-list-scroll-wrapper"
-                :class="{
-                    'fade-top': showTopFade,
-                    'fade-bottom': showBottomFade,
-                }"
+                :class="{ 'pt-0': !filterOnList }"
             >
                 <div
                     id="taxon-list-content"
@@ -192,7 +181,6 @@
         />
     </div>
 </template>
-
 <style scoped>
     #taxon-list {
         display: flex;
@@ -203,28 +191,38 @@
     }
 
     .list-container {
+        position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding: 0px 1em 0px 1em;
+        padding: 0px 1em;
     }
 
     #taxon-list-filter {
         margin-top: 1em;
+        margin-bottom: 1em;
         display: flex;
         flex-direction: row;
         justify-content: center;
         gap: 1em;
-        margin-bottom: 1em;
-        margin-left: 1em;
         flex-wrap: wrap;
     }
 
+    .overlap-filter {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0.8em 1em;
+        z-index: 20;
+    }
+
     .taxon-list-scroll-wrapper {
-        position: relative;
         flex-grow: 1;
         overflow: hidden;
+        padding-left: 1em;
+        padding-top: 20px;
     }
 
     #taxon-list-content {

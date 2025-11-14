@@ -55,7 +55,7 @@
 
     .toggle-btn {
         position: fixed;
-        bottom: 20px;
+        bottom: 40px;
         left: 50%;
         transform: translateX(-50%);
         background-color: white;

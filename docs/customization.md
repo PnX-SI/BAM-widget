@@ -146,6 +146,12 @@ Hexadecimal color for footer background. Color must be in format `RRGGBB`.
 
 **Example:** `"aaa"`
 
+### `filterOnList` (**Type:** boolean)
+
+If filters are displayed on the species list or above.
+
+**Example:** `true`
+
 ## Integration examples
 
 Find widget integration examples [here](README?id=🚀-generate-your-widget).

@@ -72,6 +72,7 @@ Each parameter can be set via URL query or through the widget configuration inte
 | `soundSource`        | string  | Name of the data source use to fetch animal sounds.                                                                                                                                                                          | `[gbif]`                         |
 | `imageSource`        | string  | Name of the data source use to fetch species pictures.                                                                                                                                                                       | `[wikidata, gbif, inpn, taxhub]` |
 | `footerColor`        | string  | Hexadecimal color for footer background. Color must be in format `RRGGBB`.                                                                                                                                                   | 'aaa'                            |
+| `filterOnList`       | boolean | If filters are displayed on the species list or above. `true`.                                                                                                                                                               | `true` / `false`                 |
 
 ## ⚙️ Self-hosting
 
