@@ -145,7 +145,7 @@ class ParameterStore {
      * If the filter are overlapping the taxa list.
      * @type {Ref<boolean>}
      */
-    filterOnList: Ref<boolean> = ref(false);
+    filtersOnList: Ref<boolean> = ref(false);
 
     private constructor() {
         const { locale, availableLocales } = useI18n();
@@ -167,7 +167,7 @@ class ParameterStore {
         this.class = ref(config.class);
         this.widgetType = ref(config.widgetType);
         this.modeSwitchAvailable = ref(config.modeSwitchAvailable);
-        this.filterOnList = ref(config.filterOnList);
+        this.filtersOnList = ref(config.filtersOnList);
 
         this.x = ref(config.x);
         this.y = ref(config.y);
@@ -214,7 +214,7 @@ class ParameterStore {
             'modeSwitchAvailable',
             'customDetailPage',
             'footerColor',
-            'filterOnList',
+            'filtersOnList',
         ];
 
         paramsToWatch.forEach((param) => {
@@ -289,7 +289,7 @@ class ParameterStore {
             customDetailPage: (value: string) => value,
             nbDisplayedSpecies: (value: string) => parseInt(value),
             footerColor: (value: string) => value,
-            filterOnList: (value: string) => value === 'true',
+            filtersOnList: (value: string) => value === 'true',
         };
 
         Object.entries(paramHandlers).forEach(([paramName, transformFn]) => {

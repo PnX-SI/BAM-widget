@@ -22,7 +22,7 @@
         mode,
         class: class_,
         nbDisplayedSpecies,
-        filterOnList,
+        filtersOnList,
     } = parameterStore;
 
     const props = defineProps({
@@ -126,7 +126,7 @@
         <div class="list-container">
             <div
                 id="taxon-list-filter"
-                :class="{ 'overlap-filter': filterOnList }"
+                :class="{ 'overlap-filter': filtersOnList }"
             >
                 <TaxonListModeSelection />
                 <TaxonClassFilterBadge
@@ -151,7 +151,7 @@
 
             <div
                 class="taxon-list-scroll-wrapper"
-                :class="{ 'pt-0': !filterOnList }"
+                :class="{ 'pt-0': !filtersOnList }"
             >
                 <div
                     id="taxon-list-content"

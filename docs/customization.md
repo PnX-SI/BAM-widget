@@ -146,7 +146,7 @@ Hexadecimal color for footer background. Color must be in format `RRGGBB`.
 
 **Example:** `"aaa"`
 
-### `filterOnList` (**Type:** boolean)
+### `filtersOnList` (**Type:** boolean)
 
 If filters are displayed on the species list or above.
 

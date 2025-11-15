@@ -19,7 +19,7 @@ const config = {
     nbTaxonPerLine: 2,
     nbDisplayedSpecies: null,
     footerColor: 'aaa',
-    filterOnList: true,
+    filtersOnList: true,
 };
 
 export default config;

@@ -21,16 +21,16 @@
     <div class="container-fluid position-relative">
         <!-- Desktop / Tablette : affichage côte à côte -->
         <div v-if="!isMobile" class="row">
-            <div class="col-12 col-lg-6 col-md-6">
+            <div class="col-12 col-lg-6 col-md-6 padding">
                 <Map :height="props.height" />
             </div>
-            <div class="col-12 col-lg-6 col-md-6">
+            <div class="col-12 col-lg-6 col-md-6 padding">
                 <TaxonList :style="'height:' + props.height" />
             </div>
         </div>
 
         <!-- Mobile : affichage switchable -->
-        <div v-else class="mobile-container">
+        <div v-else class="mobile-container padding">
             <Map
                 :height="'100vh !important'"
                 v-show="showMap"
@@ -72,5 +72,8 @@
 
     .toggle-btn:hover {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .padding {
+        padding-top: 5px;
     }
 </style>
