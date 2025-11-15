@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8" />
@@ -546,9 +546,8 @@
 
                         const widgetUrl = `https://pnx-si.github.io/BAM-widget/#/?buffer=300&wkt=${wkt}&connector=GBIF&nbTaxonPerLine=3&showFilters=false&mapEditable=true&lang=fr&mode=gallery&widgetType=list&switchModeAvailable=true&GBIF_ENDPOINT=https://api.gbif.org/v1&LIMIT=300&NB_PAGES=10&soundSource=gbif&imageSource=wikidata`;
 
-                        document.getElementById(
-                            'widget-container'
-                        ).innerHTML = `
+                        document.getElementById('widget-container').innerHTML =
+                            `
                     <h3 class="text-lg font-semibold mb-2">${titleRefuge}</h3>
                     <iframe src="${widgetUrl}" style="width:100%; height:80vh;" allow="geolocation"></iframe>
                     <p class="text-sm text-gray-500 text-right italic mt-2">Powered by 
