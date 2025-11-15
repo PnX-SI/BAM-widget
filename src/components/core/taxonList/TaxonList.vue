@@ -221,7 +221,6 @@
     .taxon-list-scroll-wrapper {
         flex-grow: 1;
         overflow: hidden;
-        padding-left: 1em;
         padding-top: 20px;
     }
 
