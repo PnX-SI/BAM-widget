@@ -1,17 +1,65 @@
 <script setup>
-    import { ref, nextTick } from 'vue';
+    import { ref, nextTick, onMounted, onUnmounted } from 'vue';
     import { debounce } from 'lodash-es';
 
     const isActive = ref(false);
     const inputRef = ref(null);
+    const originalViewport = ref('');
+
+    onMounted(() => {
+        const viewportMeta = document.querySelector('meta[name="viewport"]');
+        if (viewportMeta) {
+            originalViewport.value = viewportMeta.getAttribute('content') || '';
+        }
+    });
+
+    onUnmounted(() => {
+        restoreViewport();
+    });
+
+    const preventZoom = () => {
+        const viewportMeta = document.querySelector('meta[name="viewport"]');
+        if (viewportMeta) {
+            viewportMeta.setAttribute(
+                'content',
+                'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+            );
+        }
+    };
+
+    const restoreViewport = () => {
+        const viewportMeta = document.querySelector('meta[name="viewport"]');
+        if (viewportMeta && originalViewport.value) {
+            viewportMeta.setAttribute('content', originalViewport.value);
+        } else if (viewportMeta) {
+            viewportMeta.setAttribute(
+                'content',
+                'width=device-width, initial-scale=1.0'
+            );
+        }
+    };
 
     const toggleSearch = () => {
         isActive.value = !isActive.value;
         if (isActive.value) {
+            preventZoom();
             nextTick(() => inputRef.value?.focus());
         } else {
             if (inputRef.value) inputRef.value.value = '';
+            restoreViewport();
         }
+    };
+
+    const handleBlur = () => {
+        restoreViewport();
+
+        if (!searchString.value.trim()) {
+            isActive.value = false;
+        }
+    };
+
+    const handleFocus = () => {
+        preventZoom();
     };
 
     const searchString = ref('');
@@ -42,7 +90,6 @@
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
         </button>
-
         <transition name="slide">
             <input
                 v-if="isActive"
@@ -52,6 +99,8 @@
                 :placeholder="$t('search')"
                 v-model="searchString"
                 @input="handleInput"
+                @focus="handleFocus"
+                @blur="handleBlur"
             />
         </transition>
     </form>
@@ -71,7 +120,6 @@
         transition: width 0.4s ease;
     }
 
-    /* When input is active, allow it to expand naturally up to max-width */
     .search-container:has(input) {
         width: min(90%, 250px);
     }
@@ -102,28 +150,32 @@
         margin-left: 10px;
         font-size: 16px;
         background: transparent;
-        min-width: 0; /* Important for flexbox on small screens */
+        min-width: 0;
     }
 
-    /* Slide transition */
     .slide-enter-from {
         opacity: 0;
         transform: translateX(-20px);
     }
+
     .slide-enter-active {
         transition: all 0.4s ease;
     }
+
     .slide-enter-to {
         opacity: 1;
         transform: translateX(0);
     }
+
     .slide-leave-from {
         opacity: 1;
         transform: translateX(0);
     }
+
     .slide-leave-active {
         transition: all 0.3s ease;
     }
+
     .slide-leave-to {
         opacity: 0;
         transform: translateX(-20px);
@@ -134,7 +186,6 @@
         height: 18px;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 500px) {
         .search-container:has(input) {
             width: 80%;
