@@ -20,11 +20,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 import Widget from './components/Widget.vue';
 import messagesCS from './assets/languageAssets/cs';
+import messagesDE from './assets/languageAssets/de';
+import messagesIT from './assets/languageAssets/it';
 
 const browserLocale = window.navigator.language.split('-')[0];
 
 const i18n = createI18n({
-    locale: ['en', 'fr', 'es', 'cs'].includes(browserLocale)
+    locale: ['en', 'fr', 'es', 'cs', 'it', 'de'].includes(browserLocale)
         ? browserLocale
         : 'en',
     fallbackLocale: 'en',
@@ -33,6 +35,8 @@ const i18n = createI18n({
         ...messagesEN,
         ...messagesES,
         ...messagesCS,
+        ...messagesDE,
+        ...messagesIT,
     },
 });
 const routes = [
