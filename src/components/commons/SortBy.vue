@@ -57,7 +57,11 @@
 
 <template>
     <div class="sort-container" ref="dropdownRef">
-        <button class="round-btn" @click="isOpen = !isOpen" :title="$t('sort')">
+        <button
+            class="round-btn"
+            @click="isOpen = !isOpen"
+            :title="$t('sortBy')"
+        >
             <i
                 :class="orderBy === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down'"
             ></i>

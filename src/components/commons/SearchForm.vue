@@ -76,7 +76,12 @@
 
 <template>
     <form class="search-container" @submit.prevent>
-        <button class="search-btn" type="button" @click="toggleSearch">
+        <button
+            class="search-btn"
+            type="button"
+            @click="toggleSearch"
+            :title="$t('search')"
+        >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
