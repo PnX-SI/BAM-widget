@@ -103,7 +103,7 @@ class ParameterStore {
      * If the user can switch between different modes of display in the taxon list.
      * @type {Ref<boolean>}
      */
-    modeSwitchAvailable: Ref<boolean>;
+    switchModeAvailable: Ref<boolean>;
 
     /**
      * Longitude.
@@ -166,7 +166,7 @@ class ParameterStore {
         this.sourceGeometry = ref(config.sourceGeometry);
         this.class = ref(config.class);
         this.widgetType = ref(config.widgetType);
-        this.modeSwitchAvailable = ref(config.modeSwitchAvailable);
+        this.switchModeAvailable = ref(config.switchModeAvailable);
         this.filtersOnList = ref(config.filtersOnList);
 
         this.x = ref(config.x);
@@ -211,7 +211,7 @@ class ParameterStore {
             'mapEditable',
             'sourceGeometry',
             'widgetType',
-            'modeSwitchAvailable',
+            'switchModeAvailable',
             'customDetailPage',
             'footerColor',
             'filtersOnList',
@@ -264,9 +264,9 @@ class ParameterStore {
             nbTaxonPerLine: (value: string) => parseInt(value),
             showFilters: (value: string) => value === 'true',
             mapEditable: (value: string) => value === 'true',
-            modeSwitchAvailable: (value: string) => value === 'true',
+            switchModeAvailable: (value: string) => value === 'true',
             hybridTaxonList: (value: string) => {
-                this.modeSwitchAvailable.value = value === 'true';
+                this.switchModeAvailable.value = value === 'true';
             },
             lang: (value: string) =>
                 availableLocales.includes(value) ? value : locale,
@@ -325,11 +325,13 @@ class ParameterStore {
 
     public getParams(): Record<string, any> {
         const params: Record<string, any> = {};
+        const banlist = ['isMobile'];
         Object.entries(this).forEach(([key, value]) => {
             if (
                 value?.value !== undefined &&
                 value.value !== null &&
-                value.value !== ''
+                value.value !== '' &&
+                !banlist.includes(key)
             ) {
                 params[key] = value.value;
             }

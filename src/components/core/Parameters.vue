@@ -22,7 +22,7 @@
         mode,
         widgetType,
         nbTaxonPerLine,
-        modeSwitchAvailable,
+        switchModeAvailable,
         connector,
         customDetailPage,
         getParams,
@@ -172,7 +172,7 @@
                 </div>
 
                 <div class="parameter-section">
-                    <BFormCheckbox switch v-model="modeSwitchAvailable">
+                    <BFormCheckbox switch v-model="switchModeAvailable">
                         <strong>{{ $t('mode.isTaxonListHybrid') }} </strong>
                     </BFormCheckbox>
                 </div>

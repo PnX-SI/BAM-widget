@@ -12,7 +12,7 @@ const config = {
     sourceGeometry: null,
     class: null,
     widgetType: WIDGET_TYPE.mapList,
-    modeSwitchAvailable: false,
+    switchModeAvailable: false,
     x: null,
     y: null,
     customDetailPage: null,

@@ -117,7 +117,7 @@
         font-weight: 500;
     }
     .sort-item:hover {
-        background: #f3f6ff;
+        background: #efefef;
     }
     .sort-item.active {
         background: #efefef;

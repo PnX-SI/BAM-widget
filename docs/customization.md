@@ -102,7 +102,7 @@ Display type for the widget, with `list` being the standard option.
 
 ![alt](images/maplist_mode.png)
 
-### `modeSwitchAvailable` (**Type:** boolean)
+### `switchModeAvailable` (**Type:** boolean)
 
 Enables switching between list and gallery display modes for species list.
 
