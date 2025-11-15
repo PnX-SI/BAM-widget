@@ -60,7 +60,7 @@
 
     // Computed Properties
     const wktFromOutside = computed(() => !!wkt.value);
-    const style = computed(() => `height: ${props.height};`);
+    const style = computed(() => `height: ${props.height} !important;`);
     let locate = null;
 
     // Functions
