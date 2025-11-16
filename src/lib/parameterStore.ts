@@ -337,7 +337,12 @@ class ParameterStore {
             }
         });
         params['connector'] = this.connector.value.name;
-        const connectorParams = this.connector.value.getParams();
+        let connectorParams = this.connector.value.getParams();
+        Object.entries(connectorParams).forEach(([key, _]) => {
+            if (banlist.includes(key)) {
+                delete connectorParams[key];
+            }
+        });
         Object.assign(params, connectorParams);
         if (params?.wkt) {
             // if another way to indicate the geolocation was given in parameter, drop the WKT generated
