@@ -31,6 +31,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         UseCustomDetailPage:
             'Modifier la redirection du bouton "En Savoir Plus" ',
         filtersTitle: 'Filtres',
+        filtersOnList: 'Afficher les filtres sur la liste',
+        footerColor: 'Changer la couleur du pied de la liste de taxon',
         mapEditable: ' Zone de recherche éditable',
         bufferSize: 'Taille du buffer (en mètre)',
         dateMin: 'Date min',
