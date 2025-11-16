@@ -1,24 +1,23 @@
 <script setup>
-    // Imports
-    import L, { icon } from 'leaflet';
-    import 'leaflet-draw';
-    import 'leaflet/dist/leaflet.css';
-    import 'leaflet-draw/dist/leaflet.draw.css';
-    import 'leaflet-geosearch/dist/geosearch.css';
+    import ParameterStore from '@/lib/parameterStore';
     import { restoreMapState, toWKT } from '@/lib/utils';
-    import { parse } from 'wellknown';
+    import { booleanClockwise, rewind } from '@turf/turf';
+    import L from 'leaflet';
+    import 'leaflet-draw';
+    import 'leaflet-draw/dist/leaflet.draw.css';
     import { LocateControl } from 'leaflet.locatecontrol';
     import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
+    import 'leaflet/dist/leaflet.css';
     import { computed, onMounted, ref, shallowRef, watch } from 'vue';
+    import { useI18n } from 'vue-i18n';
+    import { parse } from 'wellknown';
     import {
-        drawConfig,
         DefaultIcon,
+        drawConfig,
         hackForMapContainerResize,
     } from './MapConfig';
-    import { booleanClockwise, rewind } from '@turf/turf';
-    import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-    import { useI18n } from 'vue-i18n';
-    import ParameterStore from '@/lib/parameterStore';
+
+    import PlaceSearchForm from './PlaceSearchForm.vue';
 
     const { t } = useI18n();
 
@@ -40,13 +39,13 @@
             default: true,
         },
         forceEditable: {
-            // for parameters, we do not want to disable map edition
             type: Boolean,
             default: false,
         },
     });
 
     const emit = defineEmits(['update:wkt']);
+
     // Store
     const { buffer, wkt, sourceGeometry, mapEditable, lang, x, y } =
         ParameterStore.getInstance();
@@ -55,6 +54,7 @@
     const map = shallowRef();
     const locateControl = ref(null);
     const geometry = shallowRef(new L.FeatureGroup());
+    const searchFormRef = ref(null);
     let drawEventData = null;
     const mapID = (Math.random() + 1).toString(36).substring(7);
 
@@ -63,7 +63,6 @@
     const style = computed(() => `height: ${props.height} !important;`);
     let locate = null;
 
-    // Functions
     function updateGeometryFromWKT() {
         if (wkt.value) {
             geometry.value.clearLayers();
@@ -106,7 +105,6 @@
 
         wkt.value = WKT;
 
-        // if marker store in x and y
         const lat_long =
             drawEventData.layerType === 'marker' ? layer._latlng : null;
         x.value = lat_long?.lng ?? null;
@@ -115,26 +113,13 @@
         sourceGeometry.value = null;
     }
 
-    function addSearchControl() {
-        const provider = new OpenStreetMapProvider({
-            params: { 'accept-language': lang.value },
-        });
-        const searchControl = new GeoSearchControl({
-            provider: provider,
-            style: 'bar',
-            resetButton: 'x',
-            searchLabel: t('map.searchPlace'),
-            marker: { icon: DefaultIcon },
-        });
-        map.value.addControl(searchControl);
-        map.value.on('geosearch/showlocation', (e) => {
-            geometry.value.clearLayers();
-            const marker = L.marker([e.location.y, e.location.x]);
-            drawEventData = { layer: marker, layerType: 'marker' };
-            geometry.value.addLayer(marker);
-            updateGeometry();
-            focusOnGeometry();
-        });
+    function handleLocationSelected(data) {
+        geometry.value.clearLayers();
+        const marker = L.marker([data.lat, data.lon], { icon: DefaultIcon });
+        drawEventData = { layer: marker, layerType: 'marker' };
+        geometry.value.addLayer(marker);
+        updateGeometry();
+        focusOnGeometry();
     }
 
     function handleGeolocation(event) {
@@ -193,15 +178,16 @@
             locateControl.value = new LocateControl({
                 icon: 'fa-solid fa-location-crosshairs fa-xl',
             }).addTo(map.value);
-
-            /**
-             * ADD SEARCH FORM
-             */
-            addSearchControl();
         }
 
         map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
         map.value.on('locationfound', handleGeolocation);
+
+        map.value.on('click', () => {
+            if (searchFormRef.value) {
+                searchFormRef.value.clearResults();
+            }
+        });
     }
 
     // Lifecycle Hooks
@@ -228,7 +214,21 @@
 </script>
 
 <template>
-    <div class="mapC" :id="`map-${mapID}`" :style="style"></div>
+    <div style="position: relative">
+        <PlaceSearchForm
+            v-if="mapEditable"
+            ref="searchFormRef"
+            :placeholder="t('searchPlace.placeholder')"
+            :loading-text="t('searchPlace.loadingText')"
+            :error-text="t('searchPlace.errorText')"
+            :no-results-text="t('searchPlace.noResultsText')"
+            :language="lang"
+            @location-selected="handleLocationSelected"
+            :debounceDelay="300"
+        />
+
+        <div class="mapC" :id="`map-${mapID}`" :style="style"></div>
+    </div>
 </template>
 
 <style scoped>

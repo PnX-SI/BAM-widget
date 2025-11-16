@@ -32,6 +32,8 @@ You can also **share your results 📤** to collaborate with other users.
             'Change the redirection of the "Learn More" button',
 
         filtersTitle: 'Filters',
+        filtersOnList: 'Show filters on list',
+        footerColor: 'Change the color of the footer',
         mapEditable: 'Editable research zone',
         bufferSize: 'Buffer Size (in meter):',
         dateMin: 'Date Min',
@@ -140,14 +142,17 @@ You can also **share your results 📤** to collaborate with other users.
         },
         Animalia: 'Animal',
         Plantae: 'Plant',
-        map: {
-            searchPlace: 'Search a place name',
-        },
         or: 'or',
         in: 'in',
         datasetList: 'associated datasets',
         observation: 'observation',
         observations: 'observations',
+        searchPlace: {
+            loadingText: 'Search in progress',
+            placeholder: 'Search a place',
+            errorText: 'Error while searching',
+            noResultsText: 'No results found',
+        },
     },
 };
 

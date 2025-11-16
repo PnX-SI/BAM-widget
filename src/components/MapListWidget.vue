@@ -71,6 +71,6 @@
         transform: translateX(-50%) scale(0.95);
     }
     .padding {
-        padding-top: 5px;
+        /* padding-top: 5px; */
     }
 </style>

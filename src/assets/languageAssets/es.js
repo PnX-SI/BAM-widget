@@ -26,6 +26,8 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         UseCustomDetailPage:
             'Cambiar la redirección del botón "Más información"',
         filtersTitle: 'Filtros',
+        filtersOnList: 'Mostrar filtros en la lista',
+        footerColor: 'Cambiar el color del pie de p gina',
         mapEditable: 'Zona de búsqueda editable',
         bufferSize: 'Tamaño del buffer (en metro)',
         dateMin: 'Fecha Mínima',
@@ -134,14 +136,17 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         },
         Animalia: 'Animal',
         Plantae: 'Planta',
-        map: {
-            searchPlace: 'Buscar un nombre de lugar',
-        },
         or: 'o',
         in: 'en',
         datasetList: 'conjuntos de datos relacionados',
         observation: 'observación',
         observations: 'observaciones',
+        searchPlace: {
+            loadingText: 'Búsqueda en curso',
+            placeholder: 'Buscar un lugar',
+            errorText: 'Error al buscar',
+            noResultsText: 'Ningún resultado encontrado',
+        },
     },
 };
 

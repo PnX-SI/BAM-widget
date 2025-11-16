@@ -31,6 +31,8 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         UseCustomDetailPage: 'Změnit přesměrování tlačítka "Více informací"',
 
         filtersTitle: 'Filtry',
+        filtersOnList: 'Zobrazit filtry v seznamu',
+        footerColor: 'Změnit barvu patky',
         mapEditable: 'Editovatelná oblast vyhledávání',
         bufferSize: 'Velikost bufferu (v metrech):',
         dateMin: 'Minimální datum',
@@ -139,14 +141,17 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         },
         Animalia: 'Zvierata',
         Plantae: 'Rostlina',
-        map: {
-            searchPlace: 'Vyhledat název místa',
-        },
         or: 'nebo',
         in: 'v',
         datasetList: 'přiřazené datové sady',
         observation: 'pozorování',
         observations: 'pozorování',
+        searchPlace: {
+            loadingText: 'Probíhá vyhledávání',
+            placeholder: 'Vyhledat název místa',
+            errorText: 'Chyba při vyhledávání',
+            noResultsText: 'Nenalezeny žádné výsledky',
+        },
     },
 };
 
