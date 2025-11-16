@@ -139,14 +139,18 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         },
         Animalia: 'Animal',
         Plantae: 'Plante',
-        map: {
-            searchPlace: 'Rechercher un lieu',
-        },
+
         or: 'ou',
         in: 'dans',
         datasetList: 'jeux de données associés',
         observation: 'observation',
         observations: 'observations',
+        searchPlace: {
+            loadingText: 'Recherche en cours',
+            placeholder: 'Rechercher un lieu',
+            errorText: 'Erreur lors de la recherche',
+            noResultsText: 'Aucun résultat trouvé',
+        },
     },
 };
 

@@ -134,14 +134,17 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         },
         Animalia: 'Animal',
         Plantae: 'Planta',
-        map: {
-            searchPlace: 'Buscar un nombre de lugar',
-        },
         or: 'o',
         in: 'en',
         datasetList: 'conjuntos de datos relacionados',
         observation: 'observación',
         observations: 'observaciones',
+        searchPlace: {
+            loadingText: 'Búsqueda en curso',
+            placeholder: 'Buscar un lugar',
+            errorText: 'Error al buscar',
+            noResultsText: 'Ningún resultado encontrado',
+        },
     },
 };
 
