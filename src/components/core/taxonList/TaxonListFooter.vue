@@ -46,7 +46,10 @@
             >
                 {{ connector.name }}
             </a>
-            <BTooltip v-if="connector.sourceDetailMessage()">
+            <BTooltip
+                v-if="connector.sourceDetailMessage()"
+                style="z-index: 500"
+            >
                 <template #target>
                     <a
                         style="color: white; text-decoration: underline"

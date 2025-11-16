@@ -108,7 +108,7 @@
         box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
         padding: 6px 0;
         min-width: 180px;
-        z-index: 2000;
+        z-index: 10;
     }
 
     .sort-item {

@@ -59,7 +59,7 @@
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
-        z-index: 20000;
+        z-index: 430;
         display: flex;
         align-items: center;
         gap: 8px;

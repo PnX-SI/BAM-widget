@@ -19,6 +19,7 @@
         v-if="props.datasets && props.datasets.length > 0"
         :close-on-hide="true"
         :delay="{ show: 0, hide: 0 }"
+        style="z-index: 500"
     >
         <template #target>
             <a style="color: white; text-decoration: underline" class="ms-1"

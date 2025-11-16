@@ -215,7 +215,7 @@
         left: 0;
         width: 100%;
         padding: 0.8em 1em;
-        z-index: 20;
+        z-index: 10;
     }
 
     .taxon-list-scroll-wrapper {

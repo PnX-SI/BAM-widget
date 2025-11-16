@@ -92,7 +92,7 @@
 
     .audio-button i {
         color: white;
-        z-index: 1;
+        z-index: 2;
     }
 
     .tooltip {
@@ -109,7 +109,7 @@
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.2s;
-        z-index: 10;
+        z-index: 2;
         transform: translateY(-3px) translateX(-5px);
     }
 

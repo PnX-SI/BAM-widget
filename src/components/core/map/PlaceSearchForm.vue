@@ -170,6 +170,7 @@
                         @blur="handleBlur"
                         :placeholder="placeholder"
                         autocomplete="off"
+                        v-prevent-zoom
                     />
                     <button
                         class="close-btn"
@@ -215,7 +216,7 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        z-index: 1000;
+        z-index: 500;
         left: 50%;
         right: auto;
         transform: translateX(-50%);
