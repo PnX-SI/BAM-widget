@@ -325,7 +325,7 @@ class ParameterStore {
 
     public getParams(): Record<string, any> {
         const params: Record<string, any> = {};
-        const banlist = ['isMobile'];
+        const banlist = ['isMobile', 'isSearchOnAPIAvailable'];
         Object.entries(this).forEach(([key, value]) => {
             if (
                 value?.value !== undefined &&
