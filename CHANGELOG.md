@@ -1,21 +1,21 @@
 # CHANGELOG
 
-## 1.2.0 (unrelease)
+## 1.2.0 (unreleased)
 
 ### ✨ New Features
 
--   Improve GeoNature connector (#64)
+-   Improve GeoNature connector with class filter and source performances (#64)
 -   Improve TaxHub media and credits retrieving (#64)
--   Improve GBIF data quality with excluding specimens and geospatial issues (#64)
+-   Improve GBIF data quality with excluding specimens and observations with geospatial issues (#65)
 -   Add wikidata sound API source (#66)
 -   Add sound credits (#70, #71)
+-   A new parameter `nbSpeciesDisplayed` allows to limit the number of species displayed in the list
+-   The mapList mode is now the default one when accessing to https://pnx-si.github.io/BAM-widget/ (#85)
+-   Filters buttons were redesigned
+-   Search form is improved and allows to also search in vernacular names, especially with GBIF data source (#84)
+-   BAM is now available in Czech 🇨🇿 (#83 by @trendspotter), German 🇩🇪 and Italian 🇮🇹
+-   BAM is now fully usable as a standalone mobile webpage at https://pnx-si.github.io/BAM-widget/
 -   [Dev] Add prettier (#75)
--   A new parameter `nbSpeciesDisplayed` allows to limit the number species displayed in the list
--   The mapList is now the default when accessing to pnx-si.github.io/BAM-widget/
--   Filters button were redesigned
--   Search formular is improved and allows to search with vernacular names, especially with GBIF data source
--   BAM is now available in Czech 🇨🇿, Deutsch 🇩🇪 and Italian 🇮🇹🇨🇸
--   BAM is now fully usable as a standalone app with mobile devices 🇸
 
 ## 1.1.0 (2025-09-16)
 
