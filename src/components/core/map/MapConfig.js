@@ -1,6 +1,9 @@
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
+// PolyLine fix found on  https://github.com/Leaflet/Leaflet.draw/issues/695#issuecomment-577151966
+L.Draw.Polyline.prototype._onTouch = L.Util.falseFn;
+
 const DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
@@ -114,9 +117,6 @@ function hackForMapContainerResize(map, mapDomId) {
         // This will be called upon every element resize
         for (let entry of entries) {
             if (entry.target.id === mapDomId) {
-                console.log(
-                    `Size changed to: ${entry.contentRect.width}px x ${entry.contentRect.height}px`
-                );
                 map.invalidateSize();
             }
         }
