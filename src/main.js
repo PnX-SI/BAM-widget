@@ -20,6 +20,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 import Widget from './components/Widget.vue';
 import messagesCS from './assets/languageAssets/cs';
+import preventZoom from './directives/preventZoom.js';
 
 const browserLocale = window.navigator.language.split('-')[0];
 
@@ -69,6 +70,7 @@ app.use(router);
 app.use(i18n);
 app.use(createBootstrap());
 app.component('VueShowdown', VueShowdown);
+app.directive('prevent-zoom', preventZoom);
 
 app.config.errorHandler = (err, instance, info) => {
     console.group(

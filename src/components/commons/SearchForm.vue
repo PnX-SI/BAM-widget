@@ -1,65 +1,23 @@
 <script setup>
-    import { ref, nextTick, onMounted, onUnmounted } from 'vue';
+    import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue';
     import { debounce } from 'lodash-es';
 
     const isActive = ref(false);
     const inputRef = ref(null);
-    const originalViewport = ref('');
-
-    onMounted(() => {
-        const viewportMeta = document.querySelector('meta[name="viewport"]');
-        if (viewportMeta) {
-            originalViewport.value = viewportMeta.getAttribute('content') || '';
-        }
-    });
-
-    onUnmounted(() => {
-        restoreViewport();
-    });
-
-    const preventZoom = () => {
-        const viewportMeta = document.querySelector('meta[name="viewport"]');
-        if (viewportMeta) {
-            viewportMeta.setAttribute(
-                'content',
-                'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
-            );
-        }
-    };
-
-    const restoreViewport = () => {
-        const viewportMeta = document.querySelector('meta[name="viewport"]');
-        if (viewportMeta && originalViewport.value) {
-            viewportMeta.setAttribute('content', originalViewport.value);
-        } else if (viewportMeta) {
-            viewportMeta.setAttribute(
-                'content',
-                'width=device-width, initial-scale=1.0'
-            );
-        }
-    };
 
     const toggleSearch = () => {
         isActive.value = !isActive.value;
         if (isActive.value) {
-            preventZoom();
             nextTick(() => inputRef.value?.focus());
         } else {
             if (inputRef.value) inputRef.value.value = '';
-            restoreViewport();
         }
     };
 
     const handleBlur = () => {
-        restoreViewport();
-
         if (!searchString.value.trim()) {
             isActive.value = false;
         }
-    };
-
-    const handleFocus = () => {
-        preventZoom();
     };
 
     const searchString = ref('');
@@ -80,20 +38,10 @@
             class="search-btn"
             type="button"
             @click="toggleSearch"
+            @mousedown.prevent
             :title="$t('search')"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                viewBox="0 0 24 24"
-            >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+            <i class="bi bi-search"></i>
         </button>
         <transition name="slide">
             <input
@@ -104,8 +52,8 @@
                 :placeholder="$t('search')"
                 v-model="searchString"
                 @input="handleInput"
-                @focus="handleFocus"
                 @blur="handleBlur"
+                v-prevent-zoom
             />
         </transition>
     </form>
