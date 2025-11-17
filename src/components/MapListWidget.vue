@@ -25,7 +25,7 @@
             </div>
         </div>
         <!-- Mobile -->
-        <div v-else class="mobile-container">
+        <div v-else class="mobile-container" v-prevent-zoom>
             <Map
                 :height="'100svh'"
                 v-show="showMap"
