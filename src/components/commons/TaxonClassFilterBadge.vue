@@ -159,7 +159,7 @@
     }
 
     .dropdown-header {
-        font-size: 0.85rem;
+        font-size: 1rem;
         font-weight: 600;
         margin-bottom: 6px;
         opacity: 0.8;
@@ -170,6 +170,7 @@
         padding: 6px 10px;
         transition: background 0.25s ease, transform 0.2s ease;
         font-weight: 500;
+        font-size: 0.85rem;
         color: #333;
         display: flex;
         align-items: center;
