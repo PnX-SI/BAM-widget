@@ -24,7 +24,6 @@ import messagesDE from './assets/languageAssets/de';
 import messagesIT from './assets/languageAssets/it';
 import preventZoom from './directives/preventZoom.js';
 
-
 const browserLocale = window.navigator.language.split('-')[0];
 
 const i18n = createI18n({

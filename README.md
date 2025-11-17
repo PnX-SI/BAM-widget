@@ -26,7 +26,7 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 -   Sort 🔃 and filter species lists
 -   Search 🔎 and filter species
 -   Share research via link 🔗 or embed in your website 🖥️
--   Multilingual support (EN, FR, ES) 🌐
+-   Multilingual support (EN, FR, ES, CS, DE, IT) 🌐
 -   Based only on open API! No server required (except for self-hosting)!
 
 ![BAM - How it works](https://geonature.fr/documents/autres/BAM/BAM-schema-01.png)
