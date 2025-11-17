@@ -197,6 +197,7 @@
         flex-direction: column;
         flex-grow: 1;
         padding: 0px 1em;
+        padding-right: 0;
     }
 
     #taxon-list-filter {

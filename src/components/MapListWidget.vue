@@ -27,11 +27,11 @@
         <!-- Mobile -->
         <div v-else class="mobile-container">
             <Map
-                :height="'100vh'"
+                :height="'97svh'"
                 v-show="showMap"
                 v-on:update:wkt="(wkt) => (showMap = false)"
             />
-            <TaxonList :height="'100vh'" v-show="!showMap" />
+            <TaxonList :height="'97svh'" v-show="!showMap" />
 
             <button class="toggle-btn" @click="showMap = !showMap">
                 <i v-if="showMap" class="fa-solid fa-list"></i>
@@ -43,7 +43,8 @@
 </template>
 <style scoped>
     .mobile-container {
-        height: 100svh !important;
+        height: 97svh !important;
+        padding: 1svh;
     }
     .toggle-btn {
         position: fixed;
