@@ -207,6 +207,7 @@
         justify-content: center;
         gap: 1em;
         flex-wrap: wrap;
+        margin-bottom: 1em;
     }
 
     .overlap-filter {
@@ -216,6 +217,7 @@
         width: 100%;
         padding: 0.8em 1em;
         z-index: 10;
+        margin-bottom: 0;
     }
 
     .taxon-list-scroll-wrapper {
