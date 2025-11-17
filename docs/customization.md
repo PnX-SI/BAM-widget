@@ -60,7 +60,7 @@ Allows or prevents editing of the geometry on the map.
 
 Language code for the user interface.
 
-**Language available:** `"en"`, `"fr", "es"`
+**Language available:** `"en"`, `"fr", "es", "cs", "de", "it"`
 
 ### `mode` (**Type:** string)
 
