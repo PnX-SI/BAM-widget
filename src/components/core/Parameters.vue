@@ -22,11 +22,13 @@
         mode,
         widgetType,
         nbTaxonPerLine,
-        hybridTaxonList,
+        switchModeAvailable,
         connector,
         customDetailPage,
         getParams,
         nbDisplayedSpecies,
+        primaryColor,
+        filtersOnList,
     } = ParameterStore.getInstance();
 
     const router = useRouter();
@@ -63,6 +65,13 @@
             { value: WIDGET_TYPE.mapList, text: t('widgetType.default') },
             { value: WIDGET_TYPE.list, text: t('widgetType.list') },
         ];
+    });
+
+    const colorWithHash = computed({
+        get: () => (primaryColor.value ? `#${primaryColor.value}` : '#000000'),
+        set: (newValue) => {
+            primaryColor.value = newValue.replace('#', '');
+        },
     });
 </script>
 
@@ -172,7 +181,7 @@
                 </div>
 
                 <div class="parameter-section">
-                    <BFormCheckbox switch v-model="hybridTaxonList">
+                    <BFormCheckbox switch v-model="switchModeAvailable">
                         <strong>{{ $t('mode.isTaxonListHybrid') }} </strong>
                     </BFormCheckbox>
                 </div>
@@ -205,6 +214,36 @@
                         v-model="nbDisplayedSpecies"
                         min="0"
                     />
+                </div>
+
+                <div class="parameter-section">
+                    <label
+                        >{{ $t('primaryColor') }}
+                        <i class="bi bi-palette-fill"></i>
+                    </label>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <BFormInput
+                            type="color"
+                            v-model="colorWithHash"
+                            class="color-picker"
+                        />
+                        <BFormInput
+                            type="text"
+                            v-model="primaryColor"
+                            placeholder="FFFFFF"
+                            maxlength="6"
+                            class="flex-grow-1"
+                        />
+                    </div>
+                </div>
+
+                <div class="parameter-section">
+                    <BFormCheckbox switch v-model="filtersOnList">
+                        <strong
+                            >{{ $t('filtersOnList') }}
+                            <i class="bi bi-funnel-fill"></i
+                        ></strong>
+                    </BFormCheckbox>
                 </div>
 
                 <div class="parameter-section">
@@ -252,5 +291,12 @@
 
     .parameter-section {
         margin-top: 1rem;
+    }
+
+    .color-picker {
+        width: 60px;
+        height: 38px;
+        padding: 2px;
+        cursor: pointer;
     }
 </style>

@@ -14,6 +14,7 @@ import { Connector } from './connectors/connector';
 import { CONNECTORS } from './connectors/connectors';
 
 import config from '@/assets/config';
+import { isRunningOnMobile } from './utils';
 
 class ParameterStore {
     /**
@@ -102,7 +103,7 @@ class ParameterStore {
      * If the user can switch between different modes of display in the taxon list.
      * @type {Ref<boolean>}
      */
-    hybridTaxonList: Ref<boolean>;
+    switchModeAvailable: Ref<boolean>;
 
     /**
      * Longitude.
@@ -128,6 +129,24 @@ class ParameterStore {
      */
     nbDisplayedSpecies: Ref<number | null>;
 
+    /**
+     * Primary color
+     * @type {Ref<string | null>}
+     */
+    primaryColor: Ref<string | null>;
+
+    /**
+     * Is the widget displayed on a mobile device.
+     * @type {Ref<boolean>}
+     */
+    isMobile: Ref<boolean>;
+
+    /**
+     * If the filter are overlapping the taxa list.
+     * @type {Ref<boolean>}
+     */
+    filtersOnList: Ref<boolean> = ref(false);
+
     private constructor() {
         const { locale, availableLocales } = useI18n();
         const route = useRoute();
@@ -147,15 +166,24 @@ class ParameterStore {
         this.sourceGeometry = ref(config.sourceGeometry);
         this.class = ref(config.class);
         this.widgetType = ref(config.widgetType);
-        this.hybridTaxonList = ref(config.hybridTaxonList);
+        this.switchModeAvailable = ref(config.switchModeAvailable);
+        this.filtersOnList = ref(config.filtersOnList);
+
         this.x = ref(config.x);
         this.y = ref(config.y);
         this.customDetailPage = ref(config.customDetailPage);
         this.nbDisplayedSpecies = ref(config.nbDisplayedSpecies);
+        this.primaryColor = ref(config.primaryColor);
 
         this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
         this.setupWatchers(router, route);
+
+        this.isMobile = ref(isRunningOnMobile());
+
+        window.addEventListener('resize', () => {
+            this.isMobile.value = isRunningOnMobile();
+        });
     }
 
     public static getInstance(): ParameterStore {
@@ -183,8 +211,10 @@ class ParameterStore {
             'mapEditable',
             'sourceGeometry',
             'widgetType',
-            'hybridTaxonList',
+            'switchModeAvailable',
             'customDetailPage',
+            'primaryColor',
+            'filtersOnList',
         ];
 
         paramsToWatch.forEach((param) => {
@@ -234,7 +264,10 @@ class ParameterStore {
             nbTaxonPerLine: (value: string) => parseInt(value),
             showFilters: (value: string) => value === 'true',
             mapEditable: (value: string) => value === 'true',
-            hybridTaxonList: (value: string) => value === 'true',
+            switchModeAvailable: (value: string) => value === 'true',
+            hybridTaxonList: (value: string) => {
+                this.switchModeAvailable.value = value === 'true';
+            },
             lang: (value: string) =>
                 availableLocales.includes(value) ? value : locale,
             mode: (value: string) =>
@@ -255,6 +288,8 @@ class ParameterStore {
             },
             customDetailPage: (value: string) => value,
             nbDisplayedSpecies: (value: string) => parseInt(value),
+            primaryColor: (value: string) => value,
+            filtersOnList: (value: string) => value === 'true',
         };
 
         Object.entries(paramHandlers).forEach(([paramName, transformFn]) => {
@@ -267,7 +302,11 @@ class ParameterStore {
                     'value' in paramRef
                 ) {
                     paramRef.value = transformFn(value);
-                } else if (['sourceGeometry', 'radius'].includes(paramName)) {
+                } else if (
+                    ['sourceGeometry', 'radius', 'hybridTaxonList'].includes(
+                        paramName
+                    )
+                ) {
                     transformFn(value);
                 }
             }
@@ -286,17 +325,24 @@ class ParameterStore {
 
     public getParams(): Record<string, any> {
         const params: Record<string, any> = {};
+        const banlist = ['isMobile', 'isSearchOnAPIAvailable'];
         Object.entries(this).forEach(([key, value]) => {
             if (
                 value?.value !== undefined &&
                 value.value !== null &&
-                value.value !== ''
+                value.value !== '' &&
+                !banlist.includes(key)
             ) {
                 params[key] = value.value;
             }
         });
         params['connector'] = this.connector.value.name;
-        const connectorParams = this.connector.value.getParams();
+        let connectorParams = this.connector.value.getParams();
+        Object.entries(connectorParams).forEach(([key, _]) => {
+            if (banlist.includes(key)) {
+                delete connectorParams[key];
+            }
+        });
         Object.assign(params, connectorParams);
         if (params?.wkt) {
             // if another way to indicate the geolocation was given in parameter, drop the WKT generated

@@ -2,7 +2,7 @@
     import ParameterStore from '@/lib/parameterStore';
     import DatasetList from './DatasetList.vue';
     const parameterStore = ParameterStore.getInstance();
-    const { connector } = parameterStore;
+    const { connector, primaryColor } = parameterStore;
 
     const props = defineProps({
         loadingDone: {
@@ -18,7 +18,11 @@
 </script>
 
 <template>
-    <div id="data-source-credits" class="text-center">
+    <div
+        id="data-source-credits"
+        class="text-center"
+        :style="{ background: '#' + primaryColor }"
+    >
         <div v-if="props.loadingDone">
             <a
                 href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
@@ -42,7 +46,10 @@
             >
                 {{ connector.name }}
             </a>
-            <BTooltip v-if="connector.sourceDetailMessage()">
+            <BTooltip
+                v-if="connector.sourceDetailMessage()"
+                style="z-index: 500"
+            >
                 <template #target>
                     <a
                         style="color: white; text-decoration: underline"
@@ -64,7 +71,7 @@
 <style>
     #data-source-credits {
         text-align: center;
-        background: #aaa;
         color: white;
+        border-radius: 0px 0px 5px 5px;
     }
 </style>

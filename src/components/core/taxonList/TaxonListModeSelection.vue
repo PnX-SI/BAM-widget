@@ -1,8 +1,9 @@
 <script setup>
     import ParameterStore from '@/lib/parameterStore';
     import { TAXONLIST_DISPLAY_MODE } from '@/lib/enums';
+
     const parameterStore = ParameterStore.getInstance();
-    const { hybridTaxonList, mode } = parameterStore;
+    const { switchModeAvailable, mode } = parameterStore;
 
     function toggleMode() {
         mode.value =
@@ -13,20 +14,19 @@
 </script>
 
 <template>
-    <div class="justify-content-center mode-dropdown" v-if="hybridTaxonList">
-        <button class="btn btn-secondary" @click="toggleMode()">
-            <i v-if="mode === 'gallery'" class="fa-solid fa-list"></i>
-            <i v-else class="bi bi-grid-fill"></i>
-        </button>
-    </div>
+    <button
+        v-if="switchModeAvailable"
+        class="round-btn"
+        @click="toggleMode"
+        :title="
+            mode === 'gallery'
+                ? $t('mode.detailedList')
+                : $t('mode.galleryMode')
+        "
+    >
+        <i
+            :key="mode"
+            :class="mode === 'gallery' ? 'fa-solid fa-list' : 'bi bi-grid-fill'"
+        ></i>
+    </button>
 </template>
-
-<style>
-    .mode-dropdown {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 9999;
-        width: max-content;
-    }
-</style>

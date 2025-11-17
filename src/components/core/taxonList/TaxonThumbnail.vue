@@ -1,5 +1,9 @@
 <script setup lang="ts">
     import { Media } from '@/lib/models';
+    import { computed, onMounted, ref, watch } from 'vue';
+    import ParameterStore from '@/lib/parameterStore';
+
+    const { isMobile } = ParameterStore.getInstance();
 
     const props = defineProps<{
         picture: Media;
@@ -8,7 +12,12 @@
         acceptedScientificName: string;
         urlDetailPage: string;
     }>();
+
+    const sizeIcon = computed(() => {
+        return isMobile.value ? 50 : 30;
+    });
 </script>
+
 <template>
     <div class="col card thumbnail">
         <Image
@@ -16,23 +25,32 @@
             :alt="props.picture?.url"
             :title="'Source: ' + props.picture?.source"
             class="card-img"
-        ></Image>
+        />
 
         <div class="card-img-overlay">
-            <div class="card-title h6">
+            <!-- Title (now at the top) -->
+            <div class="card-title">
                 <a
                     style="color: inherit; text-decoration: inherit"
                     :href="props.urlDetailPage"
                     target="_blank"
                 >
-                    <span>{{ props.vernacularName }}</span></a
-                >
+                    <span class="vernacularName">{{
+                        props.vernacularName
+                    }}</span>
+                </a>
+            </div>
+
+            <!-- Bottom Controls (audio + copyright) -->
+            <div class="bottom-controls">
                 <div class="player">
                     <SingleButtonAudioPlayer
                         v-if="props.audio"
                         :audio="props.audio"
-                    ></SingleButtonAudioPlayer>
+                        :size="sizeIcon"
+                    />
                 </div>
+
                 <BPopover
                     v-if="props.picture.source"
                     :click="true"
@@ -40,13 +58,16 @@
                     :delay="{ show: 0, hide: 0 }"
                 >
                     <template #target>
-                        <i class="bi bi-c-square-fill copyright-icon"></i>
+                        <div class="copyright-icon">
+                            <i
+                                class="bi bi-c-square-fill"
+                                :style="{
+                                    fontSize: sizeIcon + 'px',
+                                }"
+                            ></i>
+                        </div>
                     </template>
-                    <Credits
-                        link-color="link-dark"
-                        :media="props.picture"
-                        class=""
-                    ></Credits>
+                    <Credits link-color="link-dark" :media="props.picture" />
                 </BPopover>
             </div>
         </div>
@@ -57,32 +78,66 @@
     .card {
         border: 0;
         align-content: space-around;
+        position: relative;
     }
+
     .card-img {
         object-fit: cover;
         width: 100%;
         aspect-ratio: 1/1;
-    }
-    .card-title {
-        color: white;
-        text-shadow: 2px 2px 2px #333;
+        display: block;
     }
 
-    .copyright-icon {
-        margin-left: 0.2em;
-        position: absolute;
-        bottom: 5px;
-        right: 20px;
+    .card-title {
         color: #fff;
-        text-shadow: none;
+        font-size: 1rem;
+        font-weight: 600;
+        z-index: 2;
     }
-    .player {
-        margin-left: 0.2em;
+
+    /* Overlay covers the image */
+    .card-img-overlay {
         position: absolute;
-        bottom: 5px;
-        left: 15px;
-        color: #fff !important;
-        text-shadow: none;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 16px 20px;
+    }
+
+    .vernacularName {
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
         font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    .bottom-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .player,
+    .copyright-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+    }
+
+    .copyright-icon i {
+        color: #fff;
+        line-height: 1;
+    }
+
+    /* --- Mobile --- */
+    @media screen and (max-width: 768px) {
+        .card-title span {
+            font-size: 2rem;
+        }
+
+        .bottom-controls {
+            padding: 0 5px;
+        }
     }
 </style>

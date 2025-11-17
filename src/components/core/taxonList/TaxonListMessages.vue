@@ -45,61 +45,62 @@
 </script>
 
 <template>
-    <!-- Message de chargement -->
-    <Loading
-        id="loadingObs"
-        :loadingStatus="props.loadingObservations"
-        class="message-box"
-    />
+    <div class="message">
+        <Loading
+            id="loadingObs"
+            :loadingStatus="props.loadingObservations"
+            class="message-box"
+        />
 
-    <!-- Message : Aucune géométrie dessinée -->
-    <div class="message-box bg-secondary text-white" v-if="noGeometry">
-        <h5>{{ $t('drawGeometry') }}</h5>
-        <h5>
-            <i class="bi bi-square-fill"></i>
-            <i class="bi bi-hexagon-fill"></i>
-            <i class="bi bi-circle-fill"></i>
-            <i class="bi bi-geo-fill"></i>
-        </h5>
-    </div>
+        <!-- Message : No geometry -->
+        <div class="message-box bg-secondary text-white" v-if="noGeometry">
+            <h5>{{ $t('drawGeometry') }}</h5>
+            <h5>
+                <i class="bi bi-square-fill"></i>
+                <i class="bi bi-hexagon-fill"></i>
+                <i class="bi bi-circle-fill"></i>
+                <i class="bi bi-geo-fill"></i>
+            </h5>
+        </div>
 
-    <!-- Message : Aucune observation trouvée -->
-    <div class="message-box bg-warning text-white" v-if="noDataFound">
-        {{ $t('noSpeciesObserved') }}
-    </div>
+        <!-- Message : No taxa found -->
+        <div class="message-box bg-warning text-white" v-if="noDataFound">
+            {{ $t('noSpeciesObserved') }}
+        </div>
 
-    <!-- Message : Recherche vide -->
-    <div
-        class="message-box bg-warning text-white"
-        v-if="emptySearch && !noDataFound && !loadingError"
-    >
-        {{ $t('emptySearch') }}
-    </div>
+        <!-- Message : Empty search -->
+        <div
+            class="message-box bg-warning text-white"
+            v-if="emptySearch && !noDataFound && !loadingError"
+        >
+            {{ $t('emptySearch') }}
+        </div>
 
-    <!-- Message : Erreur de chargement -->
-    <div
-        id="loading-error"
-        class="message-box bg-danger text-white"
-        v-if="props.loadingError"
-    >
-        <h5><i class="bi bi-bug"></i> {{ $t('loadingError') }}</h5>
+        <!-- Message : Loading error -->
+        <div
+            id="loading-error"
+            class="message-box bg-danger text-white"
+            v-if="props.loadingError"
+        >
+            <h5><i class="bi bi-bug"></i> {{ $t('loadingError') }}</h5>
+        </div>
     </div>
 </template>
 
 <style scoped>
+    .message {
+        width: 100%;
+        display: flex;
+        align-self: center;
+        justify-content: center;
+    }
     .message-box {
+        width: 95%;
         border-radius: 10px;
         text-align: center;
         padding: 1em;
-        width: 100%;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
     }
-
-    /* Style spécifique pour le composant Loading */
-    #loadingObs {
-        background-color: var(--bs-secondary-bg);
-        color: var(--bs-secondary-color);
+    .message:not(:has(.message-box)) {
+        display: none;
     }
 </style>

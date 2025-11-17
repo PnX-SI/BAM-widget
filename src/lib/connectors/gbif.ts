@@ -101,6 +101,8 @@ export class GbifConnector extends Connector {
             fr: 'fra',
             es: 'spa',
             cs: 'ces',
+            it: 'ita',
+            de: 'deu',
         };
         const currentLanguage = ParameterStore.getInstance().lang.value;
         return fetch(

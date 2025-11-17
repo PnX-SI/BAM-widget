@@ -1,6 +1,5 @@
 <script setup>
     import { ref, computed, watch } from 'vue';
-    import sortArray from 'sort-array';
     import { useI18n } from 'vue-i18n';
     import SortBy from '@/components/commons/SortBy.vue';
     import SearchForm from '@/components/commons/SearchForm.vue';
@@ -23,6 +22,7 @@
         mode,
         class: class_,
         nbDisplayedSpecies,
+        filtersOnList,
     } = parameterStore;
 
     const props = defineProps({
@@ -49,6 +49,7 @@
             validator: (value) =>
                 Object.keys(TAXONLIST_DISPLAY_MODE).includes(value),
         },
+        height: { type: String, default: '100svh' },
     });
 
     nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
@@ -89,7 +90,7 @@
         const row_cols_lg = nbTaxonPerLine.value;
         const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
         const row_cols_sm = Math.round(row_cols_md / 2);
-        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
+        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} row-gap-4`;
     });
 
     function onScroll(event) {
@@ -111,7 +112,6 @@
         taxonManager.fetchSpeciesList(wkt.value);
     }
 
-    // Liste des tris disponibles
     const sortByAvailable = [
         { field_name: 'vernacularName', label: t('taxon.vernacularName') },
         {
@@ -122,86 +122,119 @@
         { field_name: 'lastSeenDate', label: t('taxon.lastSeenDate') },
     ];
 </script>
-
 <template>
-    <div id="taxon-list" class="card">
-        <div class="card-header" v-if="showFilters">
-            <SearchForm
-                @update:searchString="
-                    (newSearchString) => (searchString = newSearchString)
-                "
-            />
-            <SortBy
-                :sort-by-available="sortByAvailable"
-                @update:sortBy="(newSort) => (sortBy = newSort)"
-                @update:orderBy="(newOrder) => (orderBy = newOrder)"
-                :sortBy="sortBy"
-                :orderBy="orderBy"
-            />
-        </div>
-        <div class="card-body">
-            <TaxonListMessages
-                :loading-error="loadingError"
-                :loading-observations="loadingObservations"
-                :species-list="speciesList"
-                :filter-species-list="filteredSpecies"
-            ></TaxonListMessages>
-
-            <div id="taxon-list-content" :class="classNames" @scroll="onScroll">
-                <TaxonListModeSelection> </TaxonListModeSelection>
-                <div class="filter-dropdown">
-                    <TaxonClassFilterBadge
-                        @select:class="(newClass) => (filterClass = newClass)"
-                    ></TaxonClassFilterBadge>
-                </div>
-                <TaxonView
-                    v-for="observation in taxonManager.speciesListShowed.value"
-                    :key="observation.taxonId"
-                    :taxon="observation"
+    <div id="taxon-list" :style="{ height: props.height }">
+        <div class="list-container">
+            <div
+                id="taxon-list-filter"
+                :class="{ 'overlap-filter': filtersOnList }"
+            >
+                <TaxonListModeSelection />
+                <TaxonClassFilterBadge
+                    v-if="!class_"
+                    @select:class="(newClass) => (filterClass = newClass)"
+                />
+                <SortBy
+                    v-if="showFilters"
+                    :sort-by-available="sortByAvailable"
+                    @update:sortBy="(newSort) => (sortBy = newSort)"
+                    @update:orderBy="(newOrder) => (orderBy = newOrder)"
+                    :sortBy="sortBy"
+                    :orderBy="orderBy"
+                />
+                <SearchForm
+                    v-if="showFilters"
+                    @update:searchString="
+                        (newSearchString) => (searchString = newSearchString)
+                    "
                 />
             </div>
+
+            <div
+                class="taxon-list-scroll-wrapper"
+                :class="{ 'pt-0': !filtersOnList }"
+            >
+                <div
+                    id="taxon-list-content"
+                    :class="classNames"
+                    @scroll="onScroll"
+                >
+                    <TaxonListMessages
+                        :loading-error="loadingError"
+                        :loading-observations="loadingObservations"
+                        :species-list="speciesList"
+                        :filter-species-list="filteredSpecies"
+                    />
+                    <TaxonView
+                        v-for="observation in taxonManager.speciesListShowed
+                            .value"
+                        :key="observation.taxonId"
+                        :taxon="observation"
+                    />
+                </div>
+            </div>
         </div>
+
         <TaxonListFooter
             :loading-done="wkt.length && !loadingObservations"
             :number-of-species="speciesList.length"
             :datasets="datasets"
-        ></TaxonListFooter>
+        />
     </div>
 </template>
-
 <style scoped>
     #taxon-list {
-        padding: 0;
-        height: 80vh;
         display: flex;
         flex-direction: column;
+        border: 1px solid #efefef;
+        border-radius: 8px;
     }
 
-    #taxon-list-content {
-        overflow-y: scroll;
-        overflow-x: hidden;
-        padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
-    }
-
-    .card-body {
+    .list-container {
+        position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding: 0 !important;
-        position: relative;
+        padding-left: 1em;
+        padding-right: 1em;
     }
 
-    .filter-dropdown {
+    #taxon-list-filter {
+        margin-top: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1em;
+        flex-wrap: wrap;
+        margin-bottom: 1em;
+    }
+
+    .overlap-filter {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 9999;
-        width: max-content;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0.8em 1em;
+        z-index: 10;
+        margin-bottom: 0;
     }
 
-    .filter-dropdown button {
-        padding: 5px 10px;
-        width: 40px !important;
+    .taxon-list-scroll-wrapper {
+        flex-grow: 1;
+        overflow: hidden;
+        padding-top: 0em;
+    }
+
+    #taxon-list-content {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
+        padding-top: 1em;
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none;
+    }
+    #taxon-list-content ::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
     }
 </style>

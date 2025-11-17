@@ -60,7 +60,7 @@ Allows or prevents editing of the geometry on the map.
 
 Language code for the user interface.
 
-**Language available:** `"en"`, `"fr", "es"`
+**Language available:** `"en"`, `"fr", "es", "cs", "de", "it"`
 
 ### `mode` (**Type:** string)
 
@@ -102,7 +102,7 @@ Display type for the widget, with `list` being the standard option.
 
 ![alt](images/maplist_mode.png)
 
-### `hybridTaxonList` (**Type:** boolean)
+### `switchModeAvailable` (**Type:** boolean)
 
 Enables switching between list and gallery display modes for species list.
 
@@ -139,6 +139,18 @@ Name of the data source used to fetch species pictures.
 Name of the data source used to fetch animal sounds.
 
 -   `gbif` (GBIF compatible)
+
+### `primaryColor` (**Type:** string)
+
+Hexadecimal color for footer background. Color must be in format `RRGGBB`.
+
+**Example:** `"aaa"`
+
+### `filtersOnList` (**Type:** boolean)
+
+If filters are displayed on the species list or above.
+
+**Example:** `true`
 
 ## Integration examples
 
