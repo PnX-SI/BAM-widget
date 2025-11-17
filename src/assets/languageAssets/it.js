@@ -153,6 +153,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             errorText: 'Errore durante la ricerca',
             noResultsText: 'Nessun risultato trovato',
         },
+        searchTaxon: 'Cerca una specie',
     },
 };
 

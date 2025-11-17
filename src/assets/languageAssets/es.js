@@ -147,6 +147,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             errorText: 'Error al buscar',
             noResultsText: 'Ningún resultado encontrado',
         },
+        searchTaxon: 'Buscar especie',
     },
 };
 

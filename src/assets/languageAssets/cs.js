@@ -152,6 +152,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             errorText: 'Chyba při vyhledávání',
             noResultsText: 'Nenalezeny žádné výsledky',
         },
+        searchTaxon: 'Hledání druhu',
     },
 };
 

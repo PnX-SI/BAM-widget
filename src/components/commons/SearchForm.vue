@@ -49,7 +49,7 @@
                 ref="inputRef"
                 type="text"
                 class="search-input"
-                :placeholder="$t('search')"
+                :placeholder="$t('searchTaxon')"
                 v-model="searchString"
                 @input="handleInput"
                 @blur="handleBlur"

@@ -152,6 +152,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             errorText: 'Fehler während der Suche',
             noResultsText: 'Keine Ergebnisse gefunden',
         },
+        searchTaxon: 'Eine Art suchen',
     },
 };
 
