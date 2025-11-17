@@ -235,11 +235,4 @@
     .mapC {
         border-radius: 10px;
     }
-
-    @media screen and (max-width: 770px) {
-        .mapC {
-            height: 50vh !important;
-            margin-bottom: 1em;
-        }
-    }
 </style>

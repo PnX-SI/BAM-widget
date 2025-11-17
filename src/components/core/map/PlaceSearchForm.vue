@@ -236,7 +236,7 @@
     }
 
     .search-container.is-expanded {
-        width: min(90vw, 400px);
+        width: min(90vw, 250px);
     }
 
     .search-btn {
@@ -423,7 +423,7 @@
         }
 
         .results-dropdown {
-            width: 80vw;
+            width: 70vw;
         }
 
         .search-input {

@@ -153,7 +153,7 @@ You can also **share your results 📤** to collaborate with other users.
             errorText: 'Error while searching',
             noResultsText: 'No results found',
         },
-        searchTaxon: 'Search a specie',
+        searchTaxon: 'Search a species',
     },
 };
 

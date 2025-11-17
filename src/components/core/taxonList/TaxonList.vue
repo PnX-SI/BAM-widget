@@ -49,6 +49,7 @@
             validator: (value) =>
                 Object.keys(TAXONLIST_DISPLAY_MODE).includes(value),
         },
+        height: { type: String, default: '100svh' },
     });
 
     nbTaxonPerLine.value = props.nbTaxonPerLine ?? nbTaxonPerLine.value;
@@ -89,7 +90,7 @@
         const row_cols_lg = nbTaxonPerLine.value;
         const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
         const row_cols_sm = Math.round(row_cols_md / 2);
-        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} g-4`;
+        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} row-gap-4`;
     });
 
     function onScroll(event) {
@@ -122,7 +123,7 @@
     ];
 </script>
 <template>
-    <div id="taxon-list">
+    <div id="taxon-list" :style="{ height: props.height }">
         <div class="list-container">
             <div
                 id="taxon-list-filter"
@@ -185,9 +186,8 @@
     #taxon-list {
         display: flex;
         flex-direction: column;
-        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+        border: 1px solid #efefef;
         border-radius: 8px;
-        height: 100%;
     }
 
     .list-container {
@@ -196,13 +196,12 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding: 0px 1em;
-        padding-right: 0;
+        padding-left: 1em;
+        padding-right: 1em;
     }
 
     #taxon-list-filter {
         margin-top: 1em;
-        margin-bottom: 1em;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -222,14 +221,18 @@
     .taxon-list-scroll-wrapper {
         flex-grow: 1;
         overflow: hidden;
-        padding-top: 20px;
+        padding-top: 0em;
     }
 
     #taxon-list-content {
         overflow-y: auto;
         overflow-x: hidden;
         height: 100%;
-        padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
-        padding-top: 0;
+        padding-top: 1em;
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none;
+    }
+    #taxon-list-content ::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
     }
 </style>
