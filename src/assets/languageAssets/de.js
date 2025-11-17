@@ -45,7 +45,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         noResults: 'Keine Ergebnisse',
         previousPage: 'Zurück',
         nextPage: 'Weiter',
-        loading: 'Ladevorgang läuft ...',
+        loading: 'Ladevorgang läuft',
         loadingError: 'Beim Laden ist ein Fehler aufgetreten',
         noObservations: 'Keine Beobachtungen gefunden',
         noSpeciesObserved: 'In diesem Gebiet wurde keine Art beobachtet!',

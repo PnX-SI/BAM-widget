@@ -46,7 +46,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         noSpeciesObserved: 'V této oblasti nebyly pozorovány žádné druhy!',
         previousPage: 'Předchozí',
         nextPage: 'Další',
-        loading: 'Načítání...',
+        loading: 'Načítání',
         loadingError: 'Chyba načítání dat',
         noObservations: 'Nebyla nalezena žádná pozorování',
         emptySearch: 'Žádné druhy neodpovídají výsledkам vyhledávání',

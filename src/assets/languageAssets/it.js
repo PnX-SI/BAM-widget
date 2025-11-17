@@ -46,7 +46,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         noResults: 'Nessun risultato',
         previousPage: 'Precedente',
         nextPage: 'Successivo',
-        loading: 'Caricamento in corso...',
+        loading: 'Caricamento in corso',
         loadingError: 'Si è verificato un errore durante il caricamento',
         noObservations: 'Nessuna osservazione trovata',
         noSpeciesObserved: 'Nessuna specie osservata in quest’area!',

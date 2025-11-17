@@ -47,7 +47,7 @@ You can also **share your results 📤** to collaborate with other users.
         noSpeciesObserved: 'No species observed in this area !',
         previousPage: 'Previous',
         nextPage: 'Next',
-        loading: 'Loading...',
+        loading: 'Loading',
         loadingError: 'An error occurred while loading',
         noObservations: 'No observation found',
         emptySearch: 'No species match your search',

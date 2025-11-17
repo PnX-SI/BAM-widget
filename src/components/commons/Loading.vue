@@ -21,7 +21,7 @@
     <div v-if="loadingStatus" class="loading-container">
         <div class="loading-card">
             <div class="spinner"></div>
-            <h3 class="loading-text">{{ $t('loading') }}...</h3>
+            <h3 class="loading-text">{{ $t('loading') }}</h3>
         </div>
     </div>
 </template>

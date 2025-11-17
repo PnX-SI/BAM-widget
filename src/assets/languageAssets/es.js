@@ -41,7 +41,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         noSpeciesObserved: '¡No se han observado especies en esta área!',
         previousPage: 'Anterior',
         nextPage: 'Siguiente',
-        loading: 'Cargando...',
+        loading: 'Cargando',
         loadingError: 'Error al cargar los datos',
         noObservations: 'Ninguna observación encontrada',
         emptySearch: 'No se encontraron especies que coincidan con tu búsqueda',
