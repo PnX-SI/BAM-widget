@@ -2,7 +2,7 @@
     import ParameterStore from '@/lib/parameterStore';
     import DatasetList from './DatasetList.vue';
     const parameterStore = ParameterStore.getInstance();
-    const { connector, footerColor } = parameterStore;
+    const { connector, primaryColor } = parameterStore;
 
     const props = defineProps({
         loadingDone: {
@@ -21,7 +21,7 @@
     <div
         id="data-source-credits"
         class="text-center"
-        :style="{ background: '#' + footerColor }"
+        :style="{ background: '#' + primaryColor }"
     >
         <div v-if="props.loadingDone">
             <a

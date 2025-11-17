@@ -32,7 +32,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
 
         filtersTitle: 'Filtry',
         filtersOnList: 'Zobrazit filtry v seznamu',
-        footerColor: 'Změnit barvu patky',
+        primaryColor: 'Změnit barvu patky',
         mapEditable: 'Editovatelná oblast vyhledávání',
         bufferSize: 'Velikost bufferu (v metrech):',
         dateMin: 'Minimální datum',

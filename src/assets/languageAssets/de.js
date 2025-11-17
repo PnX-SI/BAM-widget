@@ -31,6 +31,8 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         UseCustomDetailPage:
             'Weiterleitung der Schaltfläche „Mehr erfahren“ anpassen',
         filtersTitle: 'Filter',
+        filtersOnList: 'Filter auf der Liste anzeigen',
+        primaryColor: 'Hauptfarbe ändern',
         mapEditable: 'Bearbeitbares Suchgebiet',
         bufferSize: 'Puffergröße (in Metern)',
         dateMin: 'Mindestdatum',
@@ -139,14 +141,17 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         },
         Animalia: 'Tier',
         Plantae: 'Pflanze',
-        map: {
-            searchPlace: 'Ort suchen',
-        },
         or: 'oder',
         in: 'in',
         datasetList: 'zugehörige Datensätze',
         observation: 'Beobachtung',
         observations: 'Beobachtungen',
+        searchPlace: {
+            loadingText: 'Suche läuft',
+            placeholder: 'Suchen Sie einen Ort',
+            errorText: 'Fehler während der Suche',
+            noResultsText: 'Keine Ergebnisse gefunden',
+        },
     },
 };
 

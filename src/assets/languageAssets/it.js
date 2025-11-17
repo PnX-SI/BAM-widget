@@ -32,6 +32,8 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         UseCustomDetailPage:
             'Modifica il reindirizzamento del pulsante "Scopri di più"',
         filtersTitle: 'Filtri',
+        filtersOnList: 'Mostra i filtri sulla lista',
+        primaryColor: 'Cambia il colore principale',
         mapEditable: 'Area di ricerca modificabile',
         bufferSize: 'Dimensione del buffer (in metri)',
         dateMin: 'Data minima',
@@ -140,14 +142,17 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         },
         Animalia: 'Animale',
         Plantae: 'Pianta',
-        map: {
-            searchPlace: 'Cerca un luogo',
-        },
         or: 'o',
         in: 'in',
         datasetList: 'set di dati associati',
         observation: 'osservazione',
         observations: 'osservazioni',
+        searchPlace: {
+            loadingText: 'Ricerca in corso',
+            placeholder: 'Cerca un luogo',
+            errorText: 'Errore durante la ricerca',
+            noResultsText: 'Nessun risultato trovato',
+        },
     },
 };
 

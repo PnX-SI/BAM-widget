@@ -27,7 +27,7 @@
         customDetailPage,
         getParams,
         nbDisplayedSpecies,
-        footerColor,
+        primaryColor,
         filtersOnList,
     } = ParameterStore.getInstance();
 
@@ -68,9 +68,9 @@
     });
 
     const colorWithHash = computed({
-        get: () => (footerColor.value ? `#${footerColor.value}` : '#000000'),
+        get: () => (primaryColor.value ? `#${primaryColor.value}` : '#000000'),
         set: (newValue) => {
-            footerColor.value = newValue.replace('#', '');
+            primaryColor.value = newValue.replace('#', '');
         },
     });
 </script>
@@ -218,7 +218,7 @@
 
                 <div class="parameter-section">
                     <label
-                        >{{ $t('footerColor') }}
+                        >{{ $t('primaryColor') }}
                         <i class="bi bi-palette-fill"></i>
                     </label>
                     <div class="d-flex align-items-center gap-2 mt-1">
@@ -229,7 +229,7 @@
                         />
                         <BFormInput
                             type="text"
-                            v-model="footerColor"
+                            v-model="primaryColor"
                             placeholder="FFFFFF"
                             maxlength="6"
                             class="flex-grow-1"

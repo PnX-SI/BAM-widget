@@ -140,7 +140,7 @@ Name of the data source used to fetch animal sounds.
 
 -   `gbif` (GBIF compatible)
 
-### `footerColor` (**Type:** string)
+### `primaryColor` (**Type:** string)
 
 Hexadecimal color for footer background. Color must be in format `RRGGBB`.
 

@@ -130,10 +130,10 @@ class ParameterStore {
     nbDisplayedSpecies: Ref<number | null>;
 
     /**
-     * Color of the footer.
+     * Primary color
      * @type {Ref<string | null>}
      */
-    footerColor: Ref<string | null>;
+    primaryColor: Ref<string | null>;
 
     /**
      * Is the widget displayed on a mobile device.
@@ -173,7 +173,7 @@ class ParameterStore {
         this.y = ref(config.y);
         this.customDetailPage = ref(config.customDetailPage);
         this.nbDisplayedSpecies = ref(config.nbDisplayedSpecies);
-        this.footerColor = ref(config.footerColor);
+        this.primaryColor = ref(config.primaryColor);
 
         this.initializeFromUrl(paramsFromUrl, locale, availableLocales);
 
@@ -213,7 +213,7 @@ class ParameterStore {
             'widgetType',
             'switchModeAvailable',
             'customDetailPage',
-            'footerColor',
+            'primaryColor',
             'filtersOnList',
         ];
 
@@ -288,7 +288,7 @@ class ParameterStore {
             },
             customDetailPage: (value: string) => value,
             nbDisplayedSpecies: (value: string) => parseInt(value),
-            footerColor: (value: string) => value,
+            primaryColor: (value: string) => value,
             filtersOnList: (value: string) => value === 'true',
         };
 

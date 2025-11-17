@@ -33,7 +33,7 @@ You can also **share your results 📤** to collaborate with other users.
 
         filtersTitle: 'Filters',
         filtersOnList: 'Show filters on list',
-        footerColor: 'Change the color of the footer',
+        primaryColor: 'Change the main color',
         mapEditable: 'Editable research zone',
         bufferSize: 'Buffer Size (in meter):',
         dateMin: 'Date Min',
