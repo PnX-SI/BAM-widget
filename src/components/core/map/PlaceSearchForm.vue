@@ -419,7 +419,7 @@
 
     @media screen and (max-width: 770px) {
         .search-container.is-expanded {
-            width: 80vw;
+            width: 70vw;
         }
 
         .results-dropdown {
