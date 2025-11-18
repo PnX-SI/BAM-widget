@@ -1,24 +1,24 @@
 # CHANGELOG
 
-## 1.2.0 (unreleased)
+## 1.2.0 (2025-11-18)
 
 ### ✨ New Features
 
 -   Full redesign of the mobile version of the widget, notably to be fully usable as a standalone mobile webpage at https://pnx-si.github.io/BAM-widget/ (#91)
--   Imprive global display and margins (#90)
+-   Improve global display and margins (#90)
 -   Filters buttons were redesigned, including a new parameter `filtersOnList` to define if they are located above or on the species list (#92)
 -   Add `primaryColor` parameter to change the taxon list footer color (#93)
 -   Search form is improved and allows to also search in vernacular names, especially with GBIF data source (#84)
 -   BAM is now available in Czech 🇨🇿 (#83 by @trendspotter), German 🇩🇪 and Italian 🇮🇹 (#94)
 -   Improve GBIF data quality with excluding specimens and observations with geospatial issues (#65)
--   Add wikidata sound API source (#66)
+-   Add Wikidata sound API source (#66)
 -   Add sound credits (#70, #71)
 -   Improve GeoNature connector with class filter and source performances (#64)
 -   Improve TaxHub media and credits retrieving (#64)
 -   A new parameter `nbSpeciesDisplayed` allows to limit the number of species displayed in the list (#21)
 -   `hybridTaxonList` parameter was renamed to `modeSwitchAvailable` and set to `false` by default (#90)
 -   The `mapList` mode is now the default one when accessing to https://pnx-si.github.io/BAM-widget/ (#85)
--   [Dev] Don't use `leaflet-geosearch` plugin for the place name search to use a better custom component (#90)
+-   [Dev] Replace `leaflet-geosearch` place name search component with a custom one(#90)
 -   [Dev] Add prettier (#75)
 
 ## 1.1.0 (2025-09-16)
