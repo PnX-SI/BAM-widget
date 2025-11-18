@@ -18,7 +18,7 @@
 -   A new parameter `nbSpeciesDisplayed` allows to limit the number of species displayed in the list (#21)
 -   `hybridTaxonList` parameter was renamed to `modeSwitchAvailable` and set to `false` by default (#90)
 -   The `mapList` mode is now the default one when accessing to https://pnx-si.github.io/BAM-widget/ (#85)
--   [Dev] Replace `leaflet-geosearch` place name search component with a custom one(#90)
+-   [Dev] Replace `leaflet-geosearch` place name search component with a custom one (#90)
 -   [Dev] Add prettier (#75)
 
 ## 1.1.0 (2025-09-16)
