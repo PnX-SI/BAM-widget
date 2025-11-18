@@ -31,6 +31,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         UseCustomDetailPage:
             'Modifier la redirection du bouton "En Savoir Plus" ',
         filtersTitle: 'Filtres',
+        filtersOnList: 'Afficher les filtres sur la liste',
+        primaryColor: 'Changer la couleur primaire',
         mapEditable: ' Zone de recherche éditable',
         bufferSize: 'Taille du buffer (en mètre)',
         dateMin: 'Date min',
@@ -43,7 +45,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         noResults: 'Aucun résultat',
         previousPage: 'Précedent',
         nextPage: 'Suivant',
-        loading: 'Chargement en cours ...',
+        loading: 'Chargement en cours',
         loadingError: 'Une erreur est survenue lors du chargement',
         noObservations: 'Aucune observation trouvée',
         noSpeciesObserved: 'Aucune espèce observée dans cette zone !',
@@ -66,6 +68,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             list: "Liste d'espèces",
             config: 'Configurateur',
         },
+        sortBy: 'Trier par',
+        sortOrder: 'Ordre',
         copy: 'Copier',
         copied: 'Copié',
         share: 'Partager',
@@ -135,14 +139,21 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
                 Pinopsida: 'Conifères',
             },
         },
-        map: {
-            searchPlace: 'Rechercher un lieu',
-        },
+        Animalia: 'Animal',
+        Plantae: 'Plante',
+
         or: 'ou',
         in: 'dans',
         datasetList: 'jeux de données associés',
         observation: 'observation',
         observations: 'observations',
+        searchPlace: {
+            loadingText: 'Recherche en cours',
+            placeholder: 'Rechercher un lieu',
+            errorText: 'Erreur lors de la recherche',
+            noResultsText: 'Aucun résultat trouvé',
+        },
+        searchTaxon: 'Recherche une espèce',
     },
 };
 

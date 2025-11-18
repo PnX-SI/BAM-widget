@@ -12,12 +12,14 @@ const config = {
     sourceGeometry: null,
     class: null,
     widgetType: WIDGET_TYPE.mapList,
-    hybridTaxonList: true,
+    switchModeAvailable: false,
     x: null,
     y: null,
     customDetailPage: null,
     nbTaxonPerLine: 2,
     nbDisplayedSpecies: null,
+    primaryColor: 'aaa',
+    filtersOnList: true,
 };
 
 export default config;
