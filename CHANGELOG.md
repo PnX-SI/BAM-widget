@@ -4,7 +4,7 @@
 
 ### ✨ New Features
 
--   Full redesign of the mobile version of the widget, notably to be fully usable as a standalone mobile webpage at https://pnx-si.github.io/BAM-widget/ (#91)
+-   Full redesign of the mobile version of the widget, notably to be fully usable as a standalone mobile webpage at https://pnx-si.github.io/BAM-widget/ (#91 by @jacquesfize)
 -   Improve global display and margins (#90)
 -   Filters buttons were redesigned, including a new parameter `filtersOnList` to define if they are located above or on the species list (#92)
 -   Add `primaryColor` parameter to change the taxon list footer color (#93)
