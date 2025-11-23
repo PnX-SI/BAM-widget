@@ -93,6 +93,7 @@
     .audio-button i {
         color: white;
         z-index: 2;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
     }
 
     .tooltip {
