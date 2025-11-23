@@ -34,4 +34,47 @@ test.describe('Simple list', () => {
         await taxonlist.changeMode('DetailedList');
         await taxonlist.waitForTaxonsToLoad();
     });
+    const wkts = [
+        'POLYGON((2.35 48.85, 2.36 48.85, 2.36 48.86, 2.35 48.86, 2.35 48.85))',
+        'LINESTRING(2.35 48.85, 2.36 48.86)',
+        'POINT(2.35 48.85)',
+    ];
+    const xandy = 'x=6.076641082763673&y=44.55164823782743';
+
+    test('test with geojson', async ({ page }) => {
+        await page.route('*/**/api/geojson', async (route: any) => {
+            const geojson = {
+                type: 'Polygon',
+                coordinates: [
+                    [
+                        [2.35, 48.85],
+                        [2.36, 48.85],
+                        [2.36, 48.86],
+                        [2.35, 48.86],
+                        [2.35, 48.85],
+                    ],
+                ],
+            };
+            await route.fulfill({ geojson });
+        });
+        await page.goto(
+            `http://localhost:5173/#/?widgetType=list&GBIF_ENDPOINT=https://api.gbif-uat.org/v1/&showFilters=true&lang=en&switchModeAvailable=true&sourceGeometry=http://api.com/api/geojson`
+        );
+        await new TaxonList(page).waitForTaxonsToLoad();
+    });
+
+    for (const wkt of wkts) {
+        test(`test with WKT = ${wkt}`, async ({ page }) => {
+            await page.goto(
+                `http://localhost:5173/#/?widgetType=list&wkt=${wkt}&GBIF_ENDPOINT=https://api.gbif-uat.org/v1/&showFilters=true&lang=en&switchModeAvailable=true`
+            );
+            await new TaxonList(page).waitForTaxonsToLoad();
+        });
+    }
+    test('with X and Y parameters', async ({ page }) => {
+        await page.goto(
+            `http://localhost:5173/#/?widgetType=list&${xandy}&GBIF_ENDPOINT=https://api.gbif-uat.org/v1/&showFilters=true&lang=en&switchModeAvailable=true`
+        );
+        await new TaxonList(page).waitForTaxonsToLoad();
+    });
 });
