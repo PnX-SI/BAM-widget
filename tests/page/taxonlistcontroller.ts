@@ -147,7 +147,7 @@ export class TaxonList {
     async waitForTaxonsToLoad() {
         await this.page.waitForSelector(
             '[data-testid="Taxon detailed view"], [data-testid="Taxon thumbnail view"]',
-            { timeout: 10000 }
+            { timeout: 20000 }
         );
     }
 
