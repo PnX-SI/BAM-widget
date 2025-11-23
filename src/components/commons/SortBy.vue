@@ -77,7 +77,7 @@
                     :class="{ active: sortBy === field.field_name }"
                     @click="selectSort(field.field_name)"
                     :data-testid="
-                        'Change sorting order button for ' + field.label
+                        'Change sorting order button for ' + field.field_name
                     "
                 >
                     <span>{{ field.label }}</span>

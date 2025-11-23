@@ -11,7 +11,7 @@ type Point = [number, number];
 
 const rect: Point[] = [
     [0, 0],
-    [1, 1],
+    [20, 20],
 ];
 
 const polygon: Point[] = [
@@ -133,7 +133,7 @@ export class Drawer {
         await this.dragAndDropCoordinates(circle);
     }
     async useGeoLocation() {
-        await this.selectDrawingTool(DrawingTypeIdentifier.GEOLOCATION);
+        await this.mapContainer.locator('.leaflet-control-locate').click();
         await this.page.waitForTimeout(1000);
     }
     async drawTestGeometry() {

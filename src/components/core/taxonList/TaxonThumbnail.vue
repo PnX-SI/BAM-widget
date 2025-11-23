@@ -19,7 +19,7 @@
 </script>
 
 <template>
-    <div class="col card thumbnail">
+    <div class="col card thumbnail" data-testid="Taxon thumbnail view">
         <Image
             :image-url="props.picture?.url"
             :alt="props.picture?.url"

@@ -23,6 +23,7 @@
                 ? $t('mode.detailedList')
                 : $t('mode.galleryMode')
         "
+        data-testid="Mode toggle button"
     >
         <i
             :key="mode"

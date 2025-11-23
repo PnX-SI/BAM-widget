@@ -238,6 +238,7 @@
                         type="number"
                         v-model="nbDisplayedSpecies"
                         min="0"
+                        data-testid="Number of displayed species form"
                     />
                 </div>
 
@@ -258,12 +259,17 @@
                             placeholder="FFFFFF"
                             maxlength="6"
                             class="flex-grow-1"
+                            data-testid="Primary color form"
                         />
                     </div>
                 </div>
 
                 <div class="parameter-section">
-                    <BFormCheckbox switch v-model="filtersOnList">
+                    <BFormCheckbox
+                        switch
+                        v-model="filtersOnList"
+                        data-testid="Show/Hide filters on list checkbox"
+                    >
                         <strong
                             >{{ $t('filtersOnList') }}
                             <i class="bi bi-funnel-fill"></i

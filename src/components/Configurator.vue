@@ -57,18 +57,7 @@
     .row > div {
         max-height: 83vh;
     }
-    #preview {
-        padding-top: 0.5em;
-        background-color: #efefef;
-        border-radius: 10px;
-        margin-right: 0.5em;
-        h3 {
-            /* color: #666; */
-            width: max-content;
-            padding: 0.3em;
-            border-radius: 10px;
-        }
-    }
+
     @media screen and (max-width: 770px) {
         #preview {
             margin-top: 4em;

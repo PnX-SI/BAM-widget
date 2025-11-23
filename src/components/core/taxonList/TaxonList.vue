@@ -123,10 +123,15 @@
     ];
 </script>
 <template>
-    <div id="taxon-list" :style="{ height: props.height }">
+    <div
+        id="taxon-list"
+        :style="{ height: props.height }"
+        data-testid="Taxon list"
+    >
         <div class="list-container">
             <div
                 id="taxon-list-filter"
+                data-testid="Taxon list filters"
                 :class="{ 'overlap-filter': filtersOnList }"
             >
                 <TaxonListModeSelection />

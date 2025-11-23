@@ -56,10 +56,11 @@
                     <small
                         v-if="props.nbObservations"
                         class="text-body-secondary"
-                        data-testid="Number of observations"
                     >
                         <strong>{{ $t('taxon.nbObservations') }} : </strong
-                        >{{ props.nbObservations }}
+                        ><span data-testid="Number of observations">{{
+                            props.nbObservations
+                        }}</span>
                     </small>
                     <br />
 
