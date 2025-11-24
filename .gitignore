@@ -35,6 +35,7 @@ docs/README.md
 docs/CHANGELOG.md
 # dev file
 components.d.ts
+dev-dist
 
 # Playwright
 /test-results/
