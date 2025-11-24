@@ -61,6 +61,7 @@
             class="round-btn"
             @click="isOpen = !isOpen"
             :title="$t('sortBy')"
+            data-testid="Sorting taxons input form"
         >
             <i
                 :class="orderBy === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down'"
@@ -75,6 +76,9 @@
                     class="sort-item"
                     :class="{ active: sortBy === field.field_name }"
                     @click="selectSort(field.field_name)"
+                    :data-testid="
+                        'Change sorting order button for ' + field.field_name
+                    "
                 >
                     <span>{{ field.label }}</span>
 

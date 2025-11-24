@@ -47,8 +47,13 @@
                     aria-label=".form-control-lg example"
                     :value="embed"
                     style="height: 80px"
+                    data-testid="Embed URL value"
                 />
-                <button class="btn btn-outline-secondary" @click="copy">
+                <button
+                    class="btn btn-outline-secondary"
+                    @click="copy"
+                    data-testid="embed tag copy button"
+                >
                     <div v-if="copied">
                         <i class="bi bi-check2-circle"></i> {{ $t('copied') }}!
                     </div>
@@ -63,6 +68,7 @@
                     placeholder="Width"
                     aria-label=".form-control-lg example"
                     v-model="width"
+                    data-testid="Width widget input form"
                 />
                 <span class="input-group-text">{{ $t('size.height') }}</span>
                 <input
@@ -71,6 +77,7 @@
                     placeholder="Height"
                     aria-label=".form-control-lg example"
                     v-model="height"
+                    data-testid="Height widget input form"
                 />
             </div>
         </div>

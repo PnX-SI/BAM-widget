@@ -20,6 +20,7 @@
 <template>
     <div
         id="data-source-credits"
+        data-testid="Data source credits"
         class="text-center"
         :style="{ background: '#' + primaryColor }"
     >

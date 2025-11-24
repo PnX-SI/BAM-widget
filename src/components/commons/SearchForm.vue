@@ -40,6 +40,7 @@
             @click="toggleSearch"
             @mousedown.prevent
             :title="$t('search')"
+            data-testid="Search taxon button"
         >
             <i class="bi bi-search"></i>
         </button>
@@ -54,6 +55,7 @@
                 @input="handleInput"
                 @blur="handleBlur"
                 v-prevent-zoom
+                data-testid="Search taxon input form"
             />
         </transition>
     </form>

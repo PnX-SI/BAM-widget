@@ -53,6 +53,7 @@
             v-b-modal.modal-center
             :variant="props.variant"
             size="md"
+            data-testid="button to open the source change modal"
             class="col-12 mb-3"
             ><i class="fa fa-leaf"></i> {{ $t('source.modify') }} ({{
                 sourceName
@@ -68,7 +69,11 @@
     >
         <div class="sourceParam">
             <label for="sourceName"> {{ $t('source.select') }}</label>
-            <select v-model="sourceName" class="form-select">
+            <select
+                v-model="sourceName"
+                class="form-select"
+                data-testid="Source selection select form"
+            >
                 <option
                     v-for="(source, sourceName) in sourcesParams"
                     :value="sourceName"

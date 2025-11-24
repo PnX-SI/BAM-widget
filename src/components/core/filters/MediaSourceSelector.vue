@@ -54,9 +54,12 @@
         v-model="mediaSourceID"
     >
         <template #first>
-            <BFormSelectOption :value="null" disabled>{{
-                $t('media.select')
-            }}</BFormSelectOption>
+            <BFormSelectOption
+                :value="null"
+                disabled
+                :data-testid="'Media Source Selector for' + props.typeMedia"
+                >{{ $t('media.select') }}</BFormSelectOption
+            >
         </template>
     </BFormSelect>
 </template>

@@ -63,6 +63,7 @@
                 height: SIZE + 'px',
             }"
             @click="toggleAudio"
+            data-testid="Toggle to play animal sound"
         >
             <i
                 :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"

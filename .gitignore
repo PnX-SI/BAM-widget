@@ -35,3 +35,10 @@ docs/README.md
 docs/CHANGELOG.md
 # dev file
 components.d.ts
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+playwright-report*
