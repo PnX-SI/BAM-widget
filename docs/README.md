@@ -1,3 +1,7 @@
+![GitHub branch check runs](https://img.shields.io/github/check-runs/PnX-SI/BAM-widget/main)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/PnX-SI/BAM-widget)
+![GitHub top language](https://img.shields.io/github/languages/top/PnX-SI/BAM-widget)
+
 **BAM (Biodiversity around me** AKA **Biodiversité autour de moi** AKA **Biodiversidad alrededor mío)** is a web widget that retrieves and displays species observed within an area, based on the GBIF data API (or alternative other biodiversity data sources).
 
 Its main goal is to make open biodiversity data easily and simply accessible to everyone, everwhere.
