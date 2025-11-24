@@ -22,7 +22,11 @@
         <HeaderNav></HeaderNav>
         <div class="row">
             <!-- Intro & Parameters -->
-            <div class="col-12 col-lg-4 col-md-2" style="height: 80vh">
+            <div
+                class="col-12 col-lg-4 col-md-2"
+                style="height: 80vh"
+                data-testid="Parameter block"
+            >
                 <Parameters />
             </div>
             <div class="col">
@@ -30,7 +34,11 @@
                     <h3 class="card-header">
                         <i class="bi bi-easel"></i> {{ $t('widgetPreview') }}
                     </h3>
-                    <div class="card-body">
+                    <div
+                        class="card-body"
+                        data-testid="Preview area"
+                        id="preview"
+                    >
                         <ListWidget
                             height="70vh"
                             v-if="widgetType == WIDGET_TYPE.list"
@@ -49,18 +57,7 @@
     .row > div {
         max-height: 83vh;
     }
-    #preview {
-        padding-top: 0.5em;
-        background-color: #efefef;
-        border-radius: 10px;
-        margin-right: 0.5em;
-        h3 {
-            /* color: #666; */
-            width: max-content;
-            padding: 0.3em;
-            border-radius: 10px;
-        }
-    }
+
     @media screen and (max-width: 770px) {
         #preview {
             margin-top: 4em;

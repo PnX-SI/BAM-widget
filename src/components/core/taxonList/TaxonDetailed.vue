@@ -13,9 +13,9 @@
     }>();
 </script>
 <template>
-    <div class="col">
+    <div class="col" data-testid="Taxon detailed view">
         <div class="card h-100 mb-2">
-            <div class="taxon-photo">
+            <div class="taxon-photo" data-testid="Taxon picture">
                 <Image
                     :image-url="props.picture?.url"
                     :alt="props.picture?.urlSource"
@@ -25,7 +25,11 @@
                             : ''
                     "
                 ></Image>
-                <div class="caption" v-if="props.picture.author">
+                <div
+                    class="caption"
+                    v-if="props.picture.author"
+                    data-testid="Picture caption"
+                >
                     <Credits
                         link-color="link-light"
                         :media="props.picture"
@@ -36,10 +40,15 @@
 
             <div class="card-body">
                 <div class="card-text">
-                    <h5 class="card-title text-wrap">
+                    <h5
+                        class="card-title text-wrap"
+                        data-testid="Vernacular name"
+                    >
                         {{ props.vernacularName }}
                     </h5>
-                    <small class="text-body-secondary"
+                    <small
+                        class="text-body-secondary"
+                        data-testid="Scientific name"
                         ><strong>{{ $t('taxon.scientificName') }} :</strong>
                         {{ props.acceptedScientificName }}</small
                     ><br />
@@ -49,7 +58,9 @@
                         class="text-body-secondary"
                     >
                         <strong>{{ $t('taxon.nbObservations') }} : </strong
-                        >{{ props.nbObservations }}
+                        ><span data-testid="Number of observations">{{
+                            props.nbObservations
+                        }}</span>
                     </small>
                     <br />
 
@@ -58,6 +69,7 @@
                         <a
               :href="props.urlDetailPage"
               target="_blank"
+               data-testid="Taxon detail redirect link"
               class="badge bg-light text-secondary border border-secondary text-decoration-none"
               ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
@@ -70,6 +82,7 @@
                         controls
                         :src="props.audio.url"
                         ref="audio"
+                        data-testid="animal sound"
                     ></audio>
                     <Credits
                         v-if="props.audio"
@@ -80,7 +93,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <small class="text-body-secondary"
+                <small class="text-body-secondary" data-testid="Last seen date"
                     >{{ $t('taxon.lastSeenDate') }} :
                     {{ props?.lastSeenDate.toLocaleDateString() }}</small
                 >

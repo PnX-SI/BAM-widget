@@ -36,3 +36,10 @@ docs/CHANGELOG.md
 # dev file
 components.d.ts
 dev-dist
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+playwright-report*

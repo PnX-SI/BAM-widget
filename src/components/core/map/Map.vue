@@ -227,7 +227,12 @@
             :debounceDelay="300"
         />
 
-        <div class="mapC" :id="`map-${mapID}`" :style="style"></div>
+        <div
+            class="mapC"
+            :id="`map-${mapID}`"
+            :style="style"
+            data-testid="Map container"
+        ></div>
     </div>
 </template>
 

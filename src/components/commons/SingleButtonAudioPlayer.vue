@@ -63,6 +63,7 @@
                 height: SIZE + 'px',
             }"
             @click="toggleAudio"
+            data-testid="Toggle to play animal sound"
         >
             <i
                 :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
@@ -93,6 +94,7 @@
     .audio-button i {
         color: white;
         z-index: 2;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
     }
 
     .tooltip {

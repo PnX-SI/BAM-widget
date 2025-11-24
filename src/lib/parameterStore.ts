@@ -215,6 +215,7 @@ class ParameterStore {
             'customDetailPage',
             'primaryColor',
             'filtersOnList',
+            'nbDisplayedSpecies',
         ];
 
         paramsToWatch.forEach((param) => {

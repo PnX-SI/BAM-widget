@@ -25,7 +25,12 @@
             </div>
         </div>
         <!-- Mobile -->
-        <div v-else class="mobile-container" v-prevent-zoom>
+        <div
+            v-else
+            class="mobile-container"
+            v-prevent-zoom
+            data-testid="Mobile map list widget"
+        >
             <Map
                 :height="'100svh'"
                 v-show="showMap"
@@ -33,7 +38,11 @@
             />
             <TaxonList :height="'100svh'" v-show="!showMap" />
 
-            <button class="toggle-btn" @click="showMap = !showMap">
+            <button
+                class="toggle-btn"
+                @click="showMap = !showMap"
+                data-testid="Mobile map list toggle"
+            >
                 <i v-if="showMap" class="fa-solid fa-list"></i>
                 <i v-else class="fa-solid fa-map"></i>
                 {{ showMap ? 'Liste' : 'Carte' }}

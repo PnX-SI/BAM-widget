@@ -19,6 +19,7 @@
             max="3000"
             v-model="buffer"
             id="buffer"
+            data-testid="Buffer selection form"
         />
     </div>
 </template>

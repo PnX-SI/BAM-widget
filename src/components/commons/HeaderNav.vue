@@ -9,6 +9,7 @@
             toggleable="lg"
             variant="light"
             class="mb-3"
+            data-testid="Toolbar"
         >
             <BNavbarBrand href="#/config"
                 ><img style="width: 35px" :src="imgUrl" />

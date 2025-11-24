@@ -44,7 +44,7 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
     -   [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
     -   [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
     -   [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
--   Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList](https://pnx-si.github.io/BAM-widget/#/?widgetType=mapList)
+-   Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/](https://pnx-si.github.io/BAM-widget/)
 
 ![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-schema-v2.png)
 

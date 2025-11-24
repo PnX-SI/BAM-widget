@@ -5,7 +5,9 @@
     >
         <div class="text-center">
             <h1 class="display-1">404</h1>
-            <p class="lead">{{ $t('error404.title') }}</p>
+            <p class="lead" data-testid="Error 404 label">
+                {{ $t('error404.title') }}
+            </p>
             <p>{{ $t('error404.subtitle') }}</p>
         </div>
     </div>
