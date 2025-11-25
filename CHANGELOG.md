@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.3.0 (unreleased)
+
+### ✨ New Features
+
+-   Add PWA to install BAM on mobile devices (#43)
+-   Add end-to-end automatic tests to improve maintenance and reduce regressions (#19)
+
+### 🐛 Fixes
+
+-   Fix CSS mobile font size (#95)
+
 ## 1.2.0 (2025-11-18)
 
 ### ✨ New Features
