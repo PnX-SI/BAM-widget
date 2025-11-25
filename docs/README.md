@@ -114,6 +114,7 @@ npm run build
 -   @EcMerc (Parc national du Mercantour)
 -   @SimonChevereau (Office Français de la Biodiversité)
 -   @babastienne (Makina Corpus)
+-   @trendspotter
 
 [![image](https://geonature.fr/img/logo-pne.jpg)](https://www.ecrins-parcnational.fr)
 
