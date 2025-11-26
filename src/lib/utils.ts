@@ -80,7 +80,7 @@ function validURL(str): boolean {
 }
 
 function isRunningOnMobile() {
-    return window.innerWidth <= 728;
+    return window.innerWidth <= 576;
     let check = false;
     (function (a) {
         if (
