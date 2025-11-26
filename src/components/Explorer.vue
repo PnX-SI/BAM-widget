@@ -2,17 +2,29 @@
     import 'leaflet/dist/leaflet.css';
     import Intro from './core/Intro.vue';
     import ParameterStore from '@/lib/parameterStore';
-    import { WIDGET_TYPE } from '@/lib/enums';
+    import { TAXONLIST_DISPLAY_MODE, WIDGET_TYPE } from '@/lib/enums';
 
-    const { widgetType } = ParameterStore.getInstance();
+    const {
+        widgetType,
+        switchModeAvailable,
+        showFilters,
+        nbTaxonPerLine,
+        mode,
+        filtersOnList,
+    } = ParameterStore.getInstance();
+    showFilters.value = true;
+    switchModeAvailable.value = true;
+    nbTaxonPerLine.value = 3;
+    mode.value = TAXONLIST_DISPLAY_MODE.gallery;
+    filtersOnList.value = false;
 </script>
 
 <template>
     <BNavbar
-        v-b-color-mode="'dark'"
+        v-b-color-mode="'light'"
         toggleable="lg"
-        variant="success"
-        class="mb-3"
+        variant="light"
+        class="mb-1"
     >
         <BNavbarBrand>🐛 🐦 🌱 {{ $t('discover.title') }}</BNavbarBrand>
         <BNavbarToggle target="nav-collapse" />
@@ -32,15 +44,8 @@
     <main class="container-fluid">
         <div class="row">
             <!-- Intro & Parameters -->
-            <div class="col-sm-3">
-                <Intro></Intro>
-                <ShareButton class="margin-top:1em"></ShareButton>
-            </div>
-            <div class="col-sm-9">
-                <ListWidget
-                    height="70vh"
-                    v-if="widgetType == WIDGET_TYPE.list"
-                ></ListWidget>
+            <div class="col-sm-12">
+                <ListWidget v-if="widgetType == WIDGET_TYPE.list"></ListWidget>
                 <MapListWidget height="90vh" v-else></MapListWidget>
             </div>
         </div>
