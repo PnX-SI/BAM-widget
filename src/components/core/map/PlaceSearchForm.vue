@@ -236,7 +236,7 @@
     }
 
     .search-container.is-expanded {
-        width: min(90vw, 200px);
+        width: min(90vw, 250px);
     }
 
     .search-btn {
@@ -335,7 +335,7 @@
         overflow: hidden;
         max-height: 300px;
         overflow-y: auto;
-        width: min(90vw, 200px);
+        width: min(90vw, 250px);
     }
 
     .result-item {
