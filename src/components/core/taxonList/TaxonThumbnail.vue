@@ -130,6 +130,12 @@
         line-height: 1;
     }
 
+    @media screen and (max-width: 1200px) {
+        .card-title span {
+            font-size: 1rem;
+        }
+    }
+
     /* --- Mobile --- */
     @media screen and (max-width: 768px) {
         .card-title span {

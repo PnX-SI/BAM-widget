@@ -17,10 +17,10 @@
     <div class="container-fluid position-relative px-0">
         <!-- Desktop -->
         <div v-if="!isMobile" class="row g-0">
-            <div class="col-12 col-lg-6 col-md-6 padding">
+            <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6 padding">
                 <Map :height="props.height" />
             </div>
-            <div class="col-12 col-lg-6 col-md-6 padding">
+            <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6 padding">
                 <TaxonList :style="'height:' + props.height" />
             </div>
         </div>
