@@ -3,21 +3,16 @@
     import { restoreMapState, toWKT } from '@/lib/utils';
     import { booleanClockwise, rewind } from '@turf/turf';
     import L from 'leaflet';
-    import 'leaflet-draw';
-    import 'leaflet-draw/dist/leaflet.draw.css';
     import { LocateControl } from 'leaflet.locatecontrol';
     import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css';
     import 'leaflet/dist/leaflet.css';
     import { computed, onMounted, ref, shallowRef, watch } from 'vue';
     import { useI18n } from 'vue-i18n';
     import { parse } from 'wellknown';
-    import {
-        DefaultIcon,
-        drawConfig,
-        hackForMapContainerResize,
-    } from './MapConfig';
+    import { hackForMapContainerResize } from './MapConfig';
 
     import PlaceSearchForm from './PlaceSearchForm.vue';
+    import DrawTool from './DrawTool.vue';
 
     const { t } = useI18n();
 
@@ -166,13 +161,6 @@
 
         if (mapEditable.value) {
             /**
-             * ADD DRAW GEOMETRY TOOLS
-             */
-            map.value.addControl(
-                new L.Control.Draw(drawConfig(geometry.value))
-            );
-
-            /**
              * ADD GEOLOCATION TOOL
              */
             locateControl.value = new LocateControl({
@@ -180,7 +168,6 @@
             }).addTo(map.value);
         }
 
-        map.value.on(L.Draw.Event.CREATED, handleGeometryCreation);
         map.value.on('locationfound', handleGeolocation);
 
         map.value.on('click', () => {
@@ -232,7 +219,17 @@
             :id="`map-${mapID}`"
             :style="style"
             data-testid="Map container"
-        ></div>
+        >
+            <!-- Ajoutez le plugin ici -->
+            <DrawTool
+                v-if="map && mapEditable"
+                :map="map"
+                :drawnItems="geometry"
+                @geometry-created="handleGeometryCreation"
+                @geometry-deleted="handleGeometryDeleted"
+                :delete-layer-button="false"
+            />
+        </div>
     </div>
 </template>
 
