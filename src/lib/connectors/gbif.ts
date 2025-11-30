@@ -208,9 +208,8 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[
-                                observation.taxonKey
-                            ].nbObservations += 1;
+                            taxonsData[observation.taxonKey].nbObservations +=
+                                1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
