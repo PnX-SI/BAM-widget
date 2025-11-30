@@ -23,6 +23,7 @@ function getConnector(
 /**
  * Simplify a polygon by removing points while keeping the total number of points below a certain threshold (190).
  * The simplification is done by the turf.js simplify algorithm.
+ * Coordinates are rounded to 5 decimal places.
  * @param {Object} polygon - Polygon to be simplified.
  * @param {number} [tolerance=0.01] - Tolerance for simplification.
  * @param {number} [threshold=190] - Threshold for total number of points.
@@ -32,10 +33,10 @@ function simplifyPolygon(polygon, tolerance = 0.01, threshold = 190) {
     let simplified = simplify(polygon, { tolerance });
     let totalCoordinatesCount = getTotalCoordinatesCount(simplified);
     while (totalCoordinatesCount > threshold) {
-        simplified = simplify(polygon, { tolerance });
+        simplified = simplify(polygon, { tolerance, highQuality: true });
         totalCoordinatesCount = getTotalCoordinatesCount(simplified);
     }
-    return simplified;
+    return roundCoordinates(simplified, 5);
 }
 
 function getTotalCoordinatesCount(polygon) {
@@ -50,5 +51,32 @@ function getTotalCoordinatesCount(polygon) {
         totalCoordinatesCount += polygon.coordinates.length;
     }
     return totalCoordinatesCount;
+}
+
+/**
+ * Round coordinates to a specified number of decimal places.
+ * @param {Object} polygon - Polygon with coordinates to round.
+ * @param {number} decimals - Number of decimal places.
+ * @returns {Object} - Polygon with rounded coordinates.
+ */
+function roundCoordinates(polygon, decimals) {
+    const factor = Math.pow(10, decimals);
+    const roundCoord = (coord) => Math.round(coord * factor) / factor;
+
+    const rounded = JSON.parse(JSON.stringify(polygon)); // Deep clone
+
+    if (rounded.type === 'MultiPolygon') {
+        rounded.coordinates = rounded.coordinates.map((multiPolygon) =>
+            multiPolygon.map((ring) =>
+                ring.map((coord) => coord.map(roundCoord))
+            )
+        );
+    } else if (rounded.type === 'Polygon') {
+        rounded.coordinates = rounded.coordinates.map((ring) =>
+            ring.map((coord) => coord.map(roundCoord))
+        );
+    }
+
+    return rounded;
 }
 export { getConnector, simplifyPolygon };

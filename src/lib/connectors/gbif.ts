@@ -146,7 +146,7 @@ export class GbifConnector extends Connector {
         ) {
             const geojson = simplifyPolygon(
                 parse(defaultParams.geometry),
-                0.01,
+                0.001,
                 MAX_NB_POLYGON_COORDINATES
             );
             defaultParams.geometry = stringify(geojson);
@@ -208,8 +208,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
