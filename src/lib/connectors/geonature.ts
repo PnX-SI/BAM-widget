@@ -5,9 +5,11 @@ import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { useI18n } from 'vue-i18n';
 import { CONNECTORS } from './connectors';
+import { simplifyPolygon } from './utils';
+import { parse, stringify } from 'wellknown';
 
 const GEONATURE_DEFAULT_LIMIT = 'ALL';
-
+const MAX_NB_POLYGON_COORDINATES = 190;
 type OccurrenceParams = Record<string, any>;
 
 export class GeoNatureConnector extends Connector {
@@ -70,12 +72,24 @@ export class GeoNatureConnector extends Connector {
             `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`
         );
         params = { ...params, limit: this.LIMIT };
+        if (
+            params.geometry.includes('POLYGON') ||
+            params.geometry.includes('MULTIPOLYGON')
+        ) {
+            const geojson = simplifyPolygon(
+                parse(params.geometry),
+                0.001,
+                MAX_NB_POLYGON_COORDINATES
+            );
+            params.geometry = stringify(geojson);
+        }
         for (const [key, value] of Object.entries(params)) {
             urlWithParams.searchParams.append(key, value as string);
         }
         if (params.class) {
             urlWithParams.searchParams.append('classe', params.class);
         }
+
         const url = urlWithParams.toString();
         return fetch(url)
             .then((response) => response.json())
