@@ -7,13 +7,10 @@ import { getMediaSource, SOURCE_ } from '../media/media';
 import { useI18n } from 'vue-i18n';
 import { CONNECTORS } from './connectors';
 import { GBIFSearchScoring } from './search/gbif';
-import { parse, stringify } from 'wellknown';
-import { simplifyPolygon } from './utils';
 
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 const GBIF_DEFAULT_LIMIT = 300;
 const GBIF_DEFAULT_NB_PAGES = 10;
-const MAX_NB_POLYGON_COORDINATES = 190;
 
 type OccurrenceParams = Record<string, any>;
 
@@ -125,6 +122,7 @@ export class GbifConnector extends Connector {
     }
 
     fetchOccurrence(params: any = {}): Promise<SearchResult> {
+        super.fetchOccurrence(params);
         let defaultParams = {
             limit: this.LIMIT,
             maxPage: this.NB_PAGES,
@@ -139,18 +137,6 @@ export class GbifConnector extends Connector {
             hasCoordinate: true,
             ...params,
         };
-
-        if (
-            defaultParams.geometry.includes('POLYGON') ||
-            defaultParams.geometry.includes('MULTIPOLYGON')
-        ) {
-            const geojson = simplifyPolygon(
-                parse(defaultParams.geometry),
-                0.001,
-                MAX_NB_POLYGON_COORDINATES
-            );
-            defaultParams.geometry = stringify(geojson);
-        }
 
         if (defaultParams.dateMin && defaultParams.dateMax) {
             defaultParams.eventDate = `${defaultParams.dateMin},${defaultParams.dateMax}`;

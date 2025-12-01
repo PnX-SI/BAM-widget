@@ -1,8 +1,11 @@
+import { parse, stringify } from 'wellknown';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { MediaSource } from '../media/MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { SearchScoring } from './search/scoring';
+import { simplifyPolygon } from './utils';
 
+const MAX_NB_POLYGON_COORDINATES = 190;
 export interface ConnectorOptions {
     imageSource?: string | MediaSource;
     soundSource?: string | MediaSource;
@@ -125,7 +128,18 @@ export class Connector {
      * @returns {Promise<Object>} A promise that resolves to the taxons data.
      */
     fetchOccurrence(params: Record<string, any>): Promise<any> {
-        throw new Error('Not implemented');
+        if (
+            params.geometry.includes('POLYGON') ||
+            params.geometry.includes('MULTIPOLYGON')
+        ) {
+            const geojson = simplifyPolygon(
+                parse(params.geometry),
+                0.001,
+                MAX_NB_POLYGON_COORDINATES
+            );
+            params.geometry = stringify(geojson);
+        }
+        return Promise.resolve({});
     }
 
     /**
