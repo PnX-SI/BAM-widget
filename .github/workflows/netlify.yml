@@ -1,5 +1,7 @@
 name: Deploy website
 on:
+    pull_request_review_comment:
+        types: [created]
     issue_comment:
         types: [created]
 
@@ -7,18 +9,31 @@ permissions:
     contents: read
     pull-requests: write
     issues: write
+    repository-projects: read
 
 jobs:
     check-permissions:
         runs-on: ubuntu-latest
-        if: |
-            github.event.issue.pull_request &&
-            contains(github.event.comment.body, '/deploy')
+        # Vérifie que c'est bien sur une PR
+        if: github.event.issue.pull_request || github.event.pull_request
         outputs:
             is-admin: ${{ steps.check-admin.outputs.is-admin }}
+            should-deploy: ${{ steps.check-comment.outputs.should-deploy }}
+
         steps:
+            - name: Check comment content
+              id: check-comment
+              run: |
+                  COMMENT_BODY="${{ github.event.comment.body }}"
+                  if [[ "$COMMENT_BODY" == *"/deploy"* ]]; then
+                    echo "should-deploy=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "should-deploy=false" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Check if user is admin
               id: check-admin
+              if: steps.check-comment.outputs.should-deploy == 'true'
               uses: actions/github-script@v7
               with:
                   result-encoding: string
@@ -32,6 +47,16 @@ jobs:
                         
                         const isAdmin = permission.permission === 'admin';
                         console.log(`User ${context.payload.comment.user.login} has ${permission.permission} permission`);
+                        
+                        if (!isAdmin) {
+                          await github.rest.issues.createComment({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: context.issue.number,
+                            body: '❌ Vous devez être admin du repository pour déclencher un déploiement.'
+                          });
+                        }
+                        
                         return isAdmin.toString();
                       } catch (error) {
                         console.error('Error checking permissions:', error);
@@ -40,9 +65,10 @@ jobs:
 
     build-and-deploy:
         needs: check-permissions
-        if: needs.check-permissions.outputs.is-admin == 'true'
+        if: |
+            needs.check-permissions.outputs.is-admin == 'true' &&
+            needs.check-permissions.outputs.should-deploy == 'true'
         runs-on: ubuntu-latest
-
         steps:
             - name: Add reaction to comment
               uses: peter-evans/create-or-update-comment@v4
