@@ -76,14 +76,11 @@
                     </small>
                     <br />
 
-                    <audio
-                        v-if="props.audio"
-                        class="audio"
-                        controls
-                        :src="props.audio.url"
-                        ref="audio"
-                        data-testid="animal sound"
-                    ></audio>
+                    <AudioPlayer
+                        v-if="props.audio.url"
+                        :audio="props.audio"
+                        variant="player"
+                    />
                     <Credits
                         v-if="props.audio"
                         class="small"
