@@ -77,7 +77,7 @@
                     <br />
 
                     <AudioPlayer
-                        v-if="props.audio.url"
+                        v-if="props.audio?.url"
                         :audio="props.audio"
                         variant="player"
                     />
