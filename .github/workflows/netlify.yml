@@ -1,0 +1,74 @@
+name: Deploy website
+on:
+    issue_comment:
+        types: [created]
+
+jobs:
+    build-and-deploy:
+        # Ne s'exécute que si le commentaire est sur une PR et contient "/deploy"
+        if: |
+            github.event.issue.pull_request &&
+            github.event.comment.author_association == 'OWNER' &&
+            contains(github.event.comment.body, '/deploy')
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Add reaction to comment
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  comment-id: ${{ github.event.comment.id }}
+                  reactions: rocket
+
+            - name: Get PR branch
+              uses: xt0rted/pull-request-comment-branch@v2
+              id: comment-branch
+
+            - name: Repository Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ steps.comment-branch.outputs.head_ref }}
+
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "npm"
+
+            - name: Install Netlify
+              run: npm install netlify-cli@17.10.1 -g
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Build project
+              run: npm run build
+
+            - name: Deploy to Netlify
+              id: netlify_deploy
+              run: |
+                  netlify deploy \
+                    --dir dist \
+                    --site ${{ secrets.NETLIFY_SITE_ID }} \
+                    --auth ${{ secrets.NETLIFY_API_TOKEN }} \
+                    --prod
+
+            - name: Comment deployment success
+              if: success()
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  issue-number: ${{ github.event.issue.number }}
+                  body: |
+                      ✅ Déploiement réussi !
+
+                      Le site a été déployé sur Netlify.
+
+            - name: Comment deployment failure
+              if: failure()
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  issue-number: ${{ github.event.issue.number }}
+                  body: |
+                      ❌ Le déploiement a échoué.
+
+                      Vérifiez les logs pour plus de détails.
