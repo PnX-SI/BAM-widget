@@ -81,12 +81,6 @@
                         :audio="props.audio"
                         variant="player"
                     />
-                    <Credits
-                        v-if="props.audio"
-                        class="small"
-                        link-color="text-muted"
-                        :media="props.audio"
-                    ></Credits>
                 </div>
             </div>
             <div class="card-footer">
