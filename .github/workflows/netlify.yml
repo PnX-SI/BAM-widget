@@ -1,0 +1,65 @@
+name: Deploy website
+on:
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: "Environment de déploiement"
+                required: true
+                default: "production"
+                type: choice
+                options:
+                    - production
+                    - preview
+
+permissions:
+    contents: read
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Repository Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "npm"
+
+            - name: Install Netlify
+              run: npm install netlify-cli@17.10.1 -g
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Build project
+              run: npm run build
+
+            - name: Deploy to Netlify (Production)
+              if: inputs.environment == 'production'
+              id: netlify_deploy_prod
+              run: |
+                  netlify deploy \
+                    --dir dist \
+                    --site ${{ secrets.NETLIFY_SITE_ID }} \
+                    --auth ${{ secrets.NETLIFY_API_TOKEN }} \
+                    --prod
+
+            - name: Deploy to Netlify (Preview)
+              if: inputs.environment == 'preview'
+              id: netlify_deploy_preview
+              run: |
+                  netlify deploy \
+                    --dir dist \
+                    --site ${{ secrets.NETLIFY_SITE_ID }} \
+                    --auth ${{ secrets.NETLIFY_API_TOKEN }}
+
+            - name: Deployment Summary
+              run: |
+                  echo "### ✅ Déploiement réussi" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Environment:** ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+                  echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
