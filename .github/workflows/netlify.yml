@@ -36,6 +36,8 @@ jobs:
 
             - name: Build project
               run: npm run build
+              env:
+                  NODE_ENV: ${{ inputs.environment }}
 
             - name: Deploy to Netlify (Production)
               if: inputs.environment == 'production'
