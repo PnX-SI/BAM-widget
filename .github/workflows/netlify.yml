@@ -5,7 +5,6 @@ on:
             environment:
                 description: "Environment de déploiement"
                 required: true
-                default: "production"
                 type: choice
                 options:
                     - production
@@ -46,7 +45,7 @@ jobs:
                   netlify deploy \
                     --dir dist \
                     --site ${{ secrets.NETLIFY_SITE_ID }} \
-                    --auth ${{ secrets.NETLIFY_API_TOKEN }} \
+                    --auth ${{ secrets.NETLIFY_APP_TOKEN }} \
                     --prod
 
             - name: Deploy to Netlify (Preview)
