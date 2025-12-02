@@ -44,9 +44,10 @@
             <!-- Bottom Controls (audio + copyright) -->
             <div class="bottom-controls">
                 <div class="player">
-                    <SingleButtonAudioPlayer
+                    <AudioPlayer
                         v-if="props.audio"
                         :audio="props.audio"
+                        variant="button"
                         :size="sizeIcon"
                     />
                 </div>
