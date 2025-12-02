@@ -25,6 +25,7 @@
                 <BButton
                     pill
                     variant="outline-primary"
+                    :aria-label="`Button to select ${value} class of taxon`"
                     :pressed="class_ == value"
                     @click="updateClass(value)"
                     data-testid="Animalia button parameter"
@@ -42,6 +43,7 @@
                     :pressed="class_ == value"
                     @click="updateClass(value)"
                     data-testid="Plantae button parameter"
+                    :aria-label="`Button to select ${value} class of taxon`"
                     >{{ $t(`taxonsClass.Plantae.${value}`) }}</BButton
                 >
             </div>
