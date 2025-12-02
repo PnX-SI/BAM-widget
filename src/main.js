@@ -92,4 +92,4 @@ app.config.errorHandler = (err, instance, info) => {
     console.groupEnd();
 };
 
--app.mount('#app');
+app.mount('#app');
