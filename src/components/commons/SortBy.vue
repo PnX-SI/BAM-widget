@@ -62,6 +62,7 @@
             @click="isOpen = !isOpen"
             :title="$t('sortBy')"
             data-testid="Sorting taxons input form"
+            aria-label="Button to open a dropdown to change the sorting paramaeters"
         >
             <i
                 :class="orderBy === 'asc' ? 'bi bi-sort-up' : 'bi bi-sort-down'"

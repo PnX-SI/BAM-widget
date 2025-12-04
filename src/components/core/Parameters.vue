@@ -297,6 +297,7 @@
                     <BButton
                         variant="danger"
                         data-testid="Refresh parameters button"
+                        aria-label="Button to refresh the parameter form"
                         @click="ParameterStore.clearParameters(route, router)"
                     >
                         <i class="bi bi-arrow-clockwise"></i>

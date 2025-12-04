@@ -27,6 +27,7 @@
                 class="btn btn-outline-secondary"
                 id="shareButton"
                 @click="copy"
+                aria-label="Share button"
             >
                 <div v-if="copied">
                     <i class="bi bi-check2-circle"></i> {{ $t('copied') }}!

@@ -33,6 +33,7 @@
                     src="https://geonature.fr/documents/autres/BAM/BAM-logo.png"
                     height="30px"
                     class="me-1"
+                    alt="BAM logo"
                 />
             </a>
             <strong
