@@ -76,8 +76,8 @@ test.describe('Form parameters testing', () => {
 
     test('Select taxon class', async ({ page }) => {
         const buttons = [
-            { name: 'Mammifères', param: 'Mammalia' },
-            { name: 'Insectes', param: 'Insecta' },
+            { name: 'Button to select Mammalia', param: 'Mammalia' },
+            { name: 'Button to select Insecta', param: 'Insecta' },
         ];
 
         for (const button of buttons) {
