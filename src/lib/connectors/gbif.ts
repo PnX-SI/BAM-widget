@@ -7,6 +7,7 @@ import { getMediaSource, SOURCE_ } from '../media/media';
 import { useI18n } from 'vue-i18n';
 import { CONNECTORS } from './connectors';
 import { GBIFSearchScoring } from './search/gbif';
+import { fetchWikidataEntityByProperty } from '../media/Wikidata';
 
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 const GBIF_DEFAULT_LIMIT = 300;
@@ -194,8 +195,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
@@ -290,5 +292,39 @@ export class GbifConnector extends Connector {
         )
             .then((response) => response.json())
             .then((json) => json.results);
+    }
+
+    fetchDescription(taxonID: string | number, lang: string): Promise<string> {
+        return fetchWikidataEntityByProperty('P846', taxonID.toString()).then(
+            (wikidataID) => {
+                if (!wikidataID) return ''; // nothing found → resolve with empty string
+
+                return fetch(
+                    `https://www.wikidata.org/wiki/Special:EntityData/${wikidataID}.json`
+                )
+                    .then((res) => res.json())
+                    .then((entityJson) => {
+                        const langSelected =
+                            `${lang}wiki` in
+                            entityJson.entities[wikidataID].sitelinks
+                                ? lang
+                                : 'en';
+
+                        const title = entityJson.entities[wikidataID].sitelinks[
+                            `${langSelected}wiki`
+                        ].title
+                            .replace(/ /g, '_')
+                            .replace(/:/g, '%3A')
+                            .replace(/#/g, '%23')
+                            .replace(/"/g, '%22');
+
+                        return fetch(
+                            `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${title}`
+                        )
+                            .then((res) => res.json())
+                            .then((summaryJson) => summaryJson.extract || '');
+                    });
+            }
+        );
     }
 }
