@@ -94,6 +94,7 @@
         :vernacular-name="vernacularName || taxon.acceptedScientificName"
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :accepted-scientific-name="taxon.acceptedScientificName"
+        :description="description"
     >
     </TaxonThumbnail>
     <TaxonDetailed
