@@ -20,6 +20,7 @@
     const speciesPhoto = ref([]);
     const speciesAudio = ref(null);
     const vernacularName = ref(taxon.vernacularName);
+    const description = ref('');
 
     function fetchDetailUrl(taxonID) {
         if (customDetailPage.value) {
@@ -67,9 +68,18 @@
         });
     }
 
+    const fetchDescription = async () => {
+        const descriptionfetched = await connector.value.fetchDescription(
+            taxon.taxonId,
+            lang.value
+        );
+        description.value = descriptionfetched;
+    };
+
     fetchTaxonImage();
     fetchTaxonAudio();
     refreshVernacularName();
+    fetchDescription();
 
     watch(lang, () => {
         refreshVernacularName();
@@ -95,5 +105,6 @@
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :nb-observations="taxon?.nbObservations"
         :last-seen-date="taxon?.lastSeenDate"
+        :description="description"
     />
 </template>

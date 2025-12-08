@@ -225,4 +225,16 @@ export class Connector {
     searchOnAPI(searchString: string): Promise<any> {
         throw new Error('Not implemented');
     }
+
+    /**
+     * Fetches the description of a taxon.
+     * @param taxonID - The ID of the taxon.
+     * @returns A promise that resolves to the description of the taxon if found.
+     */
+    fetchDescription(
+        taxonID: string | number,
+        lang: string = 'en'
+    ): Promise<string> {
+        throw new Error('Not implemented');
+    }
 }

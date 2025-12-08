@@ -209,4 +209,4 @@ class WikiDataImageSource extends MediaSource {
     }
 }
 
-export { WikiDataImageSource };
+export { WikiDataImageSource, fetchWikidataEntityByProperty };
