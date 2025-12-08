@@ -72,7 +72,11 @@
                         }}</span>
                     </small>
                     <br />
-                    <small class="text-body-secondary">
+                    <small
+                        class="text-body-secondary"
+                        data-testid="Description"
+                        v-if="description"
+                    >
                         <strong
                             >Description
                             <button
