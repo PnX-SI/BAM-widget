@@ -85,7 +85,7 @@
                     />
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="card-footer" v-if="props.lastSeenDate">
                 <small class="text-body-secondary" data-testid="Last seen date"
                     >{{ $t('taxon.lastSeenDate') }} :
                     {{ props?.lastSeenDate.toLocaleDateString() }}</small

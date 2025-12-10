@@ -266,7 +266,7 @@ export class GbifFacetConnector extends Connector {
             class: '',
             nbObservations: nbObservations,
             description: '',
-            lastSeenDate: new Date(),
+            // lastSeenDate: new Date(),
         };
     }
 
