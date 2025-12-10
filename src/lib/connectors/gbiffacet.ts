@@ -197,11 +197,15 @@ export class GbifFacetConnector extends Connector {
             return;
         }
 
-        const taxonPromises = taxonFacet.counts.map((facetItem: any) =>
-            this.processSingleTaxon(facetItem, taxonsData)
-        );
+        const BATCH_SIZE = 50; // Process 10 taxa at a time
 
-        await Promise.all(taxonPromises); // TODO : watch out for performance
+        for (let i = 0; i < taxonFacet.counts.length; i += BATCH_SIZE) {
+            const batch = taxonFacet.counts.slice(i, i + BATCH_SIZE);
+            const batchPromises = batch.map((facetItem: any) =>
+                this.processSingleTaxon(facetItem, taxonsData)
+            );
+            await Promise.all(batchPromises);
+        }
     }
 
     /**
