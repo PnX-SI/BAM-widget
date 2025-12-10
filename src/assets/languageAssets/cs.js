@@ -79,8 +79,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             title: 'Datový zdroj',
             select: 'Vyberte datový zdroj',
             modify: 'Změnit datový zdroj pozorování',
-            gbifWarning:
-                'Počet pozorování a data posledních pozorování jsou založeny na agregaci posledních pozorování v rámci vybrané oblasti a jsou omezeny na maximálně {nbObs}.',
+            gbifWarning: 'Hledání na GBIF je omezeno na { nbTaxons } druhů.',
         },
         gbif: {
             apiEndpoint: 'API endpoint GBIF',

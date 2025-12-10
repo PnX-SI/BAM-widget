@@ -359,7 +359,7 @@ export class GbifFacetConnector extends Connector {
 
     sourceDetailMessage(): string {
         return useI18n().t('source.gbifWarning', {
-            nbObs: GBIF_DEFAULT_TAXON_LIMIT,
+            nbTaxons: GBIF_DEFAULT_TAXON_LIMIT,
         });
     }
     getSourceUrl(): string | null {
