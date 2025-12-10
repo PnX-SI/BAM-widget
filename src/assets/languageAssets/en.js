@@ -81,7 +81,7 @@ You can also **share your results 📤** to collaborate with other users.
             select: 'Select a data source',
             modify: 'Change the observations data source',
             gbifWarning:
-                'The number of observations and the dates of the latest sightings are based on an aggregation of the latest observations made within the selected area and limited to {nbObs} maximum.',
+                'The search on the GBIF is limited to { nbTaxons } species.',
         },
         gbif: {
             apiEndpoint: 'API endpoint of the GBIF',
