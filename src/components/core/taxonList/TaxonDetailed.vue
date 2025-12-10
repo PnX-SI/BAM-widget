@@ -61,7 +61,7 @@
                     >
                         <strong>{{ $t('taxon.nbObservations') }} : </strong
                         ><span data-testid="Number of observations">{{
-                            props.nbObservations
+                            props.nbObservations.toLocaleString(undefined)
                         }}</span>
                     </small>
                     <br />
