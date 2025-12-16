@@ -2,11 +2,12 @@ import { CONNECTORS } from './connectors';
 import { GbifConnector } from './gbif';
 import { GeoNatureConnector } from './geonature';
 import { Connector } from './connector';
-import { simplify } from '@turf/turf';
+import { simplify, polygon, getGeom } from '@turf/turf';
+import { Feature, Geometry, Polygon, MultiPolygon } from 'geojson';
 
 type ConnectorParams = Record<string, any>;
 
-function getConnector(
+export function getConnector(
     connectorName: keyof typeof CONNECTORS = 'GBIF',
     params: ConnectorParams = {}
 ): Connector {
@@ -21,62 +22,93 @@ function getConnector(
 }
 
 /**
- * Simplify a polygon by removing points while keeping the total number of points below a certain threshold (190).
+ implify a polygon by removing points while keeping the total number of points below a certain threshold (190).
  * The simplification is done by the turf.js simplify algorithm.
  * Coordinates are rounded to 5 decimal places.
- * @param {Object} polygon - Polygon to be simplified.
- * @param {number} [tolerance=0.01] - Tolerance for simplification.
- * @param {number} [threshold=190] - Threshold for total number of points.
- * @returns {Object} - Simplified polygon.
+ * @param {Polygon | MultiPolygon} geometry - The geometry to simplify.
+ * @param {number} [initialTolerance=0.001] - The initial tolerance for the simplification algorithm.
+ * @param {number} [threshold=190] - The maximum number of coordinates in the simplified polygon.
+ * @returns {Polygon | MultiPolygon} The simplified polygon or multi-polygon.
  */
-function simplifyPolygon(polygon, tolerance = 0.01, threshold = 190) {
-    let simplified = simplify(polygon, { tolerance });
-    let totalCoordinatesCount = getTotalCoordinatesCount(simplified);
-    while (totalCoordinatesCount > threshold) {
-        simplified = simplify(polygon, { tolerance, highQuality: true });
-        totalCoordinatesCount = getTotalCoordinatesCount(simplified);
-    }
-    return roundCoordinates(simplified, 5);
-}
+export function simplifyPolygon(
+    geometry: Polygon | MultiPolygon,
+    initialTolerance = 0.001,
+    threshold = 190
+): Polygon | MultiPolygon {
+    let tolerance = initialTolerance;
 
-function getTotalCoordinatesCount(polygon) {
-    let totalCoordinatesCount = 0;
-    if (polygon.type === 'MultiPolygon') {
-        polygon.coordinates.forEach((multiPolygon) => {
-            multiPolygon.forEach((polygon) => {
-                totalCoordinatesCount += polygon.length;
-            });
+    const feature: Feature<Polygon | MultiPolygon> = {
+        type: 'Feature',
+        properties: {},
+        geometry,
+    };
+
+    let simplifiedFeature = simplify(feature, {
+        tolerance,
+        highQuality: false,
+    });
+
+    let totalPoints = countCoordinates(simplifiedFeature.geometry);
+    let iterations = 0;
+
+    while (totalPoints > threshold && iterations < 20) {
+        tolerance *= 1.5;
+
+        simplifiedFeature = simplify(feature, {
+            tolerance,
+            highQuality: false,
         });
-    } else {
-        totalCoordinatesCount += polygon.coordinates.length;
+
+        totalPoints = countCoordinates(simplifiedFeature.geometry);
+        iterations++;
     }
-    return totalCoordinatesCount;
+
+    return roundCoordinates(simplifiedFeature.geometry, 5);
 }
 
 /**
- * Round coordinates to a specified number of decimal places.
- * @param {Object} polygon - Polygon with coordinates to round.
- * @param {number} decimals - Number of decimal places.
- * @returns {Object} - Polygon with rounded coordinates.
+ * Count the total number of coordinates in a polygon or multi-polygon.
+ * @param {Polygon | MultiPolygon} geometry - The polygon or multi-polygon to count the coordinates of.
+ * @returns {number} The total number of coordinates in the polygon or multi-polygon.
  */
-function roundCoordinates(polygon, decimals) {
+function countCoordinates(geometry: Polygon | MultiPolygon): number {
+    if (geometry.type === 'Polygon') {
+        return geometry.coordinates.reduce((sum, ring) => sum + ring.length, 0);
+    }
+
+    // MultiPolygon
+    return geometry.coordinates.reduce(
+        (sum, polygon) =>
+            sum + polygon.reduce((ringSum, ring) => ringSum + ring.length, 0),
+        0
+    );
+}
+
+/**
+ * Rounds the coordinates of a polygon or multi-polygon to a given number of decimals.
+ * @param {T} geometry - The polygon or multi-polygon to round the coordinates of.
+ * @param {number} decimals - The number of decimals to round to.
+ * @returns {T} The polygon or multi-polygon with rounded coordinates.
+ */
+function roundCoordinates<T extends Polygon | MultiPolygon>(
+    geometry: T,
+    decimals: number
+): T {
     const factor = Math.pow(10, decimals);
-    const roundCoord = (coord) => Math.round(coord * factor) / factor;
+    const round = (n: number) => Math.round(n * factor) / factor;
 
-    const rounded = JSON.parse(JSON.stringify(polygon)); // Deep clone
+    const clone: T = JSON.parse(JSON.stringify(geometry));
 
-    if (rounded.type === 'MultiPolygon') {
-        rounded.coordinates = rounded.coordinates.map((multiPolygon) =>
-            multiPolygon.map((ring) =>
-                ring.map((coord) => coord.map(roundCoord))
-            )
-        );
-    } else if (rounded.type === 'Polygon') {
-        rounded.coordinates = rounded.coordinates.map((ring) =>
-            ring.map((coord) => coord.map(roundCoord))
+    const roundRing = (ring: number[][]) =>
+        ring.map((coord) => [round(coord[0]), round(coord[1])]);
+
+    if (clone.type === 'Polygon') {
+        clone.coordinates = clone.coordinates.map(roundRing);
+    } else {
+        clone.coordinates = clone.coordinates.map((polygon) =>
+            polygon.map(roundRing)
         );
     }
 
-    return rounded;
+    return clone;
 }
-export { getConnector, simplifyPolygon };

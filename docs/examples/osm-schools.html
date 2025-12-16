@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -272,8 +272,9 @@
                             });
                         }
 
-                        document.getElementById('counter').innerText =
-                            `Schools loaded: ${geojson.features.length}`;
+                        document.getElementById(
+                            'counter'
+                        ).innerText = `Schools loaded: ${geojson.features.length}`;
                     })
                     .catch((err) => {
                         alert('Error fetching data: ' + err);
@@ -310,7 +311,10 @@
                         const e = wd.entities[props.wikidata];
 
                         if (e?.claims?.P18) {
-                            const imgUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${e.claims.P18[0].mainsnak.datavalue.value.replace(/ /g, '_')}`;
+                            const imgUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${e.claims.P18[0].mainsnak.datavalue.value.replace(
+                                / /g,
+                                '_'
+                            )}`;
                             imgHtml = `<img src="${imgUrl}" alt="${name}">`;
                         }
 
@@ -338,7 +342,9 @@
                     const wkt = wellknown.stringify(feature.geometry);
                     const iframe = document.createElement('iframe');
                     iframe.allow = 'geolocation';
-                    iframe.src = `https://pnx-si.github.io/BAM-widget/#/?widgetType=list&wkt=${encodeURIComponent(wkt)}`;
+                    iframe.src = `https://pnx-si.github.io/BAM-widget/#/?widgetType=list&wkt=${encodeURIComponent(
+                        wkt
+                    )}`;
                     bamDiv.appendChild(iframe);
                 }
             }
