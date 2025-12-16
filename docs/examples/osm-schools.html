@@ -44,6 +44,12 @@
 
     button { width: 100%; padding: 6px; }
 
+    #spinner {
+      display: none;
+      text-align: center;
+      margin-top: 6px;
+    }
+
     #tabs { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
     .tab { cursor: pointer; padding: 6px; border-bottom: 2px solid transparent; flex: 1; text-align: center; }
     .tab.active { border-bottom: 2px solid #007BFF; font-weight: bold; }
@@ -73,7 +79,14 @@
 <body>
 
 <div class="controls">
-  <button id="load">Load Schools</button>
+  <button id="load">Load OSM schools</button>
+  <div id="spinner">
+    <svg width="24" height="24" viewBox="0 0 50 50">
+      <circle cx="25" cy="25" r="20" fill="none" stroke="#007BFF" stroke-width="4" stroke-linecap="round">
+        <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+      </circle>
+    </svg>
+  </div>
   <div id="counter"></div>
 </div>
 
@@ -87,7 +100,7 @@
 
   <div id="details">
     <h2>No school selected</h2>
-    <p>Click on a marker to see its details.</p>
+    <p>Search schools in an area, then click on a marker to see its details and biodiversity around.</p>
   </div>
 
   <div id="bam" style="display:none;"></div>
@@ -126,6 +139,9 @@ function loadSchools() {
 
   if (schoolLayer) map.removeLayer(schoolLayer);
   selectedMarker = null;
+
+  const spinner = document.getElementById('spinner');
+  spinner.style.display = 'block';
 
   const b = map.getBounds();
   const bbox = `${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()}`;
@@ -171,6 +187,12 @@ function loadSchools() {
 
     document.getElementById('counter').innerText =
       `Schools loaded: ${geojson.features.length}`;
+  })
+  .catch(err => {
+    alert('Error fetching data: ' + err);
+  })
+  .finally(() => {
+    spinner.style.display = 'none';
   });
 }
 
@@ -239,4 +261,3 @@ async function showDetails(feature) {
 
 </body>
 </html>
-
