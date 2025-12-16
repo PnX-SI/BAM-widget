@@ -10,6 +10,8 @@
     [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
 -   Same kind of page but with treks lines in a national park in Costa Rica:  
     [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](/docs/examples/corcovado-treks.html)
+-   Webpage loading schools from OpenStreetMap and use BAM widget to display species observed around each school:  
+    [OSM schools](https://pnx-si.github.io/BAM-widget/docs/examples/osm-schools.html) / [Source code](/docs/examples/osm-schools.html)  
 -   Example of dynamic integration of the widget in a Geotrek trekking detail page:  
     [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
 -   Example of integration in an article in a national park website managed with a CMS:  
