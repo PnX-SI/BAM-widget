@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Schools – Leaflet, OSM, Wikidata & BAM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Geo -->
+  <script src="https://unpkg.com/osmtogeojson@2.0.0/osmtogeojson.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/wellknown@0.5.0/wellknown.min.js"></script>
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; font-family: system-ui, sans-serif; flex-direction: row; height: 100vh; }
+
+    #map { flex: 1; height: 100%; min-height: 400px; z-index: 1; }
+    #sidebar {
+      width: 35%;
+      min-width: 250px;
+      padding: 12px;
+      background: #fafafa;
+      border-left: 1px solid #ddd;
+      overflow-y: auto;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 80px;
+      z-index: 1000;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      max-width: 300px;
+    }
+
+    button { width: 100%; padding: 6px; }
+
+    #tabs { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .tab { cursor: pointer; padding: 6px; border-bottom: 2px solid transparent; flex: 1; text-align: center; }
+    .tab.active { border-bottom: 2px solid #007BFF; font-weight: bold; }
+
+    .tag {
+      display: inline-block;
+      margin: 2px;
+      padding: 2px 6px;
+      background: #e6f2e6;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    img { max-width: 100%; border-radius: 6px; margin-bottom: 8px; }
+    iframe { width: 100%; height: 90vh; border: none; }
+
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      #map { width: 100%; height: 50vh; }
+      #sidebar { width: 100%; height: auto; border-left: none; border-top: 1px solid #ddd; }
+      .controls { left: 50%; transform: translateX(-50%); top: 10px; }
+      iframe { height: 400px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="controls">
+  <button id="load">Load Schools</button>
+  <div id="counter"></div>
+</div>
+
+<div id="map"></div>
+
+<div id="sidebar">
+  <div id="tabs">
+    <div class="tab active" data-tab="details">Details</div>
+    <div class="tab" data-tab="bam">🌿 BAM - Biodiversity 500m around</div>
+  </div>
+
+  <div id="details">
+    <h2>No school selected</h2>
+    <p>Click on a marker to see its details.</p>
+  </div>
+
+  <div id="bam" style="display:none;"></div>
+</div>
+
+<script>
+const map = L.map('map').setView([46.5, 2.5], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap'
+}).addTo(map);
+
+let schoolLayer;
+let selectedMarker = null;
+const defaultIcon = new L.Icon.Default();
+
+// Tabs
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#details,#bam').forEach(d => d.style.display = 'none');
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).style.display = 'block';
+  };
+});
+
+// Load Schools
+document.getElementById('load').onclick = loadSchools;
+
+function loadSchools() {
+  const MIN_ZOOM = 10;
+  if (map.getZoom() < MIN_ZOOM) {
+    alert('Please zoom in further to load schools.');
+    return;
+  }
+
+  if (schoolLayer) map.removeLayer(schoolLayer);
+  selectedMarker = null;
+
+  const b = map.getBounds();
+  const bbox = `${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()}`;
+
+  const query = `
+    [out:json][timeout:25];
+    (
+      node[amenity=school](${bbox});
+      way[amenity=school](${bbox});
+      relation[amenity=school](${bbox});
+    );
+    out body;
+    >;
+    out skel qt;
+  `;
+
+  fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+    body: query
+  })
+  .then(r => r.json())
+  .then(data => {
+    let geojson = osmtogeojson(data);
+
+    // Convert all geometries to points
+    geojson.features = geojson.features.map(f => {
+      if (f.geometry.type !== 'Point') {
+        f.geometry = turf.centroid(f).geometry;
+      }
+      return f;
+    });
+
+    schoolLayer = L.geoJSON(geojson, {
+      pointToLayer: (_, latlng) => L.marker(latlng, { icon: defaultIcon }),
+      onEachFeature: (feature, layer) =>
+        layer.on('click', () => selectFeature(feature, layer))
+    }).addTo(map);
+
+    if (geojson.features.length > 0) {
+      map.fitBounds(schoolLayer.getBounds(), { padding: [20, 20] });
+    }
+
+    document.getElementById('counter').innerText =
+      `Schools loaded: ${geojson.features.length}`;
+  });
+}
+
+// Select Feature
+function selectFeature(feature, marker) {
+  if (selectedMarker) {
+    selectedMarker.setZIndexOffset(0);
+  }
+  marker.setZIndexOffset(1000); // Highlight
+  selectedMarker = marker;
+  showDetails(feature);
+}
+
+// Show details + BAM
+async function showDetails(feature) {
+  const props = feature.properties.tags || feature.properties;
+  const name = props.name || 'School';
+
+  let imgHtml = '';
+  let wikiHtml = '';
+
+  if (props.wikidata) {
+    try {
+      const wd = await fetch(
+        `https://www.wikidata.org/wiki/Special:EntityData/${props.wikidata}.json`
+      ).then(r => r.json());
+
+      const e = wd.entities[props.wikidata];
+
+      if (e?.claims?.P18) {
+        const imgUrl =
+          `https://commons.wikimedia.org/wiki/Special:FilePath/${e.claims.P18[0].mainsnak.datavalue.value.replace(/ /g,'_')}`;
+        imgHtml = `<img src="${imgUrl}" alt="${name}">`;
+      }
+
+      if (e?.sitelinks?.enwiki) {
+        wikiHtml = `<p><a href="${e.sitelinks.enwiki.url}" target="_blank">Wikipedia</a></p>`;
+      }
+    } catch {}
+  }
+
+  document.getElementById('details').innerHTML = `
+    ${imgHtml}
+    <h2>${name}</h2>
+    ${wikiHtml}
+    <h3>OSM Tags</h3>
+    ${Object.entries(props)
+      .sort((a,b) => a[0].localeCompare(b[0]))
+      .map(([k,v]) => `<span class="tag"><b>${k}</b>=${v}</span>`)
+      .join('')}
+  `;
+
+  const bamDiv = document.getElementById('bam');
+  bamDiv.innerHTML = '';
+
+  if (feature.geometry?.type === 'Point') {
+    const wkt = wellknown.stringify(feature.geometry);
+    const iframe = document.createElement('iframe');
+    iframe.allow = 'geolocation';
+    iframe.src =
+      `https://pnx-si.github.io/BAM-widget/#/?widgetType=list&wkt=${encodeURIComponent(wkt)}`;
+    bamDiv.appendChild(iframe);
+  }
+}
+</script>
+
+</body>
+</html>
+
