@@ -9,8 +9,10 @@ Thankfully, the GBIF allows anyone to query data through its [API](https://techd
 ### Usage
 
 Since there is only one global endpoint in the API (`https://api.gbif.org/v1/occurrence/search/`), **no configuration is required**.  
-There is just a default limit of number of requests done to the GBIF API (10 requests of 300 occurrences results) to limit the load on the API but also the calculation and loading duration of the results in the widget. You can change this limit but it can be to loud for the API or for the web browser if there is too much results to download and process.  
-Indeed, based on occurrences (observations) resultats the widget will agregate them to provide a list of observed species.
+There is just a default limit of number of requests done to the GBIF API (10 requests of 300 occurrences results) to limit the load on the API but also the calculation and loading duration of the results in the widget. So the list of species is limited by default to 3000 observations. You can change this limit but it can be too loud for the API or for the web browser if there is too much results to download and process.  
+Indeed, based on occurrences (observations) results, the widget will agregate them to provide a list of observed species.
+
+<img width="1846" height="607" alt="image" src="https://github.com/user-attachments/assets/81497e8b-3121-4643-801c-2d3a4fc9f9a1" />
 
 ## GeoNature
 
@@ -18,7 +20,7 @@ Indeed, based on occurrences (observations) resultats the widget will agregate t
 
 ### Compatibility
 
-BAM widget is compatible with GeoNature versions greater than or equal to 2.16.0. You must have the Export module installed (check the documentation [here](https://github.com/PnX-SI/gn_module_export?tab=readme-ov-file#installation-du-module))
+BAM widget is compatible with GeoNature versions greater than or equal to 2.16.0. You must have the Export module installed (check the documentation [here](https://github.com/PnX-SI/gn_module_export?tab=readme-ov-file#installation-du-module)). The species list is generated based on observations returned by the observations export configured in GeoNature that is limited to 1000 results, and not paginated yet. So the list of species can be partial actually.
 
 ### Setup your GeoNature
 
@@ -43,24 +45,25 @@ To set up your GeoNature instance to use with the widget, follow these steps:
         You can use the following SQL code to create the view:
 
         ```sql
-        CREATE OR REPLACE VIEW gn_exports.bam_widget AS
+        CREATE OR REPLACE VIEW gn_exports.v_bam_widget AS
         SELECT
            t.cd_ref AS cd_ref,
            t.nom_vern AS nom_vernaculaire,
            t.lb_nom AS nom_scientifique,
+           s.id_synthese AS id_synthese,
            s.date_min AS date_min,
            s.date_max AS date_max,
-           bl.geom AS the_geom_4326,
+           s.the_geom_4326 AS the_geom_4326,
            t.classe AS classe
         FROM gn_synthese.synthese s
-        join taxonomie.taxref t using(cd_nom)
+        JOIN taxonomie.taxref t USING(cd_nom)
         ```
 
         **Notes**: Feel free to modify this view depending on your needs! You can filter data with a `where` clause in the view, but keep the view data structure.
 
     2. Once your view is created, type the information in the export creation form in GeoNature.
 
-        ![alt text](images/geonature_source/geonature_export.png)
+        ![alt text](images/geonature_source/geonature_export_config.jpg)
 
 3. **Set the export information in the widget generator:** Recover the newly export ID. Then, in the widget configuration interface, click on the `Change the data source` button. The following window should appear.
 
