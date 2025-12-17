@@ -12,7 +12,7 @@ Since there is only one global endpoint in the API (`https://api.gbif.org/v1/occ
 There is just a default limit of number of requests done to the GBIF API (10 requests of 300 occurrences results) to limit the load on the API but also the calculation and loading duration of the results in the widget. So the list of species is limited by default to 3000 observations. You can change this limit but it can be too loud for the API or for the web browser if there is too much results to download and process.  
 Indeed, based on occurrences (observations) results, the widget will agregate them to provide a list of observed species.
 
-<img width="1846" height="607" alt="image" src="https://github.com/user-attachments/assets/81497e8b-3121-4643-801c-2d3a4fc9f9a1" />
+<img alt="BAM connecting GBIF" src="https://github.com/user-attachments/assets/81497e8b-3121-4643-801c-2d3a4fc9f9a1" />
 
 ## GeoNature
 
