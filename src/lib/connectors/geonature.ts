@@ -70,7 +70,7 @@ export class GeoNatureConnector extends Connector {
         let urlWithParams = new URL(
             `${this.API_ENDPOINT}/exports/api/${this.ID_EXPORT}`
         );
-        params = { ...params, limit: this.LIMIT };
+        params = { ...params, limit: this.LIMIT, orderby: 'date_min:desc' };
 
         for (const [key, value] of Object.entries(params)) {
             urlWithParams.searchParams.append(key, value as string);
