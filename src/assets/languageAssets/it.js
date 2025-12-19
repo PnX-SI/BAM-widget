@@ -81,7 +81,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             select: 'Seleziona una fonte',
             modify: 'Modifica la fonte dei dati delle osservazioni',
             gbifWarning:
-                'Il numero di osservazioni e le loro date si basa su un’aggregazione delle ultime osservazioni effettuate nell’area selezionata e limitata a un massimo di {nbObs}.',
+                'La ricerca sul GBIF è limitata a { nbTaxons } specie.',
         },
         gbif: {
             apiEndpoint: 'Indirizzo API del GBIF',
