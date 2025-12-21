@@ -1,4 +1,4 @@
-import { Media } from '../models';
+import { Media, MediaType } from '../models';
 import { MediaSource } from './MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { SOURCE_ } from './media';
@@ -49,7 +49,7 @@ export class TaxrefODATA extends MediaSource {
                                 url: media._links.thumbnail.href,
                                 license: media.licence,
                                 source: media.copyright,
-                                typeMedia: 'image',
+                                typeMedia: MediaType.image,
                             });
                         });
                     }
