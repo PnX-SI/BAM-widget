@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -272,9 +272,8 @@
                             });
                         }
 
-                        document.getElementById(
-                            'counter'
-                        ).innerText = `Schools loaded: ${geojson.features.length}`;
+                        document.getElementById('counter').innerText =
+                            `Schools loaded: ${geojson.features.length}`;
                     })
                     .catch((err) => {
                         alert('Error fetching data: ' + err);

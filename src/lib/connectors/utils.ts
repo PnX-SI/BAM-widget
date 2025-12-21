@@ -2,8 +2,8 @@ import { CONNECTORS } from './connectors';
 import { GbifConnector } from './gbif';
 import { GeoNatureConnector } from './geonature';
 import { Connector } from './connector';
-import { simplify, polygon, getGeom } from '@turf/turf';
-import { Feature, Geometry, Polygon, MultiPolygon } from 'geojson';
+import { simplify } from '@turf/turf';
+import { Feature, Polygon, MultiPolygon } from 'geojson';
 
 type ConnectorParams = Record<string, any>;
 
@@ -22,7 +22,7 @@ export function getConnector(
 }
 
 /**
- implify a polygon by removing points while keeping the total number of points below a certain threshold (190).
+ Simplify a polygon by removing points while keeping the total number of points below a certain threshold (190).
  * The simplification is done by the turf.js simplify algorithm.
  * Coordinates are rounded to 5 decimal places.
  * @param {Polygon | MultiPolygon} geometry - The geometry to simplify.
