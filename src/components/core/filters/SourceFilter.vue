@@ -54,6 +54,7 @@
             :variant="props.variant"
             size="md"
             data-testid="button to open the source change modal"
+            aria-label="button to open the source change modal"
             class="col-12 mb-3"
             ><i class="fa fa-leaf"></i> {{ $t('source.modify') }} ({{
                 sourceName

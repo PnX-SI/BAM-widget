@@ -24,6 +24,7 @@
                 : $t('mode.galleryMode')
         "
         data-testid="Mode toggle button"
+        aria-label="Button to change the display mode between gallery and detailed list"
     >
         <i
             :key="mode"

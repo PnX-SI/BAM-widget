@@ -155,6 +155,7 @@
                 @mousedown.prevent
                 type="button"
                 :title="placeholder"
+                aria-label="Button to toggle the search place form"
             >
                 <i class="bi bi-search"></i>
             </button>
@@ -177,6 +178,7 @@
                         @click="closeForm"
                         @mousedown.prevent
                         type="button"
+                        aria-label="button to close the search place form"
                     >
                         <i class="bi bi-x-lg"></i>
                     </button>

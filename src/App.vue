@@ -9,6 +9,7 @@
     // Watch for language change
     watch(locale, () => {
         document.title = t('title');
+        document.getElementsByTagName('html')[0].lang = locale.value;
     });
 </script>
 

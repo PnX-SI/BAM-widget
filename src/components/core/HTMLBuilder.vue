@@ -52,6 +52,7 @@
                 <button
                     class="btn btn-outline-secondary"
                     @click="copy"
+                    aria-label="Button to get the iframe code"
                     data-testid="embed tag copy button"
                 >
                     <div v-if="copied">
