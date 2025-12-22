@@ -2,8 +2,9 @@ import { CONNECTORS } from './connectors';
 import { GbifConnector } from './gbif';
 import { GeoNatureConnector } from './geonature';
 import { Connector } from './connector';
-import { simplify } from '@turf/turf';
+import { simplify, truncate } from '@turf/turf';
 import { Feature, Polygon, MultiPolygon } from 'geojson';
+import { GeoJSONMultiPolygon, GeoJSONPolygon } from 'wellknown';
 
 type ConnectorParams = Record<string, any>;
 
@@ -45,25 +46,28 @@ export function simplifyPolygon(
 
     let simplifiedFeature = simplify(feature, {
         tolerance,
-        highQuality: false,
+        highQuality: true,
     });
 
     let totalPoints = countCoordinates(simplifiedFeature.geometry);
     let iterations = 0;
 
     while (totalPoints > threshold && iterations < 20) {
-        tolerance *= 1.5;
+        tolerance *= 10;
 
         simplifiedFeature = simplify(feature, {
             tolerance,
-            highQuality: false,
+            highQuality: true,
         });
 
         totalPoints = countCoordinates(simplifiedFeature.geometry);
         iterations++;
     }
 
-    return roundCoordinates(simplifiedFeature.geometry, 5);
+    return truncate(simplifiedFeature.geometry, {
+        precision: 5,
+        coordinates: 2,
+    });
 }
 
 /**
@@ -85,30 +89,36 @@ function countCoordinates(geometry: Polygon | MultiPolygon): number {
 }
 
 /**
- * Rounds the coordinates of a polygon or multi-polygon to a given number of decimals.
- * @param {T} geometry - The polygon or multi-polygon to round the coordinates of.
- * @param {number} decimals - The number of decimals to round to.
- * @returns {T} The polygon or multi-polygon with rounded coordinates.
+ * Remove holes (inner rings) from a polygon or multi-polygon, keeping only the outer rings.
+ * @param {Polygon | MultiPolygon} geometry - The geometry to remove holes from.
+ * @returns {Polygon | MultiPolygon} The geometry with only outer rings.
  */
-function roundCoordinates<T extends Polygon | MultiPolygon>(
-    geometry: T,
-    decimals: number
-): T {
-    const factor = Math.pow(10, decimals);
-    const round = (n: number) => Math.round(n * factor) / factor;
-
-    const clone: T = JSON.parse(JSON.stringify(geometry));
-
-    const roundRing = (ring: number[][]) =>
-        ring.map((coord) => [round(coord[0]), round(coord[1])]);
-
-    if (clone.type === 'Polygon') {
-        clone.coordinates = clone.coordinates.map(roundRing);
-    } else {
-        clone.coordinates = clone.coordinates.map((polygon) =>
-            polygon.map(roundRing)
-        );
+export function removeHoles(
+    geometry: Polygon | MultiPolygon | GeoJSONMultiPolygon | GeoJSONPolygon
+): Polygon | MultiPolygon {
+    if (geometry.type === 'Polygon') {
+        // In the GeoJSON, the first coordinates set is the outer ring
+        // of the polygon
+        // https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.6
+        if (geometry.coordinates.length === 0) {
+            throw new Error('Invalid polygon: no coordinates');
+        }
+        return {
+            type: 'Polygon',
+            coordinates: [geometry.coordinates[0]],
+        };
     }
 
-    return clone;
+    // Pour un MultiPolygon
+    return {
+        type: 'MultiPolygon',
+        coordinates: geometry.coordinates.map((polygon) => {
+            if (polygon.length === 0) {
+                throw new Error(
+                    'Invalid polygon in multi-polygon: no coordinates'
+                );
+            }
+            return [polygon[0]];
+        }),
+    };
 }

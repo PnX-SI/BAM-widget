@@ -7,6 +7,8 @@ import { getMediaSource, SOURCE_ } from '../media/media';
 import { useI18n } from 'vue-i18n';
 import { CONNECTORS } from './connectors';
 import { GBIFSearchScoring } from './search/gbif';
+import { removeHoles } from './utils';
+import { parse, stringify } from 'wellknown';
 
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 const GBIF_DEFAULT_LIMIT = 300;
@@ -123,6 +125,8 @@ export class GbifConnector extends Connector {
 
     fetchOccurrence(params: any = {}): Promise<SearchResult> {
         super.fetchOccurrence(params);
+        // Need to remove inner rings
+        params.geometry = stringify(removeHoles(parse(params.geometry)));
         let defaultParams = {
             limit: this.LIMIT,
             maxPage: this.NB_PAGES,
@@ -194,8 +198,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
