@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getConnector, simplifyPolygon } from './utils';
+import { getConnector, removeHoles, simplifyPolygon } from './utils';
 import { Polygon, MultiPolygon } from 'geojson';
-
 function circleCoords(numPoints: number): any {
     const radius = 5;
     const points = Array.from({ length: numPoints }, (_, i) => {
@@ -81,6 +80,18 @@ describe('getConnector', () => {
 
         expect(connector).toBeDefined();
         expect(connector).toHaveProperty('params', {});
+    });
+});
+
+describe('Remove inner rings', () => {
+    it('should remove inner rings', () => {
+        const multiPolygon: Polygon = {
+            type: 'Polygon',
+            coordinates: [[circleCoords(100)], [circleCoords(100)]],
+        };
+        const result = removeHoles(multiPolygon);
+        expect(result.type).toBe('Polygon');
+        expect(result.coordinates.length).toBe(1);
     });
 });
 
