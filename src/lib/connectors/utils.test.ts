@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getConnector, removeHoles, simplifyPolygon } from './utils';
 import { Polygon, MultiPolygon } from 'geojson';
-function circleCoords(numPoints: number): any {
-    const radius = 5;
+function circleCoords(numPoints: number, radius: number = 5): any {
     const points = Array.from({ length: numPoints }, (_, i) => {
         const angle = (i / numPoints) * Math.PI * 2;
         return [Math.cos(angle) * radius, Math.sin(angle) * radius];
@@ -199,7 +198,7 @@ describe('simplifyPolygon', () => {
         it('should simplify a MultiPolygon', () => {
             const multiPolygon: MultiPolygon = {
                 type: 'MultiPolygon',
-                coordinates: [[circleCoords(100)], [circleCoords(100)]],
+                coordinates: [[circleCoords(100)], [circleCoords(50, 3)]],
             };
 
             const simplified = simplifyPolygon(multiPolygon);
