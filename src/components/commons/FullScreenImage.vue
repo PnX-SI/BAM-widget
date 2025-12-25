@@ -29,7 +29,7 @@
 
     <Transition name="fullscreen">
         <div
-            v-if="isFullscreen"
+            v-if="isFullscreen && media?.url"
             class="fullScreenContainer"
             @click.stop="close"
         >
@@ -104,16 +104,12 @@
     /* Transitions for fullscreen */
     .fullscreen-enter-active,
     .fullscreen-leave-active {
-        transition:
-            opacity 0.3s ease,
-            backdrop-filter 0.3s ease;
+        transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
     }
 
     .fullscreen-enter-active .fullscreenImage,
     .fullscreen-leave-active .fullscreenImage {
-        transition:
-            transform 0.3s ease,
-            opacity 0.3s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .fullscreen-enter-from,

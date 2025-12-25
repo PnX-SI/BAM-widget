@@ -17,7 +17,7 @@
         <div class="card h-100 mb-2">
             <div class="taxon-photo" data-testid="Taxon picture">
                 <FullScreenImage
-                    :imageUrl="props.picture?.url"
+                    :media="props.picture"
                     :alt="props.picture?.urlSource"
                 >
                     <Image
