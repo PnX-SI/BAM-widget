@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
     import { Media } from '@/lib/models';
+    import { ref, useTemplateRef } from 'vue';
 
     const props = defineProps<{
         picture: Media;
@@ -10,7 +11,13 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
+        description?: string;
     }>();
+
+    const descriptionShown = ref(false);
+    function toggleDescription() {
+        descriptionShown.value = !descriptionShown.value;
+    }
 </script>
 <template>
     <div class="col" data-testid="Taxon detailed view">
@@ -65,13 +72,37 @@
                         }}</span>
                     </small>
                     <br />
+                    <small
+                        class="text-body-secondary"
+                        data-testid="Description"
+                        v-if="description"
+                    >
+                        <strong
+                            >Description
+                            <button
+                                class="description-button"
+                                @click="toggleDescription"
+                            >
+                                +
+                            </button></strong
+                        >
+
+                        <span
+                            class="description"
+                            :class="{ active: descriptionShown }"
+                        >
+                            {{ description }}
+                        </span>
+                    </small>
+
+                    <br />
 
                     <small class="text-body-secondary">
                         <!-- prettier-ignore -->
                         <a
               :href="props.urlDetailPage"
               target="_blank"
-               data-testid="Taxon detail redirect link"
+              data-testid="Taxon detail redirect link"
               class="badge bg-light text-secondary border border-secondary text-decoration-none"
               ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
@@ -122,5 +153,20 @@
     .audio {
         margin-top: 0.5rem;
         width: 100%;
+    }
+    .description {
+        display: none;
+    }
+    .description.active {
+        display: block;
+        transform: fadeIn 1s ease;
+    }
+    .description-button {
+        background-color: #efefef;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
     }
 </style>
