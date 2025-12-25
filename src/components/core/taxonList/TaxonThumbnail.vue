@@ -20,15 +20,9 @@
 
 <template>
     <div class="col card thumbnail" data-testid="Taxon thumbnail view">
-        <Image
-            :image-url="props.picture?.url"
-            :alt="props.picture?.url"
-            :title="'Source: ' + props.picture?.source"
-            class="card-img"
-        />
+        <Image :image-url="props.picture?.url" :alt="props.picture?.url" />
 
         <div class="card-img-overlay">
-            <!-- Title (now at the top) -->
             <div class="card-title">
                 <a
                     style="color: inherit; text-decoration: inherit"
@@ -40,6 +34,13 @@
                     }}</span>
                 </a>
             </div>
+            <FullScreenImage
+                v-if="props.picture?.url"
+                :imageUrl="props.picture?.url"
+                :alt="props.picture?.urlSource"
+            >
+                <i class="bi bi-fullscreen fullscreen-button"></i>
+            </FullScreenImage>
 
             <!-- Bottom Controls (audio + copyright) -->
             <div class="bottom-controls">
@@ -146,5 +147,13 @@
         .bottom-controls {
             padding: 0 5px;
         }
+    }
+    .fullscreen-button {
+        color: #fff;
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        font-size: 1.5rem;
+        z-index: 500;
     }
 </style>

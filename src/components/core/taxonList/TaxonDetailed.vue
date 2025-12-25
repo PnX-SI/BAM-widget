@@ -16,15 +16,17 @@
     <div class="col" data-testid="Taxon detailed view">
         <div class="card h-100 mb-2">
             <div class="taxon-photo" data-testid="Taxon picture">
-                <Image
-                    :image-url="props.picture?.url"
+                <FullScreenImage
+                    :imageUrl="props.picture?.url"
                     :alt="props.picture?.urlSource"
-                    :title="
-                        props.picture?.source
-                            ? 'Source: ' + props.picture?.source
-                            : ''
-                    "
-                ></Image>
+                >
+                    <Image
+                        :image-url="props.picture?.url"
+                        :alt="props.picture?.urlSource"
+                        class="card-img-top"
+                    ></Image>
+                </FullScreenImage>
+
                 <div
                     class="caption"
                     v-if="props.picture.author"
