@@ -100,7 +100,7 @@
                 width: size + 'px',
                 height: size + 'px',
             }"
-            @click="toggleAudio"
+            @click.stop="toggleAudio"
             data-testid="Toggle to play animal sound"
         >
             <i

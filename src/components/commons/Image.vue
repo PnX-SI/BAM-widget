@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { ref, watch, onMounted } from 'vue';
     import { NO_IMAGE_URL } from '@/assets/constant';
+    import FullscreenImage from './FullScreenImage.vue';
 
     const props = defineProps({
         imageUrl: {
@@ -54,7 +55,7 @@
             :alt="alt"
             :aria-label="ariaLabel"
             :data-testid="props?.testID"
-            :class="imageLoaded ? 'loaded' : ''"
+            :class="{ loaded: imageLoaded }"
         />
     </div>
 </template>

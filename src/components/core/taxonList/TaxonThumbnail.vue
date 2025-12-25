@@ -20,58 +20,61 @@
 
 <template>
     <div class="col card thumbnail" data-testid="Taxon thumbnail view">
-        <Image
-            :image-url="props.picture?.url"
-            :alt="props.picture?.url"
-            :title="'Source: ' + props.picture?.source"
-            class="card-img"
-        />
+        <Image :image-url="props.picture?.url" :alt="props.picture?.url" />
 
-        <div class="card-img-overlay">
-            <!-- Title (now at the top) -->
-            <div class="card-title">
-                <a
-                    style="color: inherit; text-decoration: inherit"
-                    :href="props.urlDetailPage"
-                    target="_blank"
-                >
-                    <span class="vernacularName">{{
-                        props.vernacularName
-                    }}</span>
-                </a>
-            </div>
-
-            <!-- Bottom Controls (audio + copyright) -->
-            <div class="bottom-controls">
-                <div class="player">
-                    <AudioPlayer
-                        v-if="props.audio"
-                        :audio="props.audio"
-                        variant="button"
-                        :size="sizeIcon"
-                    />
+        <FullScreenImage
+            v-if="props.picture?.url"
+            :media="props.picture"
+            :alt="props.picture?.urlSource"
+        >
+            <div class="card-img-overlay">
+                <div class="card-title">
+                    <a
+                        style="color: inherit; text-decoration: inherit"
+                        :href="props.urlDetailPage"
+                        target="_blank"
+                    >
+                        <span class="vernacularName">{{
+                            props.vernacularName
+                        }}</span>
+                    </a>
                 </div>
 
-                <BPopover
-                    v-if="props.picture.source"
-                    :click="true"
-                    :close-on-hide="true"
-                    :delay="{ show: 0, hide: 0 }"
-                >
-                    <template #target>
-                        <div class="copyright-icon">
-                            <i
-                                class="bi bi-c-square-fill"
-                                :style="{
-                                    fontSize: sizeIcon + 'px',
-                                }"
-                            ></i>
-                        </div>
-                    </template>
-                    <Credits link-color="link-dark" :media="props.picture" />
-                </BPopover>
+                <!-- Bottom Controls (audio + copyright) -->
+                <div class="bottom-controls">
+                    <div class="player">
+                        <AudioPlayer
+                            v-if="props.audio"
+                            :audio="props.audio"
+                            variant="button"
+                            :size="sizeIcon"
+                        />
+                    </div>
+
+                    <Popover
+                        v-if="props.picture.source"
+                        :click="true"
+                        :close-on-hide="true"
+                        :delay="{ show: 0, hide: 0 }"
+                    >
+                        <template #target>
+                            <div class="copyright-icon">
+                                <i
+                                    class="bi bi-c-square-fill"
+                                    :style="{
+                                        fontSize: sizeIcon + 'px',
+                                    }"
+                                ></i>
+                            </div>
+                        </template>
+                        <Credits
+                            link-color="link-dark"
+                            :media="props.picture"
+                        />
+                    </Popover>
+                </div>
             </div>
-        </div>
+        </FullScreenImage>
     </div>
 </template>
 
