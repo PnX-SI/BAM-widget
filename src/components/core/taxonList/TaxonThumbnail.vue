@@ -24,7 +24,7 @@
 
         <FullScreenImage
             v-if="props.picture?.url"
-            :imageUrl="props.picture?.url"
+            :media="props.picture"
             :alt="props.picture?.urlSource"
         >
             <div class="card-img-overlay">

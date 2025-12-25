@@ -1,15 +1,13 @@
 <script setup lang="ts">
+    import { Media } from '@/lib/models';
     import { ref } from 'vue';
 
-    const props = defineProps({
-        imageUrl: {
-            type: String,
-            required: true,
-        },
-        alt: String,
-        ariaLabel: String,
-        testID: String,
-    });
+    const props = defineProps<{
+        media: Media;
+        alt?: string;
+        ariaLabel?: string;
+        testID?: string;
+    }>();
 
     const isFullscreen = ref(false);
 
@@ -43,12 +41,18 @@
                 <i class="bi bi-x-lg"></i>
             </button>
             <img
-                :src="imageUrl"
-                :alt="alt"
-                :aria-label="ariaLabel"
+                :src="media.url"
+                :alt="props.alt"
+                :aria-label="props.ariaLabel"
                 :data-testid="testID"
                 class="fullscreenImage"
             />
+
+            <Credits
+                v-if="media.url"
+                :media="media"
+                link-color="link-light"
+            ></Credits>
         </div>
     </Transition>
 </template>
@@ -80,6 +84,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         padding: 1em;
         z-index: 1000;
         backdrop-filter: blur(8px);
