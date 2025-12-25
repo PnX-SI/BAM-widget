@@ -22,57 +22,59 @@
     <div class="col card thumbnail" data-testid="Taxon thumbnail view">
         <Image :image-url="props.picture?.url" :alt="props.picture?.url" />
 
-        <div class="card-img-overlay">
-            <div class="card-title">
-                <a
-                    style="color: inherit; text-decoration: inherit"
-                    :href="props.urlDetailPage"
-                    target="_blank"
-                >
-                    <span class="vernacularName">{{
-                        props.vernacularName
-                    }}</span>
-                </a>
-            </div>
-            <FullScreenImage
-                v-if="props.picture?.url"
-                :imageUrl="props.picture?.url"
-                :alt="props.picture?.urlSource"
-            >
-                <i class="bi bi-fullscreen fullscreen-button"></i>
-            </FullScreenImage>
-
-            <!-- Bottom Controls (audio + copyright) -->
-            <div class="bottom-controls">
-                <div class="player">
-                    <AudioPlayer
-                        v-if="props.audio"
-                        :audio="props.audio"
-                        variant="button"
-                        :size="sizeIcon"
-                    />
+        <FullScreenImage
+            v-if="props.picture?.url"
+            :imageUrl="props.picture?.url"
+            :alt="props.picture?.urlSource"
+        >
+            <div class="card-img-overlay">
+                <div class="card-title">
+                    <a
+                        style="color: inherit; text-decoration: inherit"
+                        :href="props.urlDetailPage"
+                        target="_blank"
+                    >
+                        <span class="vernacularName">{{
+                            props.vernacularName
+                        }}</span>
+                    </a>
                 </div>
 
-                <BPopover
-                    v-if="props.picture.source"
-                    :click="true"
-                    :close-on-hide="true"
-                    :delay="{ show: 0, hide: 0 }"
-                >
-                    <template #target>
-                        <div class="copyright-icon">
-                            <i
-                                class="bi bi-c-square-fill"
-                                :style="{
-                                    fontSize: sizeIcon + 'px',
-                                }"
-                            ></i>
-                        </div>
-                    </template>
-                    <Credits link-color="link-dark" :media="props.picture" />
-                </BPopover>
+                <!-- Bottom Controls (audio + copyright) -->
+                <div class="bottom-controls">
+                    <div class="player">
+                        <AudioPlayer
+                            v-if="props.audio"
+                            :audio="props.audio"
+                            variant="button"
+                            :size="sizeIcon"
+                        />
+                    </div>
+
+                    <Popover
+                        v-if="props.picture.source"
+                        :click="true"
+                        :close-on-hide="true"
+                        :delay="{ show: 0, hide: 0 }"
+                    >
+                        <template #target>
+                            <div class="copyright-icon">
+                                <i
+                                    class="bi bi-c-square-fill"
+                                    :style="{
+                                        fontSize: sizeIcon + 'px',
+                                    }"
+                                ></i>
+                            </div>
+                        </template>
+                        <Credits
+                            link-color="link-dark"
+                            :media="props.picture"
+                        />
+                    </Popover>
+                </div>
             </div>
-        </div>
+        </FullScreenImage>
     </div>
 </template>
 
@@ -147,13 +149,5 @@
         .bottom-controls {
             padding: 0 5px;
         }
-    }
-    .fullscreen-button {
-        color: #fff;
-        position: absolute;
-        top: 10px;
-        right: 25px;
-        font-size: 1.5rem;
-        z-index: 500;
     }
 </style>
