@@ -38,7 +38,7 @@
                 v-if="props.audio?.url"
                 :audio="props.audio"
                 variant="button"
-                :size="35"
+                :size="45"
                 class="audio-overlay"
             ></AudioPlayer>
         </div>
@@ -68,21 +68,18 @@
             corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
         </div>
         <div class="credits">
-            <strong>Credits</strong>
+            <div class="credits-header">
+                <h5>Credits</h5>
+            </div>
             <div v-if="props.audio" class="subcredits">
-                <strong>Audio :</strong>
-                <Credits
-                    :media="props.audio"
-                    link-color="link-dark"
-                    class=""
-                ></Credits>
+                <i class="bi bi-music-note-beamed"></i>
+                <Credits :media="props.audio" link-color="link-dark"></Credits>
             </div>
             <div v-if="props.picture" class="subcredits">
-                <strong>Picture </strong>
+                <i class="bi bi-camera"></i>
                 <Credits
                     :media="props.picture"
                     link-color="link-dark"
-                    class="ml-1"
                 ></Credits>
             </div>
         </div>
@@ -90,9 +87,9 @@
 </template>
 <style scoped>
     .detailed {
-        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
         display: flex;
-        justify-content: space-between;
+        justify-content: start;
         flex-direction: column;
         border-radius: 5px;
     }
@@ -141,17 +138,34 @@
     }
     .credits {
         padding: 1em;
+    }
+
+    .credits-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        color: #666;
+
+        i {
+            font-size: 1.1rem;
+        }
+
         strong {
-            color: #666;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
     }
+
     .subcredits {
         display: flex;
-        flex-direction: row;
-        gap: 5px;
-        padding-left: 1em;
-        strong {
+        align-items: center;
+        gap: 0.5em;
+        font-size: 0.85rem;
+        color: #666;
+        margin-left: 1em;
+
+        i {
+            color: #888;
             font-size: 1rem;
         }
     }
@@ -167,9 +181,14 @@
         flex-direction: column;
         color: #666;
         text-align: center;
+        background-color: rgba(239, 239, 239, 0.5);
+        padding: 1em;
+        border-radius: 5px;
         strong {
             color: #444;
         }
+        width: 50%;
+        font-size: 0.9rem;
     }
     .names {
         text-align: center;
@@ -184,7 +203,6 @@
     }
     .description {
         padding: 1em;
-        background-color: #efefef;
         color: #666;
         font-size: 0.8rem;
         text-align: center;
