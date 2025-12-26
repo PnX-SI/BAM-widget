@@ -88,7 +88,7 @@
         :cols="props.cols"
     >
     </TaxonThumbnail>
-    <TaxonDetailed
+    <TaxonNewDetailed
         v-else
         :picture="mediaDisplayed"
         :audio="speciesAudio"
