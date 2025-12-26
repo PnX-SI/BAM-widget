@@ -62,6 +62,8 @@
             });
 
             audioInstance.value.addEventListener('pause', () => {
+                audioInstance.value.currentTime = 0;
+                progress.value = 0;
                 play.value = false;
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
             });
@@ -85,7 +87,7 @@
 </script>
 
 <template>
-    <!-- Variante bouton circulaire -->
+    <!-- Circular button variant -->
     <div
         v-if="variant === 'button'"
         class="audio-button-wrapper"
@@ -94,9 +96,13 @@
         <div
             class="audio-button"
             :style="{
-                background: `conic-gradient(white ${
+                background: `
+                conic-gradient(#efefef ${progress * 360}deg, #afafaf ${
                     progress * 360
-                }deg, rgba(255,255,255,0.2) 0deg)`,
+                }deg)
+                   
+                    
+                `,
                 width: size + 'px',
                 height: size + 'px',
             }"
@@ -108,17 +114,19 @@
                 :style="`font-size: ${size}px;`"
             ></i>
         </div>
+
         <div v-if="showCredits" class="tooltip">
             <Credits :media="audio" link-color="link-light" />
         </div>
     </div>
 
-    <!-- Variante lecteur standard -->
+    <!-- Standard player variant -->
     <div v-else class="audio-player-wrapper">
         <div class="audio-player" data-testid="animal sound">
             <button @click="toggleAudio" class="play-button" type="button">
                 <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
             </button>
+
             <div class="progress-bar" @click="seekAudio">
                 <div
                     class="progress-fill"
@@ -126,6 +134,7 @@
                 ></div>
             </div>
         </div>
+
         <Credits
             v-if="showCredits"
             class="small"
@@ -147,19 +156,25 @@
         justify-content: center;
         border-radius: 50%;
         cursor: pointer;
-        transition: background 0.1s linear;
+        transition: filter 0.15s linear;
+    }
+
+    .audio-button:hover {
+        filter: brightness(1.1);
     }
 
     .audio-button i {
         color: white;
         z-index: 2;
-        text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+        text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     }
 
+    /* Tooltip */
     .tooltip {
         position: absolute;
         bottom: 110%;
         left: 50%;
+        transform: translateX(-50%);
         background: rgba(0, 0, 0, 0.8);
         color: white;
         padding: 0.4rem 0.6rem;
@@ -176,6 +191,7 @@
         opacity: 1;
     }
 
+    /* Player variant */
     .audio-player-wrapper {
         margin-top: 0.5rem;
         width: 100%;
@@ -220,7 +236,6 @@
         background: #e9ecef;
         border-radius: 0.25rem;
         overflow: hidden;
-        position: relative;
         cursor: pointer;
     }
 
