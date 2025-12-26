@@ -62,6 +62,8 @@
             });
 
             audioInstance.value.addEventListener('pause', () => {
+                audioInstance.value.currentTime = 0;
+                progress.value = 0;
                 play.value = false;
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
             });
@@ -95,11 +97,11 @@
             class="audio-button"
             :style="{
                 background: `
-                    radial-gradient(circle at center, #afafaf 60%, transparent 61%),
-                    conic-gradient(
-                        white ${progress * 360}deg,
-                        rgba(255,255,255,0.2) 0deg
-                    )
+                conic-gradient(#efefef ${progress * 360}deg, #afafaf ${
+                    progress * 360
+                }deg)
+                   
+                    
                 `,
                 width: size + 'px',
                 height: size + 'px',
@@ -164,6 +166,7 @@
     .audio-button i {
         color: white;
         z-index: 2;
+        text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     /* Tooltip */
