@@ -15,6 +15,16 @@
 <template>
     <div class="detailed">
         <div class="image-container">
+            <div>
+                <BPopover :delay="{ show: 0, hide: 0 }" :close-on-hide="true">
+                    <template #target>
+                        <div class="warning-btn">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                    </template>
+                    Danger
+                </BPopover>
+            </div>
             <FullScreenImage
                 :media="props.picture"
                 :alt="props.picture?.urlSource"
@@ -92,14 +102,32 @@
         position: relative;
         display: flex;
         justify-content: center;
+        margin-bottom: 1em;
     }
 
     .audio-overlay {
         position: absolute;
-        bottom: 10px;
+        bottom: 0px;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) translateY(50%);
         z-index: 10;
+    }
+    .warning-btn {
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-40%);
+        z-index: 10;
+        background-color: #f44336;
+        color: white;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
     }
 
     img {
