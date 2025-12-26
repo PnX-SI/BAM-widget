@@ -77,18 +77,21 @@
             corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
         </div>
         <div class="credits">
-            <div class="credits-header">
-                <h5>Credits</h5>
-            </div>
+            <strong>Credits</strong>
             <div v-if="props.audio" class="subcredits">
-                <i class="bi bi-music-note-beamed"></i>
-                <Credits :media="props.audio" link-color="link-dark"></Credits>
+                <strong>Audio :</strong>
+                <Credits
+                    :media="props.audio"
+                    link-color="link-dark"
+                    class=""
+                ></Credits>
             </div>
             <div v-if="props.picture" class="subcredits">
-                <i class="bi bi-camera"></i>
+                <strong>Picture </strong>
                 <Credits
                     :media="props.picture"
                     link-color="link-dark"
+                    class="ml-1"
                 ></Credits>
             </div>
         </div>
@@ -96,11 +99,9 @@
 </template>
 <style scoped>
     .detailed {
-        container-name: detailed;
-        container-type: inline-size;
-        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
         display: flex;
-        justify-content: start;
+        justify-content: space-between;
         flex-direction: column;
         border-radius: 5px;
     }
@@ -110,32 +111,14 @@
         position: relative;
         display: flex;
         justify-content: center;
-        margin-bottom: 1em;
     }
 
     .audio-overlay {
         position: absolute;
-        bottom: 0px;
+        bottom: 10px;
         left: 50%;
-        transform: translateX(-50%) translateY(50%);
-        z-index: 2;
-    }
-    .warning-btn {
-        position: absolute;
-        top: 0px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-40%);
-        z-index: 2;
-        background-color: #c44d56;
-        color: white;
-        border: 1px solid #fff;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
+        transform: translateX(-50%);
+        z-index: 10;
     }
 
     img {
@@ -149,34 +132,17 @@
     }
     .credits {
         padding: 1em;
-    }
-
-    .credits-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5em;
-        color: #666;
-
-        i {
-            font-size: 1.1rem;
-        }
-
         strong {
-            font-size: 1.2rem;
-            font-weight: 600;
+            color: #666;
+            font-size: 1.4rem;
         }
     }
-
     .subcredits {
         display: flex;
-        align-items: center;
-        gap: 0.5em;
-        font-size: 0.85rem;
-        color: #666;
-        margin-left: 1em;
-
-        i {
-            color: #888;
+        flex-direction: row;
+        gap: 5px;
+        padding-left: 1em;
+        strong {
             font-size: 1rem;
         }
     }
@@ -192,14 +158,9 @@
         flex-direction: column;
         color: #666;
         text-align: center;
-        background-color: rgba(239, 239, 239, 0.5);
-        padding: 1em;
-        border-radius: 5px;
         strong {
             color: #444;
         }
-        width: 50%;
-        font-size: 0.9rem;
     }
     .names {
         text-align: center;
@@ -214,6 +175,7 @@
     }
     .description {
         padding: 1em;
+        background-color: #efefef;
         color: #666;
         font-size: 0.8rem;
         text-align: center;
