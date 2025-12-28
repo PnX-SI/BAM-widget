@@ -99,7 +99,9 @@
 </template>
 <style scoped>
     .detailed {
-        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        container-name: detailed;
+        container-type: inline-size;
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -117,8 +119,25 @@
         position: absolute;
         bottom: 10px;
         left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
+        transform: translateX(-50%) translateY(50%);
+        z-index: 2;
+    }
+    .warning-btn {
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-40%);
+        z-index: 2;
+        background-color: #f44336;
+        color: white;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
     }
 
     img {
