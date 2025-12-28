@@ -164,11 +164,7 @@
                 class="taxon-list-scroll-wrapper"
                 :class="{ 'pt-0': !filtersOnList }"
             >
-                <div
-                    id="taxon-list-content"
-                    :class="classNames"
-                    @scroll="onScroll"
-                >
+                <div id="taxon-list-content" class="row g-3" @scroll="onScroll">
                     <TaxonListMessages
                         :loading-error="loadingError"
                         :loading-observations="loadingObservations"
