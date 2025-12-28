@@ -86,13 +86,6 @@
     const speciesList = computed(() => searchResult.value.taxons);
     const datasets = computed(() => searchResult.value.datasets);
 
-    const classNames = computed(() => {
-        const row_cols_lg = nbTaxonPerLine.value;
-        const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
-        const row_cols_sm = Math.round(row_cols_md / 2);
-        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} row-gap-4`;
-    });
-
     function onScroll(event) {
         taxonManager.onScroll(event);
     }
@@ -159,11 +152,7 @@
                 class="taxon-list-scroll-wrapper"
                 :class="{ 'pt-0': !filtersOnList }"
             >
-                <div
-                    id="taxon-list-content"
-                    :class="classNames"
-                    @scroll="onScroll"
-                >
+                <div id="taxon-list-content" class="row g-3" @scroll="onScroll">
                     <TaxonListMessages
                         :loading-error="loadingError"
                         :loading-observations="loadingObservations"

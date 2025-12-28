@@ -3,7 +3,7 @@
     import { computed, onMounted, ref, watch } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
 
-    const { isMobile } = ParameterStore.getInstance();
+    const { isMobile, nbTaxonPerLine } = ParameterStore.getInstance();
 
     const props = defineProps<{
         picture: Media;
@@ -16,10 +16,23 @@
     const sizeIcon = computed(() => {
         return isMobile.value ? 50 : 30;
     });
+    const colClasses = computed(() => {
+        const lg = Math.floor(12 / nbTaxonPerLine.value);
+        const md = Math.floor(12 / Math.ceil(nbTaxonPerLine.value / 2));
+
+        return [
+            'col-12', // sm → 1 per row
+            `col-md-${md}`, // md → nbTaxonPerLine / 2
+            `col-lg-${lg}`, // lg → nbTaxonPerLine
+        ];
+    });
 </script>
 
 <template>
-    <div class="col card thumbnail" data-testid="Taxon thumbnail view">
+    <div
+        :class="['card', 'thumbnail', ...colClasses]"
+        data-testid="Taxon thumbnail view"
+    >
         <Image :image-url="props.picture?.url" :alt="props.picture?.url" />
 
         <FullScreenImage
@@ -142,10 +155,6 @@
 
     /* --- Mobile --- */
     @media screen and (max-width: 768px) {
-        .card-title span {
-            font-size: 2rem;
-        }
-
         .bottom-controls {
             padding: 0 5px;
         }
