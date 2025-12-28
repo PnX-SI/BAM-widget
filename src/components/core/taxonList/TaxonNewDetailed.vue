@@ -1,7 +1,16 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
     import { Media } from '@/lib/models';
+    import ParameterStore from '@/lib/parameterStore';
+    import { computed } from 'vue';
 
+    const { nbTaxonPerLine } = ParameterStore.getInstance();
+    const colClasses = computed(() => {
+        const lg = Math.floor(12 / nbTaxonPerLine.value);
+        const md = Math.floor(12 / Math.ceil(nbTaxonPerLine.value / 2));
+
+        return ['col-12', `col-md-${md}`, `col-lg-${lg}`];
+    });
     const props = defineProps<{
         picture: Media;
         audio: Media;
@@ -13,7 +22,7 @@
     }>();
 </script>
 <template>
-    <div class="detailed">
+    <div :class="[...colClasses, 'detailed']" data-testid="Taxon detailed view">
         <div class="image-container">
             <div>
                 <BPopover :delay="{ show: 0, hide: 0 }" :close-on-hide="true">
@@ -87,6 +96,8 @@
 </template>
 <style scoped>
     .detailed {
+        container-name: detailed;
+        container-type: inline-size;
         box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
         display: flex;
         justify-content: start;
@@ -107,14 +118,14 @@
         bottom: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(50%);
-        z-index: 10;
+        z-index: 2;
     }
     .warning-btn {
         position: absolute;
         top: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(-40%);
-        z-index: 10;
+        z-index: 2;
         background-color: #f44336;
         color: white;
         border: 1px solid #fff;
@@ -208,5 +219,14 @@
         text-align: center;
         border-radius: 5px;
         margin-top: 1em;
+    }
+    @container detailed (width < 275px) {
+        .statistics-wrapper {
+            flex-direction: column;
+            row-gap: 0.5em;
+        }
+        .statistics {
+            width: 100%;
+        }
     }
 </style>
