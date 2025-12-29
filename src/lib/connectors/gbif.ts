@@ -208,8 +208,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
@@ -253,19 +254,6 @@ export class GbifConnector extends Connector {
             }));
     }
 
-    fetchTaxonStatus(idTaxon: string): Promise<{
-        iucnRedListCategory: string;
-        code: string;
-    }> {
-        const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/iucnRedListCategory`;
-        return fetch(url)
-            .then((response) => response.json())
-            .then((json) => ({
-                iucnRedListCategory: json.category,
-                code: json.code,
-            }));
-    }
-
     searchTaxon(
         searchString: string = '',
         params: OccurrenceParams = {}
@@ -306,7 +294,7 @@ export class GbifConnector extends Connector {
             .then((json) => json.results);
     }
 
-    getStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
+    fetchTaxonStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
         return fetch(
             `${this.GBIF_ENDPOINT}/species/${taxonId}/iucnRedListCategory`
         )

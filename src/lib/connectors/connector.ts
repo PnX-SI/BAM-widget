@@ -164,15 +164,6 @@ export class Connector {
     }
 
     /**
-     * Fetches the taxon status for a given taxon ID.
-     * @param {string} idTaxon - The ID of the taxon.
-     * @returns {Promise<Object>} A promise that resolves to the taxon status.
-     */
-    fetchTaxonStatus(idTaxon: string): Promise<any> {
-        throw new Error('Not implemented');
-    }
-
-    /**
      * Searches for taxa based on a search string.
      * @param {string} searchString - The search string.
      * @param {Object} params - Additional parameters for the search.
@@ -264,7 +255,7 @@ export class Connector {
      * @param {string|number} taxonId - The ID of the taxon.
      * @returns {Promise<string>} A promise that resolves to the conservation status of the taxon.
      */
-    getStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
+    fetchTaxonStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
         return null;
     }
 

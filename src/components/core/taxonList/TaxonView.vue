@@ -70,7 +70,7 @@
     }
 
     function fetchStatus(connector: Connector) {
-        connector.getStatus(taxon.taxonId).then((status_) => {
+        connector.fetchTaxonStatus(taxon.taxonId).then((status_) => {
             status.value = {
                 status: status_,
                 color: connector.getStatusColor(status_),
