@@ -75,7 +75,7 @@
             unde magni non, doloremque rem vitae, laudantium repellendus id eius
             corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
         </div>
-        <div class="credits">
+        <div class="credits" v-if="props?.picture.source || props.audio">
             <div class="credits-header">
                 <h5>Credits</h5>
             </div>
@@ -83,7 +83,7 @@
                 <i class="bi bi-music-note-beamed"></i>
                 <Credits :media="props.audio" link-color="link-dark"></Credits>
             </div>
-            <div v-if="props.picture" class="subcredits">
+            <div v-if="props?.picture.source" class="subcredits">
                 <i class="bi bi-camera"></i>
                 <Credits
                     :media="props.picture"
