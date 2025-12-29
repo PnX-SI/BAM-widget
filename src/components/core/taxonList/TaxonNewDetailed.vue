@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
+    import { Connector } from '@/lib/connectors/connector';
     import { Media } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
     import { computed } from 'vue';
@@ -19,19 +20,32 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
+        taxonStatus: {
+            status: string;
+            color: string;
+        };
     }>();
 </script>
 <template>
     <div :class="[...colClasses, 'detailed']" data-testid="Taxon detailed view">
         <div class="image-container">
-            <div>
+            <div v-if="props.taxonStatus.status">
                 <BPopover :delay="{ show: 0, hide: 0 }" :close-on-hide="true">
                     <template #target>
-                        <div class="warning-btn">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        <div
+                            class="status-btn"
+                            :style="{
+                                backgroundColor: props.taxonStatus.color,
+                                color:
+                                    props.taxonStatus.status == 'NE'
+                                        ? '#666'
+                                        : '#ffffff',
+                            }"
+                        >
+                            {{ props.taxonStatus.status }}
                         </div>
                     </template>
-                    Danger
+                    {{ $t('IUCNStatus.' + props.taxonStatus.status) }}
                 </BPopover>
             </div>
             <FullScreenImage
@@ -120,14 +134,13 @@
         transform: translateX(-50%) translateY(50%);
         z-index: 2;
     }
-    .warning-btn {
+    .status-btn {
         position: absolute;
         top: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(-40%);
         z-index: 2;
-        background-color: #c44d56;
-        color: white;
+
         border: 1px solid #fff;
         border-radius: 50%;
         width: 30px;

@@ -8,6 +8,7 @@
     // Components
     import TaxonThumbnail from './TaxonThumbnail.vue';
     import TaxonDetailed from './TaxonDetailed.vue';
+    import { Connector } from '@/lib/connectors/connector';
 
     const { mode, connector, lang, customDetailPage } =
         ParameterStore.getInstance();
@@ -20,6 +21,7 @@
     const speciesPhoto = ref([]);
     const speciesAudio = ref(null);
     const vernacularName = ref(taxon.vernacularName);
+    const status = ref<{ status: string; color: string }>({});
 
     function fetchDetailUrl(taxonID) {
         if (customDetailPage.value) {
@@ -67,9 +69,19 @@
         });
     }
 
+    function fetchStatus(connector: Connector) {
+        connector.getStatus(taxon.taxonId).then((status_) => {
+            status.value = {
+                status: status_,
+                color: connector.getStatusColor(status_),
+            };
+        });
+    }
+
     fetchTaxonImage();
     fetchTaxonAudio();
     refreshVernacularName();
+    fetchStatus(connector.value);
 
     watch(lang, () => {
         refreshVernacularName();
@@ -95,5 +107,6 @@
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :nb-observations="taxon?.nbObservations"
         :last-seen-date="taxon?.lastSeenDate"
+        :taxon-status="status"
     />
 </template>
