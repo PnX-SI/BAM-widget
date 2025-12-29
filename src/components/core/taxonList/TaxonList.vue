@@ -212,6 +212,10 @@
         padding: 0.8em 1em;
         z-index: 10;
         margin-bottom: 0;
+        pointer-events: none;
+    }
+    .overlap-filter > * {
+        pointer-events: auto; /* Re-enable clicks on child elements (filters) */
     }
 
     .taxon-list-scroll-wrapper {
