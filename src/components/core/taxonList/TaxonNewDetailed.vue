@@ -126,7 +126,7 @@
         left: 50%;
         transform: translateX(-50%) translateY(-40%);
         z-index: 2;
-        background-color: #f44336;
+        background-color: #c44d56;
         color: white;
         border: 1px solid #fff;
         border-radius: 50%;
