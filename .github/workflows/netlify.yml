@@ -1,66 +1,131 @@
 name: Netlify Deployment
+
 on:
-    workflow_dispatch:
-        inputs:
-            environment:
-                description: "Environment de déploiement"
-                required: true
-                type: choice
-                options:
-                    - production
-                    - preview
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment de déploiement"
+        required: true
+        type: choice
+        default: preview
+        options:
+          - production
+          - preview
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 permissions:
-    contents: read
+  contents: read
+  pull-requests: write
 
 jobs:
-    build-and-deploy:
-        runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Repository Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v4
 
-            - name: Setup NodeJS
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20
-                  cache: "npm"
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
 
-            - name: Install Netlify
-              run: npm install netlify-cli@17.10.1 -g
+      - name: Install Netlify
+        run: npm install netlify-cli@17.10.1 -g
 
-            - name: Install Dependencies
-              run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-            - name: Build project
-              run: npm run build
-              env:
-                  NODE_ENV: ${{ inputs.environment }}
+      - name: Build project
+        run: npm run build
+        env:
+          NODE_ENV: ${{ inputs.environment || 'preview' }}
 
-            - name: Deploy to Netlify (Production)
-              if: inputs.environment == 'production'
-              id: netlify_deploy_prod
-              run: |
-                  netlify deploy \
-                    --dir dist \
-                    --site ${{ secrets.NETLIFY_SITE_ID }} \
-                    --auth ${{ secrets.NETLIFY_APP_TOKEN }} \
-                    --prod
+      - name: Deploy to Netlify (Production)
+        if: inputs.environment == 'production'
+        id: netlify_deploy_prod
+        run: |
+          netlify deploy \
+            --dir dist \
+            --site ${{ secrets.NETLIFY_SITE_ID }} \
+            --auth ${{ secrets.NETLIFY_APP_TOKEN }} \
+            --prod > deploy-output.txt
+          echo "NETLIFY_URL=$(cat deploy-output.txt | grep -o 'https://[^[:space:]]*' | head -1)" >> $GITHUB_OUTPUT
 
-            - name: Deploy to Netlify (Preview)
-              if: inputs.environment == 'preview'
-              id: netlify_deploy_preview
-              run: |
-                  netlify deploy \
-                    --dir dist \
-                    --site ${{ secrets.NETLIFY_SITE_ID }} \
-                    --auth ${{ secrets.NETLIFY_APP_TOKEN }}
+      - name: Deploy to Netlify (Preview)
+        if: inputs.environment == 'preview' || github.event_name == 'pull_request'
+        id: netlify_deploy_preview
+        run: |
+          BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
+          ALIAS=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
 
-            - name: Deployment Summary
-              run: |
-                  echo "### ✅ Déploiement réussi" >> $GITHUB_STEP_SUMMARY
-                  echo "" >> $GITHUB_STEP_SUMMARY
-                  echo "- **Environment:** ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
-                  echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-                  echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          netlify deploy \
+            --dir dist \
+            --site ${{ secrets.NETLIFY_SITE_ID }} \
+            --auth ${{ secrets.NETLIFY_APP_TOKEN }} \
+            --alias "$ALIAS" > deploy-output.txt
+
+          DEPLOY_URL=$(cat deploy-output.txt | grep "Website draft URL:" | grep -o 'https://[^[:space:]]*')
+          echo "NETLIFY_URL=$DEPLOY_URL" >> $GITHUB_OUTPUT
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployUrl = '${{ steps.netlify_deploy_preview.outputs.NETLIFY_URL }}';
+            const comment = `### 🚀 Déploiement Netlify réussi
+
+            **URL de prévisualisation:** ${deployUrl}
+
+            - **Branche:** \`${{ github.head_ref }}\`
+            - **Commit:** \`${{ github.sha }}\`
+            - **Environment:** Preview
+
+            Cette URL restera stable pour tous les futurs déploiements de cette branche.`;
+
+            // Rechercher un commentaire existant
+            const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment => 
+                comment.user.type === 'Bot' && 
+                comment.body.includes('🚀 Déploiement Netlify')
+            );
+
+            if (botComment) {
+                // Mettre à jour le commentaire existant
+                await github.rest.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: botComment.id,
+                    body: comment
+                });
+            } else {
+                // Créer un nouveau commentaire
+                await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    body: comment
+                });
+            }
+
+      - name: Deployment Summary
+        run: |
+          echo "### ✅ Déploiement réussi" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment:** ${{ inputs.environment || 'preview' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ github.head_ref || github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ inputs.environment }}" == "production" ]; then
+              echo "- **URL:** ${{ steps.netlify_deploy_prod.outputs.NETLIFY_URL }}" >> $GITHUB_STEP_SUMMARY
+          else
+              echo "- **URL:** ${{ steps.netlify_deploy_preview.outputs.NETLIFY_URL }}" >> $GITHUB_STEP_SUMMARY
+          fi
