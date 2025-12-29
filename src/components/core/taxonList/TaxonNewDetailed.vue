@@ -41,9 +41,7 @@
                                         ? '#666'
                                         : '#ffffff',
                             }"
-                        >
-                            {{ props.taxonStatus.status }}
-                        </div>
+                        ></div>
                     </template>
                     {{ $t('IUCNStatus.' + props.taxonStatus.status) }}
                 </BPopover>
