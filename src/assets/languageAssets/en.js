@@ -155,6 +155,19 @@ You can also **share your results 📤** to collaborate with other users.
         },
         searchTaxon: 'Search a species',
     },
+    IUCNStatus: {
+        NA: 'Not Applicable ',
+        NE: 'Not Evaluated ',
+        DD: 'Data Deficient',
+        LC: 'Least Concern',
+        NT: 'Near Threatened',
+        VU: 'Vulnerable',
+        EN: 'Endangered',
+        CR: 'Critically Endangered',
+        RE: 'Regionally Extinct',
+        EW: 'Extinct in the Wild',
+        EX: 'Extinct',
+    },
 };
 
 export default messagesEN;

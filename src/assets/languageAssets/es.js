@@ -148,6 +148,21 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             noResultsText: 'Ningún resultado encontrado',
         },
         searchTaxon: 'Buscar especie',
+        IUCNStatus: {
+            //based on https://portals.iucn.org/library/sites/library/files/documents/RL-2001-001-2nd-Es.pdf
+            // Some translation are not available on the official document
+            NA: 'No aplicable', // translated by us
+            NE: 'No evaluado',
+            DD: 'Datos insufficientes',
+            LC: 'Préocupación Menor',
+            NT: 'Casi Amenazado',
+            VU: 'Vulnerable',
+            EN: 'En Peligro',
+            CR: 'En Peligro Critico',
+            RE: 'Extinto regionalmente', // translated by us
+            EW: 'Extinto en Estado Silvestre',
+            EX: 'Extinto',
+        },
     },
 };
 
