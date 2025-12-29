@@ -154,6 +154,21 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             noResultsText: 'Aucun résultat trouvé',
         },
         searchTaxon: 'Recherche une espèce',
+        IUCNStatus: {
+            //based on https://uicn.fr/wp-content/uploads/2016/06/UICN_2012_Categories_et_criteres_Liste_rouge.pdf
+            // Some translation are not available on the official document
+            NA: 'Non Applicable',
+            NE: 'Non évalué',
+            DD: 'Données insuffisante',
+            LC: 'Préoccupation Mineure',
+            NT: 'Quasi menacé',
+            VU: 'Vulnérable',
+            EN: 'En danger',
+            CR: 'En danger critique',
+            RE: 'Éteint régionalement',
+            EW: "Éteint à l'état sauvage",
+            EX: 'Éteint',
+        },
     },
 };
 
