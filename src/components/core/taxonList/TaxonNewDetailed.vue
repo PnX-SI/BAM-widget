@@ -3,8 +3,9 @@
     import { Media } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
     import { computed } from 'vue';
+    import { StatusInfo } from './interface';
 
-    const { nbTaxonPerLine } = ParameterStore.getInstance();
+    const { nbTaxonPerLine, connector } = ParameterStore.getInstance();
     const colClasses = computed(() => {
         const lg = Math.floor(12 / nbTaxonPerLine.value);
         const md = Math.floor(12 / Math.ceil(nbTaxonPerLine.value / 2));
@@ -19,20 +20,17 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
+        status: StatusInfo;
     }>();
 </script>
 <template>
     <div :class="[...colClasses, 'detailed']" data-testid="Taxon detailed view">
         <div class="image-container">
-            <div>
-                <BPopover :delay="{ show: 0, hide: 0 }" :close-on-hide="true">
-                    <template #target>
-                        <div class="warning-btn">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                        </div>
-                    </template>
-                    Danger
-                </BPopover>
+            <div v-if="props.status.status">
+                <StatusIcon
+                    :status="props.status.status"
+                    :color="props.status.color"
+                ></StatusIcon>
             </div>
             <FullScreenImage
                 :media="props.picture"
@@ -41,6 +39,7 @@
                 <img
                     :src="props.picture?.url"
                     :alt="props.picture?.urlSource"
+                    data-testid="Taxon picture"
                 />
             </FullScreenImage>
             <AudioPlayer
@@ -52,14 +51,28 @@
             ></AudioPlayer>
         </div>
         <div class="names">
-            <strong>{{ props.vernacularName }}</strong>
-            <em>{{ props.acceptedScientificName }}</em>
+            <div class="vernacular-name">
+                <strong data-testid="Vernacular name">{{
+                    props.vernacularName
+                }}</strong>
+                <a
+                    :href="props.urlDetailPage"
+                    data-testid="Taxon detail redirect link"
+                >
+                    <span class="badge text-bg-secondary ml-1">
+                        {{ connector.name }}</span
+                    >
+                </a>
+            </div>
+            <em data-testid="Scientific name">{{
+                props.acceptedScientificName
+            }}</em>
         </div>
         <div class="statistics-wrapper">
             <div class="statistics">
                 <span
                     >Vu dernièrement le
-                    <strong>{{
+                    <strong data-testid="Last seen date">{{
                         props.lastSeenDate.toLocaleDateString()
                     }}</strong></span
                 >
@@ -67,7 +80,10 @@
             <div class="statistics">
                 <span
                     >Observé
-                    <strong>{{ props.nbObservations }}</strong> fois</span
+                    <strong data-testid="Number of observations">{{
+                        props.nbObservations
+                    }}</strong>
+                    fois</span
                 >
             </div>
         </div>
@@ -76,7 +92,7 @@
             unde magni non, doloremque rem vitae, laudantium repellendus id eius
             corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
         </div>
-        <div class="credits">
+        <div class="credits" v-if="props?.picture.source || props.audio">
             <div class="credits-header">
                 <h5>Credits</h5>
             </div>
@@ -84,11 +100,12 @@
                 <i class="bi bi-music-note-beamed"></i>
                 <Credits :media="props.audio" link-color="link-dark"></Credits>
             </div>
-            <div v-if="props.picture" class="subcredits">
+            <div v-if="props?.picture.source" class="subcredits">
                 <i class="bi bi-camera"></i>
                 <Credits
                     :media="props.picture"
                     link-color="link-dark"
+                    data-testid="Picture caption"
                 ></Credits>
             </div>
         </div>
@@ -120,18 +137,13 @@
         transform: translateX(-50%) translateY(50%);
         z-index: 2;
     }
-    .warning-btn {
+    :deep(.status-btn) {
         position: absolute;
         top: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(-40%);
         z-index: 2;
-        background-color: #f44336;
-        color: white;
-        border: 1px solid #fff;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -210,6 +222,13 @@
         }
         em {
             color: #888;
+        }
+        .vernacular-name {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+            align-items: center;
+            align-self: center;
         }
     }
     .description {

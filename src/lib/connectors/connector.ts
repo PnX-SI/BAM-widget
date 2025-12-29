@@ -11,6 +11,18 @@ export interface ConnectorOptions {
     soundSource?: string | MediaSource;
     [key: string]: any;
 }
+export type IUCNCodeStatus =
+    | 'NA'
+    | 'NE'
+    | 'DD'
+    | 'LC'
+    | 'NT'
+    | 'VU'
+    | 'EN'
+    | 'CR'
+    | 'RE'
+    | 'EW'
+    | 'EX';
 
 export class Connector {
     /**
@@ -152,15 +164,6 @@ export class Connector {
     }
 
     /**
-     * Fetches the taxon status for a given taxon ID.
-     * @param {string} idTaxon - The ID of the taxon.
-     * @returns {Promise<Object>} A promise that resolves to the taxon status.
-     */
-    fetchTaxonStatus(idTaxon: string): Promise<any> {
-        throw new Error('Not implemented');
-    }
-
-    /**
      * Searches for taxa based on a search string.
      * @param {string} searchString - The search string.
      * @param {Object} params - Additional parameters for the search.
@@ -200,6 +203,12 @@ export class Connector {
         return null;
     }
 
+    /**
+     * Returns an array of media sources that are compatible with this connector.
+     * Each item in the array is an object with a 'value' property that is the ID of the media source,
+     * and a 'text' property that is the name of the media source.
+     * @returns {Array<{ value: string; text: string }>} An array of compatible media sources.
+     */
     getCompatibleMediaSource(): Array<{ value: string; text: string }> {
         const availableSource: Array<{ value: string; text: string }> = [];
         Object.values(SOURCE_).forEach((idMediaSource) => {
@@ -214,15 +223,56 @@ export class Connector {
         return availableSource;
     }
 
+    /**
+     * Returns the URL of the data source of this connector.
+     * @returns {string|null} The URL of the data source if found, null otherwise.
+     */
     getSourceUrl(): string | null {
         return null;
     }
 
+    /**
+     * Returns the URL of the dataset identified by datasetID.
+     * @param {string} datasetID - The ID of the dataset.
+     * @returns {string | null} The URL of the dataset if found, null otherwise.
+     */
     getDatasetUrl(datasetID): string | null {
         return null;
     }
 
+    /**
+     * Searches for taxa based on a search string using the API of the connector. Will be
+     * used only if `isSearchOnAPIAvailable` is set to true
+     * @param {string} searchString - The search string.
+     * @returns {Promise<any>} A promise that resolves to the list of search results.
+     */
     searchOnAPI(searchString: string): Promise<any> {
         throw new Error('Not implemented');
+    }
+
+    /**
+     * Retrieves the conservation status of a taxon.
+     * @param {string|number} taxonId - The ID of the taxon.
+     * @returns {Promise<string>} A promise that resolves to the conservation status of the taxon.
+     */
+    fetchTaxonStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
+        return null;
+    }
+
+    getStatusColor(status: IUCNCodeStatus): string {
+        const IUCNStatusColorDICT = {
+            NA: '#C1B5A5',
+            NE: '#FFFFFF',
+            DD: '#D1D1C6',
+            LC: '#60C659',
+            NT: '#CCE226',
+            VU: '#F9E814',
+            EN: '#FC7F3F',
+            CR: '#D81E05',
+            RE: '#9B4F96',
+            EW: '#542344',
+            EX: '#000000',
+        };
+        return IUCNStatusColorDICT[status];
     }
 }
