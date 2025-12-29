@@ -1,12 +1,11 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
-    import { Connector } from '@/lib/connectors/connector';
     import { Media } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
     import { computed } from 'vue';
     import { StatusInfo } from './interface';
 
-    const { nbTaxonPerLine } = ParameterStore.getInstance();
+    const { nbTaxonPerLine, connector } = ParameterStore.getInstance();
     const colClasses = computed(() => {
         const lg = Math.floor(12 / nbTaxonPerLine.value);
         const md = Math.floor(12 / Math.ceil(nbTaxonPerLine.value / 2));
@@ -40,6 +39,7 @@
                 <img
                     :src="props.picture?.url"
                     :alt="props.picture?.urlSource"
+                    data-testid="Taxon picture"
                 />
             </FullScreenImage>
             <AudioPlayer
@@ -51,14 +51,28 @@
             ></AudioPlayer>
         </div>
         <div class="names">
-            <strong>{{ props.vernacularName }}</strong>
-            <em>{{ props.acceptedScientificName }}</em>
+            <div class="vernacular-name">
+                <strong data-testid="Vernacular name">{{
+                    props.vernacularName
+                }}</strong>
+                <a
+                    :href="props.urlDetailPage"
+                    data-testid="Taxon detail redirect link"
+                >
+                    <span class="badge text-bg-secondary ml-1">
+                        {{ connector.name }}</span
+                    >
+                </a>
+            </div>
+            <em data-testid="Scientific name">{{
+                props.acceptedScientificName
+            }}</em>
         </div>
         <div class="statistics-wrapper">
             <div class="statistics">
                 <span
                     >Vu dernièrement le
-                    <strong>{{
+                    <strong data-testid="Last seen date">{{
                         props.lastSeenDate.toLocaleDateString()
                     }}</strong></span
                 >
@@ -66,7 +80,10 @@
             <div class="statistics">
                 <span
                     >Observé
-                    <strong>{{ props.nbObservations }}</strong> fois</span
+                    <strong data-testid="Number of observations">{{
+                        props.nbObservations
+                    }}</strong>
+                    fois</span
                 >
             </div>
         </div>
@@ -88,6 +105,7 @@
                 <Credits
                     :media="props.picture"
                     link-color="link-dark"
+                    data-testid="Picture caption"
                 ></Credits>
             </div>
         </div>
@@ -204,6 +222,13 @@
         }
         em {
             color: #888;
+        }
+        .vernacular-name {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+            align-items: center;
+            align-self: center;
         }
     }
     .description {
