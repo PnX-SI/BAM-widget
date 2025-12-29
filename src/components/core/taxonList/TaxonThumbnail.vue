@@ -2,6 +2,7 @@
     import { Media } from '@/lib/models';
     import { computed, onMounted, ref, watch } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
+    import { StatusInfo } from './interface';
 
     const { isMobile, nbTaxonPerLine } = ParameterStore.getInstance();
 
@@ -11,6 +12,7 @@
         vernacularName: string;
         acceptedScientificName: string;
         urlDetailPage: string;
+        status: StatusInfo;
     }>();
 
     const sizeIcon = computed(() => {
@@ -42,6 +44,12 @@
         >
             <div class="card-img-overlay">
                 <div class="card-title">
+                    <StatusIcon
+                        v-if="props.status"
+                        :status="props.status.status"
+                        :color="props.status.color"
+                        :size="'1rem'"
+                    ></StatusIcon>
                     <a
                         style="color: inherit; text-decoration: inherit"
                         :href="props.urlDetailPage"
@@ -110,6 +118,9 @@
         font-size: 1rem;
         font-weight: 600;
         z-index: 2;
+        display: flex;
+        gap: 0.5em;
+        align-items: center;
     }
 
     /* Overlay covers the image */

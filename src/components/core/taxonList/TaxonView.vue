@@ -96,6 +96,7 @@
         :vernacular-name="vernacularName || taxon.acceptedScientificName"
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :accepted-scientific-name="taxon.acceptedScientificName"
+        :status="status"
     >
     </TaxonThumbnail>
     <TaxonNewDetailed
@@ -107,6 +108,6 @@
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :nb-observations="taxon?.nbObservations"
         :last-seen-date="taxon?.lastSeenDate"
-        :taxon-status="status"
+        :status="status"
     />
 </template>

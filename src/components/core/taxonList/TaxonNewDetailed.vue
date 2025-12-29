@@ -4,6 +4,7 @@
     import { Media } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
     import { computed } from 'vue';
+    import { StatusInfo } from './interface';
 
     const { nbTaxonPerLine } = ParameterStore.getInstance();
     const colClasses = computed(() => {
@@ -20,31 +21,17 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
-        taxonStatus: {
-            status: string;
-            color: string;
-        };
+        status: StatusInfo;
     }>();
 </script>
 <template>
     <div :class="[...colClasses, 'detailed']" data-testid="Taxon detailed view">
         <div class="image-container">
-            <div v-if="props.taxonStatus.status">
-                <BPopover :delay="{ show: 0, hide: 0 }" :close-on-hide="true">
-                    <template #target>
-                        <div
-                            class="status-btn"
-                            :style="{
-                                backgroundColor: props.taxonStatus.color,
-                                color:
-                                    props.taxonStatus.status == 'NE'
-                                        ? '#666'
-                                        : '#ffffff',
-                            }"
-                        ></div>
-                    </template>
-                    {{ $t('IUCNStatus.' + props.taxonStatus.status) }}
-                </BPopover>
+            <div v-if="props.status.status">
+                <StatusIcon
+                    :status="props.status.status"
+                    :color="props.status.color"
+                ></StatusIcon>
             </div>
             <FullScreenImage
                 :media="props.picture"
@@ -132,17 +119,13 @@
         transform: translateX(-50%) translateY(50%);
         z-index: 2;
     }
-    .status-btn {
+    :deep(.status-btn) {
         position: absolute;
         top: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(-40%);
         z-index: 2;
 
-        border: 1px solid #fff;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
         display: flex;
         justify-content: center;
         align-items: center;
