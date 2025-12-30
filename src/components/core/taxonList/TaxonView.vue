@@ -86,7 +86,7 @@
         :accepted-scientific-name="taxon.acceptedScientificName"
     >
     </TaxonThumbnail>
-    <TaxonDetailed
+    <TaxonNewDetailed
         v-else
         :picture="mediaDisplayed"
         :audio="speciesAudio"
