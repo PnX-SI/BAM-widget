@@ -10,6 +10,10 @@ export interface Taxon {
     lastSeenDate?: Date | null;
     kingdom?: string;
     class?: string;
+    phylum?: string;
+    order?: string;
+    family?: string;
+    genus?: string;
 }
 export enum MediaType {
     sound = 'sound',

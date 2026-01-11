@@ -62,10 +62,10 @@
     });
 
     function refreshVernacularName() {
+        if (taxon.vernacularName) return;
         connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
             if (name) {
-                vernacularName.value = name.split(',')[0];
-                taxon.vernacularName = vernacularName.value;
+                taxon.vernacularName = name.split(',')[0];
             }
         });
     }
@@ -94,7 +94,7 @@
         v-if="mode == 'gallery'"
         :picture="mediaDisplayed"
         :audio="speciesAudio"
-        :vernacular-name="vernacularName || taxon.acceptedScientificName"
+        :vernacular-name="taxon.vernacularName || taxon.acceptedScientificName"
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :accepted-scientific-name="taxon.acceptedScientificName"
         :cols="props.cols"
@@ -106,7 +106,7 @@
         :picture="mediaDisplayed"
         :audio="speciesAudio"
         :accepted-scientific-name="taxon.acceptedScientificName"
-        :vernacular-name="vernacularName || taxon.acceptedScientificName"
+        :vernacular-name="taxon.vernacularName || taxon.acceptedScientificName"
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :nb-observations="taxon?.nbObservations"
         :last-seen-date="taxon?.lastSeenDate"
