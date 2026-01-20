@@ -1,5 +1,37 @@
 @import './import.css';
 
+/* Modern Design System Variables */
+:root {
+    /* Shadow System - Light, elegant shadows */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 1px 2px 0px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-2xl: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-3xl: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    /* Transition System */
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Color Palette */
+    --color-text-primary: #333333;
+    --color-text-secondary: #666666;
+    --color-text-tertiary: #999999;
+    --color-border-light: #e0e0e0;
+    --color-border-lighter: #f0f0f0;
+    --color-bg-hover: #fafafa;
+    --color-bg-active: #f5f5f5;
+
+    /* Radius System */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-full: 50%;
+}
+
 .card-header {
     border-radius: 0 !important;
 }
@@ -7,22 +39,22 @@
 .round-btn {
     background: #fff;
     border: none;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     width: 42px;
     height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #afafaf;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    transition: all 0.3s ease;
+    color: var(--color-text-tertiary);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
     font-size: 1.2rem;
     padding: 2px;
 }
 
 .round-btn i {
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     width: 38px;
     height: 38px;
     display: flex;
@@ -31,6 +63,6 @@
 }
 
 .round-btn i:hover {
-    background: #efefef;
-    transition: all 0.3s ease;
+    background: var(--color-bg-hover);
+    transition: var(--transition-smooth);
 }

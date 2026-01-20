@@ -1,8 +1,9 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
     import StatusIcon from '@/components/commons/StatusIcon.vue';
+    import DescriptionModal from '@/components/commons/DescriptionModal.vue';
     import { Media, StatusInfo } from '@/lib/models';
-    import { ref, computed } from 'vue';
+    import { ref } from 'vue';
 
     const props = defineProps<{
         picture: Media;
@@ -19,13 +20,13 @@
 
     const showDescriptionModal = ref(false);
     const fullscreenRef = ref(null);
-    const modalId = computed(() => `description-modal-${props.taxonId}`);
-    const modalRef = ref<any>(null);
 
     function openDescriptionModal() {
-        if (modalRef.value) {
-            modalRef.value.show();
-        }
+        showDescriptionModal.value = true;
+    }
+
+    function closeDescriptionModal() {
+        showDescriptionModal.value = false;
     }
 </script>
 <template>
@@ -98,35 +99,26 @@
                     </div>
                 </div>
 
-                <!-- Description Button -->
-                <div
-                    v-if="props.description"
-                    class="description-button-wrapper"
-                >
-                    <BButton
+                <!-- Action Buttons -->
+                <div class="actions">
+                    <button
+                        v-if="props.description"
                         @click="openDescriptionModal"
-                        variant="outline-secondary"
-                        size="sm"
-                        class="w-100"
+                        class="action-button"
                         data-testid="Show description button"
+                        :aria-label="$t('taxon.description')"
                     >
                         <i class="bi bi-info-circle"></i>
-                        {{ $t('taxon.description') }}
-                    </BButton>
-                </div>
-
-                <!-- Action Links -->
-                <div class="actions">
+                        <span>{{ $t('taxon.description') }}</span>
+                    </button>
                     <a
                         :href="props.urlDetailPage"
                         target="_blank"
-                        class="badge bg-light text-secondary border border-secondary text-decoration-none"
+                        class="action-button"
                         data-testid="Taxon detail redirect link"
                     >
-                        <strong
-                            >{{ $t('taxon.learnMore') }}
-                            <i class="bi bi-arrow-right"></i
-                        ></strong>
+                        <strong>{{ $t('taxon.learnMore') }}</strong>
+                        <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
             </div>
@@ -151,15 +143,12 @@
         </div>
 
         <!-- Description Modal -->
-        <BModal
-            :id="modalId"
-            ref="modalRef"
+        <DescriptionModal
+            :is-open="showDescriptionModal"
             :title="props.vernacularName"
-            centered
-            scrollable
-        >
-            <div class="description-content" v-html="props.description"></div>
-        </BModal>
+            :content="props.description || ''"
+            @close="closeDescriptionModal"
+        />
     </div>
 </template>
 
@@ -263,17 +252,42 @@
         color: #333;
     }
 
-    /* Description Button */
-    .description-button-wrapper {
-        margin: 0.5em 0 1em 0;
-    }
-
-    /* Actions */
+    /* Action Buttons */
     .actions {
         display: flex;
         justify-content: center;
         gap: 0.5em;
         margin-bottom: 1em;
+    }
+
+    .action-button {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        padding: 0.6rem 1rem;
+        background-color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #666666;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .action-button:hover {
+        background-color: #fafafa;
+        color: #333333;
+    }
+
+    .action-button:active {
+        background-color: #f5f5f5;
+    }
+
+    .action-button i {
+        font-size: 1em;
     }
 
     /* Credits Section */
@@ -309,21 +323,6 @@
     .subcredits i {
         color: #999;
         min-width: 1em;
-    }
-
-    /* Description Content */
-    .description-content {
-        line-height: 1.6;
-        color: #333;
-        font-size: 0.95rem;
-    }
-
-    .description-content :deep(p) {
-        margin-bottom: 1rem;
-    }
-
-    .description-content :deep(strong) {
-        font-weight: 600;
     }
 
     /* Container Queries for Responsive Design */
