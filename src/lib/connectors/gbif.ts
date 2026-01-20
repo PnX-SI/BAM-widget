@@ -9,6 +9,8 @@ import { CONNECTORS } from './connectors';
 import { GBIFSearchScoring } from './search/gbif';
 import { removeHoles } from './utils';
 import { parse, stringify } from 'wellknown';
+import { wikidataService } from '../services/wikidata';
+import { wikipediaService } from '../services/wikipedia';
 
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 // const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif-uat.org/v1';
@@ -300,5 +302,54 @@ export class GbifConnector extends Connector {
         )
             .then((response) => response.json())
             .then((json) => json.results);
+    }
+
+    /**
+     * Fetch description depuis Wikipedia via Wikidata
+     * Chaîne: GBIF ID → Wikidata ID → Wikipedia article → description
+     */
+    async fetchDescription(idTaxon: string | number, lang: string = 'en'): Promise<string | undefined> {
+        try {
+            // Étape 1: Récupérer Wikidata ID à partir GBIF ID
+            const wikidataId = await wikidataService.getWikidataIdByGbifId(idTaxon.toString());
+            
+            if (!wikidataId) {
+                return undefined; // Pas de Wikidata ID trouvé
+            }
+
+            // Étape 2: Récupérer liens Wikipedia
+            const wikipediaLinks = await wikidataService.getWikipediaLinksForWikidata(wikidataId);
+            
+            // Sélectionner le lien pour la langue demandée (avec fallback EN)
+            const normalizedLang = lang.split('_')[0].toLowerCase();
+            const wikidataLang = ['en', 'fr', 'es', 'cs', 'de', 'it'].includes(normalizedLang)
+                ? normalizedLang
+                : 'en';
+
+            let wikipediaUrl = wikipediaLinks[wikidataLang] || wikipediaLinks['en'];
+            
+            if (!wikipediaUrl) {
+                return undefined; // Pas de Wikipedia link trouvé
+            }
+
+            // Extraire le titre de l'URL (après /wiki/)
+            const titleMatch = wikipediaUrl.match(/\/wiki\/(.+)$/);
+            if (!titleMatch) {
+                return undefined;
+            }
+
+            const title = decodeURIComponent(titleMatch[1]);
+
+            // Étape 3: Récupérer la description depuis Wikipedia
+            const description = await wikipediaService.getDescription(title, wikidataLang);
+
+            return description || undefined;
+        } catch (error) {
+            console.warn(
+                `[GbifConnector] Erreur fetchDescription pour taxon ${idTaxon}:`,
+                error
+            );
+            return undefined;
+        }
     }
 }

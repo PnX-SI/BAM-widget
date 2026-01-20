@@ -5,6 +5,8 @@ import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { useI18n } from 'vue-i18n';
 import { CONNECTORS } from './connectors';
+import { wikidataService } from '../services/wikidata';
+import { wikipediaService } from '../services/wikipedia';
 
 const GEONATURE_DEFAULT_LIMIT = 'ALL';
 
@@ -142,5 +144,49 @@ export class GeoNatureConnector extends Connector {
 
     fetchVernacularName(taxonId: string | number): Promise<null> {
         return Promise.resolve(null);
+    }
+
+    /**
+     * Fetch description depuis Wikipedia via Wikidata
+     * Utilisable pour Geonature si le taxon GBIF ID est disponible
+     */
+    async fetchDescription(idTaxon: string | number, lang: string = 'en'): Promise<string | undefined> {
+        try {
+            // Essayer récupérer description via Wikidata en utilisant l'ID taxon comme GBIF ID
+            const wikidataId = await wikidataService.getWikidataIdByGbifId(idTaxon.toString());
+            
+            if (!wikidataId) {
+                return undefined;
+            }
+
+            const wikipediaLinks = await wikidataService.getWikipediaLinksForWikidata(wikidataId);
+            
+            const normalizedLang = lang.split('_')[0].toLowerCase();
+            const wikidataLang = ['en', 'fr', 'es', 'cs', 'de', 'it'].includes(normalizedLang)
+                ? normalizedLang
+                : 'en';
+
+            let wikipediaUrl = wikipediaLinks[wikidataLang] || wikipediaLinks['en'];
+            
+            if (!wikipediaUrl) {
+                return undefined;
+            }
+
+            const titleMatch = wikipediaUrl.match(/\/wiki\/(.+)$/);
+            if (!titleMatch) {
+                return undefined;
+            }
+
+            const title = decodeURIComponent(titleMatch[1]);
+            const description = await wikipediaService.getDescription(title, wikidataLang);
+
+            return description || undefined;
+        } catch (error) {
+            console.warn(
+                `[GeoNatureConnector] Erreur fetchDescription pour taxon ${idTaxon}:`,
+                error
+            );
+            return undefined;
+        }
     }
 }
