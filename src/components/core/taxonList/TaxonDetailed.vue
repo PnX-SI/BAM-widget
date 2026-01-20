@@ -94,9 +94,13 @@
                         class="statistics observations"
                     >
                         <strong
-                            ><span class="seen-label">Vu</span>
+                            ><span class="seen-label">{{
+                                $t('taxon.seen')
+                            }}</span>
                             {{ props.nbObservations }}
-                            <span class="times-label">fois</span></strong
+                            <span class="times-label">{{
+                                $t('taxon.times')
+                            }}</span></strong
                         >
                     </div>
                 </div>

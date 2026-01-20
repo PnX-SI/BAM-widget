@@ -99,6 +99,8 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             vernacularName: 'Nombre Vernacular',
             nbObservations: 'Número de observaciones',
             lastSeenDate: 'Fecha de última observación',
+            seen: 'Visto',
+            times: 'veces',
             taxonFilter: 'Filtrar por especie',
             learnMore: 'Más información',
             description: 'Descripción',
