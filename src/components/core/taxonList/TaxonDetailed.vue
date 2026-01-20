@@ -3,6 +3,7 @@
     import StatusIcon from '@/components/commons/StatusIcon.vue';
     import DescriptionModal from '@/components/commons/DescriptionModal.vue';
     import { Media, StatusInfo } from '@/lib/models';
+    import { formatRelativeDate } from '@/lib/dateUtils';
     import { ref } from 'vue';
 
     const props = defineProps<{
@@ -84,18 +85,19 @@
                 <!-- Statistics Section -->
                 <div class="statistics-wrapper">
                     <div class="statistics">
-                        <small class="text-body-secondary">{{
-                            $t('taxon.lastSeenDate')
-                        }}</small>
                         <strong>{{
-                            props?.lastSeenDate.toLocaleDateString()
+                            formatRelativeDate(props.lastSeenDate)
                         }}</strong>
                     </div>
-                    <div v-if="props.nbObservations" class="statistics">
-                        <small class="text-body-secondary">{{
-                            $t('taxon.nbObservations')
-                        }}</small>
-                        <strong>{{ props.nbObservations }}</strong>
+                    <div
+                        v-if="props.nbObservations"
+                        class="statistics observations"
+                    >
+                        <strong
+                            ><span class="seen-label">Vu</span>
+                            {{ props.nbObservations }}
+                            <span class="times-label">fois</span></strong
+                        >
                     </div>
                 </div>
 
@@ -161,12 +163,12 @@
 
     /* Image Container with Rectangular Image */
     .image-container {
-        margin-top: 1em;
+        margin-top: 0.8em;
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 2em;
+        margin-bottom: 1.2em;
     }
 
     /* Status above image */
@@ -176,7 +178,7 @@
         display: flex;
         justify-content: center;
         margin-bottom: 0.5em;
-        z-index: 10;
+        z-index: 1;
     }
 
     .circular-image {
@@ -204,17 +206,18 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        margin-bottom: 0.5em;
+        margin-bottom: 0.8em;
     }
 
     .vernacular-name {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         color: #333;
-        line-height: 1.3;
+        line-height: 1.2;
+        margin-bottom: 0.2em;
     }
 
     .scientific-name {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         color: #999;
         font-style: italic;
     }
@@ -224,8 +227,8 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-top: 1em;
-        margin-bottom: 1em;
+        margin-top: 0.8em;
+        margin-bottom: 0.8em;
         column-gap: 0.5em;
     }
 
@@ -235,21 +238,42 @@
         align-items: center;
         color: #666;
         text-align: center;
-        background-color: rgba(239, 239, 239, 0.5);
-        padding: 1em;
-        border-radius: 5px;
+        background-color: rgba(239, 239, 239, 0.3);
+        padding: 0.7em;
+        border-radius: 6px;
         flex: 1;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 
     .statistics small {
         font-weight: normal;
-        margin-bottom: 0.3em;
+        margin-bottom: 0.2em;
+        font-size: 0.75rem;
+        color: #999;
     }
 
     .statistics strong {
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: #333;
+    }
+
+    .statistics.observations strong {
+        display: flex;
+        align-items: baseline;
+        gap: 0.3em;
+        font-size: 1rem;
+    }
+
+    .seen-label {
+        font-weight: normal;
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    .times-label {
+        font-size: 0.8rem;
+        font-weight: normal;
+        color: #999;
     }
 
     /* Action Buttons */
@@ -257,7 +281,7 @@
         display: flex;
         justify-content: center;
         gap: 0.5em;
-        margin-bottom: 1em;
+        margin-bottom: 0.8em;
     }
 
     .action-button {
@@ -265,12 +289,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5em;
-        padding: 0.6rem 1rem;
+        gap: 0.4em;
+        padding: 0.5rem 0.8rem;
         background-color: #ffffff;
         border: none;
-        border-radius: 8px;
-        font-size: 0.9rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
         font-weight: 500;
         color: #666666;
         cursor: pointer;
@@ -287,37 +311,38 @@
     }
 
     .action-button i {
-        font-size: 1em;
+        font-size: 0.95em;
     }
 
     /* Credits Section */
     .credits {
-        padding: 1em;
+        padding: 0.8em;
         border-top: 1px solid rgba(0, 0, 0, 0.05);
-        background-color: rgba(239, 239, 239, 0.2);
+        background-color: rgba(239, 239, 239, 0.15);
     }
 
     .credits-header {
         display: flex;
         align-items: center;
-        gap: 0.5em;
+        gap: 0.4em;
         color: #666;
-        margin-bottom: 0.8em;
+        margin-bottom: 0.6em;
     }
 
     .credits-header h6 {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         font-weight: 600;
+        margin: 0;
     }
 
     .subcredits {
         display: flex;
         align-items: center;
-        gap: 0.5em;
-        font-size: 0.85rem;
+        gap: 0.4em;
+        font-size: 0.8rem;
         color: #666;
-        margin-left: 1em;
-        margin-bottom: 0.5em;
+        margin-left: 0.8em;
+        margin-bottom: 0.3em;
     }
 
     .subcredits i {
