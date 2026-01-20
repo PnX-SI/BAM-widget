@@ -80,7 +80,7 @@ function getIUCNCodeLabel(code: string | undefined): string {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .status-icon-wrapper {
   display: inline-block;
   margin: 0 4px;
@@ -96,11 +96,11 @@ function getIUCNCodeLabel(code: string | undefined): string {
   font-weight: 600;
   cursor: help;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
+.status-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .status-icon-inner {
