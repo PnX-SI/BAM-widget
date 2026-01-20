@@ -23,13 +23,16 @@
 
 <template>
     <div class="col card thumbnail" data-testid="Taxon thumbnail view">
-        <Image :image-url="props.picture?.url" :alt="props.picture?.url" />
-
         <FullScreenImage
             v-if="props.picture?.url"
             :media="props.picture"
             :alt="props.picture?.urlSource"
         >
+            <img
+                :src="props.picture?.url"
+                :alt="props.picture?.urlSource"
+                class="card-img"
+            />
             <div class="card-img-overlay">
                 <div class="card-title">
                     <div class="title-header">
@@ -101,7 +104,8 @@
     }
 
     .card:hover {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
+            0 2px 4px rgba(0, 0, 0, 0.08);
         transform: translateY(-2px);
     }
 

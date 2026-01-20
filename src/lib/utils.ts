@@ -18,7 +18,8 @@ export enum IUCNStatusGroup {
 export const IUCN_GROUPS = {
     [IUCNStatusGroup.THREATENED]: {
         codes: ['CR', 'EN', 'VU'],
-        color: '#E31E24',
+        // Threatened group uses orange by default
+        color: '#e74c3c',
         priority: 1,
     },
     [IUCNStatusGroup.PROTECTED]: {
@@ -38,17 +39,19 @@ export const IUCN_GROUPS = {
  * @param code - The IUCN status code (CR, EN, VU, NT, DD, LC, NE, NA, EX, EW)
  * @returns The group category or UNKNOWN if code is not recognized
  */
-export function groupIUCNStatus(code: string | undefined | null): IUCNStatusGroup {
+export function groupIUCNStatus(
+    code: string | undefined | null
+): IUCNStatusGroup {
     if (!code) return IUCNStatusGroup.UNKNOWN;
-    
+
     const upperCode = code.toUpperCase();
-    
+
     for (const [group, config] of Object.entries(IUCN_GROUPS)) {
         if (config.codes.includes(upperCode)) {
             return group as IUCNStatusGroup;
         }
     }
-    
+
     return IUCNStatusGroup.UNKNOWN;
 }
 
@@ -59,6 +62,23 @@ export function groupIUCNStatus(code: string | undefined | null): IUCNStatusGrou
  */
 export function getIUCNGroupColor(group: IUCNStatusGroup): string {
     return IUCN_GROUPS[group]?.color || '#999999';
+}
+
+/**
+ * Gets the color for an IUCN status, with code-level overrides.
+ * - If code === 'EN' (Endangered) -> green
+ * - Otherwise fallback to group color
+ */
+export function getIUCNColor(
+    code: string | undefined | null,
+    group: IUCNStatusGroup | undefined | null
+): string {
+    if (code) {
+        const upper = code.toUpperCase();
+        if (upper === 'EN') return '#1ABA1C'; // En danger -> vert
+    }
+    if (group) return getIUCNGroupColor(group);
+    return '#999999';
 }
 
 /**

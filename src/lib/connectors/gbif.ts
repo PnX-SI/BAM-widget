@@ -201,8 +201,9 @@ export class GbifConnector extends Connector {
                                 };
                             }
 
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
+                            taxonsData[
+                                observation.taxonKey
+                            ].nbObservations += 1;
                             taxonsData[observation.taxonKey].lastSeenDate =
                                 new Date(
                                     Math.max(
@@ -256,8 +257,9 @@ export class GbifConnector extends Connector {
                 return undefined;
             })
             .then((json) => {
-                if (json && json.category) {
-                    return json.category;
+                // L'API GBIF retourne 'code' et non 'category'
+                if (json && json.code) {
+                    return json.code;
                 }
                 return undefined;
             })
@@ -308,26 +310,35 @@ export class GbifConnector extends Connector {
      * Fetch description depuis Wikipedia via Wikidata
      * Chaîne: GBIF ID → Wikidata ID → Wikipedia article → description
      */
-    async fetchDescription(idTaxon: string | number, lang: string = 'en'): Promise<string | undefined> {
+    async fetchDescription(
+        idTaxon: string | number,
+        lang: string = 'en'
+    ): Promise<string | undefined> {
         try {
             // Étape 1: Récupérer Wikidata ID à partir GBIF ID
-            const wikidataId = await wikidataService.getWikidataIdByGbifId(idTaxon.toString());
-            
+            const wikidataId = await wikidataService.getWikidataIdByGbifId(
+                idTaxon.toString()
+            );
+
             if (!wikidataId) {
                 return undefined; // Pas de Wikidata ID trouvé
             }
 
             // Étape 2: Récupérer liens Wikipedia
-            const wikipediaLinks = await wikidataService.getWikipediaLinksForWikidata(wikidataId);
-            
+            const wikipediaLinks =
+                await wikidataService.getWikipediaLinksForWikidata(wikidataId);
+
             // Sélectionner le lien pour la langue demandée (avec fallback EN)
             const normalizedLang = lang.split('_')[0].toLowerCase();
-            const wikidataLang = ['en', 'fr', 'es', 'cs', 'de', 'it'].includes(normalizedLang)
+            const wikidataLang = ['en', 'fr', 'es', 'cs', 'de', 'it'].includes(
+                normalizedLang
+            )
                 ? normalizedLang
                 : 'en';
 
-            let wikipediaUrl = wikipediaLinks[wikidataLang] || wikipediaLinks['en'];
-            
+            let wikipediaUrl =
+                wikipediaLinks[wikidataLang] || wikipediaLinks['en'];
+
             if (!wikipediaUrl) {
                 return undefined; // Pas de Wikipedia link trouvé
             }
@@ -341,7 +352,10 @@ export class GbifConnector extends Connector {
             const title = decodeURIComponent(titleMatch[1]);
 
             // Étape 3: Récupérer la description depuis Wikipedia
-            const description = await wikipediaService.getDescription(title, wikidataLang);
+            const description = await wikipediaService.getDescription(
+                title,
+                wikidataLang
+            );
 
             return description || undefined;
         } catch (error) {

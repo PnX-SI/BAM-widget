@@ -4,7 +4,11 @@
     import { NO_IMAGE_URL } from '@/assets/constant';
     import { MediaType, Taxon, StatusInfo } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
-    import { groupIUCNStatus, getIUCNGroupColor, IUCNStatusGroup } from '@/lib/utils';
+    import {
+        groupIUCNStatus,
+        getIUCNGroupColor,
+        IUCNStatusGroup,
+    } from '@/lib/utils';
 
     // Components
     import TaxonThumbnail from './TaxonThumbnail.vue';
@@ -73,12 +77,17 @@
 
     function fetchTaxonDescription() {
         if (!taxon.taxonId) return;
-        connector.value.fetchDescription(taxon.taxonId, lang.value).then((desc) => {
-            if (desc) {
-                description.value = desc;
-                taxon.description = desc;
-            }
-        });
+        // Capturer le taxonId dans une constante locale pour éviter les problèmes de closure
+        const currentTaxonId = taxon.taxonId;
+        connector.value
+            .fetchDescription(currentTaxonId, lang.value)
+            .then((desc) => {
+                // Vérifier que le taxonId correspond toujours avant d'assigner la description
+                if (desc && taxon.taxonId === currentTaxonId) {
+                    description.value = desc;
+                    taxon.description = desc;
+                }
+            });
     }
 
     const mediaDisplayed = computed(() => {
@@ -133,5 +142,6 @@
         :last-seen-date="taxon?.lastSeenDate"
         :status="status"
         :description="description"
+        :taxon-id="taxon.taxonId"
     />
 </template>
