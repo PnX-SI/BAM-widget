@@ -2,8 +2,9 @@
     import { ref, computed, watch } from 'vue';
 
     import { NO_IMAGE_URL } from '@/assets/constant';
-    import { MediaType, Taxon } from '@/lib/models';
+    import { MediaType, Taxon, StatusInfo } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
+    import { groupIUCNStatus, getIUCNGroupColor, IUCNStatusGroup } from '@/lib/utils';
 
     // Components
     import TaxonThumbnail from './TaxonThumbnail.vue';
@@ -20,6 +21,8 @@
     const speciesPhoto = ref([]);
     const speciesAudio = ref(null);
     const vernacularName = ref(taxon.vernacularName);
+    const status = ref<StatusInfo | null>(null);
+    const description = ref<string>('');
 
     function fetchDetailUrl(taxonID) {
         if (customDetailPage.value) {
@@ -49,6 +52,35 @@
                 });
         }
     }
+
+    function fetchTaxonStatus() {
+        if (!taxon.taxonId) return;
+        connector.value.fetchTaxonStatus(taxon.taxonId).then((statusCode) => {
+            if (statusCode) {
+                const group = groupIUCNStatus(statusCode);
+                const color = getIUCNGroupColor(group);
+                status.value = {
+                    code: statusCode,
+                    group,
+                    color,
+                };
+                taxon.status = statusCode;
+            } else {
+                status.value = null;
+            }
+        });
+    }
+
+    function fetchTaxonDescription() {
+        if (!taxon.taxonId) return;
+        connector.value.fetchDescription(taxon.taxonId, lang.value).then((desc) => {
+            if (desc) {
+                description.value = desc;
+                taxon.description = desc;
+            }
+        });
+    }
+
     const mediaDisplayed = computed(() => {
         if (!speciesPhoto.value) {
             return { url: NO_IMAGE_URL, typeMedia: MediaType.image };
@@ -70,6 +102,8 @@
     fetchTaxonImage();
     fetchTaxonAudio();
     refreshVernacularName();
+    fetchTaxonStatus();
+    fetchTaxonDescription();
 
     watch(lang, () => {
         refreshVernacularName();
@@ -84,6 +118,8 @@
         :vernacular-name="vernacularName || taxon.acceptedScientificName"
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :accepted-scientific-name="taxon.acceptedScientificName"
+        :status="status"
+        :description="description"
     >
     </TaxonThumbnail>
     <TaxonDetailed
@@ -95,5 +131,7 @@
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :nb-observations="taxon?.nbObservations"
         :last-seen-date="taxon?.lastSeenDate"
+        :status="status"
+        :description="description"
     />
 </template>

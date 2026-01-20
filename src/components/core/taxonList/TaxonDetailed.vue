@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
-    import { Media } from '@/lib/models';
+    import StatusIcon from '@/components/commons/StatusIcon.vue';
+    import { Media, StatusInfo } from '@/lib/models';
 
     const props = defineProps<{
         picture: Media;
@@ -10,6 +11,8 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
+        status?: StatusInfo | null;
+        description?: string;
     }>();
 </script>
 <template>
@@ -42,12 +45,20 @@
 
             <div class="card-body">
                 <div class="card-text">
-                    <h5
-                        class="card-title text-wrap"
-                        data-testid="Vernacular name"
-                    >
-                        {{ props.vernacularName }}
-                    </h5>
+                    <div class="title-header">
+                        <h5
+                            class="card-title text-wrap"
+                            data-testid="Vernacular name"
+                        >
+                            {{ props.vernacularName }}
+                        </h5>
+                        <StatusIcon
+                            v-if="props.status"
+                            :status-code="props.status.code"
+                            :status-group="props.status.group"
+                            :status-color="props.status.color"
+                        />
+                    </div>
                     <small
                         class="text-body-secondary"
                         data-testid="Scientific name"
@@ -96,6 +107,13 @@
 </template>
 
 <style scoped>
+    .title-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
     .taxon-photo {
         position: relative;
         display: inline-block;

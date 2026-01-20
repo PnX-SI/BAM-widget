@@ -1,7 +1,8 @@
 <script setup lang="ts">
-    import { Media } from '@/lib/models';
+    import { Media, StatusInfo } from '@/lib/models';
     import { computed, onMounted, ref, watch } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
+    import StatusIcon from '@/components/commons/StatusIcon.vue';
 
     const { isMobile } = ParameterStore.getInstance();
 
@@ -11,6 +12,8 @@
         vernacularName: string;
         acceptedScientificName: string;
         urlDetailPage: string;
+        status?: StatusInfo | null;
+        description?: string;
     }>();
 
     const sizeIcon = computed(() => {
@@ -29,15 +32,23 @@
         >
             <div class="card-img-overlay">
                 <div class="card-title">
-                    <a
-                        style="color: inherit; text-decoration: inherit"
-                        :href="props.urlDetailPage"
-                        target="_blank"
-                    >
-                        <span class="vernacularName">{{
-                            props.vernacularName
-                        }}</span>
-                    </a>
+                    <div class="title-header">
+                        <a
+                            style="color: inherit; text-decoration: inherit"
+                            :href="props.urlDetailPage"
+                            target="_blank"
+                        >
+                            <span class="vernacularName">{{
+                                props.vernacularName
+                            }}</span>
+                        </a>
+                        <StatusIcon
+                            v-if="props.status"
+                            :status-code="props.status.code"
+                            :status-group="props.status.group"
+                            :status-color="props.status.color"
+                        />
+                    </div>
                 </div>
 
                 <!-- Bottom Controls (audio + copyright) -->
@@ -97,6 +108,13 @@
         font-size: 1rem;
         font-weight: 600;
         z-index: 2;
+    }
+
+    .title-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
     }
 
     /* Overlay covers the image */
