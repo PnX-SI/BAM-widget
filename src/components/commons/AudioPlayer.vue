@@ -147,13 +147,21 @@
         justify-content: center;
         border-radius: 50%;
         cursor: pointer;
-        transition: background 0.1s linear;
+        transition: all 0.2s ease;
+        background: rgba(100, 100, 100, 0.85) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        border: none;
+    }
+
+    .audio-button:hover {
+        background: rgba(120, 120, 120, 0.95) !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .audio-button i {
         color: white;
         z-index: 2;
-        text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
 
     .tooltip {
@@ -192,7 +200,7 @@
     }
 
     .play-button {
-        background: #afafaf;
+        background: #7a7a7a;
         border: none;
         color: white;
         width: 2.5rem;
@@ -202,12 +210,18 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: all 0.2s ease;
         flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     .play-button:hover {
-        background: #bfbfbf;
+        background: #8f8f8f;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .play-button:active {
+        transform: scale(0.95);
     }
 
     .play-button i {

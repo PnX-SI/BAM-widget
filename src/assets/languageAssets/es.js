@@ -101,6 +101,8 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             lastSeenDate: 'Fecha de última observación',
             taxonFilter: 'Filtrar por especie',
             learnMore: 'Más información',
+            description: 'Descripción',
+            credits: 'Créditos',
             class: 'Clase de especie',
             taxonFound: 'especies encontradas',
             classFilter: 'Filtrar por clase',
@@ -148,8 +150,6 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             noResultsText: 'Ningún resultado encontrado',
         },
         searchTaxon: 'Buscar especie',
-        description: 'Descripción',
-        credits: 'Créditos',
         status: {
             threatened: 'Amenazada',
             protected: 'Protegida',

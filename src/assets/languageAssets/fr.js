@@ -106,8 +106,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             lastSeenDate: 'Date de la dernière observation',
             taxonFilter: 'Filtre par espèce',
             classFilter: 'Filtrer par classe',
-            learnMore: 'En savoir plus',
-            class: "Classe d'espèce",
+            learnMore: 'En savoir plus',            description: 'Description',
+            credits: 'Crédits',            class: "Classe d'espèce",
             taxonFound: 'espèces trouvées',
         },
         mode: {

@@ -108,6 +108,8 @@ You can also **share your results 📤** to collaborate with other users.
             taxonFilter: 'Filter by species',
             classFilter: 'Filter by class',
             learnMore: 'Learn more',
+            description: 'Description',
+            credits: 'Credits',
             class: "Species' class",
             taxonFound: 'species found',
         },
