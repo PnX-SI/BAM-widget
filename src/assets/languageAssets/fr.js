@@ -155,6 +155,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         },
         searchTaxon: 'Recherche une espèce',
         description: 'Description',
+        credits: 'Crédits',
         status: {
             threatened: 'Menacée',
             protected: 'Protégée',

@@ -155,6 +155,7 @@ You can also **share your results 📤** to collaborate with other users.
         },
         searchTaxon: 'Search a species',
         description: 'Description',
+        credits: 'Credits',
         status: {
             threatened: 'Threatened',
             protected: 'Protected',

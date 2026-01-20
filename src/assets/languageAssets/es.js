@@ -149,6 +149,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         },
         searchTaxon: 'Buscar especie',
         description: 'Descripción',
+        credits: 'Créditos',
         status: {
             threatened: 'Amenazada',
             protected: 'Protegida',
