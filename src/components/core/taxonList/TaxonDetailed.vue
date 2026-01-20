@@ -159,7 +159,7 @@
         box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
     }
 
-    /* Image Container with Circular Image */
+    /* Image Container with Rectangular Image */
     .image-container {
         margin-top: 1em;
         position: relative;
@@ -181,11 +181,11 @@
 
     .circular-image {
         display: flex;
-        width: 150px;
+        width: 200px;
         height: 150px;
-        aspect-ratio: 1;
         object-fit: cover;
-        border-radius: 50%;
+        object-position: center;
+        border-radius: 8px;
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     }
 
@@ -337,7 +337,7 @@
         }
 
         .circular-image {
-            width: 120px;
+            width: 160px;
             height: 120px;
         }
 
@@ -358,7 +358,7 @@
         }
 
         .circular-image {
-            width: 130px;
+            width: 170px;
             height: 130px;
         }
 
