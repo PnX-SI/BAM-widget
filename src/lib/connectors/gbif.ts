@@ -244,17 +244,22 @@ export class GbifConnector extends Connector {
             }));
     }
 
-    fetchTaxonStatus(idTaxon: string): Promise<{
-        iucnRedListCategory: string;
-        code: string;
-    }> {
+    fetchTaxonStatus(idTaxon: string): Promise<string | undefined> {
         const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/iucnRedListCategory`;
         return fetch(url)
-            .then((response) => response.json())
-            .then((json) => ({
-                iucnRedListCategory: json.category,
-                code: json.code,
-            }));
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                return undefined;
+            })
+            .then((json) => {
+                if (json && json.category) {
+                    return json.category;
+                }
+                return undefined;
+            })
+            .catch(() => undefined);
     }
 
     searchTaxon(

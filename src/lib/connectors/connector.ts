@@ -154,10 +154,36 @@ export class Connector {
     /**
      * Fetches the taxon status for a given taxon ID.
      * @param {string} idTaxon - The ID of the taxon.
-     * @returns {Promise<Object>} A promise that resolves to the taxon status.
+     * @returns {Promise<string|undefined>} A promise that resolves to the taxon IUCN status code.
      */
-    fetchTaxonStatus(idTaxon: string): Promise<any> {
-        throw new Error('Not implemented');
+    fetchTaxonStatus(idTaxon: string): Promise<string | undefined> {
+        return Promise.resolve(undefined);
+    }
+
+    /**
+     * Fetches the description for a given taxon ID.
+     * @param {string} idTaxon - The ID of the taxon.
+     * @param {string} lang - The language code for the description.
+     * @returns {Promise<string|undefined>} A promise that resolves to the taxon description.
+     */
+    fetchDescription(idTaxon: string, lang: string): Promise<string | undefined> {
+        return Promise.resolve(undefined);
+    }
+
+    /**
+     * Gets the status group and color for an IUCN status code.
+     * @param {string} statusCode - The IUCN status code.
+     * @returns {Object} Object with group and color properties.
+     */
+    getStatusGroup(statusCode: string | undefined): { group: string; color: string } {
+        if (!statusCode) {
+            return { group: 'UNKNOWN', color: '#999999' };
+        }
+
+        const { groupIUCNStatus, getIUCNGroupColor } = require('../utils');
+        const group = groupIUCNStatus(statusCode);
+        const color = getIUCNGroupColor(group);
+        return { group, color };
     }
 
     /**

@@ -10,6 +10,13 @@ export interface Taxon {
     lastSeenDate?: Date | null;
     kingdom?: string;
     class?: string;
+    status?: string;
+}
+
+export interface StatusInfo {
+    code: string; // IUCN code: CR, EN, VU, NT, DD, LC, NE, NA, EX, EW
+    group: string; // THREATENED, PROTECTED, NOT_EVALUATED, UNKNOWN
+    color: string; // Hex color code
 }
 export enum MediaType {
     sound = 'sound',

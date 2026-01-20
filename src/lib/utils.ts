@@ -3,6 +3,74 @@ import { buffer } from '@turf/turf';
 import L from 'leaflet';
 
 /**
+ * IUCN Status Group Categories
+ */
+export enum IUCNStatusGroup {
+    THREATENED = 'THREATENED',
+    PROTECTED = 'PROTECTED',
+    NOT_EVALUATED = 'NOT_EVALUATED',
+    UNKNOWN = 'UNKNOWN',
+}
+
+/**
+ * IUCN Status Group Configuration
+ */
+export const IUCN_GROUPS = {
+    [IUCNStatusGroup.THREATENED]: {
+        codes: ['CR', 'EN', 'VU'],
+        color: '#E31E24',
+        priority: 1,
+    },
+    [IUCNStatusGroup.PROTECTED]: {
+        codes: ['NT', 'DD'],
+        color: '#F4A400',
+        priority: 2,
+    },
+    [IUCNStatusGroup.NOT_EVALUATED]: {
+        codes: ['LC', 'NE', 'NA', 'EX', 'EW'],
+        color: '#1ABA1C',
+        priority: 3,
+    },
+};
+
+/**
+ * Groups an IUCN status code into one of 3 categories
+ * @param code - The IUCN status code (CR, EN, VU, NT, DD, LC, NE, NA, EX, EW)
+ * @returns The group category or UNKNOWN if code is not recognized
+ */
+export function groupIUCNStatus(code: string | undefined | null): IUCNStatusGroup {
+    if (!code) return IUCNStatusGroup.UNKNOWN;
+    
+    const upperCode = code.toUpperCase();
+    
+    for (const [group, config] of Object.entries(IUCN_GROUPS)) {
+        if (config.codes.includes(upperCode)) {
+            return group as IUCNStatusGroup;
+        }
+    }
+    
+    return IUCNStatusGroup.UNKNOWN;
+}
+
+/**
+ * Gets the color for an IUCN status group
+ * @param group - The IUCN status group
+ * @returns The color hex code
+ */
+export function getIUCNGroupColor(group: IUCNStatusGroup): string {
+    return IUCN_GROUPS[group]?.color || '#999999';
+}
+
+/**
+ * Gets the priority for an IUCN status group (lower is higher priority)
+ * @param group - The IUCN status group
+ * @returns The priority number
+ */
+export function getIUCNGroupPriority(group: IUCNStatusGroup): number {
+    return IUCN_GROUPS[group]?.priority || 999;
+}
+
+/**
  * Return a random element from a given array
  * @param choices - The array of choices
  * @returns The randomly selected item

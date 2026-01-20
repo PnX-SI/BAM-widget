@@ -154,6 +154,23 @@ You can also **share your results 📤** to collaborate with other users.
             noResultsText: 'No results found',
         },
         searchTaxon: 'Search a species',
+        status: {
+            threatened: 'Threatened',
+            protected: 'Protected',
+            notThreatened: 'Not threatened',
+            code: {
+                CR: 'Critically Endangered',
+                EN: 'Endangered',
+                VU: 'Vulnerable',
+                NT: 'Near Threatened',
+                DD: 'Data Deficient',
+                LC: 'Least Concern',
+                NE: 'Not Evaluated',
+                NA: 'Not Assessed',
+                EX: 'Extinct',
+                EW: 'Extinct in the Wild',
+            },
+        },
     },
 };
 

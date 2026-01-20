@@ -154,6 +154,23 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             noResultsText: 'Aucun résultat trouvé',
         },
         searchTaxon: 'Recherche une espèce',
+        status: {
+            threatened: 'Menacée',
+            protected: 'Protégée',
+            notThreatened: 'Non menacée',
+            code: {
+                CR: 'En danger critique d\'extinction',
+                EN: 'En danger',
+                VU: 'Vulnérable',
+                NT: 'Quasi menacée',
+                DD: 'Données insuffisantes',
+                LC: 'Préoccupation mineure',
+                NE: 'Non évaluée',
+                NA: 'Non évaluée',
+                EX: 'Disparue',
+                EW: 'Disparue à l\'état sauvage',
+            },
+        },
     },
 };
 
