@@ -154,6 +154,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             noResultsText: 'Aucun résultat trouvé',
         },
         searchTaxon: 'Recherche une espèce',
+        description: 'Description',
         status: {
             threatened: 'Menacée',
             protected: 'Protégée',

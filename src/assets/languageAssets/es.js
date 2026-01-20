@@ -148,6 +148,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             noResultsText: 'Ningún resultado encontrado',
         },
         searchTaxon: 'Buscar especie',
+        description: 'Descripción',
         status: {
             threatened: 'Amenazada',
             protected: 'Protegida',

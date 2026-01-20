@@ -154,6 +154,7 @@ You can also **share your results 📤** to collaborate with other users.
             noResultsText: 'No results found',
         },
         searchTaxon: 'Search a species',
+        description: 'Description',
         status: {
             threatened: 'Threatened',
             protected: 'Protected',

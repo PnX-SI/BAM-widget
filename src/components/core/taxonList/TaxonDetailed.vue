@@ -2,6 +2,7 @@
     import Credits from '@/components/commons/Credits.vue';
     import StatusIcon from '@/components/commons/StatusIcon.vue';
     import { Media, StatusInfo } from '@/lib/models';
+    import { ref } from 'vue';
 
     const props = defineProps<{
         picture: Media;
@@ -14,6 +15,8 @@
         status?: StatusInfo | null;
         description?: string;
     }>();
+
+    const showDescriptionModal = ref(false);
 </script>
 <template>
     <div class="col" data-testid="Taxon detailed view">
@@ -86,6 +89,16 @@
               class="badge bg-light text-secondary border border-secondary text-decoration-none"
               ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
             </a>
+                        <BButton
+                            v-if="props.description"
+                            v-b-modal.description-modal
+                            variant="light"
+                            size="sm"
+                            class="ms-2"
+                            data-testid="Show description button"
+                        >
+                            <i class="bi bi-info-circle"></i> {{ $t('taxon.description') }}
+                        </BButton>
                     </small>
                     <br />
 
@@ -103,6 +116,16 @@
                 >
             </div>
         </div>
+
+        <!-- Description Modal -->
+        <BModal
+            id="description-modal"
+            :title="props.vernacularName"
+            centered
+            scrollable
+        >
+            <div class="description-content" v-html="props.description"></div>
+        </BModal>
     </div>
 </template>
 
@@ -140,5 +163,19 @@
     .audio {
         margin-top: 0.5rem;
         width: 100%;
+    }
+
+    .description-content {
+        line-height: 1.6;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .description-content :deep(p) {
+        margin-bottom: 1rem;
+    }
+
+    .description-content :deep(strong) {
+        font-weight: 600;
     }
 </style>
