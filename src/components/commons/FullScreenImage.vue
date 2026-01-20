@@ -23,38 +23,40 @@
 </script>
 
 <template>
-    <div @click="open">
+    <div>
         <slot></slot>
     </div>
 
-    <Transition name="fullscreen">
-        <div
-            v-if="isFullscreen && media?.url"
-            class="fullScreenContainer"
-            @click.stop="close"
-        >
-            <button
-                class="close-button"
+    <Teleport to="body">
+        <Transition name="fullscreen">
+            <div
+                v-if="isFullscreen && media?.url"
+                class="fullScreenContainer"
                 @click.stop="close"
-                aria-label="Close fullscreen"
             >
-                <i class="bi bi-x-lg"></i>
-            </button>
-            <img
-                :src="media.url"
-                :alt="props.alt"
-                :aria-label="props.ariaLabel"
-                :data-testid="testID"
-                class="fullscreenImage"
-            />
+                <button
+                    class="close-button"
+                    @click.stop="close"
+                    aria-label="Close fullscreen"
+                >
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <img
+                    :src="media.url"
+                    :alt="props.alt"
+                    :aria-label="props.ariaLabel"
+                    :data-testid="testID"
+                    class="fullscreenImage"
+                />
 
-            <Credits
-                v-if="media.url"
-                :media="media"
-                link-color="link-light"
-            ></Credits>
-        </div>
-    </Transition>
+                <Credits
+                    v-if="media.url"
+                    :media="media"
+                    link-color="link-light"
+                ></Credits>
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
 <style scoped>
@@ -80,15 +82,13 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.9);
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         padding: 1em;
-        z-index: 1000;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        z-index: 9999;
     }
 
     .fullscreenImage {
@@ -104,16 +104,12 @@
     /* Transitions for fullscreen */
     .fullscreen-enter-active,
     .fullscreen-leave-active {
-        transition:
-            opacity 0.3s ease,
-            backdrop-filter 0.3s ease;
+        transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
     }
 
     .fullscreen-enter-active .fullscreenImage,
     .fullscreen-leave-active .fullscreenImage {
-        transition:
-            transform 0.3s ease,
-            opacity 0.3s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .fullscreen-enter-from,

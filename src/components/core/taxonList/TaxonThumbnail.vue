@@ -16,6 +16,7 @@
         description?: string;
     }>();
 
+    const fullscreenRef = ref(null);
     const sizeIcon = computed(() => {
         return isMobile.value ? 50 : 30;
     });
@@ -27,14 +28,16 @@
             v-if="props.picture?.url"
             :media="props.picture"
             :alt="props.picture?.urlSource"
+            ref="fullscreenRef"
         >
             <img
                 :src="props.picture?.url"
                 :alt="props.picture?.urlSource"
                 class="card-img"
+                @click.stop="fullscreenRef.open()"
             />
-            <div class="card-img-overlay">
-                <div class="card-title">
+            <div class="card-img-overlay" @click="fullscreenRef.open()">
+                <div class="card-title" @click.stop>
                     <div class="title-header">
                         <a
                             style="color: inherit; text-decoration: inherit"
@@ -55,7 +58,7 @@
                 </div>
 
                 <!-- Bottom Controls (audio + copyright) -->
-                <div class="bottom-controls">
+                <div class="bottom-controls" @click.stop>
                     <div class="player">
                         <AudioPlayer
                             v-if="props.audio"

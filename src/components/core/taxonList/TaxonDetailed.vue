@@ -18,6 +18,7 @@
     }>();
 
     const showDescriptionModal = ref(false);
+    const fullscreenRef = ref(null);
     const modalId = computed(() => `description-modal-${props.taxonId}`);
     const modalRef = ref<any>(null);
 
@@ -47,12 +48,14 @@
                 <FullScreenImage
                     :media="props.picture"
                     :alt="props.picture?.urlSource"
+                    ref="fullscreenRef"
                 >
                     <img
                         :src="props.picture?.url"
                         :alt="props.picture?.urlSource"
                         class="circular-image"
                         data-testid="Taxon picture"
+                        @click.stop="fullscreenRef.open()"
                     />
                 </FullScreenImage>
 
