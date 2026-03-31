@@ -14,6 +14,7 @@
 
     const props = defineProps<{
         taxon: Taxon;
+        cols: number;
     }>();
 
     const taxon = props.taxon;
@@ -84,6 +85,7 @@
         :vernacular-name="vernacularName || taxon.acceptedScientificName"
         :url-detail-page="fetchDetailUrl(taxon.taxonId)"
         :accepted-scientific-name="taxon.acceptedScientificName"
+        :cols="props.cols"
     >
     </TaxonThumbnail>
     <TaxonDetailed

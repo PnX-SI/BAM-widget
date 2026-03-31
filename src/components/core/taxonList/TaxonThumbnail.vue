@@ -11,6 +11,7 @@
         vernacularName: string;
         acceptedScientificName: string;
         urlDetailPage: string;
+        cols: number;
     }>();
 
     const sizeIcon = computed(() => {
@@ -34,7 +35,12 @@
                         :href="props.urlDetailPage"
                         target="_blank"
                     >
-                        <span class="vernacularName">{{
+                        <span
+                            class="vernacularName"
+                            :class="{
+                                'cols-2-plus': props.cols >= 2
+                            }"
+                        >{{
                             props.vernacularName
                         }}</span>
                     </a>
@@ -42,7 +48,12 @@
 
                 <!-- Bottom Controls (audio + copyright) -->
                 <div class="bottom-controls">
-                    <div class="player">
+                    <div
+                        class="player"
+                        :class="{
+                                'cols-2-plus': props.cols >= 2
+                        }"
+                    >
                         <AudioPlayer
                             v-if="props.audio"
                             :audio="props.audio"
@@ -58,7 +69,12 @@
                         :delay="{ show: 0, hide: 0 }"
                     >
                         <template #target>
-                            <div class="copyright-icon">
+                            <div
+                                class="copyright-icon"
+                                :class="{
+                                    'cols-2-plus': props.cols >= 2
+                                }"
+                            >
                                 <i
                                     class="bi bi-c-square-fill"
                                     :style="{
@@ -144,6 +160,15 @@
     @media screen and (max-width: 768px) {
         .card-title span {
             font-size: 2rem;
+        }
+
+        .card-title span.cols-2-plus {
+            font-size: 1rem;
+        }
+
+        .player.cols-2-plus,
+        .copyright-icon.cols-2-plus {
+            transform: scale(0.7);
         }
 
         .bottom-controls {

@@ -86,12 +86,15 @@
     const speciesList = computed(() => searchResult.value.taxons);
     const datasets = computed(() => searchResult.value.datasets);
 
+    const rowColsLg = computed(() => nbTaxonPerLine.value)
+
+    const rowColsMd = computed(() => rowColsLg.value === 1 ? 1 : Math.round(rowColsLg.value / 2))
+
+    const rowColsSm = computed(() => Math.round(rowColsMd.value / 2))
+
     const classNames = computed(() => {
-        const row_cols_lg = nbTaxonPerLine.value;
-        const row_cols_md = row_cols_lg === 1 ? 1 : Math.round(row_cols_lg / 2);
-        const row_cols_sm = Math.round(row_cols_md / 2);
-        return `row row-cols-${row_cols_sm} row-cols-lg-${row_cols_lg} row-cols-md-${row_cols_md} row-gap-4`;
-    });
+        return `row row-cols-${rowColsSm.value} row-cols-lg-${rowColsLg.value} row-cols-md-${rowColsMd.value} row-gap-4`
+    })
 
     function onScroll(event) {
         taxonManager.onScroll(event);
@@ -175,6 +178,7 @@
                             .value"
                         :key="observation.taxonId"
                         :taxon="observation"
+                        :cols="rowColsSm"
                     />
                 </div>
             </div>
