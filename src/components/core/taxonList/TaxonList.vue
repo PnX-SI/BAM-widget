@@ -86,15 +86,17 @@
     const speciesList = computed(() => searchResult.value.taxons);
     const datasets = computed(() => searchResult.value.datasets);
 
-    const rowColsLg = computed(() => nbTaxonPerLine.value)
+    const rowColsLg = computed(() => nbTaxonPerLine.value);
 
-    const rowColsMd = computed(() => rowColsLg.value === 1 ? 1 : Math.round(rowColsLg.value / 2))
+    const rowColsMd = computed(() =>
+        rowColsLg.value === 1 ? 1 : Math.round(rowColsLg.value / 2)
+    );
 
-    const rowColsSm = computed(() => Math.round(rowColsMd.value / 2))
+    const rowColsSm = computed(() => Math.round(rowColsMd.value / 2));
 
     const classNames = computed(() => {
-        return `row row-cols-${rowColsSm.value} row-cols-lg-${rowColsLg.value} row-cols-md-${rowColsMd.value} row-gap-4`
-    })
+        return `row row-cols-${rowColsSm.value} row-cols-lg-${rowColsLg.value} row-cols-md-${rowColsMd.value} row-gap-4`;
+    });
 
     function onScroll(event) {
         taxonManager.onScroll(event);

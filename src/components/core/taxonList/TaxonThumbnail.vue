@@ -38,11 +38,10 @@
                         <span
                             class="vernacularName"
                             :class="{
-                                'cols-2-plus': props.cols >= 2
+                                'cols-2-plus': props.cols >= 2,
                             }"
-                        >{{
-                            props.vernacularName
-                        }}</span>
+                            >{{ props.vernacularName }}</span
+                        >
                     </a>
                 </div>
 
@@ -51,7 +50,7 @@
                     <div
                         class="player"
                         :class="{
-                                'cols-2-plus': props.cols >= 2
+                            'cols-2-plus': props.cols >= 2,
                         }"
                     >
                         <AudioPlayer
@@ -72,7 +71,7 @@
                             <div
                                 class="copyright-icon"
                                 :class="{
-                                    'cols-2-plus': props.cols >= 2
+                                    'cols-2-plus': props.cols >= 2,
                                 }"
                             >
                                 <i
