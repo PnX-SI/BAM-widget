@@ -39,7 +39,7 @@
         "@vitejs/plugin-vue": "^5.2.1",
         "@vitest/coverage-v8": "^4.0.16",
         "unplugin-vue-components": "^28.5.0",
-        "vite": "^6.0.5",
+        "vite": "^6.4.2",
         "vite-plugin-pwa": "^1.1.0",
         "vite-plugin-vue-devtools": "^7.6.8",
         "vitest": "^4.0.16"
