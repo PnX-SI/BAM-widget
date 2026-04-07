@@ -80,7 +80,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             select: 'Quelle auswählen',
             modify: 'Beobachtungsdatenquelle ändern',
             gbifWarning:
-                'Die Anzahl der Beobachtungen und deren Datum basieren auf einer Aggregation der letzten Beobachtungen im ausgewählten Gebiet und sind auf maximal {nbObs} begrenzt.',
+                'Die Suche nach Arten über GBIF ist auf { nbTaxons } Arten begrenzt.',
         },
         gbif: {
             apiEndpoint: 'API-Adresse von GBIF',

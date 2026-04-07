@@ -80,7 +80,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             select: 'Sélectionner une source',
             modify: 'Modifier la source de données des observations',
             gbifWarning:
-                "Le nombre d'observations et leurs dates sont basés sur une agrégation des dernières observations effectuées dans la zone sélectionnée et limitée à {nbObs} maximum.",
+                'La recherche sur le GBIF est limitée à { nbTaxons } espèces.',
         },
         gbif: {
             apiEndpoint: "Adresse de l'API du GBIF",
