@@ -21,6 +21,7 @@
     const progress = ref(0);
     const audioInstance = ref<HTMLAudioElement | null>(null);
     let animationFrameId: number | null = null;
+    const size_px = props.size * 0.7 + 'px';
 
     function updateProgress() {
         if (audioInstance.value && audioInstance.value.duration > 0) {
@@ -109,10 +110,7 @@
             @click.stop="toggleAudio"
             data-testid="Toggle to play animal sound"
         >
-            <i
-                :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
-                :style="`font-size: ${size}px;`"
-            ></i>
+            <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
         </div>
 
         <div v-if="showCredits" class="tooltip">
@@ -167,6 +165,9 @@
         color: white;
         z-index: 2;
         text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        display: block;
+        line-height: 0;
+        font-size: v-bind(size_px) !important;
     }
 
     /* Tooltip */

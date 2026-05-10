@@ -105,17 +105,16 @@
     .detailed {
         container-name: detailed;
         container-type: inline-size;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+        box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
         display: flex;
         justify-content: start;
         flex-direction: column;
-        border-radius: 5px;
+        border-radius: 10px;
         padding-bottom: 1em;
-        padding-top: 1em;
     }
 
     .image-container {
-        margin-top: 1em;
+        margin-top: 0;
         margin-bottom: 1em;
         position: relative;
         display: flex;
@@ -132,12 +131,14 @@
 
     img {
         display: block;
-        width: 80%;
+        width: 100%;
         height: auto;
         aspect-ratio: 1;
         object-fit: cover;
-        border-radius: 15px;
-        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 10px 10px 0px 0px;
+        -webkit-border-radius: 10px 10px 0px 0px;
+        -moz-border-radius: 10px 10px 0px 0px;
+        /* box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); */
         margin: 0 auto;
     }
     .credits {
