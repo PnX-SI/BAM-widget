@@ -71,7 +71,8 @@
         <div class="statistics-wrapper">
             <div class="statistics">
                 <span
-                    >Vu dernièrement le
+                    >Vu dernièrement <br />
+                    le
                     <strong data-testid="Last seen date">{{
                         props.lastSeenDate.toLocaleDateString()
                     }}</strong></span
@@ -79,7 +80,7 @@
             </div>
             <div class="statistics">
                 <span
-                    >Observé
+                    >Observé <br />
                     <strong data-testid="Number of observations">{{
                         props.nbObservations
                     }}</strong>
@@ -93,23 +94,15 @@
             corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
         </div>
         <div class="credits" v-if="props?.picture.source || props.audio">
-            <div class="credits-header">
-                <h5>Credits</h5>
-            </div>
-            <div v-if="props.audio" class="subcredits">
+            <div v-if="props.audio" class="credit-pill">
                 <i class="bi bi-mic"></i>
-                <Credits
-                    :media="props.audio"
-                    link-color="link-dark"
-                    class=""
-                ></Credits>
+                <Credits :media="props.audio" link-color="link-dark"></Credits>
             </div>
-            <div v-if="props?.picture.source" class="subcredits">
+            <div v-if="props?.picture.source" class="credit-pill">
                 <i class="bi bi-camera"></i>
                 <Credits
                     :media="props.picture"
                     link-color="link-dark"
-                    class="ml-1"
                     data-testid="Picture caption"
                 ></Credits>
             </div>
@@ -164,25 +157,34 @@
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     }
     .credits {
-        padding: 1em;
-        strong {
-            color: #666;
-            font-size: 1.4rem;
-        }
-    }
-    .subcredits {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 0.75em 1em 1em;
+        justify-content: space-around;
+    }
+
+    .credit-pill {
+        display: flex;
+        align-items: center;
         gap: 5px;
-        padding-left: 1em;
-        strong {
-            font-size: 1rem;
-        }
+        background-color: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: 0.75rem;
+        color: #666;
+    }
+
+    .credit-pill i {
+        font-size: 0.8rem;
+        color: #999;
     }
     .statistics-wrapper {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: space-around;
         margin-top: 1em;
         column-gap: 0.5em;
     }
@@ -213,6 +215,7 @@
             align-self: center;
         }
     }
+    /* TODO drop display hidden when description is available */
     .description {
         padding: 1em;
         background-color: #efefef;
@@ -221,6 +224,7 @@
         text-align: center;
         border-radius: 5px;
         margin-top: 1em;
+        display: none;
     }
     @container detailed (width < 275px) {
         .statistics-wrapper {
