@@ -240,11 +240,11 @@
     #taxon-list-content {
         display: grid;
         grid-template-columns: repeat(v-bind(rowColsSm), 1fr);
-        gap: 15px;
+        gap: 20px;
         overflow-y: auto;
         overflow-x: hidden;
         height: 100%;
-        padding-top: 1em;
+        padding: 1em 1rem 0;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none;
     }

@@ -2,16 +2,9 @@
     import Credits from '@/components/commons/Credits.vue';
     import { Media } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
-    import { computed } from 'vue';
     import { StatusInfo } from './interface';
 
-    const { nbTaxonPerLine, connector } = ParameterStore.getInstance();
-    const colClasses = computed(() => {
-        const lg = Math.floor(12 / nbTaxonPerLine.value);
-        const md = Math.floor(12 / Math.ceil(nbTaxonPerLine.value / 2));
-
-        return ['col-12', `col-md-${md}`, `col-lg-${lg}`];
-    });
+    const { connector } = ParameterStore.getInstance();
     const props = defineProps<{
         picture: Media;
         audio: Media;
@@ -24,7 +17,7 @@
     }>();
 </script>
 <template>
-    <div :class="[...colClasses, 'detailed']" data-testid="Taxon detailed view">
+    <div class="detailed" data-testid="Taxon detailed view">
         <div class="image-container">
             <div v-if="props.status.status">
                 <StatusIcon
@@ -113,11 +106,13 @@
     .detailed {
         container-name: detailed;
         container-type: inline-size;
-        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
         display: flex;
         justify-content: start;
         flex-direction: column;
         border-radius: 5px;
+        padding-bottom: 1em;
+        padding-top: 1em;
     }
 
     .image-container {
