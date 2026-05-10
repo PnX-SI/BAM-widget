@@ -22,7 +22,7 @@
         style="z-index: 500"
     >
         <template #target>
-            <a style="color: white; text-decoration: underline" class="ms-1"
+            <a style="color: inherit; text-decoration: underline" class="ms-1"
                 ><i class="bi bi-database-fill"></i
             ></a>
         </template>
