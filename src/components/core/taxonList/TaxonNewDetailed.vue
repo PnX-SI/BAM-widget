@@ -143,13 +143,14 @@
     }
 
     img {
-        display: flex;
-        width: 150px;
-        height: 150px;
+        display: block;
+        width: 80%;
+        height: auto;
         aspect-ratio: 1;
         object-fit: cover;
         border-radius: 15px;
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
     }
     .credits {
         display: flex;
