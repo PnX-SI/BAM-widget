@@ -266,7 +266,7 @@
         width: 100%;
         max-width: 100%;
     }
-    
+
     /* Make TaxonListMessages span all columns and center */
     #taxon-list-content > :deep(.message) {
         grid-column: 1 / -1;
@@ -274,7 +274,7 @@
         justify-content: center;
         align-items: center;
     }
-    
+
     #taxon-list-content ::-webkit-scrollbar {
         display: none; /* Safari and Chrome */
     }
