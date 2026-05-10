@@ -97,7 +97,7 @@
                 <h5>Credits</h5>
             </div>
             <div v-if="props.audio" class="subcredits">
-                <strong>Audio :</strong>
+                <i class="bi bi-mic"></i>
                 <Credits
                     :media="props.audio"
                     link-color="link-dark"
@@ -122,13 +122,14 @@
         container-type: inline-size;
         box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
         display: flex;
-        justify-content: space-between;
+        justify-content: start;
         flex-direction: column;
         border-radius: 5px;
     }
 
     .image-container {
         margin-top: 1em;
+        margin-bottom: 1em;
         position: relative;
         display: flex;
         justify-content: center;
@@ -159,7 +160,7 @@
         height: 150px;
         aspect-ratio: 1;
         object-fit: cover;
-        border-radius: 50%;
+        border-radius: 15px;
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     }
     .credits {
