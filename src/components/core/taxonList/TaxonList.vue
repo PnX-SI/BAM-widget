@@ -164,7 +164,7 @@
                 class="taxon-list-scroll-wrapper"
                 :class="{ 'pt-0': !filtersOnList }"
             >
-                <div id="taxon-list-content" class="row g-3" @scroll="onScroll">
+                <div id="taxon-list-content" @scroll="onScroll">
                     <TaxonListMessages
                         :loading-error="loadingError"
                         :loading-observations="loadingObservations"
@@ -238,12 +238,33 @@
     }
 
     #taxon-list-content {
+        display: grid;
+        grid-template-columns: repeat(v-bind(rowColsSm), 1fr);
+        gap: 15px;
         overflow-y: auto;
         overflow-x: hidden;
         height: 100%;
         padding-top: 1em;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none;
+    }
+
+    @media (min-width: 768px) {
+        #taxon-list-content {
+            grid-template-columns: repeat(v-bind(rowColsMd), 1fr);
+        }
+    }
+
+    @media (min-width: 992px) {
+        #taxon-list-content {
+            grid-template-columns: repeat(v-bind(rowColsLg), 1fr);
+        }
+    }
+
+    /* Disable Bootstrap column sizing since we're using Grid */
+    #taxon-list-content > :deep(*) {
+        width: 100%;
+        max-width: 100%;
     }
     #taxon-list-content ::-webkit-scrollbar {
         display: none; /* Safari and Chrome */
