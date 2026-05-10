@@ -31,5 +31,6 @@
     .status-btn {
         border: 1px solid #fff;
         border-radius: 50%;
+        aspect-ratio: 1;
     }
 </style>

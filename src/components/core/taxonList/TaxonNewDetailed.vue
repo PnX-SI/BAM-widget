@@ -19,12 +19,6 @@
 <template>
     <div class="detailed" data-testid="Taxon detailed view">
         <div class="image-container">
-            <div v-if="props.status.status">
-                <StatusIcon
-                    :status="props.status.status"
-                    :color="props.status.color"
-                ></StatusIcon>
-            </div>
             <FullScreenImage
                 :media="props.picture"
                 :alt="props.picture?.urlSource"
@@ -45,6 +39,12 @@
         </div>
         <div class="names">
             <div class="vernacular-name">
+                <StatusIcon
+                    v-if="props.status.status"
+                    :status="props.status.status"
+                    :color="props.status.color"
+                    :size="'1.2rem'"
+                ></StatusIcon>
                 <strong data-testid="Vernacular name">{{
                     props.vernacularName
                 }}</strong>
@@ -129,17 +129,6 @@
         left: 50%;
         transform: translateX(-50%) translateY(50%);
         z-index: 2;
-    }
-    :deep(.status-btn) {
-        position: absolute;
-        top: 0px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-40%);
-        z-index: 2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
     }
 
     img {
