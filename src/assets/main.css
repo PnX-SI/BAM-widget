@@ -1,5 +1,19 @@
 @import './import.css';
 
+html,
+body {
+    font-family:
+        'Source Sans 3',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        sans-serif !important;
+}
+
 .card-header {
     border-radius: 0 !important;
 }
