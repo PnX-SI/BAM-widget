@@ -157,6 +157,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             noResultsText: 'Aucun résultat trouvé',
         },
         searchTaxon: 'Recherche une espèce',
+        globalConservationStatus: 'Statut de conservation mondial',
         IUCNStatus: {
             //based on https://uicn.fr/wp-content/uploads/2016/06/UICN_2012_Categories_et_criteres_Liste_rouge.pdf
             // Some translation are not available on the official document

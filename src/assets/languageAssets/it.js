@@ -157,6 +157,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             noResultsText: 'Nessun risultato trovato',
         },
         searchTaxon: 'Cerca una specie',
+        globalConservationStatus: 'Stato di conservazione mondiale',
     },
 };
 

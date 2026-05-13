@@ -151,6 +151,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             noResultsText: 'Ningún resultado encontrado',
         },
         searchTaxon: 'Buscar especie',
+        globalConservationStatus: 'Estado de conservación mundial',
         IUCNStatus: {
             //based on https://portals.iucn.org/library/sites/library/files/documents/RL-2001-001-2nd-Es.pdf
             // Some translation are not available on the official document

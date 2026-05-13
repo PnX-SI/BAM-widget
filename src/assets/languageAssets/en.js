@@ -157,6 +157,7 @@ You can also **share your results 📤** to collaborate with other users.
             noResultsText: 'No results found',
         },
         searchTaxon: 'Search a species',
+        globalConservationStatus: 'Global conservation status',
     },
     IUCNStatus: {
         NA: 'Not Applicable ',

@@ -156,6 +156,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             noResultsText: 'Nenalezeny žádné výsledky',
         },
         searchTaxon: 'Hledání druhu',
+        globalConservationStatus: 'Světový stav ochrany',
     },
 };
 

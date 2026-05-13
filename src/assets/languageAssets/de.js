@@ -156,6 +156,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             noResultsText: 'Keine Ergebnisse gefunden',
         },
         searchTaxon: 'Eine Art suchen',
+        globalConservationStatus: 'Weltweiter Erhaltungszustand',
     },
 };
 
