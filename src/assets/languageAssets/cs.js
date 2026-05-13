@@ -157,6 +157,19 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         },
         searchTaxon: 'Hledání druhu',
         globalConservationStatus: 'Světový stav ochrany',
+        IUCNStatus: {
+            NA: 'Nepoužitelné',
+            NE: 'Nehodnoceno',
+            DD: 'Nedostatek dat',
+            LC: 'Málo dotčený',
+            NT: 'Téměř ohrožený',
+            VU: 'Zranitelný',
+            EN: 'Ohrožený',
+            CR: 'Kriticky ohrožený',
+            RE: 'Regionálně vyhynulý',
+            EW: 'Vyhynulý ve volné přírodě',
+            EX: 'Vyhynulý',
+        },
     },
 };
 

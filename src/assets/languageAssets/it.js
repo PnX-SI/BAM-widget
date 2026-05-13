@@ -158,6 +158,19 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         },
         searchTaxon: 'Cerca una specie',
         globalConservationStatus: 'Stato di conservazione mondiale',
+        IUCNStatus: {
+            NA: 'Non applicabile',
+            NE: 'Non valutato',
+            DD: 'Dati insufficienti',
+            LC: 'Minor preoccupazione',
+            NT: 'Quasi minacciato',
+            VU: 'Vulnerabile',
+            EN: 'In pericolo',
+            CR: 'In pericolo critico',
+            RE: 'Estinto a livello regionale',
+            EW: 'Estinto in natura',
+            EX: 'Estinto',
+        },
     },
 };
 
