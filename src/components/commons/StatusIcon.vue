@@ -30,18 +30,22 @@
             ></div>
         </template>
         <strong style=""
-            ><a :href="linkIUCN">{{
-                $t('globalConservationStatus')
-            }}</a></strong
+            ><a target="_blank" :href="linkIUCN">
+                {{ $t('globalConservationStatus') }}
+                <i class="bi bi-info-circle"></i></a></strong
         ><br />
         {{ $t('IUCNStatus.' + props.status) }}
     </BPopover>
 </template>
 
-<style>
+<style scoped>
     .status-btn {
         border: 1px solid #bfbfbf;
         border-radius: 50%;
         aspect-ratio: 1;
+    }
+    a {
+        color: inherit;
+        text-decoration: none;
     }
 </style>
