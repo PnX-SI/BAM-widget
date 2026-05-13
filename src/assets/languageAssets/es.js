@@ -116,6 +116,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         },
         widgetType: {
             list: 'Lista',
+            map: 'Mapa',
             default: 'Carta Lista',
         },
         numberOfTaxonPerLine: 'Número de especies por línea',

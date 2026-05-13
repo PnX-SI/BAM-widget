@@ -121,6 +121,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         },
         widgetType: {
             list: 'Liste',
+            map: 'Karte',
             default: 'Karte und Liste',
         },
         numberOfTaxonPerLine: 'Anzahl der Arten pro Zeile',

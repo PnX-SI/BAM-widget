@@ -121,6 +121,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         },
         widgetType: {
             list: 'Liste',
+            map: 'Carte',
             default: 'Carte Liste',
         },
         numberOfTaxonPerLine: "Nombre d'espèces par ligne",

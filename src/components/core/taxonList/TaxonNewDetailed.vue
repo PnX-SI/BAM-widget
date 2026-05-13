@@ -117,7 +117,7 @@
 
     .image-container {
         margin-top: 0;
-        margin-bottom: 1em;
+        margin-bottom: 1.5em;
         position: relative;
         display: flex;
         justify-content: center;
@@ -125,7 +125,7 @@
 
     .audio-overlay {
         position: absolute;
-        bottom: 10px;
+        bottom: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(50%);
         z-index: 2;

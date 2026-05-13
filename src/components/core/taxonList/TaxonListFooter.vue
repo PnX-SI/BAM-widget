@@ -88,11 +88,6 @@
         width: auto;
     }
 
-    #data-source-credits:hover {
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 8px;
-        transform: translateY(-1px);
-    }
-
     #data-source-credits a {
         text-decoration: underline;
         transition: opacity 0.3s ease;

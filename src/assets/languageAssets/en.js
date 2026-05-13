@@ -122,6 +122,7 @@ You can also **share your results 📤** to collaborate with other users.
         },
         widgetType: {
             list: 'List',
+            map: 'Map',
             default: 'Map List',
         },
         numberOfTaxonPerLine: 'Number of species per line',

@@ -121,6 +121,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         },
         widgetType: {
             list: 'Seznam',
+            map: 'Mapa',
             default: 'Mapa a seznam',
         },
         numberOfTaxonPerLine: 'Počet druhů na řádek',
