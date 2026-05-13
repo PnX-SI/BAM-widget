@@ -106,7 +106,8 @@
     .detailed {
         container-name: detailed;
         container-type: inline-size;
-        box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+        /* box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1); */
+        border: 1px solid #efefef;
         display: flex;
         justify-content: start;
         flex-direction: column;
@@ -199,6 +200,8 @@
             gap: 0.5em;
             align-items: center;
             align-self: center;
+            padding-right: 0.5em;
+            padding-left: 0.5em;
         }
     }
     /* TODO drop display hidden when description is available */
