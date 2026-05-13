@@ -50,11 +50,12 @@
                 }}</strong>
                 <a
                     :href="props.urlDetailPage"
+                    target="_blank"
                     data-testid="Taxon detail redirect link"
                 >
                     <span class="badge text-bg-secondary ml-1">
-                        {{ connector.name }}</span
-                    >
+                        {{ connector.name }} <i class="bi bi-link-45deg"></i
+                    ></span>
                 </a>
             </div>
             <em data-testid="Scientific name">{{
