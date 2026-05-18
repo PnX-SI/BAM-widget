@@ -24,6 +24,11 @@
     const locationName = ref(null);
     const loadingLocation = ref(false);
 
+    // Sync expanded state with parameter store
+    watch(isExpanded, (newVal) => {
+        parameterStore.isFooterExpanded.value = newVal;
+    });
+
     // Fetch location name when WKT changes
     async function updateLocationName() {
         if (!wkt.value || wkt.value.trim() === '') {

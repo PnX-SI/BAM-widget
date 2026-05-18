@@ -4,7 +4,7 @@
     import TaxonList from '@/components/core/taxonList/TaxonList.vue';
     import Map from './core/map/Map.vue';
     import ParameterStore from '@/lib/parameterStore';
-    const { isMobile } = ParameterStore.getInstance();
+    const { isMobile, isFooterExpanded } = ParameterStore.getInstance();
     const props = defineProps({
         height: {
             type: String,
@@ -40,6 +40,7 @@
 
             <button
                 class="toggle-btn"
+                :class="{ elevated: isFooterExpanded }"
                 @click="showMap = !showMap"
                 data-testid="Mobile map list toggle"
             >
@@ -67,11 +68,17 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         font-weight: 500;
         cursor: pointer;
-        transition: all 0.2s ease-in-out;
+        transition:
+            bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            all 0.2s ease-in-out;
         z-index: 430;
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .toggle-btn.elevated {
+        bottom: 290px;
     }
     .toggle-btn:hover {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);

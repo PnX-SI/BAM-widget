@@ -147,6 +147,12 @@ class ParameterStore {
      */
     filtersOnList: Ref<boolean> = ref(false);
 
+    /**
+     * If the footer is expanded.
+     * @type {Ref<boolean>}
+     */
+    isFooterExpanded: Ref<boolean> = ref(false);
+
     private constructor() {
         const { locale, availableLocales } = useI18n();
         const route = useRoute();
@@ -180,6 +186,7 @@ class ParameterStore {
         this.setupWatchers(router, route);
 
         this.isMobile = ref(isRunningOnMobile());
+        this.isFooterExpanded = ref(false);
 
         window.addEventListener('resize', () => {
             this.isMobile.value = isRunningOnMobile();
