@@ -203,8 +203,6 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding-left: 1em;
-        padding-right: 1em;
     }
 
     #taxon-list-filter {
@@ -244,7 +242,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         height: 100%;
-        padding: 1em 1rem;
+        padding: 0 1rem;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none;
     }
