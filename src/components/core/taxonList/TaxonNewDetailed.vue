@@ -65,19 +65,19 @@
         <div class="statistics-wrapper">
             <div class="statistics">
                 <span
-                    >{{ $t('taxon.lastSeen') }} <br />
-                    <strong data-testid="Last seen date">{{
-                        props.lastSeenDate.toLocaleDateString()
-                    }}</strong></span
-                >
-            </div>
-            <div class="statistics">
-                <span
                     >{{ $t('taxon.observed') }} <br />
                     <strong data-testid="Number of observations">{{
                         props.nbObservations
                     }}</strong>
                     {{ $t('taxon.times') }}</span
+                >
+            </div>
+            <div class="statistics">
+                <span
+                    >{{ $t('taxon.lastSeen') }} <br />
+                    <strong data-testid="Last seen date">{{
+                        props.lastSeenDate.toLocaleDateString()
+                    }}</strong></span
                 >
             </div>
         </div>
