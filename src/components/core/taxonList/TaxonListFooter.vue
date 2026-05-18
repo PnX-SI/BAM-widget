@@ -108,7 +108,7 @@
                     >
                         <img
                             src="https://geonature.fr/documents/autres/BAM/BAM-logo.png"
-                            height="30px"
+                            height="24px"
                             class="me-1"
                             alt="BAM logo"
                         />
@@ -180,11 +180,11 @@
     }
 
     .footer-header {
-        padding: 12px 20px;
+        padding: 6px 12px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 8px;
         cursor: pointer;
         user-select: none;
     }
@@ -192,7 +192,7 @@
     .footer-main-content {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
         flex-wrap: wrap;
         flex: 1;
         justify-content: center;
@@ -262,12 +262,12 @@
 
     @media (max-width: 500px) {
         .footer-header {
-            padding: 10px 16px;
+            padding: 4px 12px;
             font-size: 14px;
         }
 
         .footer-main-content {
-            gap: 4px;
+            gap: 3px;
         }
 
         .footer-expanded-content {
