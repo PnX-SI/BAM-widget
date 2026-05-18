@@ -68,24 +68,19 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 12px 16px;
+        padding: 0;
     }
 
     #data-source-credits {
         background: white;
-        border-radius: 50px;
-        padding: 10px 20px;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        display: inline-flex;
+        border-radius: 0 0 8px 8px;
+        padding: 12px 20px;
+        display: flex;
         align-items: center;
         gap: 6px;
         flex-wrap: wrap;
         justify-content: center;
-        transition:
-            box-shadow 0.3s ease,
-            transform 0.3s ease;
-        max-width: min(95%, 800px);
-        width: auto;
+        width: 100%;
     }
 
     #data-source-credits a {
@@ -112,12 +107,8 @@
     }
 
     @media (max-width: 500px) {
-        .footer-wrapper {
-            padding: 10px 12px;
-        }
-
         #data-source-credits {
-            padding: 8px 16px;
+            padding: 10px 16px;
             font-size: 14px;
             gap: 4px;
         }

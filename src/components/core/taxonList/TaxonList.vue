@@ -182,7 +182,6 @@
             </div>
 
             <TaxonListFooter
-                class="overlap-footer"
                 :loading-done="wkt.length && !loadingObservations"
                 :number-of-species="speciesList.length"
                 :datasets="datasets"
@@ -232,19 +231,6 @@
         pointer-events: auto; /* Re-enable clicks on child elements (filters) */
     }
 
-    .overlap-footer {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 10;
-        pointer-events: none;
-    }
-
-    .overlap-footer > * {
-        pointer-events: auto; /* Re-enable clicks on child elements (footer links) */
-    }
-
     .taxon-list-scroll-wrapper {
         flex-grow: 1;
         overflow: hidden;
@@ -258,7 +244,7 @@
         overflow-y: auto;
         overflow-x: hidden;
         height: 100%;
-        padding: 1em 1rem 80px;
+        padding: 1em 1rem;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none;
     }
