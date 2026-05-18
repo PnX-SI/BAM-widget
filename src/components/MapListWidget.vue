@@ -40,13 +40,12 @@
 
             <button
                 class="toggle-btn"
-                :class="{ map: !showMap, ['toggle-btn']: true }"
                 @click="showMap = !showMap"
-                :title="showMap ? $t('widgetType.list') : $t('widgetType.map')"
                 data-testid="Mobile map list toggle"
             >
                 <i v-if="showMap" class="fa-solid fa-list"></i>
                 <i v-else class="fa-solid fa-map"></i>
+                {{ showMap ? 'Liste' : 'Carte' }}
             </button>
         </div>
     </div>
@@ -57,7 +56,7 @@
     }
     .toggle-btn {
         position: fixed;
-        bottom: 10px;
+        bottom: 70px;
         left: 50%;
         transform: translateX(-50%);
         background-color: white;
@@ -73,17 +72,6 @@
         display: flex;
         align-items: center;
         gap: 8px;
-    }
-    .toggle-btn.map {
-        left: 12%;
-        bottom: 12px;
-        padding: 10px;
-        width: 43px;
-        height: 43px;
-        display: flex;
-        /* align-items: center; */
-        align-content: center;
-        justify-content: center;
     }
     .toggle-btn:hover {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
