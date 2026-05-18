@@ -147,6 +147,8 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         Plantae: 'Rostlina',
         or: 'nebo',
         in: 'v',
+        near: 'poblíž',
+        searchAreaNear: 'Oblast hledání poblíž',
         datasetList: 'přiřazené datové sady',
         observation: 'pozorování',
         observations: 'pozorování',

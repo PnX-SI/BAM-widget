@@ -18,7 +18,7 @@ const config = {
     customDetailPage: null,
     nbTaxonPerLine: 2,
     nbDisplayedSpecies: null,
-    primaryColor: 'aaa',
+    primaryColor: '444',
     filtersOnList: true,
 };
 

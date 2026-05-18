@@ -148,6 +148,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
 
         or: 'ou',
         in: 'dans',
+        near: 'près de',
+        searchAreaNear: 'Zone de recherche près de',
         datasetList: 'jeux de données associés',
         observation: 'observation',
         observations: 'observations',

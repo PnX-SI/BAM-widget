@@ -147,6 +147,8 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         Plantae: 'Pflanze',
         or: 'oder',
         in: 'in',
+        near: 'nahe',
+        searchAreaNear: 'Suchbereich in der Nähe von',
         datasetList: 'zugehörige Datensätze',
         observation: 'Beobachtung',
         observations: 'Beobachtungen',

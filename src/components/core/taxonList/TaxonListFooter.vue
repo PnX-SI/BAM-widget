@@ -1,9 +1,10 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
     import DatasetList from './DatasetList.vue';
+    import { getCentroidFromWKT, reverseGeocode } from '@/lib/utils';
     const parameterStore = ParameterStore.getInstance();
-    const { connector, primaryColor } = parameterStore;
+    const { connector, primaryColor, wkt, lang } = parameterStore;
 
     const props = defineProps({
         loadingDone: {
@@ -20,6 +21,40 @@
     const isExpanded = ref(false);
     const touchStartY = ref(0);
     const touchEndY = ref(0);
+    const locationName = ref(null);
+    const loadingLocation = ref(false);
+
+    // Fetch location name when WKT changes
+    async function updateLocationName() {
+        if (!wkt.value || wkt.value.trim() === '') {
+            locationName.value = null;
+            return;
+        }
+
+        loadingLocation.value = true;
+
+        try {
+            const center = getCentroidFromWKT(wkt.value);
+            if (center) {
+                const place = await reverseGeocode(
+                    center.lat,
+                    center.lon,
+                    lang.value
+                );
+                locationName.value = place;
+            } else {
+                locationName.value = null;
+            }
+        } catch (error) {
+            console.error('Error fetching location name:', error);
+            locationName.value = null;
+        } finally {
+            loadingLocation.value = false;
+        }
+    }
+
+    // Watch for WKT changes
+    watch(wkt, updateLocationName, { immediate: true });
 
     function toggleExpand() {
         isExpanded.value = !isExpanded.value;
@@ -82,6 +117,10 @@
                         >{{ props.numberOfSpecies }}
                         {{ $t('taxon.taxonFound') }}</strong
                     >
+                    <template v-if="locationName">
+                        {{ $t('near') }}
+                        <strong>{{ locationName }}</strong>
+                    </template>
                     {{ $t('in') }}
                     <a
                         :href="connector.getSourceUrl()"

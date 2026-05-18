@@ -142,6 +142,8 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         Plantae: 'Planta',
         or: 'o',
         in: 'en',
+        near: 'cerca de',
+        searchAreaNear: 'Área de búsqueda cerca de',
         datasetList: 'conjuntos de datos relacionados',
         observation: 'observación',
         observations: 'observaciones',

@@ -148,6 +148,8 @@ You can also **share your results 📤** to collaborate with other users.
         Plantae: 'Plant',
         or: 'or',
         in: 'in',
+        near: 'near',
+        searchAreaNear: 'Search area near',
         datasetList: 'associated datasets',
         observation: 'observation',
         observations: 'observations',

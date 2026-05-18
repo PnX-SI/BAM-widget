@@ -148,6 +148,8 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         Plantae: 'Pianta',
         or: 'o',
         in: 'in',
+        near: 'vicino a',
+        searchAreaNear: 'Area di ricerca vicino a',
         datasetList: 'set di dati associati',
         observation: 'osservazione',
         observations: 'osservazioni',
