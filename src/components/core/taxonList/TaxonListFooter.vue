@@ -165,11 +165,14 @@
         border-radius: 0 0 8px 8px;
         border: 1px solid #dfdfdf;
         width: 100%;
-        max-height: 60px;
         overflow: hidden;
         transition: max-height 0.3s ease;
         display: flex;
         flex-direction: column;
+    }
+
+    #data-source-credits:not(.expanded) {
+        max-height: fit-content;
     }
 
     #data-source-credits.expanded {
