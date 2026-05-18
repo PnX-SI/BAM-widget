@@ -40,7 +40,8 @@
 
 <style scoped>
     .status-btn {
-        border: 1px solid #bfbfbf;
+        border: 1px solid
+            v-bind("props.status === 'NE' ? '#bfbfbf' : 'transparent'");
         border-radius: 50%;
         aspect-ratio: 1;
     }
