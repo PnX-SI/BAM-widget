@@ -135,19 +135,21 @@
                 </button>
             </div>
 
-            <div class="footer-expanded-content" v-show="isExpanded">
-                <div
-                    v-if="connector.sourceDetailMessage()"
-                    class="source-detail-message"
-                >
-                    <i class="bi bi-info-circle me-2"></i>
-                    {{ connector.sourceDetailMessage() }}
+            <transition name="fade">
+                <div class="footer-expanded-content" v-show="isExpanded">
+                    <div
+                        v-if="connector.sourceDetailMessage()"
+                        class="source-detail-message"
+                    >
+                        <i class="bi bi-info-circle me-2"></i>
+                        {{ connector.sourceDetailMessage() }}
+                    </div>
+                    <DatasetList
+                        v-if="props.datasets.length > 0"
+                        :datasets="props.datasets"
+                    ></DatasetList>
                 </div>
-                <DatasetList
-                    v-if="props.datasets.length > 0"
-                    :datasets="props.datasets"
-                ></DatasetList>
-            </div>
+            </transition>
         </div>
     </div>
 </template>
@@ -166,17 +168,18 @@
         border: 1px solid #dfdfdf;
         width: 100%;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
     }
 
     #data-source-credits:not(.expanded) {
-        max-height: fit-content;
+        max-height: 50px;
     }
 
     #data-source-credits.expanded {
-        max-height: 400px;
+        max-height: 500px;
+        overflow-y: auto;
     }
 
     .footer-header {
@@ -225,6 +228,16 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.3s ease;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
     }
 
     .source-detail-message {
