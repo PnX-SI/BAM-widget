@@ -138,17 +138,16 @@
 
     #data-source-credits {
         background: white;
-        border-radius: 0 0 8px 8px;
-        border: 1px solid #dfdfdf;
         width: 100%;
         overflow: hidden;
         transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
+        border-top: 1px solid #bdc3c7;
     }
 
     #data-source-credits:not(.expanded) {
-        max-height: 50px;
+        max-height: 6em;
     }
 
     #data-source-credits.expanded {
@@ -250,7 +249,7 @@
     @media (max-width: 500px) {
         .footer-header {
             padding: 4px 8px;
-            font-size: 14px;
+            font-size: 1rem;
         }
 
         .footer-main-content {
@@ -263,10 +262,7 @@
 
         .expand-toggle {
             font-size: 1.4em;
-            padding: 8px 12px;
-            margin: -8px -8px -8px 0;
-            min-width: 44px;
-            min-height: 44px;
+            margin-right: 0.5em;
         }
     }
 </style>

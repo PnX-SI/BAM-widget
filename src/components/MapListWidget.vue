@@ -78,7 +78,7 @@
     }
 
     .toggle-btn.elevated {
-        bottom: 290px;
+        bottom: 52svh;
     }
     .toggle-btn:hover {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
