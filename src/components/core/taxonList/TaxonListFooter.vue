@@ -19,8 +19,6 @@
     });
 
     const isExpanded = ref(false);
-    const touchStartY = ref(0);
-    const touchEndY = ref(0);
     const locationName = ref(null);
     const loadingLocation = ref(false);
 
@@ -64,39 +62,10 @@
     function toggleExpand() {
         isExpanded.value = !isExpanded.value;
     }
-
-    function handleTouchStart(event) {
-        touchStartY.value = event.touches[0].clientY;
-    }
-
-    function handleTouchMove(event) {
-        touchEndY.value = event.touches[0].clientY;
-    }
-
-    function handleTouchEnd() {
-        const swipeDistance = touchStartY.value - touchEndY.value;
-        const minSwipeDistance = 30;
-
-        if (swipeDistance > minSwipeDistance && !isExpanded.value) {
-            // Swipe up to expand
-            isExpanded.value = true;
-        } else if (swipeDistance < -minSwipeDistance && isExpanded.value) {
-            // Swipe down to collapse
-            isExpanded.value = false;
-        }
-
-        touchStartY.value = 0;
-        touchEndY.value = 0;
-    }
 </script>
 
 <template>
-    <div
-        class="footer-wrapper"
-        @touchstart="handleTouchStart"
-        @touchmove="handleTouchMove"
-        @touchend="handleTouchEnd"
-    >
+    <div class="footer-wrapper">
         <div
             v-if="props.loadingDone"
             id="data-source-credits"
@@ -280,7 +249,7 @@
 
     @media (max-width: 500px) {
         .footer-header {
-            padding: 4px 12px;
+            padding: 4px 8px;
             font-size: 14px;
         }
 
@@ -293,7 +262,11 @@
         }
 
         .expand-toggle {
-            font-size: 1em;
+            font-size: 1.4em;
+            padding: 8px 12px;
+            margin: -8px -8px -8px 0;
+            min-width: 44px;
+            min-height: 44px;
         }
     }
 </style>
