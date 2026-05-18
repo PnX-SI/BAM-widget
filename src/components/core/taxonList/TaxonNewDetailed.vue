@@ -190,6 +190,7 @@
         flex-direction: column;
         strong {
             font-size: 1.2em;
+            white-space: nowrap;
         }
         em {
             color: #888;
@@ -202,6 +203,17 @@
             align-self: center;
             padding-right: 0.5em;
             padding-left: 0.5em;
+            max-width: 100%;
+
+            strong {
+                flex: 1 1 auto;
+                min-width: 0;
+                overflow: hidden;
+            }
+
+            a {
+                flex-shrink: 0;
+            }
         }
     }
     /* TODO drop display hidden when description is available */
@@ -216,12 +228,20 @@
         display: none;
     }
     @container detailed (width < 275px) {
+        .names strong {
+            font-size: 1em;
+        }
         .statistics-wrapper {
             flex-direction: column;
             row-gap: 0.5em;
         }
         .statistics {
             width: 100%;
+        }
+    }
+    @container detailed (width < 230px) {
+        .names strong {
+            font-size: 0.9em;
         }
     }
 </style>
