@@ -169,6 +169,7 @@
         display: flex;
         flex-direction: column;
         border-top: 1px solid #bdc3c7;
+        border-radius: 15px 15px 0 0;
     }
 
     #data-source-credits:not(.expanded) {
