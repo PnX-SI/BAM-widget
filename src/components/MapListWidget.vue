@@ -4,7 +4,8 @@
     import TaxonList from '@/components/core/taxonList/TaxonList.vue';
     import Map from './core/map/Map.vue';
     import ParameterStore from '@/lib/parameterStore';
-    const { isMobile, isFooterExpanded } = ParameterStore.getInstance();
+    const { isMobile, isFooterExpanded, expandedFooterSize } =
+        ParameterStore.getInstance();
     const props = defineProps({
         height: {
             type: String,
@@ -78,7 +79,7 @@
     }
 
     .toggle-btn.elevated {
-        bottom: 52svh;
+        bottom: v-bind(expandedFooterSize + 20 + 'px');
     }
     .toggle-btn:hover {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);

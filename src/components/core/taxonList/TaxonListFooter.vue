@@ -1,10 +1,13 @@
 <script setup>
-    import { ref, watch } from 'vue';
+    import { ref, watch, useTemplateRef } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
     import DatasetList from './DatasetList.vue';
     import { getCentroidFromWKT, reverseGeocode } from '@/lib/utils';
+    import { useMutationObserver } from '@vueuse/core';
+
     const parameterStore = ParameterStore.getInstance();
-    const { connector, primaryColor, wkt, lang } = parameterStore;
+    const { connector, primaryColor, wkt, lang, expandedFooterSize } =
+        parameterStore;
 
     const props = defineProps({
         loadingDone: {
@@ -21,6 +24,8 @@
     const isExpanded = ref(false);
     const locationName = ref(null);
     const loadingLocation = ref(false);
+
+    const footerElement = useTemplateRef('data-source-credits');
 
     // Sync expanded state with parameter store
     watch(isExpanded, (newVal) => {
@@ -59,9 +64,28 @@
     // Watch for WKT changes
     watch(wkt, updateLocationName, { immediate: true });
 
+    /**
+     * Toggle mechanism for expanding/collapsing the footer content
+     */
+
     function toggleExpand() {
         isExpanded.value = !isExpanded.value;
     }
+
+    function getFooterSize() {
+        const f2 = footerElement.value;
+        return f2 ? f2.scrollHeight : 0;
+    }
+    useMutationObserver(
+        () => footerElement.value,
+        (mutations) => {
+            expandedFooterSize.value = getFooterSize();
+        },
+        {
+            attributes: true,
+            subtree: true,
+        }
+    );
 </script>
 
 <template>
@@ -72,6 +96,7 @@
             data-testid="Data source credits"
             :style="{ color: '#' + primaryColor }"
             :class="{ expanded: isExpanded }"
+            ref="data-source-credits"
         >
             <div class="footer-header" @click="toggleExpand">
                 <div class="footer-main-content">

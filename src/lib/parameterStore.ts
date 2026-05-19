@@ -153,6 +153,12 @@ class ParameterStore {
      */
     isFooterExpanded: Ref<boolean> = ref(false);
 
+    /**
+     * Expanded size of the footer
+     * @type {Ref<number>}
+     */
+    expandedFooterSize: Ref<number> = ref(0);
+
     private constructor() {
         const { locale, availableLocales } = useI18n();
         const route = useRoute();
@@ -333,7 +339,13 @@ class ParameterStore {
 
     public getParams(): Record<string, any> {
         const params: Record<string, any> = {};
-        const banlist = ['isMobile', 'isSearchOnAPIAvailable'];
+        const banlist = [
+            'isMobile',
+            'isSearchOnAPIAvailable',
+            'expandedFooterSize',
+            'isFooterExpanded',
+            'filtersOnList',
+        ];
         Object.entries(this).forEach(([key, value]) => {
             if (
                 value?.value !== undefined &&
