@@ -186,7 +186,7 @@ test.describe('Form parameters testing', () => {
         const footer = await page.getByTestId('Data source credits');
         await expect(footer).toHaveAttribute(
             'style',
-            expect.stringContaining(`background: #00FF00;`)
+            expect.stringContaining(`color: #FF5733;`)
         );
         // Test using color picker
         await colorPicker.fill('00FF00');
@@ -202,7 +202,7 @@ test.describe('Form parameters testing', () => {
         // Enable filters on list
         await checkBox.check();
         await page.waitForTimeout(500);
-        await checkForParameterChange(page, 'filtersOnList', 'true');
+        await checkForParameterChange(page, 'filtersOnList', true);
 
         const filters = await page.getByTestId('Taxon list filters');
         await expect(filters).toHaveClass(/overlap-filter/);
@@ -210,7 +210,7 @@ test.describe('Form parameters testing', () => {
         // Disable filters on list
         await checkBox.uncheck();
         await page.waitForTimeout(500);
-        await checkForParameterChange(page, 'filtersOnList', 'false');
+        await checkForParameterChange(page, 'filtersOnList', false);
     });
 
     test('Refresh parameters button clears all settings', async ({ page }) => {

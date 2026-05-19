@@ -344,7 +344,6 @@ class ParameterStore {
             'isSearchOnAPIAvailable',
             'expandedFooterSize',
             'isFooterExpanded',
-            'filtersOnList',
         ];
         Object.entries(this).forEach(([key, value]) => {
             if (
