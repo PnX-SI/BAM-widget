@@ -2,6 +2,7 @@
     import Credits from './Credits.vue';
     import { Media } from '@/lib/models';
     import { ref, onMounted, onBeforeUnmount } from 'vue';
+    import copyrightIcon from '@/assets/images/copyright.svg';
 
     const props = withDefaults(
         defineProps<{
@@ -40,7 +41,7 @@
             :style="{ width: size + 'px', height: size + 'px' }"
             @click="toggleTooltip"
         >
-            <i class="bi bi-c-circle"></i>
+            <img :src="copyrightIcon" class="copyright-svg" alt="Copyright" />
         </div>
         <div
             class="copyright-tooltip"
@@ -59,22 +60,24 @@
     }
 
     .copyright-icon {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     .copyright-icon:hover {
-        background-color: rgba(0, 0, 0, 0.7);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
     }
 
-    .copyright-icon i {
-        color: white;
-        font-size: 0.9rem;
+    .copyright-svg {
+        width: 70%;
+        height: 70%;
+        filter: invert(0.4) brightness(0.8);
     }
 
     .copyright-tooltip {
