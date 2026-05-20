@@ -96,93 +96,6 @@ function isRunningOnMobile() {
     return check;
 }
 
-/**
- * Calculate the centroid of a WKT geometry
- * @param wkt - The WKT string
- * @returns The centroid coordinates {lat, lon} or null if invalid
- */
-function getCentroidFromWKT(wkt: string): { lat: number; lon: number } | null {
-    if (!wkt || wkt.trim() === '') {
-        return null;
-    }
-
-    try {
-        const geojson = parse(wkt);
-        if (!geojson) {
-            return null;
-        }
-
-        const center = centroid(geojson);
-        const [lon, lat] = center.geometry.coordinates;
-
-        return { lat, lon };
-    } catch (error) {
-        console.error('Error calculating centroid from WKT:', error);
-        return null;
-    }
-}
-
-/**
- * Perform reverse geocoding to get place name from coordinates
- * @param lat - Latitude
- * @param lon - Longitude
- * @param lang - Language code for the result
- * @returns The formatted place name or null on error
- */
-async function reverseGeocode(
-    lat: number,
-    lon: number,
-    lang: string
-): Promise<string | null> {
-    try {
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=${lang}`,
-            {
-                headers: {
-                    'Accept-Language': lang,
-                },
-            }
-        );
-
-        if (!response.ok) {
-            return null;
-        }
-
-        const data = await response.json();
-
-        if (!data || data.error) {
-            return null;
-        }
-
-        // Try to build a readable location string
-        const address = data.address || {};
-        const city =
-            address.city ||
-            address.town ||
-            address.village ||
-            address.municipality ||
-            address.county;
-        const country = address.country;
-
-        if (city && country) {
-            return `${city}, ${country}`;
-        } else if (city) {
-            return city;
-        } else if (country) {
-            return country;
-        } else if (data.display_name) {
-            // Fallback to display_name, but shorten it
-            const parts = data.display_name.split(',');
-            return parts.slice(0, 2).join(',').trim();
-        }
-
-        return null;
-    } catch (error) {
-        console.error('Error during reverse geocoding:', error);
-        return null;
-    }
-}
-
 export {
     toWKT,
     restoreMapState,
@@ -190,6 +103,4 @@ export {
     getBaseUrl,
     validURL,
     isRunningOnMobile,
-    getCentroidFromWKT,
-    reverseGeocode,
 };

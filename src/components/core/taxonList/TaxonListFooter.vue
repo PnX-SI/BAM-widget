@@ -1,19 +1,12 @@
 <script setup>
-    import { ref, watch, useTemplateRef } from 'vue';
+    import { ref, computed, useTemplateRef } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
     import DatasetList from './DatasetList.vue';
-    import { getCentroidFromWKT, reverseGeocode } from '@/lib/utils';
     import { useMutationObserver } from '@vueuse/core';
 
     const parameterStore = ParameterStore.getInstance();
-    const {
-        connector,
-        primaryColor,
-        wkt,
-        lang,
-        expandedFooterSize,
-        isFooterExpanded,
-    } = parameterStore;
+    const { connector, primaryColor, expandedFooterSize, isFooterExpanded } =
+        parameterStore;
 
     const props = defineProps({
         loadingDone: {
@@ -27,47 +20,25 @@
         },
     });
 
-    const locationName = ref(null);
-    const loadingLocation = ref(false);
-
     const footerElement = useTemplateRef('data-source-credits');
 
-    // Fetch location name when WKT changes
-    async function updateLocationName() {
-        if (!wkt.value || wkt.value.trim() === '') {
-            locationName.value = null;
-            return;
-        }
-
-        loadingLocation.value = true;
-
-        try {
-            const center = getCentroidFromWKT(wkt.value);
-            locationName.value = null;
-            if (center) {
-                const place = await reverseGeocode(
-                    center.lat,
-                    center.lon,
-                    lang.value
-                );
-                locationName.value = place;
-            }
-        } catch (error) {
-            console.error('Error fetching location name:', error);
-            locationName.value = null;
-        } finally {
-            loadingLocation.value = false;
-        }
-    }
-
-    // Watch for WKT changes
-    watch(wkt, updateLocationName, { immediate: true });
+    /**
+     * Check if there is expandable content in the footer
+     */
+    const hasExpandableContent = computed(() => {
+        return (
+            connector.value.sourceDetailMessage() ||
+            (props.datasets && props.datasets.length > 0)
+        );
+    });
 
     /**
      * Toggle mechanism for expanding/collapsing the footer content
      */
     const toggleExpand = () => {
-        isFooterExpanded.value = !isFooterExpanded.value;
+        if (hasExpandableContent.value) {
+            isFooterExpanded.value = !isFooterExpanded.value;
+        }
     };
 
     /**
@@ -98,7 +69,11 @@
             :class="{ expanded: isFooterExpanded }"
             ref="data-source-credits"
         >
-            <div class="footer-header" @click="toggleExpand">
+            <div
+                class="footer-header"
+                :class="{ 'not-expandable': !hasExpandableContent }"
+                @click="toggleExpand"
+            >
                 <div class="footer-main-content">
                     <a
                         href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
@@ -116,10 +91,6 @@
                         >{{ props.numberOfSpecies }}
                         {{ $t('taxon.taxonFound') }}</strong
                     >
-                    <template v-if="locationName">
-                        {{ $t('near') }}
-                        <strong>{{ locationName }}</strong>
-                    </template>
                     {{ $t('in') }}
                     <a
                         :href="connector.getSourceUrl()"
@@ -130,6 +101,7 @@
                     </a>
                 </div>
                 <button
+                    v-if="hasExpandableContent"
                     class="expand-toggle"
                     :class="{ rotated: isFooterExpanded }"
                 >
@@ -192,6 +164,10 @@
         gap: 8px;
         cursor: pointer;
         user-select: none;
+    }
+
+    .footer-header.not-expandable {
+        cursor: default;
     }
 
     .footer-main-content {
