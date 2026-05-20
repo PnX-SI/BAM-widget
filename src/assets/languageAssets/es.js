@@ -71,6 +71,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         shareLink: 'Compartir un enlace',
         shareDiscover: 'Compartir tu búsqueda',
         source: {
+            source: 'Fuente',
             title: 'Fuente de datos',
             select: 'Seleccionar una fuente de datos',
             modify: 'Cambiar la fuente de datos de las observaciones',

@@ -77,6 +77,7 @@ You can also **share your results 📤** to collaborate with other users.
         shareLink: 'Share a link',
         shareDiscover: 'Share your research',
         source: {
+            source: 'Source',
             title: 'Data Source',
             select: 'Select a data source',
             modify: 'Change the observations data source',

@@ -76,6 +76,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         shareLink: 'Link teilen',
         shareDiscover: 'Ihre Suche teilen',
         source: {
+            source: 'Quelle',
             title: 'Datenquelle',
             select: 'Quelle auswählen',
             modify: 'Beobachtungsdatenquelle ändern',

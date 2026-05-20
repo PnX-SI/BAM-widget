@@ -76,6 +76,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         shareLink: 'Sdílet odkaz',
         shareDiscover: 'Sdílet svůj výzkum',
         source: {
+            source: 'Zdroj',
             title: 'Datový zdroj',
             select: 'Vyberte datový zdroj',
             modify: 'Změnit datový zdroj pozorování',

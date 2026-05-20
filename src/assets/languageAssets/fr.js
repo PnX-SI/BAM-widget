@@ -76,6 +76,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         shareLink: 'Partager un lien',
         shareDiscover: 'Partager votre recherche',
         source: {
+            source: 'Source',
             title: 'Source de données',
             select: 'Sélectionner une source',
             modify: 'Modifier la source de données des observations',

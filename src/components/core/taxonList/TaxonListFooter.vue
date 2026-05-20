@@ -78,27 +78,33 @@
                     <a
                         href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
                         target="_blank"
+                        class="bam-logo-link"
                         @click.stop
                     >
                         <img
                             src="https://geonature.fr/documents/autres/BAM/BAM-logo.png"
                             height="24px"
-                            class="me-1"
                             alt="BAM logo"
                         />
                     </a>
-                    <strong
-                        >{{ props.numberOfSpecies }}
-                        {{ $t('taxon.taxonFound') }}</strong
-                    >
-                    {{ $t('in') }}
-                    <a
-                        :href="connector.getSourceUrl()"
-                        target="_blank"
-                        @click.stop
-                    >
-                        {{ connector.name }}
-                    </a>
+                    <span class="species-count">
+                        <strong>{{ props.numberOfSpecies }}</strong>
+                        {{ $t('taxon.taxonFound') }}
+                    </span>
+                    <span class="separator">•</span>
+                    <span class="source-info">
+                        {{ $t('source.source') }}
+                        <a
+                            v-if="connector.getSourceUrl()"
+                            :href="connector.getSourceUrl()"
+                            target="_blank"
+                            class="source-link"
+                            @click.stop
+                        >
+                            {{ connector.name }}
+                        </a>
+                        <strong v-else>{{ connector.name }}</strong>
+                    </span>
                 </div>
                 <button
                     v-if="hasExpandableContent"
@@ -177,6 +183,34 @@
         flex-wrap: wrap;
         flex: 1;
         justify-content: center;
+    }
+
+    .bam-logo-link {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 4px;
+    }
+
+    .species-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .separator {
+        color: #999;
+        margin: 0 6px;
+        font-size: 0.9em;
+    }
+
+    .source-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .source-link {
+        font-weight: 500;
     }
 
     .expand-toggle {
