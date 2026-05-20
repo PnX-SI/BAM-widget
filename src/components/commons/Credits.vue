@@ -27,15 +27,15 @@
 
 <template>
     <div :class="props.class">
-        <span
+        <span v-if="props.media.urlSource"
             ><a
                 :class="props.linkColor ? props.linkColor : 'link-light'"
-                v-if="props.media.urlSource"
                 :href="props.media.urlSource"
                 target="_blank"
                 >{{ creditsAuthor }}</a
             ></span
         >
+        <span v-else>{{ creditsAuthor }}</span>
         <span v-if="creditsLicense && creditsAuthor"> - </span>
         <span v-if="props.media.licenseUrl"
             ><a

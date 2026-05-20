@@ -87,7 +87,7 @@ export class TaxHubMediaSource extends MediaSource {
                             source: media.auteur,
                             typeMedia: 'image',
                             author: media.auteur,
-                            urlSource: media.url,
+                            urlSource: media.media_url,
                         }));
                 })
                 .catch((error) => {
