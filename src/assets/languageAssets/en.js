@@ -90,6 +90,7 @@ You can also **share your results 📤** to collaborate with other users.
         geonature: {
             api_endpoint: 'GeoNature  API endpoint',
             id_export: "Export's id",
+            source_name: 'Source name',
         },
         desc: 'Décroissant',
         asc: 'Croissant',

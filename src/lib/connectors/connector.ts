@@ -259,6 +259,14 @@ export class Connector {
         return null;
     }
 
+    /**
+     * Returns the name of the source.
+     * @returns {string} The name of the source.
+     */
+    getSourceName(): string {
+        return this.name;
+    }
+
     getStatusColor(status: IUCNCodeStatus): string {
         const IUCNStatusColorDICT = {
             NA: '#C1B5A5',

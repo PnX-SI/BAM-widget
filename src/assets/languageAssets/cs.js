@@ -89,6 +89,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         geonature: {
             api_endpoint: 'API endpoint GeoNature',
             id_export: 'ID exportu',
+            source_name: 'Název zdroje',
         },
         desc: 'Sestupně',
         asc: 'Vzestupně',

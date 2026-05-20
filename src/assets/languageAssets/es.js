@@ -84,6 +84,7 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
         geonature: {
             api_endpoint: 'Dirección de la API de GeoNature',
             id_export: 'ID de exportación',
+            source_name: 'Nombre de la fuente',
         },
         desc: 'Descendente',
         asc: 'Ascendente',

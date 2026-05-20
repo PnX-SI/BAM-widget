@@ -101,9 +101,9 @@
                             class="source-link"
                             @click.stop
                         >
-                            {{ connector.name }}
+                            {{ connector.getSourceName() }}
                         </a>
-                        <strong v-else>{{ connector.name }}</strong>
+                        <strong v-else>{{ connector.getSourceName() }}</strong>
                     </span>
                 </div>
                 <button

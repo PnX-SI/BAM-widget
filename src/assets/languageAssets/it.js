@@ -90,6 +90,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         geonature: {
             api_endpoint: 'Indirizzo API di GeoNature',
             id_export: 'Identificativo dell’esportazione',
+            source_name: 'Nome della fonte',
         },
         desc: 'Decrescente',
         asc: 'Crescente',
