@@ -1,7 +1,10 @@
 <script setup lang="ts">
     import Credits from '@/components/commons/Credits.vue';
     import { Media } from '@/lib/models';
+    import ParameterStore from '@/lib/parameterStore';
+    import { StatusInfo } from './interface';
 
+    const { connector } = ParameterStore.getInstance();
     const props = defineProps<{
         picture: Media;
         audio: Media;
@@ -10,117 +13,215 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
+        status: StatusInfo;
     }>();
 </script>
 <template>
-    <div class="col" data-testid="Taxon detailed view">
-        <div class="card h-100 mb-2">
-            <div class="taxon-photo" data-testid="Taxon picture">
-                <FullScreenImage
-                    :media="props.picture"
+    <div class="detailed" data-testid="Taxon detailed view">
+        <div class="image-container">
+            <FullScreenImage
+                :media="props.picture"
+                :alt="props.picture?.urlSource"
+            >
+                <img
+                    :src="props.picture?.url"
                     :alt="props.picture?.urlSource"
+                    data-testid="Taxon picture"
+                />
+            </FullScreenImage>
+            <AudioPlayer
+                v-if="props.audio?.url"
+                :audio="props.audio"
+                variant="button"
+                :size="45"
+                class="audio-overlay"
+            ></AudioPlayer>
+        </div>
+        <div class="names">
+            <div class="vernacular-name">
+                <StatusIcon
+                    v-if="props.status.status"
+                    :status="props.status.status"
+                    :color="props.status.color"
+                    :size="'1.2rem'"
+                ></StatusIcon>
+                <strong data-testid="Vernacular name">{{
+                    props.vernacularName
+                }}</strong>
+                <a
+                    :href="props.urlDetailPage"
+                    target="_blank"
+                    data-testid="Taxon detail redirect link"
                 >
-                    <Image
-                        :image-url="props.picture?.url"
-                        :alt="props.picture?.urlSource"
-                        class="card-img-top"
-                    ></Image>
-                </FullScreenImage>
-
-                <div
-                    class="caption"
-                    v-if="props.picture.author"
+                    <strong class="text-secondary ml-1">
+                        <i class="bi bi-box-arrow-up-right"></i
+                    ></strong>
+                </a>
+            </div>
+            <em data-testid="Scientific name">{{
+                props.acceptedScientificName
+            }}</em>
+        </div>
+        <div class="statistics-wrapper">
+            <div class="statistics">
+                <span
+                    >{{ $t('taxon.observed') }} <br />
+                    <strong data-testid="Number of observations">{{
+                        props.nbObservations
+                    }}</strong>
+                    {{ $t('taxon.times') }}</span
+                >
+            </div>
+            <div class="statistics">
+                <span
+                    >{{ $t('taxon.lastSeen') }} <br />
+                    <strong data-testid="Last seen date">{{
+                        props.lastSeenDate.toLocaleDateString()
+                    }}</strong></span
+                >
+            </div>
+        </div>
+        <div class="description">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam quae
+            unde magni non, doloremque rem vitae, laudantium repellendus id eius
+            corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
+        </div>
+        <div class="credits" v-if="props?.picture.source || props.audio">
+            <div v-if="props.audio" class="credit-pill">
+                <i class="bi bi-mic"></i>
+                <Credits :media="props.audio" link-color="link-dark"></Credits>
+            </div>
+            <div v-if="props?.picture.source" class="credit-pill">
+                <i class="bi bi-camera"></i>
+                <Credits
+                    :media="props.picture"
+                    link-color="link-dark"
                     data-testid="Picture caption"
-                >
-                    <Credits
-                        link-color="link-light"
-                        :media="props.picture"
-                        class=""
-                    ></Credits>
-                </div>
-            </div>
-
-            <div class="card-body">
-                <div class="card-text">
-                    <h5
-                        class="card-title text-wrap"
-                        data-testid="Vernacular name"
-                    >
-                        {{ props.vernacularName }}
-                    </h5>
-                    <small
-                        class="text-body-secondary"
-                        data-testid="Scientific name"
-                        ><strong>{{ $t('taxon.scientificName') }} :</strong>
-                        {{ props.acceptedScientificName }}</small
-                    ><br />
-
-                    <small
-                        v-if="props.nbObservations"
-                        class="text-body-secondary"
-                    >
-                        <strong>{{ $t('taxon.nbObservations') }} : </strong
-                        ><span data-testid="Number of observations">{{
-                            props.nbObservations
-                        }}</span>
-                    </small>
-                    <br />
-
-                    <small class="text-body-secondary">
-                        <!-- prettier-ignore -->
-                        <a
-              :href="props.urlDetailPage"
-              target="_blank"
-               data-testid="Taxon detail redirect link"
-              class="badge bg-light text-secondary border border-secondary text-decoration-none"
-              ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
-            </a>
-                    </small>
-                    <br />
-
-                    <AudioPlayer
-                        v-if="props.audio?.url"
-                        :audio="props.audio"
-                        variant="player"
-                    />
-                </div>
-            </div>
-            <div class="card-footer">
-                <small class="text-body-secondary" data-testid="Last seen date"
-                    >{{ $t('taxon.lastSeenDate') }} :
-                    {{ props?.lastSeenDate.toLocaleDateString() }}</small
-                >
+                ></Credits>
             </div>
         </div>
     </div>
 </template>
-
 <style scoped>
-    .taxon-photo {
+    .detailed {
+        container-name: detailed;
+        container-type: inline-size;
+        /* box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1); */
+        border: 1px solid #efefef;
+        display: flex;
+        justify-content: start;
+        flex-direction: column;
+        border-radius: 10px;
+        padding-bottom: 1em;
+    }
+
+    .image-container {
+        margin-top: 0;
+        margin-bottom: 1.5em;
         position: relative;
-        display: inline-block;
+        display: flex;
+        justify-content: center;
     }
 
-    .taxon-photo > img {
-        object-fit: cover;
-        height: 250px !important;
-        border-radius: 0px !important;
-        width: 100%;
-    }
-
-    .caption {
+    .audio-overlay {
         position: absolute;
         bottom: 0px;
-        left: 0px;
-        width: 100%;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 5px;
-        border-radius: 3px;
+        left: 50%;
+        transform: translateX(-50%) translateY(50%);
+        z-index: 2;
     }
 
-    .audio {
-        margin-top: 0.5rem;
+    img {
+        display: block;
         width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 10px 10px 0px 0px;
+        -webkit-border-radius: 10px 10px 0px 0px;
+        -moz-border-radius: 10px 10px 0px 0px;
+        /* box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); */
+        margin: 0 auto;
+    }
+    .credits {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 0.75em 1em 1em;
+        justify-content: space-around;
+    }
+
+    .credit-pill {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: 0.75rem;
+        color: #666;
+    }
+
+    .credit-pill i {
+        font-size: 0.8rem;
+        color: #999;
+    }
+    .statistics-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: 1em;
+        column-gap: 0.5em;
+    }
+    .statistics {
+        display: flex;
+        flex-direction: column;
+        color: #666;
+        text-align: center;
+        strong {
+            color: #444;
+        }
+    }
+    .names {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        strong {
+            font-size: 1.2em;
+        }
+        em {
+            color: #888;
+        }
+        .vernacular-name {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+            align-items: center;
+            align-self: center;
+            padding-right: 0.5em;
+            padding-left: 0.5em;
+        }
+    }
+    /* TODO drop display hidden when description is available */
+    .description {
+        padding: 1em;
+        background-color: #efefef;
+        color: #666;
+        font-size: 0.8rem;
+        text-align: center;
+        border-radius: 5px;
+        margin-top: 1em;
+        display: none;
+    }
+    @container detailed (width < 275px) {
+        .statistics-wrapper {
+            flex-direction: column;
+            row-gap: 0.5em;
+        }
+        .statistics {
+            width: 100%;
+        }
     }
 </style>
