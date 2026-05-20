@@ -139,25 +139,6 @@
         opacity: 0.8;
     }
 
-    .divider {
-        border: none;
-        border-top: 1px solid #eee;
-        margin: 6px 0;
-    }
-
-    .sort-order {
-        padding: 8px 14px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        transition: background 0.2s ease;
-        font-weight: 500;
-    }
-    .sort-order:hover {
-        background: #f3f6ff;
-    }
-
     .fade-slide-enter-from,
     .fade-slide-leave-to {
         opacity: 0;

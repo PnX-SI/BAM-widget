@@ -138,31 +138,7 @@
         /* box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); */
         margin: 0 auto;
     }
-    .credits {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 6px;
-        padding: 0.75em 1em 1em;
-        justify-content: space-around;
-    }
 
-    .credit-pill {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        background-color: #f5f5f5;
-        border: 1px solid #e0e0e0;
-        border-radius: 999px;
-        padding: 3px 10px;
-        font-size: 0.75rem;
-        color: #666;
-    }
-
-    .credit-pill i {
-        font-size: 0.8rem;
-        color: #999;
-    }
     .statistics-wrapper {
         display: flex;
         flex-direction: row;

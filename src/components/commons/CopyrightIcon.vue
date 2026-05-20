@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import Credits from './Credits.vue';
     import { Media } from '@/lib/models';
+    import { ref, onMounted, onBeforeUnmount } from 'vue';
 
     const props = withDefaults(
         defineProps<{
@@ -11,6 +12,25 @@
             size: 32,
         }
     );
+
+    const showTooltip = ref(false);
+
+    function toggleTooltip(event: Event) {
+        event.stopPropagation();
+        showTooltip.value = !showTooltip.value;
+    }
+
+    function closeTooltip() {
+        showTooltip.value = false;
+    }
+
+    onMounted(() => {
+        window.addEventListener('click', closeTooltip);
+    });
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('click', closeTooltip);
+    });
 </script>
 
 <template>
@@ -18,10 +38,15 @@
         <div
             class="copyright-icon"
             :style="{ width: size + 'px', height: size + 'px' }"
+            @click="toggleTooltip"
         >
             <i class="bi bi-c-circle"></i>
         </div>
-        <div class="copyright-tooltip">
+        <div
+            class="copyright-tooltip"
+            :class="{ active: showTooltip }"
+            @click.stop
+        >
             <Credits :media="props.media" link-color="link-light"></Credits>
         </div>
     </div>
@@ -68,7 +93,25 @@
         z-index: 3;
     }
 
-    .copyright-icon-wrapper:hover .copyright-tooltip {
+    /* Invisible bridge to prevent tooltip from disappearing */
+    .copyright-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 10px;
+    }
+
+    .copyright-icon-wrapper:hover .copyright-tooltip,
+    .copyright-tooltip:hover {
         opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Active state for mobile/touch */
+    .copyright-tooltip.active {
+        opacity: 1;
+        pointer-events: auto;
     }
 </style>

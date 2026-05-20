@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Media } from '@/lib/models';
-    import { ref, onBeforeUnmount } from 'vue';
+    import { ref, onMounted, onBeforeUnmount } from 'vue';
     import Credits from './Credits.vue';
 
     const props = withDefaults(
@@ -22,6 +22,16 @@
     const audioInstance = ref<HTMLAudioElement | null>(null);
     let animationFrameId: number | null = null;
     const size_px = props.size * 0.7 + 'px';
+    const showTooltip = ref(false);
+
+    function toggleTooltip(event: Event) {
+        event.stopPropagation();
+        showTooltip.value = !showTooltip.value;
+    }
+
+    function closeTooltip() {
+        showTooltip.value = false;
+    }
 
     function updateProgress() {
         if (audioInstance.value && audioInstance.value.duration > 0) {
@@ -78,7 +88,12 @@
         play.value ? audioInstance.value.pause() : audioInstance.value.play();
     }
 
+    onMounted(() => {
+        window.addEventListener('click', closeTooltip);
+    });
+
     onBeforeUnmount(() => {
+        window.removeEventListener('click', closeTooltip);
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
         if (audioInstance.value) {
             audioInstance.value.pause();
@@ -113,7 +128,17 @@
             <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
         </div>
 
-        <div v-if="showCredits" class="tooltip">
+        <!-- Small info icon for mobile to toggle credits -->
+        <div v-if="showCredits" class="info-icon" @click.stop="toggleTooltip">
+            <i class="bi bi-c-circle"></i>
+        </div>
+
+        <div
+            v-if="showCredits"
+            class="tooltip"
+            :class="{ active: showTooltip }"
+            @click.stop
+        >
             <Credits :media="audio" link-color="link-light" />
         </div>
     </div>
@@ -170,6 +195,33 @@
         font-size: v-bind(size_px) !important;
     }
 
+    /* Small info icon for mobile */
+    .info-icon {
+        position: absolute;
+        bottom: -6px;
+        right: -6px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 4;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s ease;
+    }
+
+    .info-icon:active {
+        transform: scale(0.95);
+    }
+
+    .info-icon i {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
     /* Tooltip */
     .tooltip {
         position: absolute;
@@ -185,11 +237,29 @@
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.2s;
-        z-index: 2;
+        z-index: 3;
     }
 
-    .audio-button-wrapper:hover .tooltip {
+    /* Invisible bridge to prevent tooltip from disappearing */
+    .tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: 10px;
+    }
+
+    .audio-button-wrapper:hover .tooltip,
+    .tooltip:hover {
         opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Active state for mobile/touch */
+    .tooltip.active {
+        opacity: 1;
+        pointer-events: auto;
     }
 
     /* Player variant */
