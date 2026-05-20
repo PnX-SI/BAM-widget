@@ -3,6 +3,7 @@
     import { computed, onMounted, ref, watch } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
     import { StatusInfo } from './interface';
+    import CopyrightIcon from '@/components/commons/CopyrightIcon.vue';
 
     const { isMobile, nbTaxonPerLine } = ParameterStore.getInstance();
 
@@ -82,32 +83,17 @@
                         />
                     </div>
 
-                    <Popover
-                        v-if="props.picture.source"
-                        :click="true"
-                        :close-on-hide="true"
-                        :delay="{ show: 0, hide: 0 }"
+                    <div
+                        class="copyright-wrapper"
+                        :class="{
+                            'cols-2-plus': props.cols >= 2,
+                        }"
                     >
-                        <template #target>
-                            <div
-                                class="copyright-icon"
-                                :class="{
-                                    'cols-2-plus': props.cols >= 2,
-                                }"
-                            >
-                                <i
-                                    class="bi bi-c-square-fill"
-                                    :style="{
-                                        fontSize: sizeIcon + 'px',
-                                    }"
-                                ></i>
-                            </div>
-                        </template>
-                        <Credits
-                            link-color="link-dark"
+                        <CopyrightIcon
                             :media="props.picture"
+                            :size="sizeIcon"
                         />
-                    </Popover>
+                    </div>
                 </div>
             </div>
         </FullScreenImage>
@@ -161,16 +147,11 @@
     }
 
     .player,
-    .copyright-icon {
+    .copyright-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
-    }
-
-    .copyright-icon i {
-        color: #fff;
-        line-height: 1;
     }
 
     @media screen and (max-width: 1200px) {
@@ -190,7 +171,7 @@
         }
 
         .player.cols-2-plus,
-        .copyright-icon.cols-2-plus {
+        .copyright-wrapper.cols-2-plus {
             transform: scale(0.7);
         }
 

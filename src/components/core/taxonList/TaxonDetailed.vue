@@ -1,10 +1,10 @@
 <script setup lang="ts">
-    import Credits from '@/components/commons/Credits.vue';
+    import CopyrightIcon from '@/components/commons/CopyrightIcon.vue';
     import { Media } from '@/lib/models';
     import ParameterStore from '@/lib/parameterStore';
     import { StatusInfo } from './interface';
 
-    const { connector } = ParameterStore.getInstance();
+    const { connector, primaryColor } = ParameterStore.getInstance();
     const props = defineProps<{
         picture: Media;
         audio: Media;
@@ -36,6 +36,7 @@
                 :size="45"
                 class="audio-overlay"
             ></AudioPlayer>
+            <CopyrightIcon :media="props.picture" class="copyright-overlay" />
         </div>
         <div class="names">
             <div class="vernacular-name">
@@ -48,20 +49,12 @@
                 <strong data-testid="Vernacular name">{{
                     props.vernacularName
                 }}</strong>
-                <a
-                    :href="props.urlDetailPage"
-                    target="_blank"
-                    data-testid="Taxon detail redirect link"
-                >
-                    <strong class="text-secondary ml-1">
-                        <i class="bi bi-box-arrow-up-right"></i
-                    ></strong>
-                </a>
             </div>
             <em data-testid="Scientific name">{{
                 props.acceptedScientificName
             }}</em>
         </div>
+
         <div class="statistics-wrapper">
             <div class="statistics">
                 <span
@@ -81,24 +74,19 @@
                 >
             </div>
         </div>
+        <a
+            :href="props.urlDetailPage"
+            target="_blank"
+            class="detail-button"
+            data-testid="Taxon detail redirect link"
+        >
+            {{ $t('taxon.learnMore') }}
+            <i class="bi bi-box-arrow-up-right"></i>
+        </a>
         <div class="description">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam quae
             unde magni non, doloremque rem vitae, laudantium repellendus id eius
             corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
-        </div>
-        <div class="credits" v-if="props?.picture.source || props.audio">
-            <div v-if="props.audio" class="credit-pill">
-                <i class="bi bi-mic"></i>
-                <Credits :media="props.audio" link-color="link-dark"></Credits>
-            </div>
-            <div v-if="props?.picture.source" class="credit-pill">
-                <i class="bi bi-camera"></i>
-                <Credits
-                    :media="props.picture"
-                    link-color="link-dark"
-                    data-testid="Picture caption"
-                ></Credits>
-            </div>
         </div>
     </div>
 </template>
@@ -128,6 +116,13 @@
         bottom: 0px;
         left: 50%;
         transform: translateX(-50%) translateY(50%);
+        z-index: 2;
+    }
+
+    .copyright-overlay {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
         z-index: 2;
     }
 
@@ -204,6 +199,34 @@
             padding-left: 0.5em;
         }
     }
+
+    .detail-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        margin: 1em auto 0;
+        padding: 0.4em 0.8em;
+        background-color: transparent;
+        color: v-bind('"#" + primaryColor');
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        border: 1px solid v-bind('"#" + primaryColor');
+        cursor: pointer;
+    }
+
+    .detail-button:hover {
+        background-color: v-bind('"#" + primaryColor');
+        color: white;
+    }
+
+    .detail-button i {
+        font-size: 0.85rem;
+    }
+
     /* TODO drop display hidden when description is available */
     .description {
         padding: 1em;
