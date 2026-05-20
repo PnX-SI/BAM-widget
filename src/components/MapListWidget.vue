@@ -13,6 +13,10 @@
         },
     });
     const showMap = ref(true);
+    function toggleMapList() {
+        showMap.value = !showMap.value;
+        isFooterExpanded.value = false; // Collapse footer when toggling
+    }
 </script>
 <template>
     <div class="container-fluid position-relative px-0">
@@ -42,7 +46,7 @@
             <button
                 class="toggle-btn"
                 :class="{ elevated: isFooterExpanded }"
-                @click="showMap = !showMap"
+                @click="toggleMapList"
                 data-testid="Mobile map list toggle"
             >
                 <i v-if="showMap" class="fa-solid fa-list"></i>

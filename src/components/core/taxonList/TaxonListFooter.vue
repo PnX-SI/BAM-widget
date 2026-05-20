@@ -6,8 +6,14 @@
     import { useMutationObserver } from '@vueuse/core';
 
     const parameterStore = ParameterStore.getInstance();
-    const { connector, primaryColor, wkt, lang, expandedFooterSize } =
-        parameterStore;
+    const {
+        connector,
+        primaryColor,
+        wkt,
+        lang,
+        expandedFooterSize,
+        isFooterExpanded,
+    } = parameterStore;
 
     const props = defineProps({
         loadingDone: {
@@ -21,16 +27,10 @@
         },
     });
 
-    const isExpanded = ref(false);
     const locationName = ref(null);
     const loadingLocation = ref(false);
 
     const footerElement = useTemplateRef('data-source-credits');
-
-    // Sync expanded state with parameter store
-    watch(isExpanded, (newVal) => {
-        parameterStore.isFooterExpanded.value = newVal;
-    });
 
     // Fetch location name when WKT changes
     async function updateLocationName() {
@@ -43,6 +43,7 @@
 
         try {
             const center = getCentroidFromWKT(wkt.value);
+            locationName.value = null;
             if (center) {
                 const place = await reverseGeocode(
                     center.lat,
@@ -50,8 +51,6 @@
                     lang.value
                 );
                 locationName.value = place;
-            } else {
-                locationName.value = null;
             }
         } catch (error) {
             console.error('Error fetching location name:', error);
@@ -67,19 +66,20 @@
     /**
      * Toggle mechanism for expanding/collapsing the footer content
      */
+    const toggleExpand = () => {
+        isFooterExpanded.value = !isFooterExpanded.value;
+    };
 
-    function toggleExpand() {
-        isExpanded.value = !isExpanded.value;
-    }
-
-    function getFooterSize() {
-        const f2 = footerElement.value;
-        return f2 ? f2.scrollHeight : 0;
-    }
+    /**
+     * Watch for changes in the footer
+     * and update the expandedFooterSize in the parameter store accordingly
+     */
     useMutationObserver(
         () => footerElement.value,
         (mutations) => {
-            expandedFooterSize.value = getFooterSize();
+            expandedFooterSize.value = footerElement.value
+                ? footerElement.value.scrollHeight
+                : 0;
         },
         {
             attributes: true,
@@ -95,7 +95,7 @@
             id="data-source-credits"
             data-testid="Data source credits"
             :style="{ color: '#' + primaryColor }"
-            :class="{ expanded: isExpanded }"
+            :class="{ expanded: isFooterExpanded }"
             ref="data-source-credits"
         >
             <div class="footer-header" @click="toggleExpand">
@@ -129,13 +129,16 @@
                         {{ connector.name }}
                     </a>
                 </div>
-                <button class="expand-toggle" :class="{ rotated: isExpanded }">
+                <button
+                    class="expand-toggle"
+                    :class="{ rotated: isFooterExpanded }"
+                >
                     <i class="bi bi-chevron-up"></i>
                 </button>
             </div>
 
             <transition name="fade">
-                <div class="footer-expanded-content" v-show="isExpanded">
+                <div class="footer-expanded-content" v-show="isFooterExpanded">
                     <div
                         v-if="connector.sourceDetailMessage()"
                         class="source-detail-message"

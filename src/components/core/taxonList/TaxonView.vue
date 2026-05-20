@@ -101,7 +101,7 @@
         :status="status"
     >
     </TaxonThumbnail>
-    <TaxonNewDetailed
+    <TaxonDetailed
         v-else
         :picture="mediaDisplayed"
         :audio="speciesAudio"
