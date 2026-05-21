@@ -87,18 +87,12 @@
             {{ $t('taxon.learnMore') }}
             <i class="bi bi-box-arrow-up-right"></i>
         </a>
-        <div class="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam quae
-            unde magni non, doloremque rem vitae, laudantium repellendus id eius
-            corporis nesciunt ad dolore? Id nemo qui cum harum adipisci.
-        </div>
     </div>
 </template>
 <style scoped>
     .detailed {
         container-name: detailed;
         container-type: inline-size;
-        /* box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1); */
         border: 1px solid #efefef;
         display: flex;
         justify-content: start;
@@ -139,7 +133,6 @@
         border-radius: 10px 10px 0px 0px;
         -webkit-border-radius: 10px 10px 0px 0px;
         -moz-border-radius: 10px 10px 0px 0px;
-        /* box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); */
         margin: 0 auto;
     }
 
@@ -207,17 +200,6 @@
         font-size: 0.85rem;
     }
 
-    /* TODO drop display hidden when description is available */
-    .description {
-        padding: 1em;
-        background-color: #efefef;
-        color: #666;
-        font-size: 0.8rem;
-        text-align: center;
-        border-radius: 5px;
-        margin-top: 1em;
-        display: none;
-    }
     @container detailed (width < 275px) {
         .statistics-wrapper {
             flex-direction: column;
