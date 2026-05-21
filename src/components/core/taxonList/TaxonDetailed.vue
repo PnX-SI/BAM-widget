@@ -36,7 +36,11 @@
                 :size="45"
                 class="audio-overlay"
             ></AudioPlayer>
-            <CopyrightIcon :media="props.picture" class="copyright-overlay" />
+            <CopyrightIcon
+                :media="props.picture"
+                class="copyright-overlay"
+                :size="20"
+            />
         </div>
         <div class="names">
             <div class="vernacular-name">
@@ -188,7 +192,7 @@
         text-decoration: none;
         border-radius: 8px;
         font-weight: 500;
-        font-size: 0.95rem;
+        font-size: 0.75rem;
         transition: all 0.2s ease;
         border: 1px solid v-bind('"#" + primaryColor');
         cursor: pointer;
