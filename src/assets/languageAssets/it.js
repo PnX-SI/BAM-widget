@@ -107,7 +107,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             vernacularName: 'Nome comune',
             nbObservations: 'Numero di osservazioni',
             lastSeenDate: 'Data dell’ultima osservazione',
-            lastSeen: "Visto l'ultima volta",
+            lastSeen: "Visto l'ultima volta il",
             observed: 'Osservato',
             times: 'volte',
             taxonFilter: 'Filtro per specie',

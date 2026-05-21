@@ -107,7 +107,7 @@ You can also **share your results 📤** to collaborate with other users.
             vernacularName: 'Vernacular name',
             nbObservations: 'Number of observations',
             lastSeenDate: 'Last observation date',
-            lastSeen: 'Last seen',
+            lastSeen: 'Last seen on',
             observed: 'Observed',
             times: 'times',
             taxonFilter: 'Filter by species',

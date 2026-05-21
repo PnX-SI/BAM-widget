@@ -106,7 +106,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             vernacularName: 'Nom vernaculaire',
             nbObservations: "Nombre d'observations",
             lastSeenDate: 'Date de la dernière observation',
-            lastSeen: 'Vu dernièrement',
+            lastSeen: 'Vu dernièrement le',
             observed: 'Observé',
             times: 'fois',
             taxonFilter: 'Filtre par espèce',

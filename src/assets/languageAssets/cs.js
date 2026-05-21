@@ -106,7 +106,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             vernacularName: 'Obecný název',
             nbObservations: 'Počet pozorování',
             lastSeenDate: 'Datum posledního pozorování',
-            lastSeen: 'Naposledy viděno',
+            lastSeen: 'Naposledy viděno dne',
             observed: 'Pozorováno',
             times: 'krát',
             taxonFilter: 'Filtrovat podle druhu',

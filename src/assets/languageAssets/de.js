@@ -106,7 +106,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             vernacularName: 'Trivialname',
             nbObservations: 'Anzahl der Beobachtungen',
             lastSeenDate: 'Datum der letzten Beobachtung',
-            lastSeen: 'Zuletzt gesehen',
+            lastSeen: 'Zuletzt gesehen am',
             observed: 'Beobachtet',
             times: 'Mal',
             taxonFilter: 'Art filtern',
