@@ -83,13 +83,13 @@
 
     function showTooltipHandler() {
         if (!props.showCredits || !props.audio?.source) return;
-        
+
         // Clear any pending hide timer
         if (hoverTimer) {
             clearTimeout(hoverTimer);
             hoverTimer = null;
         }
-        
+
         showTooltip.value = true;
     }
 
@@ -110,7 +110,7 @@
 
     function handleTouchStart(event: TouchEvent) {
         if (!props.showCredits || !props.audio?.source) return;
-        
+
         longPressTimer = window.setTimeout(() => {
             showTooltip.value = true;
             // Prevent the default action to avoid opening context menu
@@ -204,14 +204,14 @@
     <!-- Standard player variant -->
     <div v-else class="audio-player-wrapper">
         <div class="audio-player" data-testid="animal sound">
-            <button 
-                @click="toggleAudio" 
+            <button
+                @click="toggleAudio"
                 @mouseenter="showTooltipHandler"
                 @mouseleave="hideTooltipHandler"
                 @touchstart="handleTouchStart"
                 @touchend="handleTouchEnd"
                 @touchmove="handleTouchMove"
-                class="play-button" 
+                class="play-button"
                 type="button"
             >
                 <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
