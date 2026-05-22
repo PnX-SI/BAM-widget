@@ -171,7 +171,7 @@
             class="audio-button"
             :style="{
                 background: `
-                conic-gradient(#efefef ${progress * 360}deg, #afafaf ${
+                conic-gradient(#efefef ${progress * 360}deg, #718093 ${
                     progress * 360
                 }deg)
                    
@@ -199,7 +199,7 @@
             @mouseenter="keepTooltipVisible"
             @mouseleave="hideTooltipHandler"
         >
-            <Credits :media="audio" link-color="link-light" />
+            <Credits :media="audio" />
         </FloatingTooltip>
     </div>
 

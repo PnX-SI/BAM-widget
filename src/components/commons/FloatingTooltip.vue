@@ -22,8 +22,8 @@
             offset: 8,
             viewportPadding: 8,
             zIndex: 2000,
-            textColor: '#fff',
-            backgroundColor: '#999',
+            textColor: '#999',
+            backgroundColor: '#fff',
         }
     );
 
@@ -116,8 +116,8 @@
         position: fixed;
         top: 0;
         left: 0;
-        background: v-bind('backgroundColor');
-        color: v-bind('textColor');
+        background: v-bind('backgroundColor') !important;
+        color: v-bind('textColor') !important;
         padding: 0.5rem 0.75rem;
         border-radius: 6px;
         font-size: 0.85rem;
