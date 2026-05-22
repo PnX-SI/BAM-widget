@@ -43,6 +43,7 @@
         "vite": "^6.4.2",
         "vite-plugin-pwa": "^1.1.0",
         "vite-plugin-vue-devtools": "^7.6.8",
+        "vite-plugin-webfont-dl": "^3.12.0",
         "vitest": "^4.0.16"
     }
 }

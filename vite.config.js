@@ -6,12 +6,16 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 import Components from 'unplugin-vue-components/vite';
 import { BootstrapVueNextResolver } from 'bootstrap-vue-next';
 import { VitePWA } from 'vite-plugin-pwa';
+import webfontDownload from 'vite-plugin-webfont-dl';
 
 // https://vite.dev/config/
 export default defineConfig({
     base: process.env.NODE_ENV === 'production' ? '/BAM-widget/' : '/',
     plugins: [
         vue(),
+        webfontDownload([
+            'https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap',
+        ]),
         vueDevTools(),
         Components({
             resolvers: [BootstrapVueNextResolver()],
