@@ -1,4 +1,4 @@
-import { Connector, ConnectorOptions } from './connector';
+import { Connector, ConnectorOptions, IUCNCodeStatus } from './connector';
 import { Dataset, SearchResult, Taxon } from '../models';
 import ParameterStore from '../parameterStore';
 import { NO_IMAGE_URL } from '@/assets/constant';
@@ -16,6 +16,15 @@ const GBIF_DEFAULT_LIMIT = 300;
 const GBIF_DEFAULT_NB_PAGES = 10;
 
 type OccurrenceParams = Record<string, any>;
+
+interface GBIFStatus {
+    category: string;
+    usageKey: number;
+    scientificName: string;
+    taxonomicStatus: string;
+    iucnTaxonID: string;
+    code: IUCNCodeStatus;
+}
 
 function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
     const urlWithParams = new URL(`${GBIF_ENDPOINT_DEFAULT}/occurrence/search`);
@@ -244,19 +253,6 @@ export class GbifConnector extends Connector {
             }));
     }
 
-    fetchTaxonStatus(idTaxon: string): Promise<{
-        iucnRedListCategory: string;
-        code: string;
-    }> {
-        const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}/iucnRedListCategory`;
-        return fetch(url)
-            .then((response) => response.json())
-            .then((json) => ({
-                iucnRedListCategory: json.category,
-                code: json.code,
-            }));
-    }
-
     searchTaxon(
         searchString: string = '',
         params: OccurrenceParams = {}
@@ -295,5 +291,13 @@ export class GbifConnector extends Connector {
         )
             .then((response) => response.json())
             .then((json) => json.results);
+    }
+
+    fetchTaxonStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
+        return fetch(
+            `${this.GBIF_ENDPOINT}/species/${taxonId}/iucnRedListCategory`
+        )
+            .then((response) => response.json())
+            .then((json: GBIFStatus) => json.code);
     }
 }

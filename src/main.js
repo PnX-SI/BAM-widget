@@ -6,7 +6,6 @@ import { createBootstrap } from 'bootstrap-vue-next';
 import App from './App.vue';
 
 import Configurator from './components/Configurator.vue';
-import Explorer from './components/Explorer.vue';
 import Error404 from './components/commons/Error404.vue';
 import { VueShowdown } from 'vue-showdown';
 
@@ -48,10 +47,6 @@ const routes = [
     {
         path: '/config',
         component: Configurator,
-    },
-    {
-        path: '/explorer',
-        component: Explorer,
     },
     { path: '/:pathMatch(.*)*', name: 'NotFound', component: Error404 },
 ];

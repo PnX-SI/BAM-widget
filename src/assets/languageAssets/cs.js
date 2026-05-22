@@ -76,6 +76,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         shareLink: 'Sdílet odkaz',
         shareDiscover: 'Sdílet svůj výzkum',
         source: {
+            source: 'Zdroj',
             title: 'Datový zdroj',
             select: 'Vyberte datový zdroj',
             modify: 'Změnit datový zdroj pozorování',
@@ -88,6 +89,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         geonature: {
             api_endpoint: 'API endpoint GeoNature',
             id_export: 'ID exportu',
+            source_name: 'Název zdroje',
         },
         desc: 'Sestupně',
         asc: 'Vzestupně',
@@ -104,6 +106,9 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             vernacularName: 'Obecný název',
             nbObservations: 'Počet pozorování',
             lastSeenDate: 'Datum posledního pozorování',
+            lastSeen: 'Naposledy viděno dne',
+            observed: 'Pozorováno',
+            times: 'krát',
             taxonFilter: 'Filtrovat podle druhu',
             classFilter: 'Filtrovat podle třídy',
             learnMore: 'Více informací',
@@ -118,6 +123,7 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         },
         widgetType: {
             list: 'Seznam',
+            map: 'Mapa',
             default: 'Mapa a seznam',
         },
         numberOfTaxonPerLine: 'Počet druhů na řádek',
@@ -143,6 +149,8 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
         Plantae: 'Rostlina',
         or: 'nebo',
         in: 'v',
+        near: 'poblíž',
+        searchAreaNear: 'Oblast hledání poblíž',
         datasetList: 'přiřazené datové sady',
         observation: 'pozorování',
         observations: 'pozorování',
@@ -153,6 +161,20 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             noResultsText: 'Nenalezeny žádné výsledky',
         },
         searchTaxon: 'Hledání druhu',
+        globalConservationStatus: 'Světový stav ochrany',
+        IUCNStatus: {
+            NA: 'Nepoužitelné',
+            NE: 'Nehodnoceno',
+            DD: 'Nedostatek dat',
+            LC: 'Málo dotčený',
+            NT: 'Téměř ohrožený',
+            VU: 'Zranitelný',
+            EN: 'Ohrožený',
+            CR: 'Kriticky ohrožený',
+            RE: 'Regionálně vyhynulý',
+            EW: 'Vyhynulý ve volné přírodě',
+            EX: 'Vyhynulý',
+        },
     },
 };
 

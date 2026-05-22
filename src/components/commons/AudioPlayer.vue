@@ -1,7 +1,8 @@
 <script setup lang="ts">
     import { Media } from '@/lib/models';
-    import { ref, onBeforeUnmount } from 'vue';
+    import { ref, onBeforeUnmount, onMounted } from 'vue';
     import Credits from './Credits.vue';
+    import FloatingTooltip from './FloatingTooltip.vue';
 
     const props = withDefaults(
         defineProps<{
@@ -20,7 +21,12 @@
     const play = ref(false);
     const progress = ref(0);
     const audioInstance = ref<HTMLAudioElement | null>(null);
+    const showTooltip = ref(false);
+    const buttonWrapper = ref<HTMLElement | null>(null);
     let animationFrameId: number | null = null;
+    let longPressTimer: number | null = null;
+    let hoverTimer: number | null = null;
+    const size_px = props.size * 0.7 + 'px';
 
     function updateProgress() {
         if (audioInstance.value && audioInstance.value.duration > 0) {
@@ -62,6 +68,8 @@
             });
 
             audioInstance.value.addEventListener('pause', () => {
+                audioInstance.value.currentTime = 0;
+                progress.value = 0;
                 play.value = false;
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
             });
@@ -75,50 +83,142 @@
         play.value ? audioInstance.value.pause() : audioInstance.value.play();
     }
 
+    function showTooltipHandler() {
+        if (!props.showCredits || !props.audio?.source) return;
+
+        // Clear any pending hide timer
+        if (hoverTimer) {
+            clearTimeout(hoverTimer);
+            hoverTimer = null;
+        }
+
+        showTooltip.value = true;
+    }
+
+    function hideTooltipHandler() {
+        // Add a delay before hiding to allow moving mouse to tooltip
+        hoverTimer = window.setTimeout(() => {
+            showTooltip.value = false;
+        }, 200); // 200ms delay before hiding
+    }
+
+    function keepTooltipVisible() {
+        // Cancel hide timer when hovering over tooltip
+        if (hoverTimer) {
+            clearTimeout(hoverTimer);
+            hoverTimer = null;
+        }
+    }
+
+    function handleTouchStart(event: TouchEvent) {
+        if (!props.showCredits || !props.audio?.source) return;
+
+        longPressTimer = window.setTimeout(() => {
+            showTooltip.value = true;
+            // Prevent the default action to avoid opening context menu
+            event.preventDefault();
+        }, 500); // 500ms for long press
+    }
+
+    function handleTouchEnd() {
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+    }
+
+    function handleTouchMove() {
+        // Cancel long press if user moves finger
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+    }
+
+    function closeTooltip() {
+        showTooltip.value = false;
+    }
+
+    onMounted(() => {
+        window.addEventListener('click', closeTooltip);
+    });
+
     onBeforeUnmount(() => {
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
         if (audioInstance.value) {
             audioInstance.value.pause();
             audioInstance.value = null;
         }
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+        }
+        if (hoverTimer) {
+            clearTimeout(hoverTimer);
+        }
+        window.removeEventListener('click', closeTooltip);
     });
 </script>
 
 <template>
-    <!-- Variante bouton circulaire -->
+    <!-- Circular button variant -->
     <div
         v-if="variant === 'button'"
+        ref="buttonWrapper"
         class="audio-button-wrapper"
         :style="{ width: size + 'px', height: size + 'px' }"
     >
         <div
             class="audio-button"
             :style="{
-                background: `conic-gradient(white ${
+                background: `
+                conic-gradient(#efefef ${progress * 360}deg, #718093 ${
                     progress * 360
-                }deg, rgba(255,255,255,0.2) 0deg)`,
+                }deg)
+                   
+                    
+                `,
                 width: size + 'px',
                 height: size + 'px',
             }"
             @click.stop="toggleAudio"
+            @mouseenter="showTooltipHandler"
+            @mouseleave="hideTooltipHandler"
+            @touchstart="handleTouchStart"
+            @touchend="handleTouchEnd"
+            @touchmove="handleTouchMove"
             data-testid="Toggle to play animal sound"
         >
-            <i
-                :class="play ? 'bi bi-pause-circle' : 'bi bi-play-circle'"
-                :style="`font-size: ${size}px;`"
-            ></i>
+            <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
         </div>
-        <div v-if="showCredits" class="tooltip">
-            <Credits :media="audio" link-color="link-light" />
-        </div>
+
+        <!-- Tooltip for copyright -->
+        <FloatingTooltip
+            v-if="showCredits && audio?.source"
+            :show="showTooltip"
+            :anchor="buttonWrapper"
+            @mouseenter="keepTooltipVisible"
+            @mouseleave="hideTooltipHandler"
+        >
+            <Credits :media="audio" />
+        </FloatingTooltip>
     </div>
 
-    <!-- Variante lecteur standard -->
+    <!-- Standard player variant -->
     <div v-else class="audio-player-wrapper">
         <div class="audio-player" data-testid="animal sound">
-            <button @click="toggleAudio" class="play-button" type="button">
+            <button
+                @click="toggleAudio"
+                @mouseenter="showTooltipHandler"
+                @mouseleave="hideTooltipHandler"
+                @touchstart="handleTouchStart"
+                @touchend="handleTouchEnd"
+                @touchmove="handleTouchMove"
+                class="play-button"
+                type="button"
+            >
                 <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
             </button>
+
             <div class="progress-bar" @click="seekAudio">
                 <div
                     class="progress-fill"
@@ -126,12 +226,18 @@
                 ></div>
             </div>
         </div>
-        <Credits
-            v-if="showCredits"
-            class="small"
-            link-color="text-muted"
-            :media="audio"
-        />
+
+        <!-- Tooltip for copyright -->
+        <div
+            v-if="showCredits && audio?.source"
+            class="copyright-tooltip player-variant"
+            :class="{ active: showTooltip }"
+            @click.stop
+            @mouseenter="keepTooltipVisible"
+            @mouseleave="hideTooltipHandler"
+        >
+            <Credits :media="audio" link-color="link-light" />
+        </div>
     </div>
 </template>
 
@@ -147,38 +253,27 @@
         justify-content: center;
         border-radius: 50%;
         cursor: pointer;
-        transition: background 0.1s linear;
+        transition: filter 0.15s linear;
+    }
+
+    .audio-button:hover {
+        filter: brightness(1.1);
     }
 
     .audio-button i {
         color: white;
         z-index: 2;
-        text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
+        text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        display: block;
+        line-height: 0;
+        font-size: v-bind(size_px) !important;
     }
 
-    .tooltip {
-        position: absolute;
-        bottom: 110%;
-        left: 50%;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 0.4rem 0.6rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s;
-        z-index: 2;
-    }
-
-    .audio-button-wrapper:hover .tooltip {
-        opacity: 1;
-    }
-
+    /* Player variant */
     .audio-player-wrapper {
         margin-top: 0.5rem;
         width: 100%;
+        position: relative;
     }
 
     .audio-player {
@@ -220,7 +315,6 @@
         background: #e9ecef;
         border-radius: 0.25rem;
         overflow: hidden;
-        position: relative;
         cursor: pointer;
     }
 
@@ -232,5 +326,55 @@
         height: 100%;
         background: #afafaf;
         transition: width 0.1s linear;
+    }
+
+    /* Copyright tooltip styles */
+    .copyright-tooltip {
+        position: absolute;
+        bottom: 110%;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .copyright-tooltip.active {
+        opacity: 1;
+        pointer-events: auto;
+        cursor: default;
+    }
+
+    .copyright-tooltip.player-variant {
+        bottom: auto;
+        top: 110%;
+        left: 0;
+        right: auto;
+    }
+
+    /* Tooltip arrow */
+    .copyright-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        right: 10px;
+        border: 5px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .copyright-tooltip.player-variant::after {
+        top: auto;
+        bottom: 100%;
+        left: 20px;
+        right: auto;
+        border-top-color: transparent;
+        border-bottom-color: rgba(0, 0, 0, 0.9);
     }
 </style>

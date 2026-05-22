@@ -27,19 +27,17 @@
 
 <template>
     <div :class="props.class">
-        <span
-            ><a
-                :class="props.linkColor ? props.linkColor : 'link-light'"
-                v-if="props.media.urlSource"
-                :href="props.media.urlSource"
-                target="_blank"
-                >{{ creditsAuthor }}</a
-            ></span
+        <!-- :class="props.linkColor ? props.linkColor : 'link-light'" -->
+        <span v-if="props.media.urlSource"
+            ><a :href="props.media.urlSource" target="_blank">{{
+                creditsAuthor
+            }}</a></span
         >
+        <span v-else>{{ creditsAuthor }}</span>
         <span v-if="creditsLicense && creditsAuthor"> - </span>
+        <!-- :class="props.linkColor ? props.linkColor : 'link-light'" -->
         <span v-if="props.media.licenseUrl"
             ><a
-                :class="props.linkColor ? props.linkColor : 'link-light'"
                 :href="props.media.licenseUrl"
                 target="_blank"
                 style="margin-left: 0.3em"
@@ -52,5 +50,8 @@
 <style scoped>
     span {
         margin-right: 0.2em;
+    }
+    a {
+        color: inherit;
     }
 </style>

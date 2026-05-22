@@ -14,6 +14,7 @@ export class GeoNatureConnector extends Connector {
     API_ENDPOINT: string | undefined;
     ID_EXPORT: number;
     LIMIT: string | number;
+    SOURCE_NAME: string | undefined;
 
     constructor(options: ConnectorOptions) {
         super(options);
@@ -21,6 +22,7 @@ export class GeoNatureConnector extends Connector {
         this.API_ENDPOINT = options?.API_ENDPOINT;
         this.ID_EXPORT = options?.ID_EXPORT ?? 35;
         this.LIMIT = this.options?.LIMIT ?? GEONATURE_DEFAULT_LIMIT;
+        this.SOURCE_NAME = options?.SOURCE_NAME;
         this.referential = TAXON_REFERENTIAL.TAXREF;
 
         this.imageSource = this.imageSource ?? getMediaSource(SOURCE_.inpn);
@@ -61,6 +63,12 @@ export class GeoNatureConnector extends Connector {
                 label: t('limit'),
                 type: Number,
                 default: GEONATURE_DEFAULT_LIMIT,
+            },
+            {
+                name: 'SOURCE_NAME',
+                label: t('geonature.source_name'),
+                type: String,
+                default: undefined,
             },
         ];
     }
@@ -142,5 +150,9 @@ export class GeoNatureConnector extends Connector {
 
     fetchVernacularName(taxonId: string | number): Promise<null> {
         return Promise.resolve(null);
+    }
+
+    getSourceName(): string {
+        return this.SOURCE_NAME ?? this.name;
     }
 }

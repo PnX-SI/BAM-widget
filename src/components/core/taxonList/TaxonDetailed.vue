@@ -1,7 +1,10 @@
 <script setup lang="ts">
-    import Credits from '@/components/commons/Credits.vue';
+    import CopyrightIcon from '@/components/commons/CopyrightIcon.vue';
     import { Media } from '@/lib/models';
+    import ParameterStore from '@/lib/parameterStore';
+    import { StatusInfo } from './interface';
 
+    const { connector, primaryColor } = ParameterStore.getInstance();
     const props = defineProps<{
         picture: Media;
         audio: Media;
@@ -10,117 +13,200 @@
         urlDetailPage: string;
         nbObservations: number;
         lastSeenDate: Date;
+        status: StatusInfo;
     }>();
 </script>
 <template>
-    <div class="col" data-testid="Taxon detailed view">
-        <div class="card h-100 mb-2">
-            <div class="taxon-photo" data-testid="Taxon picture">
-                <FullScreenImage
-                    :media="props.picture"
+    <div class="detailed" data-testid="Taxon detailed view">
+        <div class="image-container">
+            <FullScreenImage
+                :media="props.picture"
+                :alt="props.picture?.urlSource"
+            >
+                <img
+                    :src="props.picture?.url"
                     :alt="props.picture?.urlSource"
-                >
-                    <Image
-                        :image-url="props.picture?.url"
-                        :alt="props.picture?.urlSource"
-                        class="card-img-top"
-                    ></Image>
-                </FullScreenImage>
-
-                <div
-                    class="caption"
-                    v-if="props.picture.author"
-                    data-testid="Picture caption"
-                >
-                    <Credits
-                        link-color="link-light"
-                        :media="props.picture"
-                        class=""
-                    ></Credits>
-                </div>
+                    data-testid="Taxon picture"
+                />
+            </FullScreenImage>
+            <AudioPlayer
+                v-if="props.audio?.url"
+                :audio="props.audio"
+                variant="button"
+                :size="45"
+                class="audio-overlay"
+            ></AudioPlayer>
+            <CopyrightIcon
+                :media="props.picture"
+                class="copyright-overlay"
+                :size="20"
+            />
+        </div>
+        <div class="names">
+            <div class="vernacular-name">
+                <StatusIcon
+                    v-if="props.status.status"
+                    :status="props.status.status"
+                    :color="props.status.color"
+                    :size="'1.2rem'"
+                ></StatusIcon>
+                <strong data-testid="Vernacular name">{{
+                    props.vernacularName
+                }}</strong>
             </div>
+            <em data-testid="Scientific name">{{
+                props.acceptedScientificName
+            }}</em>
+        </div>
 
-            <div class="card-body">
-                <div class="card-text">
-                    <h5
-                        class="card-title text-wrap"
-                        data-testid="Vernacular name"
-                    >
-                        {{ props.vernacularName }}
-                    </h5>
-                    <small
-                        class="text-body-secondary"
-                        data-testid="Scientific name"
-                        ><strong>{{ $t('taxon.scientificName') }} :</strong>
-                        {{ props.acceptedScientificName }}</small
-                    ><br />
-
-                    <small
-                        v-if="props.nbObservations"
-                        class="text-body-secondary"
-                    >
-                        <strong>{{ $t('taxon.nbObservations') }} : </strong
-                        ><span data-testid="Number of observations">{{
-                            props.nbObservations
-                        }}</span>
-                    </small>
-                    <br />
-
-                    <small class="text-body-secondary">
-                        <!-- prettier-ignore -->
-                        <a
-              :href="props.urlDetailPage"
-              target="_blank"
-               data-testid="Taxon detail redirect link"
-              class="badge bg-light text-secondary border border-secondary text-decoration-none"
-              ><strong>{{ $t("taxon.learnMore") }} <i class="bi bi-arrow-right"></i> </strong>
-            </a>
-                    </small>
-                    <br />
-
-                    <AudioPlayer
-                        v-if="props.audio?.url"
-                        :audio="props.audio"
-                        variant="player"
-                    />
-                </div>
+        <div class="statistics-wrapper">
+            <div class="statistics">
+                <span
+                    >{{ $t('taxon.observed') }} <br />
+                    <strong data-testid="Number of observations">{{
+                        props.nbObservations
+                    }}</strong>
+                    {{ $t('taxon.times') }}</span
+                >
             </div>
-            <div class="card-footer">
-                <small class="text-body-secondary" data-testid="Last seen date"
-                    >{{ $t('taxon.lastSeenDate') }} :
-                    {{ props?.lastSeenDate.toLocaleDateString() }}</small
+            <div class="statistics">
+                <span
+                    >{{ $t('taxon.lastSeen') }} <br />
+                    <strong data-testid="Last seen date">{{
+                        props.lastSeenDate.toLocaleDateString()
+                    }}</strong></span
                 >
             </div>
         </div>
+        <a
+            :href="props.urlDetailPage"
+            target="_blank"
+            class="detail-button"
+            data-testid="Taxon detail redirect link"
+        >
+            {{ $t('taxon.learnMore') }}
+            <i class="bi bi-box-arrow-up-right"></i>
+        </a>
     </div>
 </template>
-
 <style scoped>
-    .taxon-photo {
+    .detailed {
+        container-name: detailed;
+        container-type: inline-size;
+        border: 1px solid #efefef;
+        display: flex;
+        justify-content: start;
+        flex-direction: column;
+        border-radius: 10px;
+        padding-bottom: 1em;
+    }
+
+    .image-container {
+        margin-top: 0;
+        margin-bottom: 1.5em;
         position: relative;
-        display: inline-block;
+        display: flex;
+        justify-content: center;
     }
 
-    .taxon-photo > img {
-        object-fit: cover;
-        height: 250px !important;
-        border-radius: 0px !important;
-        width: 100%;
-    }
-
-    .caption {
+    .audio-overlay {
         position: absolute;
         bottom: 0px;
-        left: 0px;
-        width: 100%;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 5px;
-        border-radius: 3px;
+        left: 50%;
+        transform: translateX(-50%) translateY(50%);
+        z-index: 2;
     }
 
-    .audio {
-        margin-top: 0.5rem;
+    .copyright-overlay {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        z-index: 2;
+    }
+
+    img {
+        display: block;
         width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 10px 10px 0px 0px;
+        -webkit-border-radius: 10px 10px 0px 0px;
+        -moz-border-radius: 10px 10px 0px 0px;
+        margin: 0 auto;
+    }
+
+    .statistics-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: 1em;
+        column-gap: 0.5em;
+    }
+    .statistics {
+        display: flex;
+        flex-direction: column;
+        color: #666;
+        text-align: center;
+        strong {
+            color: #444;
+        }
+    }
+    .names {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        strong {
+            font-size: 1.2em;
+        }
+        em {
+            color: #888;
+        }
+        .vernacular-name {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5em;
+            align-items: center;
+            align-self: center;
+            padding-right: 0.5em;
+            padding-left: 0.5em;
+        }
+    }
+
+    .detail-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        margin: 1em auto 0;
+        padding: 0.4em 0.8em;
+        background-color: transparent;
+        color: v-bind('"#" + primaryColor');
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.75rem;
+        transition: all 0.2s ease;
+        border: 1px solid v-bind('"#" + primaryColor');
+        cursor: pointer;
+    }
+
+    .detail-button:hover {
+        background-color: v-bind('"#" + primaryColor');
+        color: white;
+    }
+
+    .detail-button i {
+        font-size: 0.85rem;
+    }
+
+    @container detailed (width < 275px) {
+        .statistics-wrapper {
+            flex-direction: column;
+            row-gap: 0.5em;
+        }
+        .statistics {
+            width: 100%;
+        }
     }
 </style>

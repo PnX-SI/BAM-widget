@@ -164,11 +164,7 @@
                 class="taxon-list-scroll-wrapper"
                 :class="{ 'pt-0': !filtersOnList }"
             >
-                <div
-                    id="taxon-list-content"
-                    :class="classNames"
-                    @scroll="onScroll"
-                >
+                <div id="taxon-list-content" @scroll="onScroll">
                     <TaxonListMessages
                         :loading-error="loadingError"
                         :loading-observations="loadingObservations"
@@ -184,13 +180,13 @@
                     />
                 </div>
             </div>
-        </div>
 
-        <TaxonListFooter
-            :loading-done="wkt.length && !loadingObservations"
-            :number-of-species="speciesList.length"
-            :datasets="datasets"
-        />
+            <TaxonListFooter
+                :loading-done="wkt.length && !loadingObservations"
+                :number-of-species="speciesList.length"
+                :datasets="datasets"
+            />
+        </div>
     </div>
 </template>
 <style scoped>
@@ -207,8 +203,6 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        padding-left: 1em;
-        padding-right: 1em;
     }
 
     #taxon-list-filter {
@@ -229,6 +223,10 @@
         padding: 0.8em 1em;
         z-index: 10;
         margin-bottom: 0;
+        pointer-events: none;
+    }
+    .overlap-filter > * {
+        pointer-events: auto; /* Re-enable clicks on child elements (filters) */
     }
 
     .taxon-list-scroll-wrapper {
@@ -238,13 +236,43 @@
     }
 
     #taxon-list-content {
+        display: grid;
+        grid-template-columns: repeat(v-bind(rowColsSm), 1fr);
+        gap: 20px;
         overflow-y: auto;
         overflow-x: hidden;
         height: 100%;
-        padding-top: 1em;
+        padding: 0 1rem;
         -ms-overflow-style: none; /* Internet Explorer 10+ */
         scrollbar-width: none;
     }
+
+    @media (min-width: 768px) {
+        #taxon-list-content {
+            grid-template-columns: repeat(v-bind(rowColsMd), 1fr);
+        }
+    }
+
+    @media (min-width: 992px) {
+        #taxon-list-content {
+            grid-template-columns: repeat(v-bind(rowColsLg), 1fr);
+        }
+    }
+
+    /* Disable Bootstrap column sizing since we're using Grid */
+    #taxon-list-content > :deep(*) {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Make TaxonListMessages span all columns and center */
+    #taxon-list-content > :deep(.message) {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     #taxon-list-content ::-webkit-scrollbar {
         display: none; /* Safari and Chrome */
     }

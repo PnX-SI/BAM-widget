@@ -76,6 +76,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         shareLink: 'Partager un lien',
         shareDiscover: 'Partager votre recherche',
         source: {
+            source: 'Source',
             title: 'Source de données',
             select: 'Sélectionner une source',
             modify: 'Modifier la source de données des observations',
@@ -88,6 +89,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         geonature: {
             api_endpoint: "Adresse de l'API de GeoNature",
             id_export: "Identifiant de l'export",
+            source_name: 'Nom de la source',
         },
         desc: 'Décroissant',
         asc: 'Croissant',
@@ -104,6 +106,9 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             vernacularName: 'Nom vernaculaire',
             nbObservations: "Nombre d'observations",
             lastSeenDate: 'Date de la dernière observation',
+            lastSeen: 'Vu dernièrement le',
+            observed: 'Observé',
+            times: 'fois',
             taxonFilter: 'Filtre par espèce',
             classFilter: 'Filtrer par classe',
             learnMore: 'En savoir plus',
@@ -118,6 +123,7 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
         },
         widgetType: {
             list: 'Liste',
+            map: 'Carte',
             default: 'Carte Liste',
         },
         numberOfTaxonPerLine: "Nombre d'espèces par ligne",
@@ -144,6 +150,8 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
 
         or: 'ou',
         in: 'dans',
+        near: 'près de',
+        searchAreaNear: 'Zone de recherche près de',
         datasetList: 'jeux de données associés',
         observation: 'observation',
         observations: 'observations',
@@ -154,6 +162,22 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             noResultsText: 'Aucun résultat trouvé',
         },
         searchTaxon: 'Recherche une espèce',
+        globalConservationStatus: 'Statut de conservation mondial',
+        IUCNStatus: {
+            //based on https://uicn.fr/wp-content/uploads/2016/06/UICN_2012_Categories_et_criteres_Liste_rouge.pdf
+            // Some translation are not available on the official document
+            NA: 'Non Applicable',
+            NE: 'Non évalué',
+            DD: 'Données insuffisante',
+            LC: 'Préoccupation Mineure',
+            NT: 'Quasi menacé',
+            VU: 'Vulnérable',
+            EN: 'En danger',
+            CR: 'En danger critique',
+            RE: 'Éteint régionalement',
+            EW: "Éteint à l'état sauvage",
+            EX: 'Éteint',
+        },
     },
 };
 

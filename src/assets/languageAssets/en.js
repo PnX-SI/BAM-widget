@@ -77,6 +77,7 @@ You can also **share your results 📤** to collaborate with other users.
         shareLink: 'Share a link',
         shareDiscover: 'Share your research',
         source: {
+            source: 'Source',
             title: 'Data Source',
             select: 'Select a data source',
             modify: 'Change the observations data source',
@@ -89,6 +90,7 @@ You can also **share your results 📤** to collaborate with other users.
         geonature: {
             api_endpoint: 'GeoNature  API endpoint',
             id_export: "Export's id",
+            source_name: 'Source name',
         },
         desc: 'Décroissant',
         asc: 'Croissant',
@@ -105,6 +107,9 @@ You can also **share your results 📤** to collaborate with other users.
             vernacularName: 'Vernacular name',
             nbObservations: 'Number of observations',
             lastSeenDate: 'Last observation date',
+            lastSeen: 'Last seen on',
+            observed: 'Observed',
+            times: 'times',
             taxonFilter: 'Filter by species',
             classFilter: 'Filter by class',
             learnMore: 'Learn more',
@@ -119,6 +124,7 @@ You can also **share your results 📤** to collaborate with other users.
         },
         widgetType: {
             list: 'List',
+            map: 'Map',
             default: 'Map List',
         },
         numberOfTaxonPerLine: 'Number of species per line',
@@ -144,6 +150,8 @@ You can also **share your results 📤** to collaborate with other users.
         Plantae: 'Plant',
         or: 'or',
         in: 'in',
+        near: 'near',
+        searchAreaNear: 'Search area near',
         datasetList: 'associated datasets',
         observation: 'observation',
         observations: 'observations',
@@ -154,6 +162,20 @@ You can also **share your results 📤** to collaborate with other users.
             noResultsText: 'No results found',
         },
         searchTaxon: 'Search a species',
+        globalConservationStatus: 'Global conservation status',
+        IUCNStatus: {
+            NA: 'Not Applicable ',
+            NE: 'Not Evaluated ',
+            DD: 'Data Deficient',
+            LC: 'Least Concern',
+            NT: 'Near Threatened',
+            VU: 'Vulnerable',
+            EN: 'Endangered',
+            CR: 'Critically Endangered',
+            RE: 'Regionally Extinct',
+            EW: 'Extinct in the Wild',
+            EX: 'Extinct',
+        },
     },
 };
 

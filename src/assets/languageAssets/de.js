@@ -76,6 +76,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         shareLink: 'Link teilen',
         shareDiscover: 'Ihre Suche teilen',
         source: {
+            source: 'Quelle',
             title: 'Datenquelle',
             select: 'Quelle auswählen',
             modify: 'Beobachtungsdatenquelle ändern',
@@ -88,6 +89,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         geonature: {
             api_endpoint: 'API-Adresse von GeoNature',
             id_export: 'Export-Kennung',
+            source_name: 'Quellenname',
         },
         desc: 'Absteigend',
         asc: 'Aufsteigend',
@@ -104,6 +106,9 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             vernacularName: 'Trivialname',
             nbObservations: 'Anzahl der Beobachtungen',
             lastSeenDate: 'Datum der letzten Beobachtung',
+            lastSeen: 'Zuletzt gesehen am',
+            observed: 'Beobachtet',
+            times: 'Mal',
             taxonFilter: 'Art filtern',
             classFilter: 'Nach Klasse filtern',
             learnMore: 'Mehr erfahren',
@@ -118,6 +123,7 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         },
         widgetType: {
             list: 'Liste',
+            map: 'Karte',
             default: 'Karte und Liste',
         },
         numberOfTaxonPerLine: 'Anzahl der Arten pro Zeile',
@@ -143,6 +149,8 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
         Plantae: 'Pflanze',
         or: 'oder',
         in: 'in',
+        near: 'nahe',
+        searchAreaNear: 'Suchbereich in der Nähe von',
         datasetList: 'zugehörige Datensätze',
         observation: 'Beobachtung',
         observations: 'Beobachtungen',
@@ -153,6 +161,20 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             noResultsText: 'Keine Ergebnisse gefunden',
         },
         searchTaxon: 'Eine Art suchen',
+        globalConservationStatus: 'Weltweiter Erhaltungszustand',
+        IUCNStatus: {
+            NA: 'Nicht anwendbar',
+            NE: 'Nicht bewertet',
+            DD: 'Unzureichende Daten',
+            LC: 'Nicht gefährdet',
+            NT: 'Potenziell gefährdet',
+            VU: 'Gefährdet',
+            EN: 'Stark gefährdet',
+            CR: 'Vom Aussterben bedroht',
+            RE: 'Regional ausgestorben',
+            EW: 'In der Natur ausgestorben',
+            EX: 'Ausgestorben',
+        },
     },
 };
 

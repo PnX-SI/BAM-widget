@@ -15,28 +15,23 @@
 </script>
 
 <template>
-    <BPopover
+    <div
         v-if="props.datasets && props.datasets.length > 0"
-        :close-on-hide="true"
-        :delay="{ show: 0, hide: 0 }"
-        style="z-index: 500"
+        class="datasets-container"
     >
-        <template #target>
-            <a style="color: white; text-decoration: underline" class="ms-1"
-                ><i class="bi bi-database-fill"></i
-            ></a>
-        </template>
-        <h4>{{ sortedDatasets.length }} {{ $t('datasetList') }}</h4>
-        <ul class="list-group datasetsList">
-            <li v-for="dataset in sortedDatasets" class="list-group-item">
+        <h4 class="datasets-title">
+            {{ sortedDatasets.length }} {{ $t('datasetList') }}
+        </h4>
+        <ul class="datasets-list">
+            <li v-for="dataset in sortedDatasets" class="dataset-item">
                 <a
-                    class="link-primary text-decoration-none"
+                    class="dataset-link"
                     target="_blank"
                     :href="connector.getDatasetUrl(dataset.uuid)"
                 >
                     {{ dataset.name }}
                 </a>
-                <span class="badge bg-warning rounded-pill ms-1">
+                <span class="observation-count">
                     {{ dataset.nbObservations }}
                     {{
                         $t(
@@ -48,12 +43,99 @@
                 </span>
             </li>
         </ul>
-    </BPopover>
+    </div>
 </template>
 
-<style>
-    .datasetsList {
-        height: 200px;
-        overflow-y: scroll;
+<style scoped>
+    .datasets-container {
+        width: 100%;
+    }
+
+    .datasets-title {
+        font-size: 1em;
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: inherit;
+    }
+
+    .datasets-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .dataset-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        gap: 12px;
+        transition: background 0.2s ease;
+    }
+
+    .dataset-item:hover {
+        background: #e9ecef;
+    }
+
+    .dataset-link {
+        color: inherit;
+        text-decoration: none;
+        flex: 1;
+        font-weight: 500;
+        transition: opacity 0.2s ease;
+    }
+
+    .dataset-link:hover {
+        opacity: 0.7;
+        text-decoration: underline;
+    }
+
+    .observation-count {
+        font-size: 0.85em;
+        color: #6c757d;
+        white-space: nowrap;
+        font-weight: 500;
+    }
+
+    /* Custom scrollbar */
+    .datasets-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .datasets-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .datasets-list::-webkit-scrollbar-thumb {
+        background: #dee2e6;
+        border-radius: 3px;
+    }
+
+    .datasets-list::-webkit-scrollbar-thumb:hover {
+        background: #adb5bd;
+    }
+
+    @media (max-width: 500px) {
+        .datasets-title {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .dataset-item {
+            padding: 8px 12px;
+            font-size: 0.9em;
+            gap: 8px;
+        }
+
+        .observation-count {
+            font-size: 0.8em;
+        }
     }
 </style>

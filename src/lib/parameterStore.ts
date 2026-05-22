@@ -147,6 +147,18 @@ class ParameterStore {
      */
     filtersOnList: Ref<boolean> = ref(false);
 
+    /**
+     * If the footer is expanded.
+     * @type {Ref<boolean>}
+     */
+    isFooterExpanded: Ref<boolean> = ref(false);
+
+    /**
+     * Expanded size of the footer
+     * @type {Ref<number>}
+     */
+    expandedFooterSize: Ref<number> = ref(0);
+
     private constructor() {
         const { locale, availableLocales } = useI18n();
         const route = useRoute();
@@ -180,6 +192,7 @@ class ParameterStore {
         this.setupWatchers(router, route);
 
         this.isMobile = ref(isRunningOnMobile());
+        this.isFooterExpanded = ref(false);
 
         window.addEventListener('resize', () => {
             this.isMobile.value = isRunningOnMobile();
@@ -326,7 +339,12 @@ class ParameterStore {
 
     public getParams(): Record<string, any> {
         const params: Record<string, any> = {};
-        const banlist = ['isMobile', 'isSearchOnAPIAvailable'];
+        const banlist = [
+            'isMobile',
+            'isSearchOnAPIAvailable',
+            'expandedFooterSize',
+            'isFooterExpanded',
+        ];
         Object.entries(this).forEach(([key, value]) => {
             if (
                 value?.value !== undefined &&

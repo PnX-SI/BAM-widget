@@ -2,8 +2,10 @@
     import { Media } from '@/lib/models';
     import { computed, onMounted, ref, watch } from 'vue';
     import ParameterStore from '@/lib/parameterStore';
+    import { StatusInfo } from './interface';
+    import CopyrightIcon from '@/components/commons/CopyrightIcon.vue';
 
-    const { isMobile } = ParameterStore.getInstance();
+    const { isMobile, nbTaxonPerLine } = ParameterStore.getInstance();
 
     const props = defineProps<{
         picture: Media;
@@ -12,15 +14,29 @@
         acceptedScientificName: string;
         urlDetailPage: string;
         cols: number;
+        status: StatusInfo;
     }>();
 
     const sizeIcon = computed(() => {
         return isMobile.value ? 50 : 30;
     });
+    const colClasses = computed(() => {
+        const lg = Math.floor(12 / nbTaxonPerLine.value);
+        const md = Math.floor(12 / Math.ceil(nbTaxonPerLine.value / 2));
+
+        return [
+            'col-12', // sm → 1 per row
+            `col-md-${md}`, // md → nbTaxonPerLine / 2
+            `col-lg-${lg}`, // lg → nbTaxonPerLine
+        ];
+    });
 </script>
 
 <template>
-    <div class="col card thumbnail" data-testid="Taxon thumbnail view">
+    <div
+        :class="['card', 'thumbnail', ...colClasses]"
+        data-testid="Taxon thumbnail view"
+    >
         <Image :image-url="props.picture?.url" :alt="props.picture?.url" />
 
         <FullScreenImage
@@ -30,6 +46,12 @@
         >
             <div class="card-img-overlay">
                 <div class="card-title">
+                    <StatusIcon
+                        v-if="props.status.status"
+                        :status="props.status.status"
+                        :color="props.status.color"
+                        :size="'1rem'"
+                    ></StatusIcon>
                     <a
                         style="color: inherit; text-decoration: inherit"
                         :href="props.urlDetailPage"
@@ -61,32 +83,17 @@
                         />
                     </div>
 
-                    <Popover
-                        v-if="props.picture.source"
-                        :click="true"
-                        :close-on-hide="true"
-                        :delay="{ show: 0, hide: 0 }"
+                    <div
+                        class="copyright-wrapper"
+                        :class="{
+                            'cols-2-plus': props.cols >= 2,
+                        }"
                     >
-                        <template #target>
-                            <div
-                                class="copyright-icon"
-                                :class="{
-                                    'cols-2-plus': props.cols >= 2,
-                                }"
-                            >
-                                <i
-                                    class="bi bi-c-square-fill"
-                                    :style="{
-                                        fontSize: sizeIcon + 'px',
-                                    }"
-                                ></i>
-                            </div>
-                        </template>
-                        <Credits
-                            link-color="link-dark"
+                        <CopyrightIcon
                             :media="props.picture"
+                            :size="sizeIcon"
                         />
-                    </Popover>
+                    </div>
                 </div>
             </div>
         </FullScreenImage>
@@ -112,6 +119,9 @@
         font-size: 1rem;
         font-weight: 600;
         z-index: 2;
+        display: flex;
+        gap: 0.5em;
+        align-items: center;
     }
 
     /* Overlay covers the image */
@@ -137,16 +147,11 @@
     }
 
     .player,
-    .copyright-icon {
+    .copyright-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
-    }
-
-    .copyright-icon i {
-        color: #fff;
-        line-height: 1;
     }
 
     @media screen and (max-width: 1200px) {
@@ -166,7 +171,7 @@
         }
 
         .player.cols-2-plus,
-        .copyright-icon.cols-2-plus {
+        .copyright-wrapper.cols-2-plus {
             transform: scale(0.7);
         }
 

@@ -77,6 +77,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         shareLink: 'Condividi un link',
         shareDiscover: 'Condividi la tua ricerca',
         source: {
+            source: 'Fonte',
             title: 'Fonte dei dati',
             select: 'Seleziona una fonte',
             modify: 'Modifica la fonte dei dati delle osservazioni',
@@ -89,6 +90,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         geonature: {
             api_endpoint: 'Indirizzo API di GeoNature',
             id_export: 'Identificativo dell’esportazione',
+            source_name: 'Nome della fonte',
         },
         desc: 'Decrescente',
         asc: 'Crescente',
@@ -105,6 +107,9 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             vernacularName: 'Nome comune',
             nbObservations: 'Numero di osservazioni',
             lastSeenDate: 'Data dell’ultima osservazione',
+            lastSeen: "Visto l'ultima volta il",
+            observed: 'Osservato',
+            times: 'volte',
             taxonFilter: 'Filtro per specie',
             classFilter: 'Filtra per classe',
             learnMore: 'Scopri di più',
@@ -119,6 +124,7 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         },
         widgetType: {
             list: 'Lista',
+            map: 'Mappa',
             default: 'Mappa e lista',
         },
         numberOfTaxonPerLine: 'Numero di specie per riga',
@@ -144,6 +150,8 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
         Plantae: 'Pianta',
         or: 'o',
         in: 'in',
+        near: 'vicino a',
+        searchAreaNear: 'Area di ricerca vicino a',
         datasetList: 'set di dati associati',
         observation: 'osservazione',
         observations: 'osservazioni',
@@ -154,6 +162,20 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             noResultsText: 'Nessun risultato trovato',
         },
         searchTaxon: 'Cerca una specie',
+        globalConservationStatus: 'Stato di conservazione mondiale',
+        IUCNStatus: {
+            NA: 'Non applicabile',
+            NE: 'Non valutato',
+            DD: 'Dati insufficienti',
+            LC: 'Minor preoccupazione',
+            NT: 'Quasi minacciato',
+            VU: 'Vulnerabile',
+            EN: 'In pericolo',
+            CR: 'In pericolo critico',
+            RE: 'Estinto a livello regionale',
+            EW: 'Estinto in natura',
+            EX: 'Estinto',
+        },
     },
 };
 
