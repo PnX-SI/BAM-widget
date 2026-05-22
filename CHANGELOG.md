@@ -5,22 +5,22 @@
 ### ✨ New Features
 
 - Complete redesign of the detailed taxon view with improved layout and aesthetics (#123 par @jacquesfize)
-- Add Global conservation status (IUCN Red List) display for species (#119 par @jacquesfize)
-- Custom source naming for GeoNature connector via `SOURCE_NAME` parameter (#125 par @jacquesfize)
+- Add Global conservation status (IUCN Red List) display on each species (#119 par @jacquesfize)
+- Fullscreen mode by clicking on a species picture (#122 by @jacquesfize)
 - Improved audio player with better tooltips and interaction feedback (#125 par @jacquesfize)
-- End2End tests are now available using Playwright (#19 par @jacquesfize)
 - BAM is now available as PWA for a mobile usage (#43 par @jacquesfize)
-- New features proposed in the pull request are automatically deployed on Netlify (#106 par @jacquesfize)
-- New examples are available in the documentation (by @camillemonchicourt)
+- Custom source naming for GeoNature connector via `SOURCE_NAME` new parameter (#125 par @jacquesfize)
+- End2End tests are now available using Playwright (#19 par @jacquesfize)
 - Add unit tests using Vitest (#114 par @jacquesfize)
-- Fullscreen mode by simply clicking on the desired image (#122 by @jacquesfize)
+- New features proposed in pull requests are automatically deployed on Netlify (#106 par @jacquesfize)
+- New examples are available in the documentation (by @camillemonchicourt)
 
 ### 🐛 Fixes
 
 - Fix TaxHub media URL retrieval to use correct `media_url` field
 - Fix credits display when no source URL is provided
-- Audio is now loaded only when used (#103)
-- Add missing orderby in the GeoNature connector results(#118 par @jacquesfize)
+- Audio is now loaded only when played (#103)
+- Add missing orderby in the GeoNature connector results (#118 par @jacquesfize)
 - Small optimizations (#105 par @jacquesfize)
 - Add function to remove potential inner ring (incompatible with most datasource API) (#120 by @jacquesfize)
 - Improved compatibility with mobile when 2 or more columns are (#131 par @azarz)
