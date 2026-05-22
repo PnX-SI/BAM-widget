@@ -2,6 +2,7 @@
     import { Media } from '@/lib/models';
     import { ref, onBeforeUnmount, onMounted } from 'vue';
     import Credits from './Credits.vue';
+    import FloatingTooltip from './FloatingTooltip.vue';
 
     const props = withDefaults(
         defineProps<{
@@ -21,6 +22,7 @@
     const progress = ref(0);
     const audioInstance = ref<HTMLAudioElement | null>(null);
     const showTooltip = ref(false);
+    const buttonWrapper = ref<HTMLElement | null>(null);
     let animationFrameId: number | null = null;
     let longPressTimer: number | null = null;
     let hoverTimer: number | null = null;
@@ -161,6 +163,7 @@
     <!-- Circular button variant -->
     <div
         v-if="variant === 'button'"
+        ref="buttonWrapper"
         class="audio-button-wrapper"
         :style="{ width: size + 'px', height: size + 'px' }"
     >
@@ -189,16 +192,15 @@
         </div>
 
         <!-- Tooltip for copyright -->
-        <div
+        <FloatingTooltip
             v-if="showCredits && audio?.source"
-            class="copyright-tooltip"
-            :class="{ active: showTooltip }"
-            @click.stop
+            :show="showTooltip"
+            :anchor="buttonWrapper"
             @mouseenter="keepTooltipVisible"
             @mouseleave="hideTooltipHandler"
         >
             <Credits :media="audio" link-color="link-light" />
-        </div>
+        </FloatingTooltip>
     </div>
 
     <!-- Standard player variant -->
