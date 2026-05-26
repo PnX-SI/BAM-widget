@@ -62,11 +62,28 @@ export class Connector {
      */
     scoringSearchClass: SearchScoring = new SearchScoring();
 
+    /**
+     * Optional callback function to report progress during long-running operations
+     * @type {Function}
+     */
+    onProgress?: (progress: number, message?: string) => void;
+
     constructor(options: ConnectorOptions) {
         this.options = options;
 
         this.imageSource = this.parseMediaSource(options?.imageSource);
         this.soundSource = this.parseMediaSource(options?.soundSource);
+    }
+
+    /**
+     * Helper method to report progress if a callback is configured
+     * @param {number} progress - Progress percentage (0-100)
+     * @param {string} message - Optional message to display
+     */
+    protected reportProgress(progress: number, message?: string): void {
+        if (this.onProgress) {
+            this.onProgress(progress, message);
+        }
     }
 
     /**

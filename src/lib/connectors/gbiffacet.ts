@@ -275,6 +275,8 @@ export class GbifFacetConnector extends Connector {
     /* ---------- fetchOccurrence ---------- */
     fetchOccurrence(params: any = {}): Promise<SearchResult> {
         super.fetchOccurrence(params);
+        const { t } = useI18n();
+
         if (params.geometry)
             params.geometry = stringify(removeHoles(parse(params.geometry)));
 
@@ -305,7 +307,13 @@ export class GbifFacetConnector extends Connector {
             delete defaultParams.class;
         }
 
+        // Step 1 (25%): API GBIF call
+        this.reportProgress(25, t('gbif.progress.fetching'));
+
         return callOccurrenceApi(defaultParams).then(async (gbifData) => {
+            // Step 2 (50%): Extract facets
+            this.reportProgress(50, t('gbif.progress.processing'));
+
             if (!gbifData.facets || gbifData.facets.length === 0)
                 return { taxons: [], datasets: [] };
 
@@ -326,6 +334,9 @@ export class GbifFacetConnector extends Connector {
             if (!taxonFacet || !taxonFacet.counts)
                 return { taxons: [], datasets };
 
+            // Step 3 (75%): Wikidata enrichment
+            this.reportProgress(75, t('gbif.progress.enriching'));
+
             // Parallel prefetch: Start Wikidata enrichment immediately, don't await yet
             const speciesIds = taxonFacet.counts.map((f: any) => f.name);
             const enrichmentPromise = this.enrichTaxonomy(speciesIds);
@@ -335,6 +346,9 @@ export class GbifFacetConnector extends Connector {
 
             // Now await the enrichment data
             const enrichmentMap = await enrichmentPromise;
+
+            // Step 4 (100%): Build taxons
+            this.reportProgress(100, t('gbif.progress.finalizing'));
 
             const taxons: TaxonWithAncestors[] = taxonFacet.counts.map(
                 (facet: any) => {
