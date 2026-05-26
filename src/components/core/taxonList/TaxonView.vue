@@ -130,12 +130,19 @@
     }
 
     function fetchStatus(connector: Connector) {
-        connector.fetchTaxonStatus(taxon.taxonId).then((status_) => {
-            status.value = {
-                status: status_,
-                color: connector.getStatusColor(status_),
-            };
-        });
+        connector
+            .fetchTaxonStatus(taxon.taxonId)
+            .then((status_) => {
+                if (status_) {
+                    status.value = {
+                        status: status_,
+                        color: connector.getStatusColor(status_),
+                    };
+                }
+            })
+            .catch((err) => {
+                console.warn('Failed to fetch taxon status:', err);
+            });
     }
 
     fetchTaxonImage();

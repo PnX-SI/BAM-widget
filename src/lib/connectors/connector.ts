@@ -254,7 +254,7 @@ export class Connector {
      * @returns {Promise<string>} A promise that resolves to the conservation status of the taxon.
      */
     fetchTaxonStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
-        return null;
+        return Promise.resolve(null);
     }
 
     /**

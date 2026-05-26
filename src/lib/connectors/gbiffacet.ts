@@ -384,10 +384,7 @@ export class GbifFacetConnector extends Connector {
     fetchTaxonStatus(idTaxon: string) {
         return fetchJson<{ category: string; code: string }>(
             `${this.GBIF_ENDPOINT}/species/${idTaxon}/iucnRedListCategory`
-        ).then((json) => ({
-            iucnRedListCategory: json.category,
-            code: json.code,
-        }));
+        ).then((json) => json.code);
     }
 
     searchTaxon(searchString: string = '', params: OccurrenceParams = {}) {
