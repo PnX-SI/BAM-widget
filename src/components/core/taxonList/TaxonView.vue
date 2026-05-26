@@ -34,7 +34,14 @@
 
     function fetchTaxonImage() {
         speciesPhoto.value = [];
-        if (taxon.taxonId) {
+        if (taxon.mediaUrl) {
+            speciesPhoto.value = [
+                {
+                    url: taxon.mediaUrl,
+                    typeMedia: MediaType.image,
+                },
+            ];
+        } else if (taxon.taxonId) {
             connector.value.imageSource
                 .fetchPicture(taxon.taxonId, connector.value)
                 .then((response) => {
@@ -62,7 +69,10 @@
     });
 
     function refreshVernacularName() {
-        if (taxon.vernacularName) return;
+        if (taxon.vernacularName) {
+            console.log('Vernacular name already exists, no need to fetch it');
+            return;
+        }
         connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
             if (name) {
                 taxon.vernacularName = name.split(',')[0];

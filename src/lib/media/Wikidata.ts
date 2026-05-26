@@ -77,7 +77,7 @@ function fetchCommonsMedia(
                 {
                     url:
                         typeMedia === MediaType.image
-                            ? `https://commons.wikimedia.org/w/thumb.php?width=700&f=${fileName}`
+                            ? `https://commons.wikimedia.org/w/thumb.php?width=400&f=${fileName}`
                             : info.url,
                     source: `${
                         credit.artist

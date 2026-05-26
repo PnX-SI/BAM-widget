@@ -14,8 +14,6 @@ import { fetchJson } from '../utils';
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 const GBIF_DEFAULT_TAXON_LIMIT = 1000;
 const WIKIDATA_SPARQL_ENDPOINT = 'https://query.wikidata.org/sparql';
-const INAT_API_ENDPOINT = 'https://api.inaturalist.org/v1/taxa';
-const INAT_BATCH_SIZE = 30;
 
 type OccurrenceParams = Record<string, any>;
 
@@ -29,8 +27,14 @@ interface WikidataBinding {
     gbifID: { value: string };
     iNatID?: { value: string };
     scientificName?: { value: string };
-    commonName?: { value: string }; // nouveau
+    commonName?: { value: string };
     image?: { value: string };
+    kingdomLabel?: { value: string };
+    phylumLabel?: { value: string };
+    classLabel?: { value: string };
+    orderLabel?: { value: string };
+    familyLabel?: { value: string };
+    genusLabel?: { value: string };
 }
 
 interface EnrichedTaxonData {
@@ -146,6 +150,7 @@ export class GbifFacetConnector extends Connector {
         const values = gbifIds.map((id) => `"${id}"`).join(' ');
         return `
         SELECT ?gbifID ?iNatID ?scientificName ?commonName ?image
+               ?kingdomLabel ?phylumLabel ?classLabel ?orderLabel ?familyLabel ?genusLabel
         WHERE {
             VALUES ?gbifID { ${values} }
             ?taxon wdt:P846 ?gbifID .
@@ -156,6 +161,38 @@ export class GbifFacetConnector extends Connector {
                        FILTER(LANG(?commonName) = "${lang}")
             }
             OPTIONAL { ?taxon wdt:P18 ?image . }
+            
+            # Walk the taxonomy tree to get parent taxon ranks - use scientific names directly
+            OPTIONAL {
+                ?taxon wdt:P171* ?kingdom .
+                ?kingdom wdt:P105 wd:Q36732 .
+                ?kingdom wdt:P225 ?kingdomLabel .
+            }
+            OPTIONAL {
+                ?taxon wdt:P171* ?phylum .
+                ?phylum wdt:P105 wd:Q38348 .
+                ?phylum wdt:P225 ?phylumLabel .
+            }
+            OPTIONAL {
+                ?taxon wdt:P171* ?class .
+                ?class wdt:P105 wd:Q37517 .
+                ?class wdt:P225 ?classLabel .
+            }
+            OPTIONAL {
+                ?taxon wdt:P171* ?order .
+                ?order wdt:P105 wd:Q36602 .
+                ?order wdt:P225 ?orderLabel .
+            }
+            OPTIONAL {
+                ?taxon wdt:P171* ?family .
+                ?family wdt:P105 wd:Q35409 .
+                ?family wdt:P225 ?familyLabel .
+            }
+            OPTIONAL {
+                ?taxon wdt:P171* ?genus .
+                ?genus wdt:P105 wd:Q34740 .
+                ?genus wdt:P225 ?genusLabel .
+            }
         }
     `;
     }
@@ -167,11 +204,10 @@ export class GbifFacetConnector extends Connector {
             (id) => !this.enrichTaxonomyCache.has(id)
         );
         if (!uncachedIds.length) return this.enrichTaxonomyCache;
-
         const currentLang = ParameterStore.getInstance().lang.value;
 
         try {
-            // Fetch all Wikidata IDs in a single POST
+            // Fetch all Wikidata data in a single POST (no URL length limit)
             const sparql = this.buildWikidataSparql(uncachedIds, currentLang);
             const wikidataResponse = await fetch(WIKIDATA_SPARQL_ENDPOINT, {
                 method: 'POST',
@@ -187,70 +223,37 @@ export class GbifFacetConnector extends Connector {
                 );
             const wikidataData = await wikidataResponse.json();
 
-            // Process Wikidata results
-            const gbifToINat: Record<string, string> = {};
+            // Process Wikidata results - now includes parent taxon ranks
             wikidataData.results.bindings.forEach((b: WikidataBinding) => {
                 const gbifId = b.gbifID.value;
-                const existing = this.enrichTaxonomyCache.get(gbifId) || {};
-                this.enrichTaxonomyCache.set(gbifId, {
-                    ...existing,
+
+                // Transform Wikidata image URL to use Wikimedia Commons thumbnail
+                let photoUrl = b.image?.value;
+                if (photoUrl) {
+                    const fileName = photoUrl.split('/').pop();
+                    if (fileName) {
+                        photoUrl = `https://commons.wikimedia.org/w/thumb.php?width=400&f=${fileName}`;
+                    }
+                }
+
+                const enrichedData: EnrichedTaxonData = {
                     scientificName: b.scientificName?.value,
-                    commonName: b.commonName?.value.replace(/^./, (char) =>
+                    commonName: b.commonName?.value?.replace(/^./, (char) =>
                         char.toUpperCase()
                     ),
-                    photo: b.image?.value,
-                });
-                if (b.iNatID) gbifToINat[gbifId] = b.iNatID.value;
-            });
+                    photo: photoUrl,
+                    iNatId: b.iNatID?.value,
+                    // Parent taxon ranks from Wikidata - eliminates need for iNaturalist
+                    kingdom: b.kingdomLabel?.value,
+                    phylum: b.phylumLabel?.value,
+                    order: b.orderLabel?.value,
+                    family: b.familyLabel?.value,
+                    genus: b.genusLabel?.value,
+                    // Use class as iconicTaxonName for backward compatibility
+                    iconicTaxonName: b.classLabel?.value,
+                };
 
-            // iNaturalist
-            const iNatIds = Object.values(gbifToINat);
-            const iNatPromises: Promise<any>[] = [];
-            for (let i = 0; i < iNatIds.length; i += INAT_BATCH_SIZE) {
-                const batch = iNatIds.slice(i, i + INAT_BATCH_SIZE);
-                if (!batch.length) continue;
-                iNatPromises.push(
-                    fetchJson(`${INAT_API_ENDPOINT}/${batch.join(',')}`)
-                );
-            }
-
-            const iNatResults = await Promise.all(iNatPromises);
-
-            // Merge iNaturalist data into cache
-            iNatResults.forEach((iNatData) => {
-                Object.entries(gbifToINat).forEach(([gbifId, iNatId]) => {
-                    const taxon = iNatData.results.find(
-                        (t: any) => t.id == iNatId
-                    );
-                    if (!taxon) return;
-                    const existing = this.enrichTaxonomyCache.get(gbifId) || {};
-                    this.enrichTaxonomyCache.set(gbifId, {
-                        ...existing,
-                        iNatId,
-                        scientificName: taxon.name,
-                        commonName:
-                            existing.commonName || taxon.preferred_common_name,
-                        ancestors: taxon.ancestors || [],
-                        kingdom: taxon.ancestors?.find(
-                            (a: any) => a.rank === 'kingdom'
-                        )?.name,
-                        phylum: taxon.ancestors?.find(
-                            (a: any) => a.rank === 'phylum'
-                        )?.name,
-                        order: taxon.ancestors?.find(
-                            (a: any) => a.rank === 'order'
-                        )?.name,
-                        family: taxon.ancestors?.find(
-                            (a: any) => a.rank === 'family'
-                        )?.name,
-                        genus: taxon.ancestors?.find(
-                            (a: any) => a.rank === 'genus'
-                        )?.name,
-                        iconicTaxonName: taxon.iconic_taxon_name, // equivalent of the functional group in INPN
-                        photo:
-                            taxon.default_photo?.medium_url || existing.photo,
-                    });
-                });
+                this.enrichTaxonomyCache.set(gbifId, enrichedData);
             });
         } catch (e) {
             console.error(`[${this.name}] enrichTaxonomy failed`, e);
@@ -313,8 +316,15 @@ export class GbifFacetConnector extends Connector {
             if (!taxonFacet || !taxonFacet.counts)
                 return { taxons: [], datasets };
 
+            // Parallel prefetch: Start Wikidata enrichment immediately, don't await yet
             const speciesIds = taxonFacet.counts.map((f: any) => f.name);
-            const enrichmentMap = await this.enrichTaxonomy(speciesIds);
+            const enrichmentPromise = this.enrichTaxonomy(speciesIds);
+
+            // Do any other synchronous work here while Wikidata fetches in parallel
+            // (In this case, datasets are already processed above)
+
+            // Now await the enrichment data
+            const enrichmentMap = await enrichmentPromise;
 
             const taxons: TaxonWithAncestors[] = taxonFacet.counts.map(
                 (facet: any) => {
