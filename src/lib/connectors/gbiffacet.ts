@@ -1,5 +1,5 @@
 import { Connector, ConnectorOptions } from './connector';
-import { Dataset, SearchResult, Taxon } from '../models';
+import { Dataset, SearchResult, Taxon, Media, MediaType } from '../models';
 import ParameterStore from '../parameterStore';
 import { NO_IMAGE_URL } from '@/assets/constant';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
@@ -40,7 +40,7 @@ interface WikidataBinding {
 interface EnrichedTaxonData {
     scientificName?: string;
     commonName?: string;
-    photo?: string;
+    medias?: Media[];
     iNatId?: string;
     ancestors?: any[];
     kingdom?: string;
@@ -224,15 +224,25 @@ export class GbifFacetConnector extends Connector {
             const wikidataData = await wikidataResponse.json();
 
             // Process Wikidata results - now includes parent taxon ranks
+            // Store basic media info (filename) without fetching credits
+            // Credits will be fetched on-demand when detailed view is rendered
             wikidataData.results.bindings.forEach((b: WikidataBinding) => {
                 const gbifId = b.gbifID.value;
+                let medias: Media[] = [];
 
-                // Transform Wikidata image URL to use Wikimedia Commons thumbnail
-                let photoUrl = b.image?.value;
-                if (photoUrl) {
-                    const fileName = photoUrl.split('/').pop();
-                    if (fileName) {
-                        photoUrl = `https://commons.wikimedia.org/w/thumb.php?width=400&f=${fileName}`;
+                // Store basic media with thumbnail URL and filename for later credit fetching
+                if (b.image?.value) {
+                    const encodedFileName = b.image.value.split('/').pop();
+                    if (encodedFileName) {
+                        // Decode the filename from the Wikidata URL
+                        const fileName = decodeURIComponent(encodedFileName);
+                        medias = [
+                            {
+                                url: `https://commons.wikimedia.org/w/thumb.php?width=400&f=${encodeURIComponent(fileName)}`,
+                                typeMedia: MediaType.image,
+                                source: fileName, // Store decoded filename for later credit fetching
+                            },
+                        ];
                     }
                 }
 
@@ -241,7 +251,7 @@ export class GbifFacetConnector extends Connector {
                     commonName: b.commonName?.value?.replace(/^./, (char) =>
                         char.toUpperCase()
                     ),
-                    photo: photoUrl,
+                    medias,
                     iNatId: b.iNatID?.value,
                     // Parent taxon ranks from Wikidata - eliminates need for iNaturalist
                     kingdom: b.kingdomLabel?.value,
@@ -331,6 +341,12 @@ export class GbifFacetConnector extends Connector {
                     const gbifId = facet.name;
                     const enrichment = enrichmentMap.get(gbifId);
 
+                    // For backward compatibility, set mediaUrl to first image or NO_IMAGE_URL
+                    const firstImageUrl =
+                        enrichment?.medias?.find(
+                            (m) => m.typeMedia === MediaType.image
+                        )?.url || NO_IMAGE_URL;
+
                     const taxon: Taxon = {
                         taxonId: gbifId,
                         acceptedScientificName:
@@ -338,7 +354,8 @@ export class GbifFacetConnector extends Connector {
                         vernacularName: enrichment?.commonName || '',
                         taxonRank: 'SPECIES',
                         nbObservations: facet.count,
-                        mediaUrl: enrichment?.photo || NO_IMAGE_URL,
+                        mediaUrl: firstImageUrl, // Backward compatibility
+                        medias: enrichment?.medias || [],
                         description: '',
                         lastSeenDate: new Date(),
                         kingdom: enrichment?.kingdom || '',

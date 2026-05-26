@@ -3,7 +3,8 @@ export interface Taxon {
     acceptedScientificName: string;
     vernacularName?: string;
     nbObservations?: number;
-    mediaUrl?: string;
+    mediaUrl?: string; // Deprecated: use medias instead
+    medias?: Media[];
     taxonRank?: string;
     description?: string;
     taxonSheetUrl?: string;

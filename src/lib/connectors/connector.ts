@@ -265,6 +265,11 @@ export class Connector {
         return this.name;
     }
 
+    /**
+     * Returns the color associated with a given IUCN conservation status code.
+     * @param {IUCNCodeStatus} status - The IUCN conservation status code.
+     * @returns {string} The color associated with the given IUCN conservation status code.
+     */
     getStatusColor(status: IUCNCodeStatus): string {
         const IUCNStatusColorDICT = {
             NA: '#C1B5A5',

@@ -34,6 +34,40 @@
 
     function fetchTaxonImage() {
         speciesPhoto.value = [];
+
+        // First priority: use medias array if available
+        if (taxon.medias && taxon.medias.length > 0) {
+            const images = taxon.medias.filter(
+                (m) => m.typeMedia === MediaType.image
+            );
+            if (images.length > 0) {
+                speciesPhoto.value = [...images];
+
+                // For detailed view, fetch full credits if not already present
+                images.forEach((media, index) => {
+                    // Check if media already has full credits (has license field)
+                    if (!media.license && media.source) {
+                        // Use the media source's getCredits method to fetch full credits
+                        connector.value.imageSource
+                            .getCredits(media)
+                            .then((enrichedMedia) => {
+                                // Update the media with full credits
+                                speciesPhoto.value[index] = enrichedMedia;
+                            })
+                            .catch((err) => {
+                                console.warn(
+                                    `Failed to fetch credits for ${media.source}:`,
+                                    err
+                                );
+                            });
+                    }
+                });
+
+                return;
+            }
+        }
+
+        // Second priority: use mediaUrl for backward compatibility
         if (taxon.mediaUrl) {
             speciesPhoto.value = [
                 {
@@ -41,7 +75,9 @@
                     typeMedia: MediaType.image,
                 },
             ];
-        } else if (taxon.taxonId) {
+        }
+        // Last resort: fetch from media source
+        else if (taxon.taxonId) {
             connector.value.imageSource
                 .fetchPicture(taxon.taxonId, connector.value)
                 .then((response) => {
@@ -51,6 +87,19 @@
     }
     function fetchTaxonAudio() {
         speciesAudio.value = null;
+
+        // First priority: use medias array if available (includes full credits)
+        if (taxon.medias && taxon.medias.length > 0) {
+            const sounds = taxon.medias.filter(
+                (m) => m.typeMedia === MediaType.sound
+            );
+            if (sounds.length > 0) {
+                speciesAudio.value = sounds[0];
+                return;
+            }
+        }
+
+        // Fallback: fetch from media source
         if (taxon.taxonId) {
             connector.value.soundSource
                 .fetchSound(taxon.taxonId, connector.value)
