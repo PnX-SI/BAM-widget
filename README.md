@@ -21,34 +21,34 @@ The widget is built using Vue.js 3 ⚡, Turf.js ⿻, Leaflet 🗺️, and Bootst
 
 ## ✨ Features
 
--   Display species found in a defined area using observations data from GBIF API or from a GeoNature instance
--   Define area based on a specific point, line or polygon, or a GeoJSON, or dynamic geographic objects
--   GPS geolocation
--   Point and line automatic buffer
--   Multiple widget modes: list 📋, map 🗺️
--   Multiple species display mode: detailed or gallery
--   Sort 🔃 and filter species lists
--   Search 🔎 and filter species
--   Share research via link 🔗 or embed in your website 🖥️
--   Multilingual support (EN, FR, ES, CS, DE, IT) 🌐
--   Based only on open API! No server required (except for self-hosting)!
+- Display species found in a defined area using observations data from GBIF API or from a GeoNature instance
+- Define area based on a specific point, line or polygon, or a GeoJSON, or dynamic geographic objects
+- GPS geolocation
+- Point and line automatic buffer
+- Multiple widget modes: list 📋, map 🗺️
+- Multiple species display mode: detailed or gallery
+- Sort 🔃 and filter species lists
+- Search 🔎 and filter species
+- Share research via link 🔗 or embed in your website 🖥️
+- Multilingual support (EN, FR, ES, CS, DE, IT) 🌐
+- Based only on open API! No server required (except for self-hosting)!
 
 ![BAM - How it works](https://geonature.fr/documents/autres/BAM/BAM-schema-01.png)
 
 ## 🚀 Generate your widget!
 
--   Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
--   Documentation: [https://pnx-si.github.io/BAM-widget/docs/](https://pnx-si.github.io/BAM-widget/docs/)
--   Widget integration examples:
-    -   [Basic examples](https://pnx-si.github.io/BAM-widget/docs/examples/basic-examples.html) / [Source code](/docs/examples/basic-examples.html)
-    -   [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
-    -   [Falkensee schools and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/falkensee-schools-biodiversity.html) / [Source code](/docs/examples/falkensee-schools-biodiversity.html)
-    -   [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
-    -   [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](docs/examples/corcovado-treks.html)
-    -   [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
-    -   [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
-    -   [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
--   Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/](https://pnx-si.github.io/BAM-widget/)
+- Generate your widget -> [https://pnx-si.github.io/BAM-widget/#/config](https://pnx-si.github.io/BAM-widget/#/config)
+- Documentation: [https://pnx-si.github.io/BAM-widget/docs/](https://pnx-si.github.io/BAM-widget/docs/)
+- Widget integration examples:
+    - [Basic examples](https://pnx-si.github.io/BAM-widget/docs/examples/basic-examples.html) / [Source code](/docs/examples/basic-examples.html)
+    - [Ecrins huts and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/huts-biodiversity.html) / [Source code](/docs/examples/huts-biodiversity.html)
+    - [Falkensee schools and biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/falkensee-schools-biodiversity.html) / [Source code](/docs/examples/falkensee-schools-biodiversity.html)
+    - [Jamaican biodiversity](https://pnx-si.github.io/BAM-widget/docs/examples/jamaican-biodiversity.html) / [Source code](/docs/examples/jamaican-biodiversity.html)
+    - [Corcovado treks](https://pnx-si.github.io/BAM-widget/docs/examples/corcovado-treks.html) / [Source code](docs/examples/corcovado-treks.html)
+    - [Geotrek trekking page](https://gtr3demo.ecrins-parcnational.fr/trek/2-Col-de-Font-Froide) / [Source code](/docs/examples/geotrek-detail-page.html)
+    - [Biodiversity observed around an event location](https://www.ecrins-parcnational.fr/actualite/retour-premieres-rencontres-nationales-geonature)
+    - [GeoNature demo instance observations in South France](https://pnx-si.github.io/BAM-widget/docs/examples/geonature-demo-widget.html) / [Source code](/docs/examples/geonature-demo-widget.html)
+- Test and explore GBIF observed species: [https://pnx-si.github.io/BAM-widget/](https://pnx-si.github.io/BAM-widget/)
 
 ![BAM architecture](https://geonature.fr/documents/autres/BAM/BAM-schema-v2.png)
 
@@ -115,18 +115,22 @@ npm run dev
 npm run build
 ```
 
+### 🧩 Configuration
+
+Default parameters value can overridden in the `.env` file.
+
 ## 👥 Contributors
 
 **Conceived and developed by**
 
--   @jacquesfize (Parc national des Écrins)
--   @amandine-sahl (Parc national des Cévennes)
--   @camillemonchicourt (Parc national des Écrins)
--   @CynthiaBorotPNV (Parc national de la Vanoise)
--   @EcMerc (Parc national du Mercantour)
--   @SimonChevereau (Office Français de la Biodiversité)
--   @babastienne (Makina Corpus)
--   @trendspotter
+- @jacquesfize (Parc national des Écrins)
+- @amandine-sahl (Parc national des Cévennes)
+- @camillemonchicourt (Parc national des Écrins)
+- @CynthiaBorotPNV (Parc national de la Vanoise)
+- @EcMerc (Parc national du Mercantour)
+- @SimonChevereau (Office Français de la Biodiversité)
+- @babastienne (Makina Corpus)
+- @trendspotter
 
 [![image](https://geonature.fr/img/logo-pne.jpg)](https://www.ecrins-parcnational.fr)
 
