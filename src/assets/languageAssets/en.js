@@ -83,9 +83,12 @@ You can also **share your results 📤** to collaborate with other users.
             modify: 'Change the observations data source',
             gbifWarning:
                 'The number of observations and the dates of the latest sightings are based on an aggregation of the latest observations made within the selected area and limited to {nbObs} maximum.',
+            howToContribute: 'How to contribute?',
         },
         gbif: {
             apiEndpoint: 'API endpoint of the GBIF',
+            howToContribute:
+                'If you would like to contribute to the open biodiversity observation data aggregated in GBIF, you can use collaborative platforms such as [INaturalist](https://www.inaturalist.org/), [PlantNet](https://identify.plantnet.org/) or [Observation.org](https://observation.org/).',
         },
         geonature: {
             api_endpoint: 'GeoNature  API endpoint',

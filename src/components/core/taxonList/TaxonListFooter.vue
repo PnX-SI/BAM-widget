@@ -124,6 +124,18 @@
                         <i class="bi bi-info-circle me-2"></i>
                         {{ connector.sourceDetailMessage() }}
                     </div>
+                    <div
+                        class="how-to-contribute"
+                        v-if="connector.howToContributeMessage()"
+                    >
+                        <i class="bi bi-node-plus"></i>
+                        <div>
+                            <strong>{{ $t('source.howToContribute') }}</strong>
+                            <VueShowdown
+                                :markdown="connector.howToContributeMessage()"
+                            />
+                        </div>
+                    </div>
                     <DatasetList
                         v-if="props.datasets.length > 0"
                         :datasets="props.datasets"
@@ -252,7 +264,8 @@
         opacity: 0;
     }
 
-    .source-detail-message {
+    .source-detail-message,
+    .how-to-contribute {
         padding: 10px;
         background: #f8f9fa;
         border-radius: 6px;
@@ -260,6 +273,10 @@
         align-items: flex-start;
         font-size: 0.9em;
         line-height: 1.4;
+        gap: 8px;
+    }
+    .how-to-contribute i {
+        font-size: 1em;
     }
 
     #data-source-credits a {

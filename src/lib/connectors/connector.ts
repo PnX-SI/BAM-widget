@@ -12,17 +12,7 @@ export interface ConnectorOptions {
     [key: string]: any;
 }
 export type IUCNCodeStatus =
-    | 'NA'
-    | 'NE'
-    | 'DD'
-    | 'LC'
-    | 'NT'
-    | 'VU'
-    | 'EN'
-    | 'CR'
-    | 'RE'
-    | 'EW'
-    | 'EX';
+    'NA' | 'NE' | 'DD' | 'LC' | 'NT' | 'VU' | 'EN' | 'CR' | 'RE' | 'EW' | 'EX';
 
 export class Connector {
     /**
@@ -200,6 +190,14 @@ export class Connector {
      * @returns source detail
      */
     sourceDetailMessage(): string | null {
+        return null;
+    }
+
+    /**
+     * Return a message to explain how to contribute to the data source
+     * @returns contribution message
+     */
+    howToContributeMessage(): string | null {
         return null;
     }
 
