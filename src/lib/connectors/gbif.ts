@@ -277,6 +277,10 @@ export class GbifConnector extends Connector {
             nbObs: this.LIMIT * this.NB_PAGES,
         });
     }
+
+    howToContributeMessage(): string | null {
+        return useI18n().t('gbif.howToContribute');
+    }
     getSourceUrl(): string | null {
         return 'https://www.gbif.org';
     }

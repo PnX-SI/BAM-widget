@@ -77,9 +77,12 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             modify: 'Cambiar la fuente de datos de las observaciones',
             gbifWarning:
                 'El número de observaciones y sus fechas se basan en una agregación de las últimas observaciones realizadas en el área seleccionada y están limitadas a un máximo de {nbObs}.',
+            howToContribute: '¿Cómo contribuir?',
         },
         gbif: {
             apiEndpoint: 'Punto final de la API de GBIF',
+            howToContribute:
+                'Si desea contribuir a los datos abiertos de observaciones de biodiversidad agregados en GBIF, puede utilizar plataformas colaborativas como [INaturalist](https://www.inaturalist.org/), [PlantNet](https://identify.plantnet.org/) o [Observation.org](https://observation.org/).',
         },
         geonature: {
             api_endpoint: 'Dirección de la API de GeoNature',
