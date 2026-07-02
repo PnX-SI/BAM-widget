@@ -32,7 +32,7 @@
         "wellknown": "^0.5.0"
     },
     "devDependencies": {
-        "@playwright/test": "^1.54.1",
+        "@playwright/test": "^1.61.1",
         "@types/geojson": "^7946.0.16",
         "@types/node": "^24.1.0",
         "@vite-pwa/assets-generator": "^1.0.2",

@@ -88,7 +88,7 @@ You can also **share your results 📤** to collaborate with other users.
         gbif: {
             apiEndpoint: 'API endpoint of the GBIF',
             howToContribute:
-                'If you would like to contribute to the open biodiversity observation data aggregated in GBIF, you can use collaborative platforms such as [iNaturalist](https://www.inaturalist.org/), [Pl@ntNet](https://identify.plantnet.org/) or [Observation.org](https://observation.org/).',
+                "If you would like to contribute to the open biodiversity observation data aggregated in GBIF, you can use collaborative platforms such as <a target='_blank' href='https://www.inaturalist.org/'>iNaturalist</a>, <a target='_blank' href='https://plantnet.org/'>Pl@ntNet</a> or <a target='_blank' href='https://observation.org/'>Observation.org</a>.",
         },
         geonature: {
             api_endpoint: 'GeoNature  API endpoint',
