@@ -177,6 +177,8 @@
              */
             locateControl.value = new LocateControl({
                 icon: 'fa-solid fa-location-crosshairs fa-xl',
+                onLocationError: () => {},
+                onLocationOutsideMapBounds: () => {},
             }).addTo(map.value);
         }
 
