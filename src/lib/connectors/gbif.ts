@@ -38,12 +38,11 @@ function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
         }
     });
 
-    return fetch(urlWithParams.toString()).then((response) =>{
+    return fetch(urlWithParams.toString()).then((response) => {
         if (response.status === 200) {
             return response.json();
-        }
-        else if (response.status === 429) {
-            console.error("Rate limit exceeded");
+        } else if (response.status === 429) {
+            console.error('Rate limit exceeded');
         }
     });
 }
@@ -188,50 +187,54 @@ export class GbifConnector extends Connector {
                 const offset = pageIndex * defaultParams.limit;
                 return callOccurrenceApi({ ...defaultParams, offset }).then(
                     (apiResult) => {
-                        (apiResult?.results || []).forEach((observation: any) => {
-                            if (!(observation.datasetKey in datasetData)) {
-                                datasetData[observation.datasetKey] = {
-                                    uuid: observation.datasetKey,
-                                    name: observation.datasetKey,
-                                    nbObservations: 0,
-                                };
-                            }
+                        (apiResult?.results || []).forEach(
+                            (observation: any) => {
+                                if (!(observation.datasetKey in datasetData)) {
+                                    datasetData[observation.datasetKey] = {
+                                        uuid: observation.datasetKey,
+                                        name: observation.datasetKey,
+                                        nbObservations: 0,
+                                    };
+                                }
 
-                            datasetData[
-                                observation.datasetKey
-                            ].nbObservations += 1;
-                            if (!taxonsData[observation.taxonKey]) {
-                                taxonsData[observation.taxonKey] = {
-                                    acceptedScientificName:
-                                        observation.acceptedScientificName,
-                                    vernacularName: observation.vernacularName,
-                                    taxonId: observation.taxonKey,
-                                    mediaUrl: NO_IMAGE_URL,
-                                    taxonRank: observation.taxonRank,
-                                    kingdom: observation.kingdom,
-                                    class: observation.class,
-                                    nbObservations: 0,
-                                    description: '',
-                                    lastSeenDate: new Date(
-                                        observation.eventDate
-                                    ),
-                                };
-                            }
-
-                            taxonsData[observation.taxonKey].nbObservations +=
-                                1;
-                            taxonsData[observation.taxonKey].lastSeenDate =
-                                new Date(
-                                    Math.max(
-                                        new Date(
+                                datasetData[
+                                    observation.datasetKey
+                                ].nbObservations += 1;
+                                if (!taxonsData[observation.taxonKey]) {
+                                    taxonsData[observation.taxonKey] = {
+                                        acceptedScientificName:
+                                            observation.acceptedScientificName,
+                                        vernacularName:
+                                            observation.vernacularName,
+                                        taxonId: observation.taxonKey,
+                                        mediaUrl: NO_IMAGE_URL,
+                                        taxonRank: observation.taxonRank,
+                                        kingdom: observation.kingdom,
+                                        class: observation.class,
+                                        nbObservations: 0,
+                                        description: '',
+                                        lastSeenDate: new Date(
                                             observation.eventDate
-                                        ).getTime(),
-                                        taxonsData[
-                                            observation.taxonKey
-                                        ].lastSeenDate.getTime()
-                                    )
-                                );
-                        });
+                                        ),
+                                    };
+                                }
+
+                                taxonsData[
+                                    observation.taxonKey
+                                ].nbObservations += 1;
+                                taxonsData[observation.taxonKey].lastSeenDate =
+                                    new Date(
+                                        Math.max(
+                                            new Date(
+                                                observation.eventDate
+                                            ).getTime(),
+                                            taxonsData[
+                                                observation.taxonKey
+                                            ].lastSeenDate.getTime()
+                                        )
+                                    );
+                            }
+                        );
                         return fetchPage(pageIndex + 1);
                     }
                 );
