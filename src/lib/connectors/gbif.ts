@@ -38,7 +38,14 @@ function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
         }
     });
 
-    return fetch(urlWithParams.toString()).then((response) => response.json());
+    return fetch(urlWithParams.toString()).then((response) =>{
+        if (response.status === 200) {
+            return response.json();
+        }
+        else if (response.status === 429) {
+            console.error("Rate limit exceeded");
+        }
+    });
 }
 
 export class GbifConnector extends Connector {
@@ -104,7 +111,7 @@ export class GbifConnector extends Connector {
     }
 
     countOccurrence(params: OccurrenceParams = {}): Promise<number> {
-        return callOccurrenceApi(params).then((data) => data.count);
+        return callOccurrenceApi(params).then((data) => (data || []).count);
     }
 
     fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
@@ -164,10 +171,13 @@ export class GbifConnector extends Connector {
         }
 
         return this.countOccurrence(defaultParams).then((countOccurrence) => {
-            const nbOfPages = Math.min(
+            let nbOfPages = Math.min(
                 Math.ceil(countOccurrence / defaultParams.limit),
                 defaultParams.maxPage
             );
+            if (isNaN(nbOfPages)) {
+                nbOfPages = 1;
+            }
             const taxonsData: Record<string, Taxon> = {};
             const datasetData: Record<string, Dataset> = {};
 
@@ -178,7 +188,7 @@ export class GbifConnector extends Connector {
                 const offset = pageIndex * defaultParams.limit;
                 return callOccurrenceApi({ ...defaultParams, offset }).then(
                     (apiResult) => {
-                        apiResult.results.forEach((observation: any) => {
+                        (apiResult?.results || []).forEach((observation: any) => {
                             if (!(observation.datasetKey in datasetData)) {
                                 datasetData[observation.datasetKey] = {
                                     uuid: observation.datasetKey,
