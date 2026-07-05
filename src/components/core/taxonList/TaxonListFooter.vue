@@ -57,7 +57,7 @@
             subtree: true,
         }
     );
-    const versionTooltipAnchor = (ref < HTMLElement) | (null > null);
+    const versionTooltipAnchor = ref(null);
     const showTooltip = ref(false);
     const VERSION = __APP_VERSION__;
 </script>
