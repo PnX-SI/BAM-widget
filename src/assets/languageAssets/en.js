@@ -179,6 +179,11 @@ You can also **share your results 📤** to collaborate with other users.
             EW: 'Extinct in the Wild',
             EX: 'Extinct',
         },
+        bam: {
+            poweredBy: 'Powered by BAM',
+            version: 'Version',
+            clickToLearnMore: 'Click to learn more about BAM-widget',
+        },
     },
 };
 

@@ -175,6 +175,11 @@ También puedes **compartir tus resultados 📤** para colaborar con otros usuar
             EW: 'Extinto en Estado Silvestre',
             EX: 'Extinto',
         },
+        bam: {
+            poweredBy: 'Desarrollado por BAM',
+            version: 'Versión',
+            clickToLearnMore: 'Haga clic para obtener más información sobre BAM-widget',
+        },
     },
 };
 

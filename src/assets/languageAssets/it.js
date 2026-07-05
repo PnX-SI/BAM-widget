@@ -179,6 +179,11 @@ Puoi anche **condividere i tuoi risultati 📤** per collaborare con altri utent
             EW: 'Estinto in natura',
             EX: 'Estinto',
         },
+        bam: {
+            poweredBy: 'Sviluppato da BAM',
+            version: 'Versione',
+            clickToLearnMore: 'Clicca per saperne di più su BAM-widget',
+        },
     },
 };
 

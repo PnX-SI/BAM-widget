@@ -181,6 +181,11 @@ Vous pouvez également **partager vos résultats 📤** pour collaborer avec d'a
             EW: "Éteint à l'état sauvage",
             EX: 'Éteint',
         },
+        bam: {
+            poweredBy: 'Propulsé par BAM',
+            version: 'Version',
+            clickToLearnMore: 'Cliquer pour en savoir plus sur BAM-widget',
+        },
     },
 };
 

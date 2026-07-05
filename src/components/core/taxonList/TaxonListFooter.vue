@@ -60,7 +60,6 @@
     const versionTooltipAnchor = ref(null);
     const showTooltip = ref(false);
     const VERSION = __APP_VERSION__;
-    const COMMIT_HASH = __COMMIT_HASH__;
 </script>
 
 <template>
@@ -84,7 +83,11 @@
                         :anchor="versionTooltipAnchor"
                         :offset="8"
                     >
-                        Version : {{ VERSION }} ({{ COMMIT_HASH }})
+                        <div class="bam-tooltip-content">
+                            <span class="bam-tooltip-powered">{{ $t('bam.poweredBy') }}</span>
+                            <span>{{ $t('bam.version') }} : {{ VERSION }}</span>
+                            <span class="bam-tooltip-learn-more">{{ $t('bam.clickToLearnMore') }}</span>
+                        </div>
                     </FloatingTooltip>
                     <a
                         href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
@@ -334,5 +337,22 @@
             font-size: 1.4em;
             margin-right: 0.5em;
         }
+    }
+
+    .bam-tooltip-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .bam-tooltip-powered {
+        font-weight: bold;
+    }
+
+    .bam-tooltip-learn-more {
+        font-style: italic;
+        font-size: 0.8em;
+        opacity: 0.8;
     }
 </style>

@@ -178,6 +178,11 @@ Výsledky můžete také **sdílet 📤** a spolupracovat s ostatními uživatel
             EW: 'Vyhynulý ve volné přírodě',
             EX: 'Vyhynulý',
         },
+        bam: {
+            poweredBy: 'Napájeno BAM',
+            version: 'Verze',
+            clickToLearnMore: 'Klikněte pro více informací o BAM-widget',
+        },
     },
 };
 

@@ -121,11 +121,12 @@
         padding: 0.5rem 0.75rem;
         border-radius: 6px;
         font-size: 0.85rem;
-        white-space: nowrap;
+        white-space: pre-line;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
     }
 
     .floating-tooltip.active {

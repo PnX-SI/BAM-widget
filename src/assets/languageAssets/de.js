@@ -178,6 +178,11 @@ Sie können Ihre Ergebnisse außerdem **teilen 📤**, um mit anderen Nutzern zu
             EW: 'In der Natur ausgestorben',
             EX: 'Ausgestorben',
         },
+        bam: {
+            poweredBy: 'Unterstützt von BAM',
+            version: 'Version',
+            clickToLearnMore: 'Klicken Sie hier, um mehr über BAM-widget zu erfahren',
+        },
     },
 };
 
