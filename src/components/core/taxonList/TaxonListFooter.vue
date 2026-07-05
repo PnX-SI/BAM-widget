@@ -84,15 +84,19 @@
                         :anchor="versionTooltipAnchor"
                         :offset="8"
                     >
+                        Powered by
+                        <a
+                            href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
+                            target="_blank"
+                            >BAM (Biodiversity Around Me)</a
+                        >
+                        <br />
                         Version : {{ VERSION }} ({{ COMMIT_HASH }})
                     </FloatingTooltip>
-                    <a
-                        href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
-                        target="_blank"
+                    <span
                         class="bam-logo-link"
                         ref="versionTooltipAnchor"
-                        @mouseenter="showTooltip = true"
-                        @mouseleave="showTooltip = false"
+                        @click="showTooltip = !showTooltip"
                         @click.stop
                     >
                         <img
@@ -100,7 +104,7 @@
                             height="24px"
                             alt="BAM logo"
                         />
-                    </a>
+                    </span>
                     <span class="species-count">
                         <strong>{{ props.numberOfSpecies }}</strong>
                         {{ $t('taxon.taxonFound') }}
