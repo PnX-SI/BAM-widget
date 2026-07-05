@@ -9,6 +9,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import webfontDownload from 'vite-plugin-webfont-dl';
 import { readFileSync } from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,10 +17,13 @@ const version = readFileSync(
     path.resolve(__dirname, 'VERSION'),
     'utf-8'
 ).trim();
+const commitHash =
+    execSync('git rev-parse --short HEAD').toString().trim() || '';
 // https://vite.dev/config/
 export default defineConfig({
     define: {
         __APP_VERSION__: JSON.stringify(version),
+        __COMMIT_HASH__: JSON.stringify(commitHash),
     },
     base: process.env.NODE_ENV === 'production' ? '/BAM-widget/' : '/',
     plugins: [

@@ -60,6 +60,7 @@
     const versionTooltipAnchor = ref(null);
     const showTooltip = ref(false);
     const VERSION = __APP_VERSION__;
+    const COMMIT_HASH = __COMMIT_HASH__;
 </script>
 
 <template>
@@ -83,7 +84,7 @@
                         :anchor="versionTooltipAnchor"
                         :offset="8"
                     >
-                        Version : {{ VERSION }}
+                        Version : {{ VERSION }} ({{ COMMIT_HASH }})
                     </FloatingTooltip>
                     <a
                         href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
