@@ -57,6 +57,9 @@
             subtree: true,
         }
     );
+    const versionTooltipAnchor = (ref < HTMLElement) | (null > null);
+    const showTooltip = ref(false);
+    const VERSION = __APP_VERSION__;
 </script>
 
 <template>
@@ -75,10 +78,20 @@
                 @click="toggleExpand"
             >
                 <div class="footer-main-content">
+                    <FloatingTooltip
+                        :show="showTooltip"
+                        :anchor="versionTooltipAnchor"
+                        :offset="8"
+                    >
+                        Version : {{ VERSION }}
+                    </FloatingTooltip>
                     <a
                         href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
                         target="_blank"
                         class="bam-logo-link"
+                        ref="versionTooltipAnchor"
+                        @mouseenter="showTooltip = true"
+                        @mouseleave="showTooltip = false"
                         @click.stop
                     >
                         <img

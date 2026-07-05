@@ -7,9 +7,20 @@ import Components from 'unplugin-vue-components/vite';
 import { BootstrapVueNextResolver } from 'bootstrap-vue-next';
 import { VitePWA } from 'vite-plugin-pwa';
 import webfontDownload from 'vite-plugin-webfont-dl';
+import { readFileSync } from 'fs';
+import path from 'path';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const version = readFileSync(
+    path.resolve(__dirname, 'VERSION'),
+    'utf-8'
+).trim();
 // https://vite.dev/config/
 export default defineConfig({
+    define: {
+        __APP_VERSION__: JSON.stringify(version),
+    },
     base: process.env.NODE_ENV === 'production' ? '/BAM-widget/' : '/',
     plugins: [
         vue(),
@@ -28,7 +39,7 @@ export default defineConfig({
                 'maskable-icon-512x512.png',
             ],
             manifest: {
-                name: 'BAM (Biodiversity Around Me',
+                name: `BAM (Biodiversity Around Me) - v${version}`,
                 short_name: 'BAM',
                 description:
                     'BAM is an application for showing species seen nearby any location around the world',
@@ -75,5 +86,8 @@ export default defineConfig({
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url)),
         },
+    },
+    css: {
+        devSourcemap: false, // stops Vite from trying to load CSS source maps in dev
     },
 });
