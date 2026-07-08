@@ -122,19 +122,29 @@ export class GbifConnector extends Connector {
             it: 'ita',
             de: 'deu',
         };
+        const prefOrder = [
+            'TAXREF',
+            'EUNIS Biodiversity Database',
+            'Catalogue of Life',
+        ];
         const currentLanguage = ParameterStore.getInstance().lang.value;
         return fetch(
             `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
         )
             .then((response) => response.json())
             .then((data) => {
-                const nameData = data.results.find(
+                const nameData = data.results.filter(
                     (nameData: any) =>
                         nameData.language === mapping_language[currentLanguage]
                 );
-                return nameData
-                    ? nameData.vernacularName.charAt(0).toUpperCase() +
-                          nameData.vernacularName.slice(1)
+                const prefName = (nameData.sort(
+                    (a, b) =>
+                        prefOrder.indexOf(a.source) -
+                        prefOrder.indexOf(b.source)
+                ) || [])[0];
+                return prefName
+                    ? prefName.vernacularName.charAt(0).toUpperCase() +
+                          prefName.vernacularName.slice(1)
                     : undefined;
             });
     }
