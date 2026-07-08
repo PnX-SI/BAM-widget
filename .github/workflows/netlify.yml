@@ -2,15 +2,6 @@ name: Netlify Deployment
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment de déploiement"
-        required: true
-        type: choice
-        default: preview
-        options:
-          - production
-          - preview
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -41,21 +32,9 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          NODE_ENV: ${{ inputs.environment || 'preview' }}
-
-      - name: Deploy to Netlify (Production)
-        if: inputs.environment == 'production'
-        id: netlify_deploy_prod
-        run: |
-          netlify deploy \
-            --dir dist \
-            --site ${{ secrets.NETLIFY_SITE_ID }} \
-            --auth ${{ secrets.NETLIFY_APP_TOKEN }} \
-            --prod > deploy-output.txt
-          echo "NETLIFY_URL=$(cat deploy-output.txt | grep -o 'https://[^[:space:]]*' | head -1)" >> $GITHUB_OUTPUT
-
-      - name: Deploy to Netlify (Preview)
-        if: inputs.environment == 'preview' || github.event_name == 'pull_request'
+          BASEPATH: "/"
+      - name: Deploy to Netlify for preview
+        if: github.event_name == 'pull_request'
         id: netlify_deploy_preview
         run: |
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
@@ -120,12 +99,6 @@ jobs:
         run: |
           echo "### ✅ Déploiement réussi" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Environment:** ${{ inputs.environment || 'preview' }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch:** ${{ github.head_ref || github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${{ inputs.environment }}" == "production" ]; then
-              echo "- **URL:** ${{ steps.netlify_deploy_prod.outputs.NETLIFY_URL }}" >> $GITHUB_STEP_SUMMARY
-          else
-              echo "- **URL:** ${{ steps.netlify_deploy_preview.outputs.NETLIFY_URL }}" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "- **URL:** ${{ steps.netlify_deploy_preview.outputs.NETLIFY_URL }}" >> $GITHUB_STEP_SUMMARY
