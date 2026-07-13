@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { Media } from '@/lib/models';
-    import { ref, onBeforeUnmount, onMounted } from 'vue';
+    import { ref, onBeforeUnmount } from 'vue';
     import Credits from './Credits.vue';
     import FloatingTooltip from './FloatingTooltip.vue';
 
@@ -21,11 +21,8 @@
     const play = ref(false);
     const progress = ref(0);
     const audioInstance = ref<HTMLAudioElement | null>(null);
-    const showTooltip = ref(false);
     const buttonWrapper = ref<HTMLElement | null>(null);
     let animationFrameId: number | null = null;
-    let longPressTimer: number | null = null;
-    let hoverTimer: number | null = null;
     const size_px = props.size * 0.7 + 'px';
 
     function updateProgress() {
@@ -83,79 +80,12 @@
         play.value ? audioInstance.value.pause() : audioInstance.value.play();
     }
 
-    function showTooltipHandler() {
-        if (!props.showCredits || !props.audio?.source) return;
-
-        // Clear any pending hide timer
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-            hoverTimer = null;
-        }
-
-        showTooltip.value = true;
-    }
-
-    function hideTooltipHandler() {
-        // Add a delay before hiding to allow moving mouse to tooltip
-        hoverTimer = window.setTimeout(() => {
-            showTooltip.value = false;
-        }, 200); // 200ms delay before hiding
-    }
-
-    function keepTooltipVisible() {
-        // Cancel hide timer when hovering over tooltip
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-            hoverTimer = null;
-        }
-    }
-
-    function handleTouchStart(event: TouchEvent) {
-        if (!props.showCredits || !props.audio?.source) return;
-
-        longPressTimer = window.setTimeout(() => {
-            showTooltip.value = true;
-            // Prevent the default action to avoid opening context menu
-            event.preventDefault();
-        }, 500); // 500ms for long press
-    }
-
-    function handleTouchEnd() {
-        if (longPressTimer) {
-            clearTimeout(longPressTimer);
-            longPressTimer = null;
-        }
-    }
-
-    function handleTouchMove() {
-        // Cancel long press if user moves finger
-        if (longPressTimer) {
-            clearTimeout(longPressTimer);
-            longPressTimer = null;
-        }
-    }
-
-    function closeTooltip() {
-        showTooltip.value = false;
-    }
-
-    onMounted(() => {
-        window.addEventListener('click', closeTooltip);
-    });
-
     onBeforeUnmount(() => {
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
         if (audioInstance.value) {
             audioInstance.value.pause();
             audioInstance.value = null;
         }
-        if (longPressTimer) {
-            clearTimeout(longPressTimer);
-        }
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-        }
-        window.removeEventListener('click', closeTooltip);
     });
 </script>
 
@@ -181,11 +111,6 @@
                 height: size + 'px',
             }"
             @click.stop="toggleAudio"
-            @mouseenter="showTooltipHandler"
-            @mouseleave="hideTooltipHandler"
-            @touchstart="handleTouchStart"
-            @touchend="handleTouchEnd"
-            @touchmove="handleTouchMove"
             data-testid="Toggle to play animal sound"
         >
             <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
@@ -194,10 +119,7 @@
         <!-- Tooltip for copyright -->
         <FloatingTooltip
             v-if="showCredits && audio?.source"
-            :show="showTooltip"
             :anchor="buttonWrapper"
-            @mouseenter="keepTooltipVisible"
-            @mouseleave="hideTooltipHandler"
         >
             <Credits :media="audio" />
         </FloatingTooltip>
@@ -206,16 +128,7 @@
     <!-- Standard player variant -->
     <div v-else class="audio-player-wrapper">
         <div class="audio-player" data-testid="animal sound">
-            <button
-                @click="toggleAudio"
-                @mouseenter="showTooltipHandler"
-                @mouseleave="hideTooltipHandler"
-                @touchstart="handleTouchStart"
-                @touchend="handleTouchEnd"
-                @touchmove="handleTouchMove"
-                class="play-button"
-                type="button"
-            >
+            <button @click="toggleAudio" class="play-button" type="button">
                 <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
             </button>
 
@@ -231,10 +144,7 @@
         <div
             v-if="showCredits && audio?.source"
             class="copyright-tooltip player-variant"
-            :class="{ active: showTooltip }"
             @click.stop
-            @mouseenter="keepTooltipVisible"
-            @mouseleave="hideTooltipHandler"
         >
             <Credits :media="audio" link-color="link-light" />
         </div>

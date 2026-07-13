@@ -58,7 +58,6 @@
         }
     );
     const versionTooltipAnchor = ref(null);
-    const showTooltip = ref(false);
     const VERSION = __APP_VERSION__;
     const COMMIT_HASH = __COMMIT_HASH__;
 </script>
@@ -79,11 +78,7 @@
                 @click="toggleExpand"
             >
                 <div class="footer-main-content">
-                    <FloatingTooltip
-                        :show="showTooltip"
-                        :anchor="versionTooltipAnchor"
-                        :offset="8"
-                    >
+                    <FloatingTooltip :anchor="versionTooltipAnchor" :offset="8">
                         Powered by
                         <a
                             href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
@@ -93,12 +88,7 @@
                         <br />
                         Version : {{ VERSION }} ({{ COMMIT_HASH }})
                     </FloatingTooltip>
-                    <span
-                        class="bam-logo-link"
-                        ref="versionTooltipAnchor"
-                        @click="showTooltip = !showTooltip"
-                        @click.stop
-                    >
+                    <span class="bam-logo-link" ref="versionTooltipAnchor">
                         <img
                             src="https://geonature.fr/documents/autres/BAM/BAM-logo.png"
                             height="24px"
