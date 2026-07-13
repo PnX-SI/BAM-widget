@@ -110,7 +110,7 @@
                 width: size + 'px',
                 height: size + 'px',
             }"
-            @click.stop="toggleAudio"
+            @click="toggleAudio"
             data-testid="Toggle to play animal sound"
         >
             <i :class="play ? 'bi bi-pause-fill' : 'bi bi-play-fill'"></i>
@@ -120,6 +120,7 @@
         <FloatingTooltip
             v-if="showCredits && audio?.source"
             :anchor="buttonWrapper"
+            :mode="'click'"
         >
             <Credits :media="audio" />
         </FloatingTooltip>
