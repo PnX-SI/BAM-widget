@@ -5,13 +5,20 @@
         onBeforeUnmount,
         onMounted,
         ref,
+        unref,
         watch,
     } from 'vue';
+    import ParameterStore from '@/lib/parameterStore';
+
+    const parameterStore = ParameterStore.getInstance();
+    const { isMobile } = parameterStore;
 
     const props = withDefaults(
         defineProps<{
             show: boolean;
             anchor: HTMLElement | null;
+            trigger?: 'hover' | 'click';
+            hoverHideDelay?: number;
             offset?: number;
             viewportPadding?: number;
             zIndex?: number;
@@ -19,6 +26,8 @@
             backgroundColor?: string;
         }>(),
         {
+            trigger: 'hover',
+            hoverHideDelay: 300,
             offset: 8,
             viewportPadding: 8,
             zIndex: 2000,
@@ -30,19 +39,90 @@
     const emit = defineEmits<{
         (e: 'mouseenter'): void;
         (e: 'mouseleave'): void;
+        (e: 'update:show', value: boolean): void;
     }>();
 
     const tooltipElement = ref<HTMLElement | null>(null);
     const placement = ref<'top' | 'bottom'>('top');
     const tooltipStyle = ref<Record<string, string>>({});
+    const isVisible = ref(props.show);
+
+    let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const effectiveTrigger = computed(() =>
+        unref(isMobile) ? 'click' : props.trigger
+    );
 
     const resolvedStyle = computed(() => ({
         ...tooltipStyle.value,
         zIndex: String(props.zIndex),
     }));
 
+    function clearHideTimeout() {
+        if (hideTimeout) {
+            clearTimeout(hideTimeout);
+            hideTimeout = null;
+        }
+    }
+
+    function setVisible(value: boolean) {
+        if (isVisible.value === value) return;
+        isVisible.value = value;
+        emit('update:show', value);
+    }
+
+    function scheduleHide() {
+        clearHideTimeout();
+        hideTimeout = setTimeout(() => {
+            setVisible(false);
+        }, props.hoverHideDelay);
+    }
+
+    function handleAnchorClick(event: MouseEvent) {
+        if (effectiveTrigger.value !== 'click') return;
+        event.stopPropagation();
+        setVisible(!isVisible.value);
+    }
+
+    function handleAnchorMouseEnter() {
+        if (effectiveTrigger.value !== 'hover') return;
+        clearHideTimeout();
+        setVisible(true);
+    }
+
+    function handleAnchorMouseLeave() {
+        if (effectiveTrigger.value !== 'hover') return;
+        scheduleHide();
+    }
+
+    function handleTooltipMouseEnter() {
+        if (effectiveTrigger.value === 'hover') {
+            clearHideTimeout();
+        }
+        emit('mouseenter');
+    }
+
+    function handleTooltipMouseLeave() {
+        if (effectiveTrigger.value === 'hover') {
+            scheduleHide();
+        }
+        emit('mouseleave');
+    }
+
+    function handleDocumentClick(event: MouseEvent) {
+        if (effectiveTrigger.value !== 'click' || !isVisible.value) return;
+
+        const target = event.target as Node;
+        const clickedAnchor = props.anchor?.contains(target);
+        const clickedTooltip = tooltipElement.value?.contains(target);
+
+        if (!clickedAnchor && !clickedTooltip) {
+            setVisible(false);
+        }
+    }
+
     async function updatePosition() {
-        if (!props.show || !props.anchor) return;
+        if (!isVisible.value || !props.anchor) return;
 
         await nextTick();
 
@@ -71,40 +151,74 @@
     }
 
     function handleViewportChange() {
-        if (props.show) {
+        if (isVisible.value) {
             updatePosition();
         }
     }
 
-    watch(() => props.show, handleViewportChange);
-    watch(() => props.anchor, handleViewportChange);
+    function attachAnchorListeners(el: HTMLElement) {
+        el.addEventListener('click', handleAnchorClick);
+        el.addEventListener('mouseenter', handleAnchorMouseEnter);
+        el.addEventListener('mouseleave', handleAnchorMouseLeave);
+    }
+
+    function detachAnchorListeners(el: HTMLElement) {
+        el.removeEventListener('click', handleAnchorClick);
+        el.removeEventListener('mouseenter', handleAnchorMouseEnter);
+        el.removeEventListener('mouseleave', handleAnchorMouseLeave);
+    }
+
+    watch(
+        () => props.anchor,
+        (newAnchor, oldAnchor) => {
+            if (oldAnchor) detachAnchorListeners(oldAnchor);
+            if (newAnchor) attachAnchorListeners(newAnchor);
+            handleViewportChange();
+        }
+    );
+
+    watch(
+        () => props.show,
+        (value) => {
+            isVisible.value = value;
+        }
+    );
+
+    watch(isVisible, () => {
+        handleViewportChange();
+    });
 
     onMounted(() => {
+        if (props.anchor) attachAnchorListeners(props.anchor);
         window.addEventListener('resize', handleViewportChange);
         window.addEventListener('scroll', handleViewportChange, true);
+        document.addEventListener('click', handleDocumentClick, true);
         handleViewportChange();
     });
 
     onBeforeUnmount(() => {
+        if (props.anchor) detachAnchorListeners(props.anchor);
         window.removeEventListener('resize', handleViewportChange);
         window.removeEventListener('scroll', handleViewportChange, true);
+        document.removeEventListener('click', handleDocumentClick, true);
+        clearHideTimeout();
     });
 </script>
 
 <template>
     <Teleport to="body">
         <div
-            v-show="show"
+            v-show="isVisible"
             ref="tooltipElement"
             class="floating-tooltip"
             :class="{
-                active: show,
+                active: isVisible,
                 'tooltip-below': placement === 'bottom',
             }"
             :style="resolvedStyle"
             @click.stop
-            @mouseenter="emit('mouseenter')"
-            @mouseleave="emit('mouseleave')"
+            @mouseenter="handleTooltipMouseEnter"
+            @mouseleave="handleTooltipMouseLeave"
         >
             <slot></slot>
         </div>

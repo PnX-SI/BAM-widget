@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import Credits from './Credits.vue';
     import { Media } from '@/lib/models';
-    import { ref, onMounted, onBeforeUnmount } from 'vue';
+    import { ref } from 'vue';
     import copyrightIcon from '@/assets/images/copyright.svg';
     import FloatingTooltip from './FloatingTooltip.vue';
 
@@ -15,55 +15,7 @@
         }
     );
 
-    const showTooltip = ref(false);
     const iconWrapper = ref<HTMLElement | null>(null);
-    let hoverTimer: number | null = null;
-
-    function toggleTooltip(event: Event) {
-        event.stopPropagation();
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-            hoverTimer = null;
-        }
-        showTooltip.value = !showTooltip.value;
-    }
-
-    function showTooltipHandler() {
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-            hoverTimer = null;
-        }
-
-        showTooltip.value = true;
-    }
-
-    function hideTooltipHandler() {
-        hoverTimer = window.setTimeout(() => {
-            showTooltip.value = false;
-        }, 200);
-    }
-
-    function keepTooltipVisible() {
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-            hoverTimer = null;
-        }
-    }
-
-    function closeTooltip() {
-        showTooltip.value = false;
-    }
-
-    onMounted(() => {
-        window.addEventListener('click', closeTooltip);
-    });
-
-    onBeforeUnmount(() => {
-        if (hoverTimer) {
-            clearTimeout(hoverTimer);
-        }
-        window.removeEventListener('click', closeTooltip);
-    });
 </script>
 
 <template>
@@ -75,19 +27,11 @@
         <div
             class="copyright-icon"
             :style="{ width: size + 'px', height: size + 'px' }"
-            @click="toggleTooltip"
-            @mouseenter="showTooltipHandler"
-            @mouseleave="hideTooltipHandler"
         >
             <img :src="copyrightIcon" class="copyright-svg" alt="Copyright" />
         </div>
 
-        <FloatingTooltip
-            :show="showTooltip"
-            :anchor="iconWrapper"
-            @mouseenter="keepTooltipVisible"
-            @mouseleave="hideTooltipHandler"
-        >
+        <FloatingTooltip :anchor="iconWrapper">
             <Credits :media="props.media" link-color="link-light"></Credits>
         </FloatingTooltip>
     </div>

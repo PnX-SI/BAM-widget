@@ -57,6 +57,9 @@
             subtree: true,
         }
     );
+    const versionTooltipAnchor = ref(null);
+    const VERSION = __APP_VERSION__;
+    const COMMIT_HASH = __COMMIT_HASH__;
 </script>
 
 <template>
@@ -75,18 +78,23 @@
                 @click="toggleExpand"
             >
                 <div class="footer-main-content">
-                    <a
-                        href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
-                        target="_blank"
-                        class="bam-logo-link"
-                        @click.stop
-                    >
+                    <FloatingTooltip :anchor="versionTooltipAnchor" :offset="8">
+                        Powered by
+                        <a
+                            href="https://si.ecrins-parcnational.com/blog/2025-08-BAM-widget-en.html"
+                            target="_blank"
+                            >BAM (Biodiversity Around Me)</a
+                        >
+                        <br />
+                        Version : {{ VERSION }} ({{ COMMIT_HASH }})
+                    </FloatingTooltip>
+                    <span class="bam-logo-link" ref="versionTooltipAnchor">
                         <img
                             src="https://geonature.fr/documents/autres/BAM/BAM-logo.png"
                             height="24px"
                             alt="BAM logo"
                         />
-                    </a>
+                    </span>
                     <span class="species-count">
                         <strong>{{ props.numberOfSpecies }}</strong>
                         {{ $t('taxon.taxonFound') }}
