@@ -43,7 +43,7 @@ export default defineConfig({
                 'maskable-icon-512x512.png',
             ],
             manifest: {
-                name: `BAM (Biodiversity Around Me) - v${version}`,
+                name: `BAM (Biodiversity Around Me)`,
                 short_name: 'BAM',
                 description:
                     'BAM is an application for showing species seen nearby any location around the world',
