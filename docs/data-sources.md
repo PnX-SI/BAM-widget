@@ -57,6 +57,7 @@ To set up your GeoNature instance to use with the widget, follow these steps:
            t.classe AS classe
         FROM gn_synthese.synthese s
         JOIN taxonomie.taxref t USING(cd_nom)
+        ORDER BY date_min DESC;
         ```
 
         **Notes**: Feel free to modify this view depending on your needs! You can filter data with a `where` clause in the view, but keep the view data structure.
