@@ -74,6 +74,41 @@ function callOccurrenceApi(
 }
 
 /**
+ * Sources of vernacular names, best first. A name from a source that is not
+ * listed is used only when no listed source has one.
+ */
+const VERNACULAR_SOURCE_PREFERENCE = [
+    'TAXREF',
+    'EUNIS Biodiversity Database',
+    'Catalogue of Life',
+];
+
+/**
+ * Preferred vernacular name of a taxon in a language.
+ * @param {any[]} names - `results` of `/species/{key}/vernacularNames`
+ * @param {string} languageCode - ISO 639-3 code, see GBIF_LANGUAGE_CODES
+ * @returns {string | undefined} the name with a capital letter, if any
+ */
+export function pickVernacularName(
+    names: any[],
+    languageCode: string
+): string | undefined {
+    const rank = (source: string): number => {
+        const index = VERNACULAR_SOURCE_PREFERENCE.indexOf(source);
+        // `indexOf` gives -1 for an unknown source: it must come last, not first
+        return index === -1 ? VERNACULAR_SOURCE_PREFERENCE.length : index;
+    };
+    const best = names
+        .filter((name) => name.language === languageCode && name.vernacularName)
+        .sort((a, b) => rank(a.source) - rank(b.source))[0];
+    if (!best) return undefined;
+    return (
+        best.vernacularName.charAt(0).toUpperCase() +
+        best.vernacularName.slice(1)
+    );
+}
+
+/**
  * Build the taxon and dataset lists from the facets of an occurrence search
  * (`speciesKey` and `datasetKey`). A facet is already ordered by count.
  * @param {any} data - response of `occurrence/search?limit=0&facet=...`
@@ -226,32 +261,17 @@ export class GbifConnector extends Connector {
     }
 
     fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
-        const mapping_language = GBIF_LANGUAGE_CODES;
-        const prefOrder = [
-            'TAXREF',
-            'EUNIS Biodiversity Database',
-            'Catalogue of Life',
-        ];
         const currentLanguage = ParameterStore.getInstance().lang.value;
         return scheduledFetch(
             `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
         )
             .then((response) => response.json())
-            .then((data) => {
-                const nameData = data.results.filter(
-                    (nameData: any) =>
-                        nameData.language === mapping_language[currentLanguage]
-                );
-                const prefName = (nameData.sort(
-                    (a, b) =>
-                        prefOrder.indexOf(a.source) -
-                        prefOrder.indexOf(b.source)
-                ) || [])[0];
-                return prefName
-                    ? prefName.vernacularName.charAt(0).toUpperCase() +
-                          prefName.vernacularName.slice(1)
-                    : undefined;
-            });
+            .then((data) =>
+                pickVernacularName(
+                    data.results || [],
+                    GBIF_LANGUAGE_CODES[currentLanguage]
+                )
+            );
     }
 
     /**

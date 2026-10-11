@@ -12,6 +12,7 @@ import {
     facetsToSearchResult,
     GbifConnector,
     mergeOccurrencePage,
+    pickVernacularName,
 } from './gbif';
 import { Dataset, Taxon } from '../models';
 
@@ -454,5 +455,60 @@ describe('GbifConnector.searchTaxa', () => {
         expect(
             new GbifConnector({ AGGREGATION: 'client' }).capabilities.search
         ).toBe('loaded');
+    });
+});
+
+describe('pickVernacularName', () => {
+    const name = (
+        source: string,
+        vernacularName: string,
+        language = 'fra'
+    ) => ({
+        source,
+        vernacularName,
+        language,
+    });
+
+    it('prefers TAXREF, then EUNIS, then Catalogue of Life', () => {
+        const names = [
+            name('Catalogue of Life', 'col'),
+            name('EUNIS Biodiversity Database', 'eunis'),
+            name('TAXREF', 'taxref'),
+        ];
+
+        expect(pickVernacularName(names, 'fra')).toBe('Taxref');
+        expect(pickVernacularName(names.slice(0, 2), 'fra')).toBe('Eunis');
+    });
+
+    it('puts a source that is not listed after the listed ones', () => {
+        const names = [
+            name('Integrated Taxonomic Information System (ITIS)', 'itis'),
+            name('Catalogue of Life', 'col'),
+        ];
+
+        expect(pickVernacularName(names, 'fra')).toBe('Col');
+    });
+
+    it('still uses an unlisted source when it is the only one', () => {
+        expect(
+            pickVernacularName([name('Some checklist', 'merle noir')], 'fra')
+        ).toBe('Merle noir');
+    });
+
+    it('ignores other languages and empty names', () => {
+        const names = [name('TAXREF', 'Blackbird', 'eng'), name('TAXREF', '')];
+
+        expect(pickVernacularName(names, 'fra')).toBeUndefined();
+    });
+
+    it('does not depend on the order GBIF returned the names in', () => {
+        const names = [
+            name('Catalogue of Life', 'col'),
+            name('Other', 'other'),
+            name('TAXREF', 'taxref'),
+        ];
+
+        expect(pickVernacularName([...names].reverse(), 'fra')).toBe('Taxref');
+        expect(pickVernacularName(names, 'fra')).toBe('Taxref');
     });
 });
