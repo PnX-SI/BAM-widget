@@ -2,7 +2,7 @@ import { parse, stringify } from 'wellknown';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { MediaSource } from '../media/MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
-import { SearchResult } from '../models';
+import { SearchResult, Taxon } from '../models';
 import { SearchScoring } from './search/scoring';
 import { simplifyPolygon } from './utils';
 
@@ -49,6 +49,12 @@ export interface ConnectorCapabilities {
     taxonInfo: 'aggregated' | 'lazy';
     /** Whether the class filter is applied in the browser or by the source. */
     classFilter: 'client' | 'server';
+    /**
+     * `loaded`: the search text filters the taxa already in the list.
+     * `remote`: the source answers it (`searchTaxa`), which finds taxa whose
+     * names are not loaded yet.
+     */
+    search: 'loaded' | 'remote';
 }
 
 /** Fields the species list can be sorted by. */
@@ -115,6 +121,7 @@ export class Connector {
         lastSeenDate: 'aggregated',
         taxonInfo: 'aggregated',
         classFilter: 'client',
+        search: 'loaded',
     };
 
     constructor(options: ConnectorOptions) {
@@ -223,6 +230,17 @@ export class Connector {
         query: TaxonQuery
     ): Promise<Date | null> {
         return Promise.resolve(null);
+    }
+
+    /**
+     * Taxa of the query area whose scientific or vernacular name matches a
+     * text. Only used when `capabilities.search` is `remote`. Taxa come
+     * most relevant first.
+     * @param {string} text - what the user typed
+     * @param {TaxonQuery} query - area and filters
+     */
+    searchTaxa(text: string, query: TaxonQuery): Promise<Taxon[]> {
+        return Promise.resolve([]);
     }
 
     /**

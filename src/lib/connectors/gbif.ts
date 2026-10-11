@@ -18,6 +18,17 @@ import { parse, stringify } from 'wellknown';
 
 const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 // const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif-uat.org/v1';
+/** UI language -> ISO 639-3 code used by GBIF vernacular names. */
+const GBIF_LANGUAGE_CODES: Record<string, string> = {
+    en: 'eng',
+    fr: 'fra',
+    es: 'spa',
+    cs: 'ces',
+    it: 'ita',
+    de: 'deu',
+};
+/** Taxa per occurrence request when checking which candidates are present. */
+const GBIF_SEARCH_KEYS_PER_REQUEST = 100;
 const GBIF_DEFAULT_LIMIT = 300;
 const GBIF_DEFAULT_NB_PAGES = 10;
 /** Max taxa returned by a facet request (a 10 x 10 km area has ~3 700). */
@@ -36,7 +47,10 @@ interface GBIFStatus {
     code: IUCNCodeStatus;
 }
 
-function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
+function callOccurrenceApi(
+    params: OccurrenceParams = {},
+    options: { urgent?: boolean } = {}
+): Promise<any> {
     const urlWithParams = new URL(`${GBIF_ENDPOINT_DEFAULT}/occurrence/search`);
     Object.entries(params).forEach(([key, value]) => {
         if (Array.isArray(value)) {
@@ -48,13 +62,15 @@ function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
         }
     });
 
-    return scheduledFetch(urlWithParams.toString()).then((response) => {
-        if (response.status === 200) {
-            return response.json();
-        } else if (response.status === 429) {
-            console.error('Rate limit exceeded');
+    return scheduledFetch(urlWithParams.toString(), undefined, options).then(
+        (response) => {
+            if (response.status === 200) {
+                return response.json();
+            } else if (response.status === 429) {
+                console.error('Rate limit exceeded');
+            }
         }
-    });
+    );
 }
 
 /**
@@ -176,6 +192,7 @@ export class GbifConnector extends Connector {
                 lastSeenDate: 'lazy',
                 taxonInfo: 'lazy',
                 classFilter: 'server',
+                search: 'remote',
             };
         }
     }
@@ -209,14 +226,7 @@ export class GbifConnector extends Connector {
     }
 
     fetchVernacularName(taxonID: string | number): Promise<string | undefined> {
-        const mapping_language: Record<string, string> = {
-            en: 'eng',
-            fr: 'fra',
-            es: 'spa',
-            cs: 'ces',
-            it: 'ita',
-            de: 'deu',
-        };
+        const mapping_language = GBIF_LANGUAGE_CODES;
         const prefOrder = [
             'TAXREF',
             'EUNIS Biodiversity Database',
@@ -343,6 +353,114 @@ export class GbifConnector extends Connector {
             }
             return facetsToSearchResult(data);
         });
+    }
+
+    /**
+     * Taxa of the area matching a name, in two steps:
+     * 1. GBIF name search (vernacular and scientific) gives candidate taxa
+     *    from everywhere, identified by their backbone key (`nubKey`);
+     * 2. one occurrence request limited to the area and to those keys keeps
+     *    the candidates that were observed there, with their counts. A
+     *    candidate above species level (genus, family) brings its species.
+     * Results are ordered by relevance of the name search, then by count.
+     */
+    async searchTaxa(text: string, query: TaxonQuery): Promise<Taxon[]> {
+        const search = text.trim();
+        if (!search) return [];
+
+        const lists = await Promise.all(
+            ['VERNACULAR', 'SCIENTIFIC'].map((field) =>
+                this.searchSpecies(search, field)
+            )
+        );
+        // best position of each backbone key over both lists
+        const candidates = new Map<number, { index: number; result: any }>();
+        lists.forEach((list) =>
+            list.forEach((result, index) => {
+                const key = Number(result.nubKey);
+                const known = candidates.get(key);
+                if (key && (!known || index < known.index)) {
+                    candidates.set(key, { index, result });
+                }
+            })
+        );
+        if (!candidates.size) return [];
+
+        const filter = this.buildFilter(query);
+        const keys = [...candidates.keys()];
+        const counted = new Map<number, number>();
+        const requests: Array<Promise<void>> = [];
+        for (let i = 0; i < keys.length; i += GBIF_SEARCH_KEYS_PER_REQUEST) {
+            requests.push(
+                callOccurrenceApi(
+                    {
+                        ...filter,
+                        taxonKey: keys.slice(
+                            i,
+                            i + GBIF_SEARCH_KEYS_PER_REQUEST
+                        ),
+                        limit: 0,
+                        facet: 'speciesKey',
+                        facetLimit: GBIF_FACET_LIMIT,
+                    },
+                    { urgent: true }
+                ).then((data) => {
+                    if (!data) throw new Error('GBIF request failed');
+                    (data.facets?.[0]?.counts || []).forEach((c: any) =>
+                        counted.set(Number(c.name), c.count)
+                    );
+                })
+            );
+        }
+        await Promise.all(requests);
+
+        const language =
+            GBIF_LANGUAGE_CODES[ParameterStore.getInstance().lang.value];
+        return [...counted.entries()]
+            .map(([taxonId, nbObservations]) => {
+                const candidate = candidates.get(taxonId);
+                const result = candidate?.result;
+                const vernacular = (result?.vernacularNames || []).find(
+                    (name: any) => name.language === language
+                )?.vernacularName;
+                return {
+                    index: candidate?.index ?? Infinity,
+                    taxon: {
+                        taxonId,
+                        acceptedScientificName: result?.scientificName ?? '',
+                        vernacularName: vernacular,
+                        taxonRank: result?.rank,
+                        kingdom: result?.kingdom,
+                        class: result?.class,
+                        mediaUrl: NO_IMAGE_URL,
+                        nbObservations,
+                        description: '',
+                        lastSeenDate: null,
+                    } as Taxon,
+                };
+            })
+            .sort(
+                (a, b) =>
+                    a.index - b.index ||
+                    b.taxon.nbObservations! - a.taxon.nbObservations!
+            )
+            .map(({ taxon }) => taxon);
+    }
+
+    /** GBIF accepted taxa whose names match, most relevant first. */
+    private searchSpecies(text: string, field: string): Promise<any[]> {
+        return scheduledFetch(
+            `${this.GBIF_ENDPOINT}/species/search?q=${encodeURIComponent(
+                text
+            )}&status=ACCEPTED&qField=${field}&limit=100`,
+            undefined,
+            { urgent: true }
+        )
+            .then((response) => {
+                if (!response.ok) throw new Error('GBIF search failed');
+                return response.json();
+            })
+            .then((json) => json.results || []);
     }
 
     /**

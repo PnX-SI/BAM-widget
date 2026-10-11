@@ -72,6 +72,8 @@ export class TaxonListManager {
      * older request is dropped, so a slow query cannot overwrite a newer one.
      */
     private requestId = 0;
+    /** Same guard for text searches answered by the source. */
+    private searchRequestId = 0;
 
     constructor(
         public connector: Ref<Connector>,
@@ -124,20 +126,8 @@ export class TaxonListManager {
         this.loadingError.value = false;
         this.filteredSpecies.value = [];
 
-        const connector = this.connector.value;
-        // a class filter chosen in the list is sent to sources that apply it
-        const serverClass =
-            connector.capabilities.classFilter === 'server'
-                ? this.filterClass.value
-                : null;
-
-        connector
-            .fetchTaxa({
-                geometry: wktParam,
-                dateMin: this.parameterStore.dateMin.value,
-                dateMax: this.parameterStore.dateMax.value,
-                class: serverClass ?? this.parameterStore.class.value,
-            })
+        this.connector.value
+            .fetchTaxa(this.buildQuery(wktParam))
             .then((response) => {
                 if (requestId !== this.requestId) return;
                 perfMark('list:ready');
@@ -155,10 +145,60 @@ export class TaxonListManager {
             });
     }
 
+    /** Area and filters of the list, as sent to the connector. */
+    private buildQuery(wkt: string) {
+        // a class filter chosen in the list is sent to sources that apply it
+        const serverClass =
+            this.connector.value.capabilities.classFilter === 'server'
+                ? this.filterClass.value
+                : null;
+        return {
+            geometry: wkt,
+            dateMin: this.parameterStore.dateMin.value,
+            dateMax: this.parameterStore.dateMax.value,
+            class: serverClass ?? this.parameterStore.class.value,
+        };
+    }
+
+    /**
+     * Search answered by the source: it finds taxa of the area whose names
+     * are not loaded in the list.
+     */
+    private searchOnSource(): void {
+        const text = this.searchString.value.trim();
+        const requestId = ++this.searchRequestId;
+        if (!text) {
+            this.filteredSpecies.value = this.searchResult.value.taxons ?? [];
+            this.pageIndex.value = 0;
+            this.loadingObservations.value = false;
+            return;
+        }
+        this.loadingObservations.value = true;
+        this.connector.value
+            .searchTaxa(text, this.buildQuery(this.parameterStore.wkt.value))
+            .then((taxa) => {
+                if (requestId !== this.searchRequestId) return;
+                this.filteredSpecies.value = taxa;
+            })
+            .catch(() => {
+                if (requestId !== this.searchRequestId) return;
+                this.filteredSpecies.value = [];
+            })
+            .finally(() => {
+                if (requestId !== this.searchRequestId) return;
+                this.pageIndex.value = 0;
+                this.loadingObservations.value = false;
+            });
+    }
+
     /**
      * Updates the filteredSpecies property based on the search string and filterClass values.
      */
     public updateFilteredSpecies(): void {
+        if (this.connector.value.capabilities.search === 'remote') {
+            this.searchOnSource();
+            return;
+        }
         const result = this.searchResult.value.taxons;
         if (!result) {
             this.filteredSpecies.value = [];
