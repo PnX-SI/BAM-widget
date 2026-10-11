@@ -10,9 +10,11 @@
     import TaxonDetailed from './TaxonDetailed.vue';
     import { Connector } from '@/lib/connectors/connector';
     import { perfMarkOnce } from '@/lib/perf';
+    import { getEnricher } from '@/lib/enrichment/enricher';
 
     const { mode, connector, lang, customDetailPage } =
         ParameterStore.getInstance();
+    const enricher = getEnricher();
 
     const props = defineProps<{
         taxon: Taxon;
@@ -36,22 +38,20 @@
     function fetchTaxonImage() {
         speciesPhoto.value = [];
         if (taxon.taxonId) {
-            connector.value.imageSource
-                .fetchPicture(taxon.taxonId, connector.value)
-                .then((response) => {
-                    speciesPhoto.value = response;
-                    if (response?.length) perfMarkOnce('first-image');
+            enricher
+                .getImages(taxon.taxonId, connector.value)
+                .then((medias) => {
+                    speciesPhoto.value = medias;
+                    if (medias.length) perfMarkOnce('first-image');
                 });
         }
     }
     function fetchTaxonAudio() {
         speciesAudio.value = null;
         if (taxon.taxonId) {
-            connector.value.soundSource
-                .fetchSound(taxon.taxonId, connector.value)
-                .then((response) => {
-                    if (response) speciesAudio.value = response[0];
-                });
+            enricher.getSound(taxon.taxonId, connector.value).then((sound) => {
+                if (sound) speciesAudio.value = sound;
+            });
         }
     }
     const mediaDisplayed = computed(() => {
@@ -64,16 +64,19 @@
     });
 
     function refreshVernacularName() {
-        connector.value.fetchVernacularName(taxon.taxonId).then((name) => {
-            if (name) {
-                vernacularName.value = name.split(',')[0];
-                taxon.vernacularName = vernacularName.value;
-            }
-        });
+        enricher
+            .getVernacularName(taxon.taxonId, connector.value, lang.value)
+            .then((name) => {
+                if (name) {
+                    vernacularName.value = name.split(',')[0];
+                    taxon.vernacularName = vernacularName.value;
+                }
+            });
     }
 
     function fetchStatus(connector: Connector) {
-        connector.fetchTaxonStatus(taxon.taxonId).then((status_) => {
+        enricher.getStatus(taxon.taxonId, connector).then((status_) => {
+            if (!status_) return;
             status.value = {
                 status: status_,
                 color: connector.getStatusColor(status_),
