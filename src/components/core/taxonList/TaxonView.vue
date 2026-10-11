@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { ref, computed, watch } from 'vue';
+    import { useIntersectionObserver } from '@vueuse/core';
 
     import { NO_IMAGE_URL } from '@/assets/constant';
     import { MediaType, Taxon } from '@/lib/models';
@@ -104,10 +105,25 @@
 
     /**
      * The date of the last observation is only shown by the detailed view,
-     * and some sources give it per taxon: it is requested as cards appear.
+     * and some sources give it per taxon: it is requested when the card
+     * comes into view, so it follows the scroll.
      */
+    const card = ref<any>(null);
+    const isVisible = ref(false);
+    const { stop: stopObservingCard } = useIntersectionObserver(
+        () => card.value?.$el,
+        ([entry]) => {
+            if (!entry?.isIntersecting) return;
+            isVisible.value = true;
+            stopObservingCard();
+            fetchLastSeenDate();
+        },
+        { rootMargin: '300px' }
+    );
+
     function fetchLastSeenDate() {
         if (
+            !isVisible.value ||
             taxon.lastSeenDate ||
             mode.value === 'gallery' ||
             connector.value.capabilities.lastSeenDate !== 'lazy'
@@ -126,7 +142,6 @@
     }
 
     fetchTaxonInfo();
-    fetchLastSeenDate();
     fetchTaxonImage();
     fetchTaxonAudio();
     refreshVernacularName();
@@ -140,6 +155,7 @@
 
 <template>
     <TaxonThumbnail
+        ref="card"
         v-if="mode == 'gallery'"
         :picture="mediaDisplayed"
         :audio="speciesAudio"
@@ -151,6 +167,7 @@
     >
     </TaxonThumbnail>
     <TaxonDetailed
+        ref="card"
         v-else
         :picture="mediaDisplayed"
         :audio="speciesAudio"
