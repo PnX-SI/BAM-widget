@@ -3,15 +3,26 @@
  *
  * - bounds the number of simultaneous requests per host (a card list would
  *   otherwise fire hundreds of requests at once and get throttled);
- * - retries on 429/503, honouring `Retry-After`;
+ * - backs off per host on 429/503: the whole host pauses for `Retry-After`
+ *   and its concurrency is halved, then grows back while requests succeed;
+ * - retries a throttled request, re-queued behind the pause;
  * - deduplicates identical in-flight/finished async work with `memoAsync`.
  */
 
-const DEFAULT_HOST_LIMIT = 6;
-/** Hosts that throttle aggressively get a lower concurrency. */
-const HOST_LIMITS: Record<string, number> = {
-    'query.wikidata.org': 3,
+/** Concurrency of hosts that are not listed below. */
+const DEFAULT_HOST_LIMIT = { initial: 6, ceiling: 6 };
+/**
+ * Hosts that throttle: they start low and may grow to `ceiling`.
+ * - GBIF occurrence/search answers 429 (Retry-After: 3) as soon as heavy
+ *   queries overlap: 4 at once failed 12 times out of 20 in a measure,
+ *   1 or 2 at once almost never.
+ */
+const HOST_LIMITS: Record<string, { initial: number; ceiling: number }> = {
+    'query.wikidata.org': { initial: 3, ceiling: 3 },
+    'api.gbif.org': { initial: 2, ceiling: 4 },
 };
+/** Successful requests in a row before a throttled host gets one slot back. */
+const SUCCESSES_TO_GROW = 10;
 
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 500;
@@ -48,21 +59,91 @@ export function createLimiter(max: number): Limiter {
         });
 }
 
-const limiters = new Map<string, Limiter>();
+/**
+ * Runs tasks of one host with an adaptive number in flight and a pause
+ * after throttling.
+ */
+export class HostGate {
+    private active = 0;
+    private queue: Array<() => void> = [];
+    private pausedUntil = 0;
+    private successes = 0;
+    private wakeUp: ReturnType<typeof setTimeout> | null = null;
 
-function getLimiter(url: string): Limiter {
+    constructor(
+        private max: number,
+        private ceiling: number = max
+    ) {}
+
+    get concurrency(): number {
+        return this.max;
+    }
+
+    run<T>(task: () => Promise<T>): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            this.queue.push(() => {
+                this.active++;
+                Promise.resolve()
+                    .then(task)
+                    .then(resolve, reject)
+                    .finally(() => {
+                        this.active--;
+                        this.pump();
+                    });
+            });
+            this.pump();
+        });
+    }
+
+    /** The host throttled us: pause everything and slow down. */
+    penalize(delayMs: number): void {
+        this.pausedUntil = Math.max(this.pausedUntil, Date.now() + delayMs);
+        this.max = Math.max(1, Math.floor(this.max / 2));
+        this.successes = 0;
+    }
+
+    /** A request went through: slowly give concurrency back. */
+    reward(): void {
+        if (++this.successes >= SUCCESSES_TO_GROW && this.max < this.ceiling) {
+            this.max++;
+            this.successes = 0;
+            this.pump();
+        }
+    }
+
+    private pump(): void {
+        const wait = this.pausedUntil - Date.now();
+        if (wait > 0) {
+            if (!this.wakeUp && this.queue.length) {
+                this.wakeUp = setTimeout(() => {
+                    this.wakeUp = null;
+                    this.pump();
+                }, wait);
+            }
+            return;
+        }
+        while (this.active < this.max && this.queue.length) {
+            this.queue.shift()!();
+        }
+    }
+}
+
+const gates = new Map<string, HostGate>();
+
+function getGate(url: string): HostGate {
     let host = '';
     try {
         host = new URL(url).host;
     } catch {
         // relative or invalid URL: share the default bucket
     }
-    let limiter = limiters.get(host);
-    if (!limiter) {
-        limiter = createLimiter(HOST_LIMITS[host] ?? DEFAULT_HOST_LIMIT);
-        limiters.set(host, limiter);
+    let gate = gates.get(host);
+    if (!gate) {
+        const limits = HOST_LIMITS[host] ?? DEFAULT_HOST_LIMIT;
+        gate = new HostGate(limits.initial, limits.ceiling);
+        gates.set(host, gate);
     }
-    return limiter;
+    return gate;
 }
 
 function retryDelay(response: Response, attempt: number): number {
@@ -73,28 +154,26 @@ function retryDelay(response: Response, attempt: number): number {
     return Math.min(BASE_DELAY_MS * 2 ** attempt, MAX_DELAY_MS);
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 /**
- * `fetch` with per-host concurrency limit and retry on 429/503.
+ * `fetch` with per-host concurrency, back-off and retry on 429/503.
  * After the last retry the last response is returned as is, so callers keep
  * their own status handling.
  */
-export function scheduledFetch(
+export async function scheduledFetch(
     url: string,
     init?: RequestInit
 ): Promise<Response> {
-    return getLimiter(url)(async () => {
-        let attempt = 0;
-        for (;;) {
-            const response = await fetch(url, init);
-            const retryable =
-                response.status === 429 || response.status === 503;
-            if (!retryable || attempt >= MAX_RETRIES) return response;
-            await sleep(retryDelay(response, attempt));
-            attempt++;
+    const gate = getGate(url);
+    for (let attempt = 0; ; attempt++) {
+        const response = await gate.run(() => fetch(url, init));
+        const throttled = response.status === 429 || response.status === 503;
+        if (!throttled) {
+            gate.reward();
+            return response;
         }
-    });
+        gate.penalize(retryDelay(response, attempt));
+        if (attempt >= MAX_RETRIES) return response;
+    }
 }
 
 /**
