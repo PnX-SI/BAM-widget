@@ -1,247 +1,280 @@
-import { scheduledFetch, memoAsync } from '../http/scheduler';
+import { scheduledFetch } from '../http/scheduler';
 import { Connector } from '../connectors/connector';
 import { Media, MediaType } from '../models';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
 import { SOURCE_ } from './media';
-import { MediaSource } from './MediaSource';
+import { MediaBatch, MediaSource } from './MediaSource';
 
 const { GBIF, TAXREF } = TAXON_REFERENTIAL;
 
-interface WikidataResponse {
-    results: {
-        bindings: Array<{
-            item: { value: string };
-        }>;
-    };
+const SPARQL_URL = 'https://query.wikidata.org/sparql';
+const COMMONS_API_URL = 'https://commons.wikimedia.org/w/api.php';
+
+/** Wikidata property holding the taxon identifier, by referential. */
+const TAXON_ID_PROPERTY: Partial<Record<TAXON_REFERENTIAL, string>> = {
+    [GBIF]: 'P846',
+    [TAXREF]: 'P3186',
+};
+
+/** Max taxa per SPARQL query and max files per Commons query. */
+const SPARQL_CHUNK = 50;
+const COMMONS_CHUNK = 50;
+
+interface WikidataFiles {
+    image?: string;
+    sound?: string;
 }
 
-interface WikidataEntity {
-    entities: {
-        [key: string]: {
-            claims?: Record<
-                string,
-                Array<{ mainsnak: { datavalue: { value: string } } }>
-            >;
-        };
-    };
+interface SparqlBinding {
+    k: { value: string };
+    img?: { value: string };
+    snd?: { value: string };
+}
+
+interface CommonsImageInfo {
+    url: string;
+    extmetadata?: Record<string, { value?: string }>;
+}
+
+function chunk<T>(items: T[], size: number): T[][] {
+    const chunks: T[][] = [];
+    for (let i = 0; i < items.length; i += size) {
+        chunks.push(items.slice(i, i + size));
+    }
+    return chunks;
+}
+
+/** `http://commons.wikimedia.org/wiki/Special:FilePath/My%20bird.jpg` -> `My bird.jpg` */
+function fileNameFromUrl(url: string): string {
+    return decodeURIComponent(url.split('/').pop() || '').replace(/_/g, ' ');
 }
 
 /**
- * SPARQL query to fetch Wikidata entity ID by external property (GBIF, TAXREF…)
+ * One SPARQL query for several taxa: returns the image (P18) and sound (P51)
+ * file names of each taxon that exists in Wikidata. An entity with several
+ * files yields several rows, the first one wins.
  */
-const entityIdCache = new Map<string, Promise<string | null>>();
-const entityMediaFilesCache = new Map<
-    string,
-    Promise<Record<string, string | undefined>>
->();
-
-function fetchWikidataEntityByProperty(
-    property: string,
-    value: string
-): Promise<string | null> {
-    return memoAsync(entityIdCache, `${property}:${value}`, () =>
-        queryWikidataEntityByProperty(property, value)
-    );
-}
-
-function queryWikidataEntityByProperty(
-    property: string,
-    value: string
-): Promise<string | null> {
-    const url = 'https://query.wikidata.org/sparql';
-    const query = `SELECT ?item WHERE { ?item wdt:${property} "${value}" . }`;
+function queryWikidataFiles(
+    idProperty: string,
+    ids: string[]
+): Promise<Map<string, WikidataFiles>> {
+    // identifiers are interpolated in the query: keep only safe characters
+    const values = ids
+        .map((id) => `"${id.replace(/[^0-9A-Za-z_.-]/g, '')}"`)
+        .join(' ');
+    const query =
+        `SELECT ?k ?img ?snd WHERE { VALUES ?k { ${values} } ` +
+        `?item wdt:${idProperty} ?k . ` +
+        `OPTIONAL { ?item wdt:P18 ?img } OPTIONAL { ?item wdt:P51 ?snd } }`;
 
     return scheduledFetch(
-        url + '?format=json&query=' + encodeURIComponent(query)
+        `${SPARQL_URL}?format=json&query=${encodeURIComponent(query)}`
     )
-        .then((response) => response.json() as Promise<WikidataResponse>)
-        .then((data) => {
-            if (!data.results.bindings.length) return null;
-            return data.results.bindings[0].item.value.split('/').pop() || null;
-        });
-}
-
-/**
- * Fetch metadata for a Commons file (image or audio)
- */
-function fetchCommonsMedia(
-    fileName: string,
-    typeMedia: MediaType
-): Promise<Media[]> {
-    const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(
-        fileName
-    )}&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
-
-    return scheduledFetch(commonsUrl)
-        .then((res) => res.json())
-        .then((commonsData) => {
-            const pages = commonsData.query.pages;
-            const page = Object.values(pages)[0] as any;
-
-            if (!page?.imageinfo?.length) {
-                return [];
-            }
-
-            const info = page.imageinfo[0];
-            const meta = info.extmetadata || {};
-            const credit = {
-                artist: meta.Artist?.value || null,
-                license: meta.LicenseShortName?.value || null,
-                creditLine: meta.Credit?.value || null,
-                licenseUrl: meta.LicenseUrl?.value || null,
-            };
-
-            return [
-                {
-                    url:
-                        typeMedia === MediaType.image
-                            ? `https://commons.wikimedia.org/w/thumb.php?width=700&f=${fileName}`
-                            : info.url,
-                    source: `${
-                        credit.artist
-                            ? credit.artist.replace(/<[^>]*>?/gm, '')
-                            : ''
-                    } - ${credit.license}`,
-                    typeMedia,
-                    licenseUrl: credit.licenseUrl,
-                    license: credit.license,
-                    author: credit.artist
-                        ? credit.artist.replace(/<[^>]*>?/gm, '')
-                        : credit.artist,
-                    urlSource: `https://commons.wikimedia.org/wiki/File:${fileName}`,
-                },
-            ] as Media[];
-        });
-}
-
-/** Properties read from an entity: P18 (image) and P51 (audio). */
-const MEDIA_PROPERTIES = ['P18', 'P51'];
-
-/**
- * Fetch the Commons file names of an entity. The (large) entity document is
- * requested once per entity and shared between image and sound lookups.
- */
-function fetchEntityMediaFiles(
-    entityId: string
-): Promise<Record<string, string | undefined>> {
-    return memoAsync(entityMediaFilesCache, entityId, () => {
-        const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
-        return scheduledFetch(url)
-            .then((response) => response.json() as Promise<WikidataEntity>)
-            .then((data) => {
-                const claims = data.entities[entityId]?.claims || {};
-                const files: Record<string, string | undefined> = {};
-                MEDIA_PROPERTIES.forEach((property) => {
-                    files[property] =
-                        claims[property]?.[0]?.mainsnak?.datavalue?.value;
-                });
-                return files;
+        .then((response) => response.json())
+        .then((data: { results: { bindings: SparqlBinding[] } }) => {
+            const files = new Map<string, WikidataFiles>();
+            data.results.bindings.forEach((binding) => {
+                const entry = files.get(binding.k.value) ?? {};
+                if (!entry.image && binding.img) {
+                    entry.image = fileNameFromUrl(binding.img.value);
+                }
+                if (!entry.sound && binding.snd) {
+                    entry.sound = fileNameFromUrl(binding.snd.value);
+                }
+                files.set(binding.k.value, entry);
             });
-    });
+            return files;
+        });
 }
 
 /**
- * Generic fetcher for Wikidata media (image/audio)
+ * One Commons query for several files: author, license and URL.
+ * Files unknown to Commons are absent from the result.
  */
-function fetchMediaFromWikidata(
-    entityId: string,
-    property: string,
-    typeMedia: MediaType
-): Promise<Media[]> {
-    if (!entityId) {
-        return Promise.resolve([]);
-    }
+function queryCommonsInfo(
+    fileNames: string[]
+): Promise<Map<string, CommonsImageInfo>> {
+    const titles = fileNames.map((name) => `File:${name}`).join('|');
+    const url =
+        `${COMMONS_API_URL}?action=query&titles=${encodeURIComponent(titles)}` +
+        `&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
 
-    return fetchEntityMediaFiles(entityId).then((files) => {
-        const fileName = files[property];
-        if (!fileName) {
-            return [];
-        }
-        return fetchCommonsMedia(fileName, typeMedia);
-    });
+    return scheduledFetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            const infos = new Map<string, CommonsImageInfo>();
+            Object.values(data?.query?.pages || {}).forEach((page: any) => {
+                const info = page?.imageinfo?.[0];
+                if (info && typeof page.title === 'string') {
+                    infos.set(page.title.replace(/^File:/, ''), info);
+                }
+            });
+            return infos;
+        });
 }
 
-/**
- * Resolve Wikidata ID from connector + fetch media
- */
-function fetchWikidataMedia(
-    idTaxon: string | number,
-    connector: Connector,
-    property: string,
+function stripHtml(value?: string | null): string | null {
+    return value ? value.replace(/<[^>]*>?/gm, '') : null;
+}
+
+function buildMedia(
+    fileName: string,
     typeMedia: MediaType,
-    wikidataEntryID: string | null = null
-): Promise<Media[]> {
-    if (!idTaxon) throw new Error('No taxonId given!');
+    info: CommonsImageInfo
+): Media {
+    const meta = info.extmetadata || {};
+    const author = stripHtml(meta.Artist?.value);
+    const license = meta.LicenseShortName?.value || null;
 
-    if (wikidataEntryID) {
-        return fetchMediaFromWikidata(wikidataEntryID, property, typeMedia);
-    }
-
-    let fetchIDPromise: Promise<string | null> | null = null;
-
-    switch (connector.referential) {
-        case GBIF:
-            fetchIDPromise = fetchWikidataEntityByProperty('P846', idTaxon);
-            break;
-        case TAXREF:
-            fetchIDPromise = fetchWikidataEntityByProperty('P3186', idTaxon);
-            break;
-        default:
-            break;
-    }
-
-    if (!fetchIDPromise) return Promise.resolve([]);
-
-    return fetchIDPromise.then((idWikidata) => {
-        if (idWikidata) {
-            return fetchMediaFromWikidata(idWikidata, property, typeMedia);
-        }
-        return [];
-    });
+    return {
+        url:
+            typeMedia === MediaType.image
+                ? `https://commons.wikimedia.org/w/thumb.php?width=700&f=${encodeURIComponent(fileName)}`
+                : info.url,
+        source: `${author ?? ''} - ${license}`,
+        typeMedia,
+        licenseUrl: meta.LicenseUrl?.value || null,
+        license,
+        author,
+        urlSource: `https://commons.wikimedia.org/wiki/File:${fileName}`,
+    } as Media;
 }
 
-class WikiDataImageSource extends MediaSource {
+export class WikiDataImageSource extends MediaSource {
+    /** Files by taxon (`property:id`), shared by images and sounds. */
+    private filesCache = new Map<string, Promise<WikidataFiles>>();
+    /** Commons metadata by file name. */
+    private commonsCache = new Map<string, Promise<CommonsImageInfo | null>>();
+
     constructor() {
         super('Wikidata', SOURCE_.wikidata);
+    }
+
+    isCompatible(connector: any): boolean {
+        return [GBIF, TAXREF].includes(connector.referential);
     }
 
     fetchPicture(
         taxonID: string | number,
         connector: Connector
     ): Promise<Media[] | undefined> {
-        if (!this.isCompatible(connector)) {
-            throw new Error(
-                'Wikidata Image source is only compatible with GBIF and TAXREF connectors'
-            );
-        }
-        return fetchWikidataMedia(
-            taxonID,
-            connector,
-            'P18',
-            MediaType.image
-        ) as Promise<Media[] | undefined>;
+        return this.fetchBatch([taxonID], connector, 'image').then(
+            (batch) => batch.get(String(taxonID)) ?? []
+        );
     }
 
     fetchSound(
-        taxonID: string,
+        taxonID: string | number,
         connector: Connector
     ): Promise<Media[] | undefined> {
+        return this.fetchBatch([taxonID], connector, 'sound').then(
+            (batch) => batch.get(String(taxonID)) ?? []
+        );
+    }
+
+    fetchPictures(
+        taxonIDs: Array<string | number>,
+        connector: Connector
+    ): Promise<MediaBatch> {
+        return this.fetchBatch(taxonIDs, connector, 'image');
+    }
+
+    fetchSounds(
+        taxonIDs: Array<string | number>,
+        connector: Connector
+    ): Promise<MediaBatch> {
+        return this.fetchBatch(taxonIDs, connector, 'sound');
+    }
+
+    private async fetchBatch(
+        taxonIDs: Array<string | number>,
+        connector: Connector,
+        kind: 'image' | 'sound'
+    ): Promise<MediaBatch> {
         if (!this.isCompatible(connector)) {
             throw new Error(
-                'Wikidata Sound source is only compatible with GBIF and TAXREF connectors'
+                'Wikidata source is only compatible with GBIF and TAXREF connectors'
             );
         }
-        return fetchWikidataMedia(
-            taxonID,
-            connector,
-            'P51',
-            MediaType.sound
-        ) as Promise<Media[] | undefined>;
+        const idProperty = TAXON_ID_PROPERTY[connector.referential!]!;
+        const ids = [...new Set(taxonIDs.map(String))];
+
+        const files = await Promise.all(this.resolveFiles(idProperty, ids));
+        const fileByTaxon = new Map<string, string>();
+        ids.forEach((id, index) => {
+            const fileName = files[index][kind];
+            if (fileName) fileByTaxon.set(id, fileName);
+        });
+
+        const infos = await Promise.all(
+            this.resolveCommons([...new Set(fileByTaxon.values())])
+        );
+        const infoByFile = new Map<string, CommonsImageInfo>();
+        [...new Set(fileByTaxon.values())].forEach((name, index) => {
+            const info = infos[index];
+            if (info) infoByFile.set(name, info);
+        });
+
+        const typeMedia = kind === 'image' ? MediaType.image : MediaType.sound;
+        const batch: MediaBatch = new Map();
+        ids.forEach((id) => {
+            const fileName = fileByTaxon.get(id);
+            const info = fileName ? infoByFile.get(fileName) : undefined;
+            batch.set(
+                id,
+                fileName && info ? [buildMedia(fileName, typeMedia, info)] : []
+            );
+        });
+        return batch;
     }
 
-    isCompatible(connector: any): boolean {
-        return [GBIF, TAXREF].includes(connector.referential);
+    /**
+     * Files of each taxon, one promise per id. Ids that are not cached yet
+     * are queried together (chunks of SPARQL_CHUNK).
+     */
+    private resolveFiles(
+        idProperty: string,
+        ids: string[]
+    ): Array<Promise<WikidataFiles>> {
+        const missing = ids.filter(
+            (id) => !this.filesCache.has(`${idProperty}:${id}`)
+        );
+        chunk(missing, SPARQL_CHUNK).forEach((chunkIds) => {
+            const query = queryWikidataFiles(idProperty, chunkIds);
+            chunkIds.forEach((id) => {
+                const key = `${idProperty}:${id}`;
+                this.filesCache.set(
+                    key,
+                    query
+                        .then((files) => files.get(id) ?? {})
+                        .catch((error) => {
+                            this.filesCache.delete(key);
+                            throw error;
+                        })
+                );
+            });
+        });
+        return ids.map((id) => this.filesCache.get(`${idProperty}:${id}`)!);
+    }
+
+    private resolveCommons(
+        fileNames: string[]
+    ): Array<Promise<CommonsImageInfo | null>> {
+        const missing = fileNames.filter((n) => !this.commonsCache.has(n));
+        chunk(missing, COMMONS_CHUNK).forEach((chunkNames) => {
+            const query = queryCommonsInfo(chunkNames);
+            chunkNames.forEach((name) => {
+                this.commonsCache.set(
+                    name,
+                    query
+                        .then((infos) => infos.get(name) ?? null)
+                        .catch((error) => {
+                            this.commonsCache.delete(name);
+                            throw error;
+                        })
+                );
+            });
+        });
+        return fileNames.map((name) => this.commonsCache.get(name)!);
     }
 }
-
-export { WikiDataImageSource };
