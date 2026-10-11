@@ -1,5 +1,10 @@
 import { scheduledFetch } from '../http/scheduler';
-import { Connector, ConnectorOptions, IUCNCodeStatus } from './connector';
+import {
+    Connector,
+    ConnectorOptions,
+    IUCNCodeStatus,
+    TaxonQuery,
+} from './connector';
 import { Dataset, SearchResult, Taxon } from '../models';
 import ParameterStore from '../parameterStore';
 import { NO_IMAGE_URL } from '@/assets/constant';
@@ -15,6 +20,8 @@ const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif.org/v1';
 // const GBIF_ENDPOINT_DEFAULT = 'https://api.gbif-uat.org/v1';
 const GBIF_DEFAULT_LIMIT = 300;
 const GBIF_DEFAULT_NB_PAGES = 10;
+/** Max taxa returned by a facet request (a 10 x 10 km area has ~3 700). */
+const GBIF_FACET_LIMIT = 5000;
 
 type OccurrenceParams = Record<string, any>;
 
@@ -46,6 +53,34 @@ function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
             console.error('Rate limit exceeded');
         }
     });
+}
+
+/**
+ * Build the taxon and dataset lists from the facets of an occurrence search
+ * (`speciesKey` and `datasetKey`). A facet is already ordered by count.
+ * @param {any} data - response of `occurrence/search?limit=0&facet=...`
+ */
+export function facetsToSearchResult(data: any): SearchResult {
+    const counts = (field: string): Array<{ name: string; count: number }> =>
+        (data?.facets || []).find((facet: any) => facet.field === field)
+            ?.counts || [];
+
+    const taxons: Taxon[] = counts('SPECIES_KEY').map(({ name, count }) => ({
+        taxonId: Number(name),
+        acceptedScientificName: '',
+        mediaUrl: NO_IMAGE_URL,
+        nbObservations: count,
+        description: '',
+        lastSeenDate: null,
+    }));
+    const datasets: Dataset[] = counts('DATASET_KEY').map(
+        ({ name, count }) => ({
+            uuid: name,
+            name,
+            nbObservations: count,
+        })
+    );
+    return { taxons, datasets };
 }
 
 /**
@@ -131,6 +166,16 @@ export class GbifConnector extends Connector {
         };
         this.isSearchOnAPIAvailable = true;
         this.scoringSearchClass = new GBIFSearchScoring();
+
+        // Counted by GBIF (facets) unless the raw aggregation is requested
+        if (this.options?.AGGREGATION !== 'client') {
+            this.capabilities = {
+                aggregation: 'facet',
+                lastSeenDate: 'lazy',
+                taxonInfo: 'lazy',
+                classFilter: 'server',
+            };
+        }
     }
 
     getParamsSchema(): Array<Record<string, any>> {
@@ -197,13 +242,20 @@ export class GbifConnector extends Connector {
             });
     }
 
-    fetchOccurrence(params: any = {}): Promise<SearchResult> {
-        super.fetchOccurrence(params);
+    /**
+     * GBIF search filters for a query: simplified geometry without holes,
+     * observation types, period and class. Shared by every occurrence request.
+     * @param {Record<string, any>} params - `geometry`, `dateMin`, `dateMax`, `class`
+     */
+    private buildFilter(params: Record<string, any>): Record<string, any> {
+        const query = { ...params };
+        // too many coordinates are rejected by the API
+        super.fetchOccurrence(query);
         // Need to remove inner rings
-        params.geometry = stringify(removeHoles(parse(params.geometry)));
-        let defaultParams = {
-            limit: this.LIMIT,
-            maxPage: this.NB_PAGES,
+        query.geometry = stringify(removeHoles(parse(query.geometry)));
+
+        const filter: Record<string, any> = {
+            geometry: query.geometry,
             occurrenceStatus: 'PRESENT',
             basisOfRecord: [
                 'OBSERVATION',
@@ -213,19 +265,22 @@ export class GbifConnector extends Connector {
             ],
             hasGeospatialIssue: false,
             hasCoordinate: true,
-            ...params,
         };
-
-        if (defaultParams.dateMin && defaultParams.dateMax) {
-            defaultParams.eventDate = `${defaultParams.dateMin},${defaultParams.dateMax}`;
+        if (query.dateMin && query.dateMax) {
+            filter.eventDate = `${query.dateMin},${query.dateMax}`;
         }
-
-        if (params?.class) {
-            defaultParams = {
-                ...defaultParams,
-                classKey: this.taxonClass2SourceID[params?.class],
-            };
+        if (query.class) {
+            filter.classKey = this.taxonClass2SourceID[query.class];
         }
+        return filter;
+    }
+
+    fetchOccurrence(params: any = {}): Promise<SearchResult> {
+        const defaultParams = {
+            limit: this.LIMIT,
+            maxPage: this.NB_PAGES,
+            ...this.buildFilter(params),
+        };
 
         return this.countOccurrence(defaultParams).then((countOccurrence) => {
             let nbOfPages = Math.min(
@@ -263,11 +318,74 @@ export class GbifConnector extends Connector {
         });
     }
 
+    /**
+     * Taxa of the area counted by GBIF: one request with the `speciesKey` and
+     * `datasetKey` facets covers every matching observation, where the raw
+     * aggregation only sees the first LIMIT * NB_PAGES of them. Taxa come
+     * most observed first with their identifier and count; names, class and
+     * last observation are completed per displayed taxon.
+     */
+    fetchTaxa(query: TaxonQuery): Promise<SearchResult> {
+        if (this.capabilities.aggregation !== 'facet') {
+            return super.fetchTaxa(query);
+        }
+        return callOccurrenceApi({
+            ...this.buildFilter(query),
+            limit: 0,
+            facet: ['speciesKey', 'datasetKey'],
+            facetLimit: GBIF_FACET_LIMIT,
+        }).then((data) => facetsToSearchResult(data));
+    }
+
+    /**
+     * Last observation of a taxon: the most recent year first, then the
+     * dates of that year. GBIF ignores sort on occurrence search, and a
+     * facet is ordered by count, hence the two steps.
+     */
+    fetchLastSeenDate(
+        taxonId: string | number,
+        query: TaxonQuery
+    ): Promise<Date | null> {
+        const filter = {
+            ...this.buildFilter(query),
+            speciesKey: taxonId,
+            limit: 0,
+        };
+        const facetNames = (data: any): string[] =>
+            (data?.facets?.[0]?.counts || []).map((c: any) => c.name);
+
+        return callOccurrenceApi({
+            ...filter,
+            facet: 'year',
+            facetLimit: 200,
+        })
+            .then((data) => {
+                const years = facetNames(data).map(Number).filter(Boolean);
+                if (!years.length) return null;
+                return callOccurrenceApi({
+                    ...filter,
+                    year: Math.max(...years),
+                    facet: 'eventDate',
+                    facetLimit: 1000,
+                });
+            })
+            .then((data) => {
+                const dates = facetNames(data)
+                    .map((name) => new Date(name))
+                    .filter((date) => !isNaN(date.getTime()));
+                return dates.length
+                    ? new Date(Math.max(...dates.map((d) => d.getTime())))
+                    : null;
+            });
+    }
+
     fetchTaxonInfo(idTaxon: string): Promise<{
         scientificName: string;
         vernacularName: string;
         rank: string;
         taxonKey: number;
+        class?: string;
+        kingdom?: string;
     }> {
         const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}`;
         return scheduledFetch(url)
@@ -277,6 +395,8 @@ export class GbifConnector extends Connector {
                 vernacularName: json.vernacularName,
                 rank: json.rank,
                 taxonKey: json.key,
+                class: json.class,
+                kingdom: json.kingdom,
             }));
     }
 
@@ -299,7 +419,11 @@ export class GbifConnector extends Connector {
         return `https://www.gbif.org/species/${taxonId}`;
     }
 
-    sourceDetailMessage(): string {
+    sourceDetailMessage(): string | null {
+        // facets count every observation: the sampling warning does not apply
+        if (this.capabilities.aggregation === 'facet') {
+            return null;
+        }
         return useI18n().t('source.gbifWarning', {
             nbObs: this.LIMIT * this.NB_PAGES,
         });
