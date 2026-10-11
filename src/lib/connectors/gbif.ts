@@ -48,6 +48,53 @@ function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
     });
 }
 
+/**
+ * Merge one page of GBIF occurrences into the per-taxon and per-dataset
+ * aggregates (mutates both records).
+ * @param {any[]} observations - `results` of an occurrence search page
+ * @param {Record<string, Taxon>} taxonsData - aggregates by taxonKey
+ * @param {Record<string, Dataset>} datasetData - aggregates by datasetKey
+ */
+export function mergeOccurrencePage(
+    observations: any[],
+    taxonsData: Record<string, Taxon>,
+    datasetData: Record<string, Dataset>
+): void {
+    observations.forEach((observation: any) => {
+        if (!(observation.datasetKey in datasetData)) {
+            datasetData[observation.datasetKey] = {
+                uuid: observation.datasetKey,
+                name: observation.datasetKey,
+                nbObservations: 0,
+            };
+        }
+        datasetData[observation.datasetKey].nbObservations += 1;
+
+        if (!taxonsData[observation.taxonKey]) {
+            taxonsData[observation.taxonKey] = {
+                acceptedScientificName: observation.acceptedScientificName,
+                vernacularName: observation.vernacularName,
+                taxonId: observation.taxonKey,
+                mediaUrl: NO_IMAGE_URL,
+                taxonRank: observation.taxonRank,
+                kingdom: observation.kingdom,
+                class: observation.class,
+                nbObservations: 0,
+                description: '',
+                lastSeenDate: new Date(observation.eventDate),
+            };
+        }
+        const taxon = taxonsData[observation.taxonKey];
+        taxon.nbObservations += 1;
+        taxon.lastSeenDate = new Date(
+            Math.max(
+                new Date(observation.eventDate).getTime(),
+                taxon.lastSeenDate.getTime()
+            )
+        );
+    });
+}
+
 export class GbifConnector extends Connector {
     name: string;
     GBIF_ENDPOINT: string;
@@ -191,72 +238,28 @@ export class GbifConnector extends Connector {
             const taxonsData: Record<string, Taxon> = {};
             const datasetData: Record<string, Dataset> = {};
 
-            const fetchPage = (pageIndex: number): Promise<void> => {
-                if (pageIndex >= nbOfPages) {
-                    return Promise.resolve();
-                }
-                const offset = pageIndex * defaultParams.limit;
-                return callOccurrenceApi({ ...defaultParams, offset }).then(
-                    (apiResult) => {
-                        (apiResult?.results || []).forEach(
-                            (observation: any) => {
-                                if (!(observation.datasetKey in datasetData)) {
-                                    datasetData[observation.datasetKey] = {
-                                        uuid: observation.datasetKey,
-                                        name: observation.datasetKey,
-                                        nbObservations: 0,
-                                    };
-                                }
+            // Pages are independent: request them all and let the per-host
+            // limiter in `scheduledFetch` bound the concurrency. Merging is
+            // order independent (sums and max), so arrival order is free.
+            const pageRequests = Array.from(
+                { length: nbOfPages },
+                (_, pageIndex) =>
+                    callOccurrenceApi({
+                        ...defaultParams,
+                        offset: pageIndex * defaultParams.limit,
+                    }).then((apiResult) =>
+                        mergeOccurrencePage(
+                            apiResult?.results || [],
+                            taxonsData,
+                            datasetData
+                        )
+                    )
+            );
 
-                                datasetData[
-                                    observation.datasetKey
-                                ].nbObservations += 1;
-                                if (!taxonsData[observation.taxonKey]) {
-                                    taxonsData[observation.taxonKey] = {
-                                        acceptedScientificName:
-                                            observation.acceptedScientificName,
-                                        vernacularName:
-                                            observation.vernacularName,
-                                        taxonId: observation.taxonKey,
-                                        mediaUrl: NO_IMAGE_URL,
-                                        taxonRank: observation.taxonRank,
-                                        kingdom: observation.kingdom,
-                                        class: observation.class,
-                                        nbObservations: 0,
-                                        description: '',
-                                        lastSeenDate: new Date(
-                                            observation.eventDate
-                                        ),
-                                    };
-                                }
-
-                                taxonsData[
-                                    observation.taxonKey
-                                ].nbObservations += 1;
-                                taxonsData[observation.taxonKey].lastSeenDate =
-                                    new Date(
-                                        Math.max(
-                                            new Date(
-                                                observation.eventDate
-                                            ).getTime(),
-                                            taxonsData[
-                                                observation.taxonKey
-                                            ].lastSeenDate.getTime()
-                                        )
-                                    );
-                            }
-                        );
-                        return fetchPage(pageIndex + 1);
-                    }
-                );
-            };
-
-            return fetchPage(0).then(() => {
-                return {
-                    taxons: Object.values(taxonsData),
-                    datasets: Object.values(datasetData),
-                };
-            });
+            return Promise.all(pageRequests).then(() => ({
+                taxons: Object.values(taxonsData),
+                datasets: Object.values(datasetData),
+            }));
         });
     }
 
