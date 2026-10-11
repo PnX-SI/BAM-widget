@@ -29,6 +29,8 @@ interface Requests {
     occurrencePages: string[];
     lastSeen: string[];
     speciesInfo: string[];
+    speciesSearch: string[];
+    searchFacets: string[];
     sparql: string[];
     commonsInfo: string[];
     entityData: string[];
@@ -40,6 +42,8 @@ async function simulateNetwork(page: Page): Promise<Requests> {
         occurrencePages: [],
         lastSeen: [],
         speciesInfo: [],
+        speciesSearch: [],
+        searchFacets: [],
         sparql: [],
         commonsInfo: [],
         entityData: [],
@@ -48,6 +52,21 @@ async function simulateNetwork(page: Page): Promise<Requests> {
     await page.route('https://api.gbif.org/v1/occurrence/search**', (route) => {
         const url = new URL(route.request().url());
         const facets = url.searchParams.getAll('facet');
+        const askedKeys = url.searchParams.getAll('taxonKey');
+        if (askedKeys.length) {
+            // which candidates of a name search were observed in the area
+            requests.searchFacets.push(url.toString());
+            return json(route, {
+                facets: [
+                    {
+                        field: 'SPECIES_KEY',
+                        counts: [1003, 1004]
+                            .filter((id) => askedKeys.includes(String(id)))
+                            .map((id) => ({ name: String(id), count: 10 })),
+                    },
+                ],
+            });
+        }
         if (facets.includes('speciesKey')) {
             requests.facets.push(url.toString());
             return json(route, {
@@ -84,6 +103,18 @@ async function simulateNetwork(page: Page): Promise<Requests> {
 
     await page.route('https://api.gbif.org/v1/species/**', (route) => {
         const url = new URL(route.request().url());
+        if (url.pathname.endsWith('/species/search')) {
+            requests.speciesSearch.push(url.toString());
+            return json(route, {
+                results: [1003, 1004, 1005, 1006].map((nubKey) => ({
+                    key: nubKey + 5_000_000,
+                    nubKey,
+                    scientificName: `Species ${nubKey}`,
+                    rank: 'SPECIES',
+                    class: 'Aves',
+                })),
+            });
+        }
         const [, key, sub] = url.pathname.match(/species\/(\d+)\/?(.*)$/) || [];
         if (sub === 'vernacularNames') return json(route, { results: [] });
         if (sub === 'iucnRedListCategory') return json(route, { code: 'LC' });
@@ -189,7 +220,7 @@ test.describe('Species list network behaviour', () => {
         expect(requests.occurrencePages).toHaveLength(0);
     });
 
-    test('completes names and the last observation of displayed cards only', async ({
+    test('completes names of displayed cards and the date of visible ones', async ({
         page,
     }) => {
         const requests = await simulateNetwork(page);
@@ -204,7 +235,9 @@ test.describe('Species list network behaviour', () => {
 
         // 20 displayed cards out of 30 taxa
         await expect.poll(() => requests.speciesInfo.length).toBe(20);
-        await expect.poll(() => requests.lastSeen.length).toBe(20);
+        // the date is only asked for cards that come into view
+        await expect.poll(() => requests.lastSeen.length).toBeGreaterThan(0);
+        expect(requests.lastSeen.length).toBeLessThan(20);
     });
 
     test('resolves the pictures of the displayed cards in batches', async ({
@@ -272,5 +305,46 @@ test.describe('Species list network behaviour', () => {
         );
         expect(classKey).toBe('212');
         expect(requests.occurrencePages).toHaveLength(0);
+    });
+
+    test('searches a common name with the source, limited to the area', async ({
+        page,
+    }) => {
+        const requests = await simulateNetwork(page);
+        await page.goto(`${LIST_URL}&showFilters=true`);
+        const cards = page.getByTestId('Taxon detailed view');
+        await expect(cards).toHaveCount(20);
+
+        await new TaxonList(page).searchTaxon('merle');
+
+        // 4 candidates found by name, 2 of them observed in the area
+        await expect(cards).toHaveCount(2);
+        expect(requests.speciesSearch).toHaveLength(2);
+        expect(requests.searchFacets).toHaveLength(1);
+        const url = new URL(requests.searchFacets[0]);
+        expect(url.searchParams.getAll('taxonKey').sort()).toEqual([
+            '1003',
+            '1004',
+            '1005',
+            '1006',
+        ]);
+        expect(url.searchParams.get('geometry')).toContain('POLYGON');
+    });
+
+    test('shows the full list again when the search is cleared', async ({
+        page,
+    }) => {
+        await simulateNetwork(page);
+        await page.goto(`${LIST_URL}&showFilters=true`);
+        const cards = page.getByTestId('Taxon detailed view');
+        await expect(cards).toHaveCount(20);
+        const list = new TaxonList(page);
+
+        await list.searchTaxon('merle');
+        await expect(cards).toHaveCount(2);
+        await page.getByTestId('Search taxon input form').fill('');
+        await page.waitForTimeout(600);
+
+        await expect(cards).toHaveCount(20);
     });
 });
