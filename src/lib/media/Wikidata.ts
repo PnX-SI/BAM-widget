@@ -1,4 +1,4 @@
-import { scheduledFetch } from '../http/scheduler';
+import { scheduledFetch, memoAsync } from '../http/scheduler';
 import { Connector } from '../connectors/connector';
 import { Media, MediaType } from '../models';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
@@ -29,7 +29,22 @@ interface WikidataEntity {
 /**
  * SPARQL query to fetch Wikidata entity ID by external property (GBIF, TAXREF…)
  */
+const entityIdCache = new Map<string, Promise<string | null>>();
+const entityMediaFilesCache = new Map<
+    string,
+    Promise<Record<string, string | undefined>>
+>();
+
 function fetchWikidataEntityByProperty(
+    property: string,
+    value: string
+): Promise<string | null> {
+    return memoAsync(entityIdCache, `${property}:${value}`, () =>
+        queryWikidataEntityByProperty(property, value)
+    );
+}
+
+function queryWikidataEntityByProperty(
     property: string,
     value: string
 ): Promise<string | null> {
@@ -99,6 +114,32 @@ function fetchCommonsMedia(
         });
 }
 
+/** Properties read from an entity: P18 (image) and P51 (audio). */
+const MEDIA_PROPERTIES = ['P18', 'P51'];
+
+/**
+ * Fetch the Commons file names of an entity. The (large) entity document is
+ * requested once per entity and shared between image and sound lookups.
+ */
+function fetchEntityMediaFiles(
+    entityId: string
+): Promise<Record<string, string | undefined>> {
+    return memoAsync(entityMediaFilesCache, entityId, () => {
+        const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
+        return scheduledFetch(url)
+            .then((response) => response.json() as Promise<WikidataEntity>)
+            .then((data) => {
+                const claims = data.entities[entityId]?.claims || {};
+                const files: Record<string, string | undefined> = {};
+                MEDIA_PROPERTIES.forEach((property) => {
+                    files[property] =
+                        claims[property]?.[0]?.mainsnak?.datavalue?.value;
+                });
+                return files;
+            });
+    });
+}
+
 /**
  * Generic fetcher for Wikidata media (image/audio)
  */
@@ -111,22 +152,13 @@ function fetchMediaFromWikidata(
         return Promise.resolve([]);
     }
 
-    const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
-
-    return scheduledFetch(url)
-        .then((response) => response.json() as Promise<WikidataEntity>)
-        .then((data) => {
-            const entity = data.entities[entityId];
-            const claims = entity.claims || {};
-            const mediaClaims = claims[property] || [];
-
-            if (!mediaClaims.length) {
-                return [];
-            }
-
-            const fileName = mediaClaims[0].mainsnak.datavalue.value;
-            return fetchCommonsMedia(fileName, typeMedia);
-        });
+    return fetchEntityMediaFiles(entityId).then((files) => {
+        const fileName = files[property];
+        if (!fileName) {
+            return [];
+        }
+        return fetchCommonsMedia(fileName, typeMedia);
+    });
 }
 
 /**

@@ -31,6 +31,7 @@ interface MediaTaxHub {
 
 export class TaxHubMediaSource extends MediaSource {
     type: number | null = null;
+    private typePromise: Promise<number | null> | null = null;
 
     constructor(parameters: any) {
         super('TaxHub', SOURCE_.taxhub);
@@ -41,8 +42,12 @@ export class TaxHubMediaSource extends MediaSource {
         if (this.type !== null) {
             return Promise.resolve(this.type);
         }
+        // share the in-flight request between cards created at the same time
+        if (this.typePromise) {
+            return this.typePromise;
+        }
 
-        return scheduledFetch(
+        this.typePromise = scheduledFetch(
             `${connector.API_ENDPOINT}/taxhub/api/tmedias/types`
         )
             .then((response) => response.json())
@@ -58,6 +63,7 @@ export class TaxHubMediaSource extends MediaSource {
                 this.type = -1;
                 return this.type;
             });
+        return this.typePromise;
     }
 
     fetchPicture(taxonID: string | number, connector: any): Promise<any[]> {
