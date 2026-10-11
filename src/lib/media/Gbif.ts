@@ -1,3 +1,4 @@
+import { scheduledFetch } from '../http/scheduler';
 import { Media, MediaType } from '../models';
 import { MediaSource } from './MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
@@ -25,7 +26,7 @@ export class GBIFMediaSource extends MediaSource {
             );
         }
         const url = `${connector.GBIF_ENDPOINT}/species/${taxonID}/media`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json: any) => {
                 let mediaList = this.processMedia(json.results);
@@ -49,7 +50,7 @@ export class GBIFMediaSource extends MediaSource {
             );
         }
         const url = `${connector.GBIF_ENDPOINT}/occurrence/search?limit=10&mediaType=Sound&speciesKey=${taxonID}`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((data: any) => {
                 if (data.results.length > 0) {
@@ -118,7 +119,7 @@ export class GBIFMediaSource extends MediaSource {
         ENDPOINT: string
     ): Promise<Media[]> {
         const url = `${ENDPOINT}/occurrence/search?limit=10&mediaType=StillImage&speciesKey=${idTaxon}`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json: any) => {
                 const medias = json.results.flatMap((element) => element.media);

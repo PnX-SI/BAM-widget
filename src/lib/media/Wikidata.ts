@@ -1,3 +1,4 @@
+import { scheduledFetch } from '../http/scheduler';
 import { Connector } from '../connectors/connector';
 import { Media, MediaType } from '../models';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
@@ -35,7 +36,9 @@ function fetchWikidataEntityByProperty(
     const url = 'https://query.wikidata.org/sparql';
     const query = `SELECT ?item WHERE { ?item wdt:${property} "${value}" . }`;
 
-    return fetch(url + '?format=json&query=' + encodeURIComponent(query))
+    return scheduledFetch(
+        url + '?format=json&query=' + encodeURIComponent(query)
+    )
         .then((response) => response.json() as Promise<WikidataResponse>)
         .then((data) => {
             if (!data.results.bindings.length) return null;
@@ -54,7 +57,7 @@ function fetchCommonsMedia(
         fileName
     )}&prop=imageinfo&iiprop=url|extmetadata&format=json&origin=*`;
 
-    return fetch(commonsUrl)
+    return scheduledFetch(commonsUrl)
         .then((res) => res.json())
         .then((commonsData) => {
             const pages = commonsData.query.pages;
@@ -110,7 +113,7 @@ function fetchMediaFromWikidata(
 
     const url = `https://www.wikidata.org/wiki/Special:EntityData/${entityId}.json`;
 
-    return fetch(url)
+    return scheduledFetch(url)
         .then((response) => response.json() as Promise<WikidataEntity>)
         .then((data) => {
             const entity = data.entities[entityId];

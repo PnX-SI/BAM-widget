@@ -1,3 +1,4 @@
+import { scheduledFetch } from '../http/scheduler';
 import { Connector, ConnectorOptions, IUCNCodeStatus } from './connector';
 import { Dataset, SearchResult, Taxon } from '../models';
 import ParameterStore from '../parameterStore';
@@ -38,7 +39,7 @@ function callOccurrenceApi(params: OccurrenceParams = {}): Promise<any> {
         }
     });
 
-    return fetch(urlWithParams.toString()).then((response) => {
+    return scheduledFetch(urlWithParams.toString()).then((response) => {
         if (response.status === 200) {
             return response.json();
         } else if (response.status === 429) {
@@ -128,7 +129,7 @@ export class GbifConnector extends Connector {
             'Catalogue of Life',
         ];
         const currentLanguage = ParameterStore.getInstance().lang.value;
-        return fetch(
+        return scheduledFetch(
             `${this.GBIF_ENDPOINT}/species/${taxonID}/vernacularNames?limit=100`
         )
             .then((response) => response.json())
@@ -266,7 +267,7 @@ export class GbifConnector extends Connector {
         taxonKey: number;
     }> {
         const url = `${this.GBIF_ENDPOINT}/species/${idTaxon}`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json) => ({
                 scientificName: json.scientificName,
@@ -281,7 +282,7 @@ export class GbifConnector extends Connector {
         params: OccurrenceParams = {}
     ): Promise<Array<{ scientificName: string; taxonKey: number }>> {
         const url = `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&limit=20`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json) =>
                 json.results.map((element: any) => ({
@@ -313,7 +314,7 @@ export class GbifConnector extends Connector {
     }
 
     searchOnAPI(searchString: string): Promise<any> {
-        return fetch(
+        return scheduledFetch(
             `${this.GBIF_ENDPOINT}/species/search?q=${searchString}&status=ACCEPTED&qField=VERNACULAR&limit=100`
         )
             .then((response) => response.json())
@@ -321,7 +322,7 @@ export class GbifConnector extends Connector {
     }
 
     fetchTaxonStatus(taxonId: string | number): Promise<IUCNCodeStatus> {
-        return fetch(
+        return scheduledFetch(
             `${this.GBIF_ENDPOINT}/species/${taxonId}/iucnRedListCategory`
         )
             .then((response) => response.json())

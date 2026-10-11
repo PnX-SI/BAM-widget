@@ -1,3 +1,4 @@
+import { scheduledFetch } from '../http/scheduler';
 import { MediaSource } from './MediaSource';
 import { SOURCE_ } from './media';
 import { CONNECTORS } from '../connectors/connectors';
@@ -41,7 +42,9 @@ export class TaxHubMediaSource extends MediaSource {
             return Promise.resolve(this.type);
         }
 
-        return fetch(`${connector.API_ENDPOINT}/taxhub/api/tmedias/types`)
+        return scheduledFetch(
+            `${connector.API_ENDPOINT}/taxhub/api/tmedias/types`
+        )
             .then((response) => response.json())
             .then((types: TypeMedia[]) => {
                 const type = types.find(
@@ -60,7 +63,7 @@ export class TaxHubMediaSource extends MediaSource {
     fetchPicture(taxonID: string | number, connector: any): Promise<any[]> {
         return this.fetchTypeMedia(connector).then((type) => {
             const url = `${connector.API_ENDPOINT}/taxhub/api/taxref/${taxonID}?fields=medias`;
-            return fetch(url)
+            return scheduledFetch(url)
                 .then((response) => response.json())
                 .then((json) => {
                     const medias = Object.values(json?.medias || {});

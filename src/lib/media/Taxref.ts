@@ -1,3 +1,4 @@
+import { scheduledFetch } from '../http/scheduler';
 import { Media, MediaType } from '../models';
 import { MediaSource } from './MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
@@ -33,7 +34,7 @@ export class TaxrefODATA extends MediaSource {
     ): Promise<Media[] | undefined> {
         const url = `https://odata-inpn.mnhn.fr/photos/taxa?taxrefId=${taxonID}&visibility=PUBLIC`;
 
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => {
                 return response.json() as Promise<TaxrefODATAResponse>;
             })

@@ -1,3 +1,4 @@
+import { scheduledFetch } from '../http/scheduler';
 import { Connector, ConnectorOptions } from './connector';
 import { SearchResult, Taxon } from '../models';
 import { NO_IMAGE_URL } from '@/assets/constant';
@@ -88,7 +89,7 @@ export class GeoNatureConnector extends Connector {
         }
 
         const url = urlWithParams.toString();
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json) => {
                 let taxonsData: Record<string, Taxon> = {};
@@ -127,7 +128,7 @@ export class GeoNatureConnector extends Connector {
         taxonKey: number;
     }> {
         const url = `https://odata-inpn.mnhn.fr/taxa/${idTaxon}`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json) => ({
                 scientificName: json.names.scientific,
@@ -139,7 +140,7 @@ export class GeoNatureConnector extends Connector {
 
     fetchTaxonStatus(idTaxon: string): Promise<any> {
         const url = `https://taxref.mnhn.fr/api/taxa/${idTaxon}/status/columns`;
-        return fetch(url)
+        return scheduledFetch(url)
             .then((response) => response.json())
             .then((json) => json._embedded?.status);
     }
