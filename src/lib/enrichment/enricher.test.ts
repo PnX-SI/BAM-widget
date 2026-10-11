@@ -182,4 +182,70 @@ describe('Enricher', () => {
             await enricher.getVernacularName(1, connector, 'fr')
         ).toBeUndefined();
     });
+
+    it('caches the taxon info and shares it between callers', async () => {
+        const connector = fakeConnector(fakeSource(), {
+            fetchTaxonInfo: vi.fn().mockResolvedValue({
+                scientificName: 'Turdus merula',
+                class: 'Aves',
+            }),
+        });
+        const enricher = make();
+
+        const [a, b] = await Promise.all([
+            enricher.getTaxonInfo(7, connector),
+            enricher.getTaxonInfo('7', connector),
+        ]);
+
+        expect(a?.scientificName).toBe('Turdus merula');
+        expect(b).toEqual(a);
+        expect(connector.fetchTaxonInfo).toHaveBeenCalledTimes(1);
+        expect(connector.fetchTaxonInfo).toHaveBeenCalledWith('7');
+    });
+
+    it('returns null when the taxon info cannot be loaded', async () => {
+        const connector = fakeConnector(fakeSource(), {
+            fetchTaxonInfo: () => {
+                throw new Error('Not implemented');
+            },
+        });
+
+        expect(await make().getTaxonInfo(1, connector)).toBeNull();
+    });
+
+    it('returns the last seen date as a Date, once per area', async () => {
+        const connector = fakeConnector(fakeSource(), {
+            fetchLastSeenDate: vi
+                .fn()
+                .mockResolvedValue(new Date('2024-09-14T00:00:00Z')),
+        });
+        const enricher = make();
+        const area = { geometry: 'POINT(1 2)' };
+
+        const first = await enricher.getLastSeenDate(1, connector, area);
+        await enricher.getLastSeenDate(1, connector, area);
+        await enricher.getLastSeenDate(1, connector, {
+            ...area,
+            dateMin: '2024-01-01',
+        });
+
+        expect(first).toBeInstanceOf(Date);
+        expect(first?.toISOString()).toBe('2024-09-14T00:00:00.000Z');
+        expect(connector.fetchLastSeenDate).toHaveBeenCalledTimes(2);
+    });
+
+    it('does not cache a last seen date that failed to load', async () => {
+        const fetchLastSeenDate = vi
+            .fn()
+            .mockRejectedValueOnce(new Error('network'))
+            .mockResolvedValueOnce(new Date('2024-01-01T00:00:00Z'));
+        const connector = fakeConnector(fakeSource(), { fetchLastSeenDate });
+        const enricher = make();
+        const area = { geometry: 'POINT(1 2)' };
+
+        expect(await enricher.getLastSeenDate(1, connector, area)).toBeNull();
+        expect(
+            await enricher.getLastSeenDate(1, connector, area)
+        ).toBeInstanceOf(Date);
+    });
 });

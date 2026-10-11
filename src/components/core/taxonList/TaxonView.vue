@@ -12,7 +12,7 @@
     import { perfMarkOnce } from '@/lib/perf';
     import { getEnricher } from '@/lib/enrichment/enricher';
 
-    const { mode, connector, lang, customDetailPage } =
+    const { mode, connector, lang, customDetailPage, wkt, dateMin, dateMax } =
         ParameterStore.getInstance();
     const enricher = getEnricher();
 
@@ -84,6 +84,49 @@
         });
     }
 
+    /**
+     * Sources that list taxa by identifier only: name, class and rank are
+     * completed for the cards that are displayed.
+     */
+    function fetchTaxonInfo() {
+        if (taxon.acceptedScientificName || !taxon.taxonId) return;
+        enricher.getTaxonInfo(taxon.taxonId, connector.value).then((info) => {
+            if (!info) return;
+            taxon.acceptedScientificName = info.scientificName;
+            taxon.taxonRank = info.rank;
+            taxon.class = taxon.class ?? info.class;
+            taxon.kingdom = taxon.kingdom ?? info.kingdom;
+            if (!vernacularName.value && info.vernacularName) {
+                vernacularName.value = info.vernacularName;
+            }
+        });
+    }
+
+    /**
+     * The date of the last observation is only shown by the detailed view,
+     * and some sources give it per taxon: it is requested as cards appear.
+     */
+    function fetchLastSeenDate() {
+        if (
+            taxon.lastSeenDate ||
+            mode.value === 'gallery' ||
+            connector.value.capabilities.lastSeenDate !== 'lazy'
+        ) {
+            return;
+        }
+        enricher
+            .getLastSeenDate(taxon.taxonId, connector.value, {
+                geometry: wkt.value,
+                dateMin: dateMin.value,
+                dateMax: dateMax.value,
+            })
+            .then((date) => {
+                if (date) taxon.lastSeenDate = date;
+            });
+    }
+
+    fetchTaxonInfo();
+    fetchLastSeenDate();
     fetchTaxonImage();
     fetchTaxonAudio();
     refreshVernacularName();
@@ -92,6 +135,7 @@
     watch(lang, () => {
         refreshVernacularName();
     });
+    watch(mode, fetchLastSeenDate);
 </script>
 
 <template>

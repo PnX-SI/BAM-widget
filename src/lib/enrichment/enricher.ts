@@ -1,4 +1,4 @@
-import { Connector, IUCNCodeStatus } from '../connectors/connector';
+import { Connector, IUCNCodeStatus, TaxonQuery } from '../connectors/connector';
 import { memoAsync } from '../http/scheduler';
 import { Media } from '../models';
 import { MediaBatch, MediaSource } from '../media/MediaSource';
@@ -11,6 +11,18 @@ import {
 /** Pictures and sounds rarely change; "nothing found" is rechecked sooner. */
 const TTL_FOUND_MS = 7 * DAY_MS;
 const TTL_EMPTY_MS = 1 * DAY_MS;
+/** Names and classification change very rarely. */
+const TTL_INFO_MS = 30 * DAY_MS;
+
+/** Taxon description returned by `Connector.fetchTaxonInfo`. */
+export interface TaxonInfo {
+    scientificName: string;
+    vernacularName?: string;
+    rank?: string;
+    taxonKey?: number;
+    class?: string;
+    kingdom?: string;
+}
 
 type MediaKind = 'image' | 'sound';
 
@@ -80,6 +92,49 @@ export class Enricher {
             connector.soundSource
         );
         return sounds[0];
+    }
+
+    /** Scientific name, class and rank of a taxon the list only knows by id. */
+    getTaxonInfo(
+        taxonId: string | number,
+        connector: Connector
+    ): Promise<TaxonInfo | null> {
+        const key = `info|${this.scope(connector)}|${taxonId}`;
+        return this.cached<TaxonInfo | null>(
+            key,
+            () =>
+                Promise.resolve()
+                    .then(() => connector.fetchTaxonInfo(String(taxonId)))
+                    .then((info) => info ?? null),
+            () => TTL_INFO_MS
+        ).catch(() => null);
+    }
+
+    /** Last observation of a taxon in the query area, when not in the list. */
+    getLastSeenDate(
+        taxonId: string | number,
+        connector: Connector,
+        query: TaxonQuery
+    ): Promise<Date | null> {
+        const key = [
+            'lastseen',
+            this.scope(connector),
+            taxonId,
+            query.geometry,
+            query.dateMin ?? '',
+            query.dateMax ?? '',
+        ].join('|');
+        // stored as an ISO string: it is what survives every cache backend
+        return this.cached<string | null>(
+            key,
+            () =>
+                connector
+                    .fetchLastSeenDate(taxonId, query)
+                    .then((date) => (date ? date.toISOString() : null)),
+            () => TTL_EMPTY_MS
+        )
+            .then((iso) => (iso ? new Date(iso) : null))
+            .catch(() => null);
     }
 
     getStatus(

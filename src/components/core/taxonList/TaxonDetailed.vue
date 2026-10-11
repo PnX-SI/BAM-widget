@@ -12,7 +12,7 @@
         acceptedScientificName: string;
         urlDetailPage: string;
         nbObservations: number;
-        lastSeenDate: Date;
+        lastSeenDate?: Date | null;
         status: StatusInfo;
     }>();
 </script>
@@ -73,7 +73,9 @@
                 <span
                     >{{ $t('taxon.lastSeen') }} <br />
                     <strong data-testid="Last seen date">{{
-                        props.lastSeenDate.toLocaleDateString()
+                        props.lastSeenDate
+                            ? props.lastSeenDate.toLocaleDateString()
+                            : '–'
                     }}</strong></span
                 >
             </div>

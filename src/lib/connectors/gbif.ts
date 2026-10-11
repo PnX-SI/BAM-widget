@@ -22,6 +22,8 @@ const GBIF_DEFAULT_LIMIT = 300;
 const GBIF_DEFAULT_NB_PAGES = 10;
 /** Max taxa returned by a facet request (a 10 x 10 km area has ~3 700). */
 const GBIF_FACET_LIMIT = 5000;
+/** Distinct dates requested at once to find the last observation. */
+const GBIF_DATES_FACET_LIMIT = 1000;
 
 type OccurrenceParams = Record<string, any>;
 
@@ -334,15 +336,23 @@ export class GbifConnector extends Connector {
             limit: 0,
             facet: ['speciesKey', 'datasetKey'],
             facetLimit: GBIF_FACET_LIMIT,
-        }).then((data) => facetsToSearchResult(data));
+        }).then((data) => {
+            if (!data) {
+                // an unavailable API must not look like an empty area
+                throw new Error('GBIF occurrence request failed');
+            }
+            return facetsToSearchResult(data);
+        });
     }
 
     /**
-     * Last observation of a taxon: the most recent year first, then the
-     * dates of that year. GBIF ignores sort on occurrence search, and a
-     * facet is ordered by count, hence the two steps.
+     * Last observation of a taxon. GBIF ignores sort on occurrence search and
+     * orders a facet by count, so the dates are read from a facet:
+     * - in one request when all the distinct dates fit in it (most taxa);
+     * - otherwise the most recent year first, then the dates of that year.
+     * A failed request rejects: the caller must not take it for "no date".
      */
-    fetchLastSeenDate(
+    async fetchLastSeenDate(
         taxonId: string | number,
         query: TaxonQuery
     ): Promise<Date | null> {
@@ -351,32 +361,38 @@ export class GbifConnector extends Connector {
             speciesKey: taxonId,
             limit: 0,
         };
-        const facetNames = (data: any): string[] =>
-            (data?.facets?.[0]?.counts || []).map((c: any) => c.name);
+        const facetNames = async (extra: Record<string, any>) => {
+            const data = await callOccurrenceApi({ ...filter, ...extra });
+            if (!data) throw new Error('GBIF occurrence request failed');
+            return (data.facets?.[0]?.counts || []).map((c: any) => c.name);
+        };
+        const latest = (names: string[]): Date | null => {
+            const times = names
+                .map((name) => new Date(name).getTime())
+                .filter((time) => !isNaN(time));
+            return times.length ? new Date(Math.max(...times)) : null;
+        };
 
-        return callOccurrenceApi({
-            ...filter,
-            facet: 'year',
-            facetLimit: 200,
-        })
-            .then((data) => {
-                const years = facetNames(data).map(Number).filter(Boolean);
-                if (!years.length) return null;
-                return callOccurrenceApi({
-                    ...filter,
-                    year: Math.max(...years),
-                    facet: 'eventDate',
-                    facetLimit: 1000,
-                });
+        const dates = await facetNames({
+            facet: 'eventDate',
+            facetLimit: GBIF_DATES_FACET_LIMIT,
+        });
+        if (dates.length < GBIF_DATES_FACET_LIMIT) {
+            return latest(dates);
+        }
+
+        // more dates than a facet returns, and they come most frequent first
+        const years = (await facetNames({ facet: 'year', facetLimit: 200 }))
+            .map(Number)
+            .filter(Boolean);
+        if (!years.length) return null;
+        return latest(
+            await facetNames({
+                year: Math.max(...years),
+                facet: 'eventDate',
+                facetLimit: GBIF_DATES_FACET_LIMIT,
             })
-            .then((data) => {
-                const dates = facetNames(data)
-                    .map((name) => new Date(name))
-                    .filter((date) => !isNaN(date.getTime()));
-                return dates.length
-                    ? new Date(Math.max(...dates.map((d) => d.getTime())))
-                    : null;
-            });
+        );
     }
 
     fetchTaxonInfo(idTaxon: string): Promise<{

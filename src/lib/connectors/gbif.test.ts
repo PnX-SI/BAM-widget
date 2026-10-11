@@ -172,33 +172,56 @@ describe('GbifConnector facet strategy', () => {
         expect(connector.getSortableFields()).toEqual(['nbObservations']);
     });
 
-    it('finds the last observation date in the most recent year', async () => {
-        const fetchMock = vi.fn((input: string) => {
-            const url = new URL(input);
-            if (url.searchParams.get('facet') === 'year') {
-                return json({
-                    facets: [
-                        {
-                            field: 'YEAR',
-                            counts: [
-                                { name: '2021', count: 4 },
-                                { name: '2024', count: 2 },
-                            ],
-                        },
-                    ],
-                });
-            }
-            return json({
+    it('reads the last observation date from one request when dates fit', async () => {
+        const fetchMock = vi.fn(() =>
+            json({
                 facets: [
                     {
                         field: 'EVENT_DATE',
                         counts: [
                             { name: '2024-03-01', count: 30 },
                             { name: '2024-09-14T18:51:55', count: 1 },
+                            { name: '2021-05-02', count: 4 },
                         ],
                     },
                 ],
-            });
+            })
+        );
+        vi.stubGlobal('fetch', fetchMock);
+
+        const date = await new GbifConnector({}).fetchLastSeenDate(42, {
+            geometry,
+        });
+
+        expect(date?.toISOString().slice(0, 10)).toBe('2024-09-14');
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('goes through the most recent year when dates exceed one facet', async () => {
+        const manyDates = Array.from({ length: 1000 }, (_, i) => ({
+            name: `2019-01-01T00:00:${String(i).padStart(4, '0')}`,
+            count: 5,
+        }));
+        const fetchMock = vi.fn((input: string) => {
+            const url = new URL(input);
+            if (url.searchParams.get('facet') === 'year') {
+                return json({
+                    facets: [
+                        {
+                            counts: [
+                                { name: '2019', count: 900 },
+                                { name: '2024', count: 2 },
+                            ],
+                        },
+                    ],
+                });
+            }
+            if (url.searchParams.get('year') === '2024') {
+                return json({
+                    facets: [{ counts: [{ name: '2024-09-14', count: 1 }] }],
+                });
+            }
+            return json({ facets: [{ counts: manyDates }] });
         });
         vi.stubGlobal('fetch', fetchMock);
 
@@ -207,9 +230,29 @@ describe('GbifConnector facet strategy', () => {
         });
 
         expect(date?.toISOString().slice(0, 10)).toBe('2024-09-14');
-        const second = new URL((fetchMock.mock.calls[1] as any)[0]);
-        expect(second.searchParams.get('year')).toBe('2024');
-        expect(second.searchParams.get('speciesKey')).toBe('42');
+        expect(fetchMock).toHaveBeenCalledTimes(3);
+    });
+
+    it('rejects instead of answering "no date" when GBIF is unavailable', async () => {
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(() => Promise.resolve(new Response('{}', { status: 500 })))
+        );
+
+        await expect(
+            new GbifConnector({}).fetchLastSeenDate(42, { geometry })
+        ).rejects.toThrow();
+    });
+
+    it('rejects the taxon list when GBIF is unavailable', async () => {
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(() => Promise.resolve(new Response('{}', { status: 500 })))
+        );
+
+        await expect(
+            new GbifConnector({}).fetchTaxa({ geometry })
+        ).rejects.toThrow();
     });
 
     it('returns null when the taxon has no observation', async () => {
