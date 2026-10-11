@@ -9,6 +9,7 @@
     import TaxonThumbnail from './TaxonThumbnail.vue';
     import TaxonDetailed from './TaxonDetailed.vue';
     import { Connector } from '@/lib/connectors/connector';
+    import { perfMarkOnce } from '@/lib/perf';
 
     const { mode, connector, lang, customDetailPage } =
         ParameterStore.getInstance();
@@ -39,6 +40,7 @@
                 .fetchPicture(taxon.taxonId, connector.value)
                 .then((response) => {
                     speciesPhoto.value = response;
+                    if (response?.length) perfMarkOnce('first-image');
                 });
         }
     }

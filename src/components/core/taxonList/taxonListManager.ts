@@ -3,6 +3,7 @@ import { Taxon } from '@/lib/models';
 import { Connector } from '@/lib/connectors/connector';
 import { computed, ref, Ref } from 'vue';
 import ParameterStore from '@/lib/parameterStore';
+import { perfMark, perfReset } from '@/lib/perf';
 
 interface SearchResult {
     taxons: Taxon[];
@@ -111,6 +112,8 @@ export class TaxonListManager {
     public fetchSpeciesList(wktParam: string): void {
         if (!wktParam.length) return;
 
+        perfReset();
+        perfMark('list:start');
         this.loadingObservations.value = true;
         this.loadingError.value = false;
         this.filteredSpecies.value = [];
@@ -123,12 +126,14 @@ export class TaxonListManager {
                 class: this.parameterStore.class.value,
             })
             .then((response) => {
+                perfMark('list:ready');
                 this.searchResult.value = response;
                 this.filteredSpecies.value = response.taxons;
                 this.pageIndex.value = 0;
                 this.loadingObservations.value = false;
             })
             .catch(() => {
+                perfMark('list:error');
                 this.loadingError.value = true;
                 this.loadingObservations.value = false;
             });
