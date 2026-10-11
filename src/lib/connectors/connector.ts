@@ -2,6 +2,7 @@ import { parse, stringify } from 'wellknown';
 import { getMediaSource, SOURCE_ } from '../media/media';
 import { MediaSource } from '../media/MediaSource';
 import { TAXON_REFERENTIAL } from '../taxonReferential';
+import { SearchResult } from '../models';
 import { SearchScoring } from './search/scoring';
 import { simplifyPolygon } from './utils';
 
@@ -13,6 +14,49 @@ export interface ConnectorOptions {
 }
 export type IUCNCodeStatus =
     'NA' | 'NE' | 'DD' | 'LC' | 'NT' | 'VU' | 'EN' | 'CR' | 'RE' | 'EW' | 'EX';
+
+/**
+ * Search area and filters of a taxon list request.
+ */
+export interface TaxonQuery {
+    /** WKT of the search area */
+    geometry: string;
+    dateMin?: Date | string | null;
+    dateMax?: Date | string | null;
+    /** Taxon class name (see `taxonClass2SourceID`) */
+    class?: string | null;
+}
+
+/**
+ * What a connector can do natively. The UI adapts to it instead of
+ * testing the connector name.
+ */
+export interface ConnectorCapabilities {
+    /**
+     * Where taxa are counted: `client` (raw observations aggregated in the
+     * browser), `facet` or `server` (counted by the data source).
+     */
+    aggregation: 'client' | 'facet' | 'server';
+    /**
+     * `aggregated`: the list carries the date of the last observation.
+     * `lazy`: it is fetched per taxon with `fetchLastSeenDate`.
+     */
+    lastSeenDate: 'aggregated' | 'lazy';
+    /**
+     * `aggregated`: the list carries names, class and rank.
+     * `lazy`: only identifiers and counts, the rest comes from `fetchTaxonInfo`.
+     */
+    taxonInfo: 'aggregated' | 'lazy';
+    /** Whether the class filter is applied in the browser or by the source. */
+    classFilter: 'client' | 'server';
+}
+
+/** Fields the species list can be sorted by. */
+export type SortField =
+    | 'nbObservations'
+    | 'vernacularName'
+    | 'acceptedScientificName'
+    | 'lastSeenDate';
 
 export class Connector {
     /**
@@ -61,6 +105,17 @@ export class Connector {
      * Class that describe how to sort the taxon list based on a search string
      */
     scoringSearchClass: SearchScoring = new SearchScoring();
+
+    /**
+     * What this connector does natively. The defaults describe the generic
+     * behaviour: raw observations aggregated by the widget.
+     */
+    capabilities: ConnectorCapabilities = {
+        aggregation: 'client',
+        lastSeenDate: 'aggregated',
+        taxonInfo: 'aggregated',
+        classFilter: 'client',
+    };
 
     constructor(options: ConnectorOptions) {
         this.options = options;
@@ -142,6 +197,46 @@ export class Connector {
             params.geometry = stringify(geojson);
         }
         return Promise.resolve({});
+    }
+
+    /**
+     * Fetches the taxa observed in an area, with their number of observations.
+     * The default implementation aggregates the raw observations of
+     * `fetchOccurrence`; connectors whose source counts by taxon override it
+     * and declare it in `capabilities`.
+     * @param {TaxonQuery} query - area and filters
+     * @returns {Promise<SearchResult>} taxa and datasets, most observed first when the source provides it
+     */
+    fetchTaxa(query: TaxonQuery): Promise<SearchResult> {
+        return this.fetchOccurrence({ ...query });
+    }
+
+    /**
+     * Date of the last observation of a taxon in the query area. Only used
+     * when `capabilities.lastSeenDate` is `lazy`.
+     * @param {string|number} taxonId - the taxon
+     * @param {TaxonQuery} query - area and filters
+     * @returns {Promise<Date|null>} the date, null when unknown
+     */
+    fetchLastSeenDate(
+        taxonId: string | number,
+        query: TaxonQuery
+    ): Promise<Date | null> {
+        return Promise.resolve(null);
+    }
+
+    /**
+     * Sort fields that make sense with the data this connector puts in the list.
+     */
+    getSortableFields(): SortField[] {
+        const fields: SortField[] = ['nbObservations'];
+        if (this.capabilities.taxonInfo === 'aggregated') {
+            fields.push('vernacularName', 'acceptedScientificName');
+        }
+        if (this.capabilities.lastSeenDate === 'aggregated') {
+            fields.push('lastSeenDate');
+        }
+        return fields;
     }
 
     /**

@@ -107,6 +107,17 @@
         pageIndex.value = 0;
     });
 
+    // sources that filter by class themselves are queried again
+    watch(filterClass, () => {
+        if (
+            connector.value.capabilities.classFilter === 'server' &&
+            wkt.value
+        ) {
+            searchResult.value = { taxons: [], datasets: [] };
+            taxonManager.fetchSpeciesList(wkt.value);
+        }
+    });
+
     watch([wkt, class_, dateMin, dateMax, connector], () => {
         searchResult.value = { taxons: [], datasets: [] };
         if (wkt.value) taxonManager.fetchSpeciesList(wkt.value);
@@ -117,7 +128,7 @@
         taxonManager.fetchSpeciesList(wkt.value);
     }
 
-    const sortByAvailable = [
+    const sortFields = [
         { field_name: 'vernacularName', label: t('taxon.vernacularName') },
         {
             field_name: 'acceptedScientificName',
@@ -126,6 +137,13 @@
         { field_name: 'nbObservations', label: t('taxon.nbObservations') },
         { field_name: 'lastSeenDate', label: t('taxon.lastSeenDate') },
     ];
+    // only the fields the current source can provide for the whole list
+    const sortByAvailable = computed(() => {
+        const available = connector.value.getSortableFields();
+        return sortFields.filter((field) =>
+            available.includes(field.field_name)
+        );
+    });
 </script>
 <template>
     <div

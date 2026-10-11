@@ -124,12 +124,19 @@ export class TaxonListManager {
         this.loadingError.value = false;
         this.filteredSpecies.value = [];
 
-        this.connector.value
-            .fetchOccurrence({
+        const connector = this.connector.value;
+        // a class filter chosen in the list is sent to sources that apply it
+        const serverClass =
+            connector.capabilities.classFilter === 'server'
+                ? this.filterClass.value
+                : null;
+
+        connector
+            .fetchTaxa({
                 geometry: wktParam,
                 dateMin: this.parameterStore.dateMin.value,
                 dateMax: this.parameterStore.dateMax.value,
-                class: this.parameterStore.class.value,
+                class: serverClass ?? this.parameterStore.class.value,
             })
             .then((response) => {
                 if (requestId !== this.requestId) return;
@@ -138,6 +145,7 @@ export class TaxonListManager {
                 this.filteredSpecies.value = response.taxons;
                 this.pageIndex.value = 0;
                 this.loadingObservations.value = false;
+                if (this.searchString.value) this.updateFilteredSpecies();
             })
             .catch(() => {
                 if (requestId !== this.requestId) return;
@@ -191,8 +199,12 @@ export class TaxonListManager {
                 );
             }
 
-            // if a taxon class is selected
-            if (this.filterClass.value) {
+            // if a taxon class is selected (sources with a server side class
+            // filter already returned only that class)
+            if (
+                this.filterClass.value &&
+                this.connector.value.capabilities.classFilter === 'client'
+            ) {
                 filtered = filtered.filter(
                     (taxon) => taxon.class === this.filterClass.value
                 );

@@ -9,7 +9,11 @@
     const class_ = ref(null);
     const isOpen = ref(false);
     const emit = defineEmits(['select:class']);
-    watch(wkt, () => (class_.value = null));
+    watch(wkt, () => {
+        // the list filter must follow the badge when the area changes
+        if (class_.value !== null) emit('select:class', null);
+        class_.value = null;
+    });
 
     function updateClass(className) {
         class_.value = class_.value === className ? null : className;
