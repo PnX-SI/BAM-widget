@@ -21,6 +21,25 @@ const HOST_LIMITS: Record<string, { initial: number; ceiling: number }> = {
     'query.wikidata.org': { initial: 3, ceiling: 3 },
     'api.gbif.org': { initial: 2, ceiling: 4 },
 };
+/**
+ * Routes with their own queue and limits, because they are much heavier than
+ * the rest of their host: GBIF occurrence search runs a spatial query and
+ * answered 429 for 12 of 20 requests at 4 in parallel, 3 of 20 at 2 and none
+ * one by one, while its species routes answer 4 at a time.
+ */
+const ROUTE_LIMITS: Array<{
+    host: string;
+    prefix: string;
+    initial: number;
+    ceiling: number;
+}> = [
+    {
+        host: 'api.gbif.org',
+        prefix: '/v1/occurrence/search',
+        initial: 1,
+        ceiling: 2,
+    },
+];
 /** Successful requests in a row before a throttled host gets one slot back. */
 const SUCCESSES_TO_GROW = 10;
 
@@ -79,9 +98,10 @@ export class HostGate {
         return this.max;
     }
 
-    run<T>(task: () => Promise<T>): Promise<T> {
+    /** `urgent` tasks start before the ones already waiting. */
+    run<T>(task: () => Promise<T>, urgent = false): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            this.queue.push(() => {
+            const start = () => {
                 this.active++;
                 Promise.resolve()
                     .then(task)
@@ -90,7 +110,9 @@ export class HostGate {
                         this.active--;
                         this.pump();
                     });
-            });
+            };
+            if (urgent) this.queue.unshift(start);
+            else this.queue.push(start);
             this.pump();
         });
     }
@@ -132,16 +154,21 @@ const gates = new Map<string, HostGate>();
 
 function getGate(url: string): HostGate {
     let host = '';
+    let path = '';
     try {
-        host = new URL(url).host;
+        ({ host, pathname: path } = new URL(url));
     } catch {
         // relative or invalid URL: share the default bucket
     }
-    let gate = gates.get(host);
+    const route = ROUTE_LIMITS.find(
+        (r) => r.host === host && path.startsWith(r.prefix)
+    );
+    const key = route ? `${host}${route.prefix}` : host;
+    let gate = gates.get(key);
     if (!gate) {
-        const limits = HOST_LIMITS[host] ?? DEFAULT_HOST_LIMIT;
+        const limits = route ?? HOST_LIMITS[host] ?? DEFAULT_HOST_LIMIT;
         gate = new HostGate(limits.initial, limits.ceiling);
-        gates.set(host, gate);
+        gates.set(key, gate);
     }
     return gate;
 }
@@ -157,15 +184,17 @@ function retryDelay(response: Response, attempt: number): number {
 /**
  * `fetch` with per-host concurrency, back-off and retry on 429/503.
  * After the last retry the last response is returned as is, so callers keep
- * their own status handling.
+ * their own status handling. `urgent` is for what the user is waiting on
+ * (a search): it goes before the requests already queued.
  */
 export async function scheduledFetch(
     url: string,
-    init?: RequestInit
+    init?: RequestInit,
+    options: { urgent?: boolean } = {}
 ): Promise<Response> {
     const gate = getGate(url);
     for (let attempt = 0; ; attempt++) {
-        const response = await gate.run(() => fetch(url, init));
+        const response = await gate.run(() => fetch(url, init), options.urgent);
         const throttled = response.status === 429 || response.status === 503;
         if (!throttled) {
             gate.reward();

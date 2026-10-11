@@ -157,6 +157,73 @@ describe('scheduledFetch on api.gbif.org', () => {
     });
 });
 
+describe('scheduledFetch routes', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
+    function trackPeak() {
+        const peaks = { occurrence: 0, species: 0 };
+        const active = { occurrence: 0, species: 0 };
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(async (url: string) => {
+                const kind = url.includes('/occurrence/')
+                    ? 'occurrence'
+                    : 'species';
+                active[kind]++;
+                peaks[kind] = Math.max(peaks[kind], active[kind]);
+                await new Promise((r) => setTimeout(r, 5));
+                active[kind]--;
+                return response(200);
+            })
+        );
+        return peaks;
+    }
+
+    it('keeps GBIF occurrence searches to 2 at a time, whatever happens elsewhere', async () => {
+        const peaks = trackPeak();
+
+        await Promise.all([
+            ...Array.from({ length: 40 }, (_, i) =>
+                scheduledFetch(
+                    `https://api.gbif.org/v1/occurrence/search?x=${i}`
+                )
+            ),
+            ...Array.from({ length: 40 }, (_, i) =>
+                scheduledFetch(`https://api.gbif.org/v1/species/${i}`)
+            ),
+        ]);
+
+        expect(peaks.occurrence).toBeLessThanOrEqual(2);
+        expect(peaks.species).toBeGreaterThan(2);
+        expect(peaks.species).toBeLessThanOrEqual(4);
+    });
+
+    it('lets an urgent request go before the ones already waiting', async () => {
+        const order: string[] = [];
+        vi.stubGlobal(
+            'fetch',
+            vi.fn(async (url: string) => {
+                order.push(url.split('/').pop()!);
+                await new Promise((r) => setTimeout(r, 5));
+                return response(200);
+            })
+        );
+
+        const requests = [1, 2, 3, 4, 5, 6].map((i) =>
+            scheduledFetch(`https://api.gbif.org/v1/occurrence/search/${i}`)
+        );
+        const urgent = scheduledFetch(
+            'https://api.gbif.org/v1/occurrence/search/urgent',
+            undefined,
+            { urgent: true }
+        );
+        await Promise.all([...requests, urgent]);
+
+        // 1 is already running; the urgent one is next, before 2…6
+        expect(order.indexOf('urgent')).toBeLessThanOrEqual(2);
+    });
+});
+
 describe('HostGate', () => {
     afterEach(() => vi.useRealTimers());
 
