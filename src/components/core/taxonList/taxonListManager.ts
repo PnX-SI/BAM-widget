@@ -67,6 +67,11 @@ export class TaxonListManager {
      * @type {any}
      */
     public speciesListShowed: any;
+    /**
+     * Identifier of the latest list request. A response that belongs to an
+     * older request is dropped, so a slow query cannot overwrite a newer one.
+     */
+    private requestId = 0;
 
     constructor(
         public connector: Ref<Connector>,
@@ -112,6 +117,7 @@ export class TaxonListManager {
     public fetchSpeciesList(wktParam: string): void {
         if (!wktParam.length) return;
 
+        const requestId = ++this.requestId;
         perfReset();
         perfMark('list:start');
         this.loadingObservations.value = true;
@@ -126,6 +132,7 @@ export class TaxonListManager {
                 class: this.parameterStore.class.value,
             })
             .then((response) => {
+                if (requestId !== this.requestId) return;
                 perfMark('list:ready');
                 this.searchResult.value = response;
                 this.filteredSpecies.value = response.taxons;
@@ -133,6 +140,7 @@ export class TaxonListManager {
                 this.loadingObservations.value = false;
             })
             .catch(() => {
+                if (requestId !== this.requestId) return;
                 perfMark('list:error');
                 this.loadingError.value = true;
                 this.loadingObservations.value = false;
@@ -193,7 +201,10 @@ export class TaxonListManager {
             this.filteredSpecies.value = filtered;
         };
 
-        if (this.searchString && this.connector.value.isSearchOnAPIAvailable) {
+        if (
+            this.searchString.value &&
+            this.connector.value.isSearchOnAPIAvailable
+        ) {
             this.connector.value
                 .searchOnAPI(this.searchString.value)
                 .then((data) => applyFilters(result, data))
